@@ -190,6 +190,25 @@ Gallery_ScenarioProgress;{{0=...|Fear of the Unknown}} · {{1=...|3}} of 8 endin
 Gallery_WinFor;Win for {{0=...|Anna}}: win number {{1=...|5}}
 Gallery_FamilyWin;Shared win for the family
 Gallery_RecordedNote;Saved in the Endings Gallery on this device. Going back with Undo and correcting a score replaces this result, so a game is never counted twice.
+Gallery_EditGame;Edit game
+Gallery_AddGame;Add a game
+Gallery_EditNote;Changes update the win counts and the Endings map.
+Gallery_AddNote;For a game played without this app. It counts like a game played here.
+Gallery_Scenario;Scenario
+Gallery_PlayedOn;Played on
+Gallery_ScoresWinner;Players, scores and winner
+Gallery_Winner;winner
+Gallery_Score;Score
+Gallery_AddPlayer;+ Player
+Gallery_RemovePlayer;Remove {{0=...|Anna}} from this game
+Gallery_PlayerName;Name
+Gallery_SharedFamilyWin;Shared win (the family)
+Gallery_DeleteGame;Delete game
+Gallery_SureDeleteGame;Delete for good?
+Gallery_Cancel;Cancel
+Gallery_Save;Save
+Gallery_NamesInvalid;Every player needs a name of 2 to 15 letters, each name once.
+Gallery_TapToEdit;Tap a game to change or delete it.
 MainMenu_SavedGames;Saved Games
 SavedGames_Note;Every game is kept on this device. Starting a new game or loading a save code puts the game you were playing here. Open a game to continue it or to look back through it with Back (⬅).
 SavedGames_Current;Playing now

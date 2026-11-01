@@ -1,4 +1,4 @@
-@page "/PlayersNameEntry/{PlayerIndex:int}"
+﻿@page "/PlayersNameEntry/{PlayerIndex:int}"
 @using MyFathersWorkApp.Shared
 @inject NavigationManager Nav
 @inject AudioService      Audio
@@ -34,7 +34,11 @@
             <div class="remembered-names">
                 @foreach (string name in _Remembered)
                 {
-                    <button class="mp-chip @(name == _PlayerName ? "selected" : "")" @onclick="() => PickName(name)">@name</button>
+                    string forget = GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Forget).FormatWithReplacement(0, name);
+                    <span class="remembered-name">
+                        <button class="mp-chip @(name == _PlayerName ? "selected" : "")" @onclick="() => PickName(name)">@name</button>
+                        <button class="forget-name" aria-label="@forget" title="@forget" @onclick="() => Forget(name)">×</button>
+                    </span>
                 }
             </div>
         </div>
@@ -81,6 +85,16 @@
     {
         Audio.PlayClick();
         _PlayerName = name;
+    }
+
+    // Endings Gallery: stop suggesting this name (its games and wins stay; finishing a game with it brings it back)
+    private async Task Forget(string name)
+    {
+        Audio.PlayClick();
+        await Gallery.ForgetPlayerAsync(name);
+        _Remembered.Remove(name);
+        _LastTable = [];
+        if (_PlayerName == name) _PlayerName = string.Empty;
     }
 
     private void UseLastTable()

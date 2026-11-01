@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -275,6 +275,31 @@ public class GalleryService(IJSRuntime js)
         data.Players.RemoveAll(player => player.Name == name);
         data.LastTable.Clear();
         await SaveAsync();
+    }
+
+    // Recent Games sheet: adds a game by hand (empty Id) or replaces an edited one. The players are remembered for the
+    // name suggestions; the last table (seat order of the last game played) is left alone.
+    public async Task SaveGameAsync(GalleryGame game)
+    {
+        GalleryData data = await GetAsync();
+        if (game.Id == string.Empty) game.Id = $"manual:{Guid.NewGuid():N}";
+
+        data.Games.RemoveAll(existing => existing.Id == game.Id);
+        data.Games.Add(game);
+
+        foreach (string name in game.Players.Where(name => data.Players.All(player => player.Name != name)))
+        {
+            data.Players.Add(new GalleryPlayer { Name = name, LastPlayed = game.Date });
+        }
+
+        await SaveAsync();
+    }
+
+    // Recent Games sheet: removes a game (e.g. a test playthrough). Its wins and played ending go with it; ticks stay.
+    public async Task DeleteGameAsync(string id)
+    {
+        GalleryData data = await GetAsync();
+        if (data.Games.RemoveAll(game => game.Id == id) > 0) await SaveAsync();
     }
 
     public async Task<string> ExportAsync()

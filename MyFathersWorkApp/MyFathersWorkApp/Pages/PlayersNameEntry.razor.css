@@ -1,4 +1,4 @@
-/* "Carefully pass the storybook to Player X" on a steel plate */
+﻿/* "Carefully pass the storybook to Player X" on a steel plate */
 .pass-book {
     max-width: 40rem;
     padding: 0.7rem 1.4rem;
@@ -38,3 +38,33 @@
     justify-content: center;
     gap: 0.35rem;
 }
+
+/* A remembered name with its forget button (×) on the chip's right edge */
+.remembered-name {
+    position: relative;
+    display: inline-flex;
+}
+
+.remembered-name .mp-chip {
+    padding-right: 1.9rem;
+}
+
+.forget-name {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #b5a789;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.forget-name:hover         { color: #ff9d8a; }
+.forget-name:focus-visible { outline: 2px solid #c9a35a; }

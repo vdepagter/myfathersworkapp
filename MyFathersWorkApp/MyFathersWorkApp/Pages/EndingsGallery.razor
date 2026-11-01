@@ -1,4 +1,4 @@
-@page "/EndingsGallery"
+﻿@page "/EndingsGallery"
 @using MyFathersWorkApp.Shared
 @using System.Globalization
 @inject NavigationManager Nav
@@ -37,7 +37,6 @@
                                 </th>
                             }
                             <th>@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Wins)</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,20 +52,16 @@
                                     <td class="@(wins == 0 ? "zero" : "")">@wins</td>
                                 }
                                 <td class="tally-wins">@line.Wins</td>
-                                <td>
-                                    @if (line.Forgettable)
-                                    {
-                                        string label = GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Forget).FormatWithReplacement(0, line.Name);
-                                        <button class="tally-forget" aria-label="@label" title="@label" @onclick="() => Forget(line.Name)">×</button>
-                                    }
-                                </td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
 
-            <h2 class="mp-section-title">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_RecentGames)</h2>
+            <div class="recent-head">
+                <h2 class="mp-section-title">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_RecentGames)</h2>
+                <button class="mp-chip" @onclick="AddGame">+ @GlobalData.GetLocalizedUITag(GlobalTags.Gallery_AddGame)</button>
+            </div>
 
             <div class="gallery-panel">
                 @if (_Data.Games.Count == 0)
@@ -74,15 +69,27 @@
                     <p class="mp-note">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_NoGames)</p>
                 }
 
-                @foreach (GalleryGame game in _Data.Games.OrderByDescending(game => game.Date).Take(10))
+                @* Tap a game to change it or delete it (Shared/GalleryGameSheet.razor) *@
+                @foreach (GalleryGame game in _Data.Games.OrderByDescending(game => game.Date).Take(_AllGames ? int.MaxValue : 10))
                 {
-                    <div class="recent-game">
-                        <div>
+                    <button class="recent-game" @onclick="() => EditGame(game)">
+                        <span class="recent-text">
                             <b>@GalleryTrees.Title(game)</b>
                             <small>@GalleryTrees.Name(game.Scenario) · @FormatDate(game.Date) · @string.Join(", ", game.Players)</small>
-                        </div>
+                        </span>
                         <span class="recent-winner">@(game.FamilyWinner ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Family) : game.Winner)</span>
-                    </div>
+                        <span class="recent-chevron" aria-hidden="true">›</span>
+                    </button>
+                }
+
+                @if (_Data.Games.Count > 0)
+                {
+                    <p class="mp-note recent-hint">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_TapToEdit)</p>
+                }
+
+                @if (_Data.Games.Count > 10 && !_AllGames)
+                {
+                    <button class="mp-chip recent-all" @onclick="ShowAllGames">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_ShowAll) (@_Data.Games.Count)</button>
                 }
             </div>
 
@@ -220,11 +227,16 @@
 </div>
 </MenuPage>
 
+@if (_ShowSheet)
+{
+    <GalleryGameSheet Game="_EditGame" GlobalData="GlobalData" OnClose="CloseSheet"/>
+}
+
 @code
 {
     [CascadingParameter] private GlobalData GlobalData { get; set; } = null!;
 
-    private record TallyLine(string Name, string Sub, int[] PerScenario, int Wins, bool Family, bool Forgettable);
+    private record TallyLine(string Name, string Sub, int[] PerScenario, int Wins, bool Family);
 
     // One plaque of the endings map. Row / Span: its place in the map grid (one grid row per ending below it); Parent: the
     // index of the branch it hangs from (-1 for the first branch), for the lines drawn by js/gallery.js
@@ -235,6 +247,9 @@
     private bool         _EndingsTab;
     private ScenarioId   _Scenario = ScenarioId.CostOfDisease;
     private bool         _ShowAll;
+    private bool         _AllGames;     // Recent Games: all games instead of the last 10
+    private bool         _ShowSheet;    // Recent Games: the game sheet is open
+    private GalleryGame? _EditGame;     // the game on the sheet, null to add one
     private string       _Export        = string.Empty;
     private bool         _ShowImport;
     private string       _ImportText    = string.Empty;
@@ -267,7 +282,7 @@
                                          int   played      = data.Games.Count(game => game.Players.Contains(name));
                                          return new TallyLine(name,
                                                               GlobalData.GetLocalizedUITag(GlobalTags.Gallery_GamesPlayed).FormatWithReplacement(0, played.ToString()),
-                                                              perScenario, perScenario.Sum(), false, data.Players.Any(player => player.Name == name));
+                                                              perScenario, perScenario.Sum(), false);
                                      })
                                      .OrderByDescending(line => line.Wins)
                                      .ThenBy(line => line.Name, StringComparer.CurrentCultureIgnoreCase)
@@ -277,7 +292,7 @@
         if (family.Sum() > 0)
         {
             lines.Add(new TallyLine(GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Family), GlobalData.GetLocalizedUITag(GlobalTags.Gallery_FamilyNote),
-                                    family, family.Sum(), true, false));
+                                    family, family.Sum(), true));
         }
 
         return lines;
@@ -394,10 +409,26 @@
         await Gallery.SetTickedAsync(_Scenario, ending, ticked);
     }
 
-    private async Task Forget(string name)
+    private void AddGame()
     {
         Audio.PlayClick();
-        await Gallery.ForgetPlayerAsync(name);
+        _EditGame  = null;
+        _ShowSheet = true;
+    }
+
+    private void EditGame(GalleryGame game)
+    {
+        Audio.PlayClick();
+        _EditGame  = game;
+        _ShowSheet = true;
+    }
+
+    private void CloseSheet() => _ShowSheet = false;
+
+    private void ShowAllGames()
+    {
+        Audio.PlayClick();
+        _AllGames = true;
     }
 
     private async Task Export()

@@ -1,0 +1,180 @@
+/* Recent Games sheet (Shared/GalleryGameSheet.razor): parchment (css/theme.css) over a dark overlay; scrolls when taller
+   than the window */
+.sheet-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    display: flex;
+    padding: 1rem;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.65);
+}
+
+.sheet {
+    margin: auto;
+    width: min(100%, 36rem);
+    padding: 0.6rem 1rem 0.8rem;
+    font-size: 1.02rem;
+}
+
+.sheet-title {
+    margin: 0;
+    font-family: var(--mfw-font-heading);
+    font-weight: 400;
+    font-size: 1.7rem;
+    color: #3b2210;
+    -webkit-text-stroke: 0;
+}
+
+.sheet-note {
+    margin: 0.1rem 0 0.8rem;
+    color: #4a321c;
+    font-size: 0.95rem;
+}
+
+.sheet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem 0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.sheet-grid .wide {
+    grid-column: 1 / -1;
+}
+
+.sheet-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    color: #4a321c;
+    font-size: 0.92rem;
+}
+
+.sheet select,
+.sheet input[type=date],
+.sheet-name,
+.sheet-score {
+    min-height: 42px;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid #8a6a43;
+    border-radius: 5px;
+    background: #f6ead0;
+    color: #17100a;
+    font: 1rem var(--mfw-font-text);
+    color-scheme: light;
+    -webkit-text-stroke: 0;
+    min-width: 0;
+}
+
+.sheet select:focus-visible,
+.sheet input:focus-visible,
+.sheet button:focus-visible {
+    outline: 2px solid #8c2416;
+    outline-offset: 1px;
+}
+
+.sheet-players {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 5.5rem auto 2.6rem;
+    gap: 0.4rem 0.5rem;
+    align-items: center;
+    margin-top: 0.3rem;
+}
+
+.sheet-winner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: #4a321c;
+    font-size: 0.92rem;
+    cursor: pointer;
+}
+
+.sheet-winner input {
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: #8c2416;
+}
+
+.sheet-remove {
+    width: 2.6rem;
+    height: 2.6rem;
+    border: 1px solid #8a6a43;
+    border-radius: 50%;
+    background: transparent;
+    color: #8c2416;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.sheet-remove:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.sheet-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin-top: 0.6rem;
+}
+
+.sheet-small {
+    min-height: 40px;
+    padding: 0.2rem 0.9rem;
+    border: 1px solid #8a6a43;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.25);
+    color: #3b2210;
+    font: 0.95rem var(--mfw-font-text);
+    cursor: pointer;
+}
+
+.sheet-error {
+    margin: 0.6rem 0 0;
+    color: #8c2416;
+    font-size: 0.95rem;
+}
+
+.sheet-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.sheet-buttons span {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.sheet-button {
+    min-height: 44px;
+    padding: 0.4rem 1.1rem;
+    border: 1px solid #5a3f26;
+    border-radius: 6px;
+    background: linear-gradient(#6d4b2c, #432a16);
+    color: #f6e7c6;
+    font: 1rem var(--mfw-font-button);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    -webkit-text-stroke: 0;
+    cursor: pointer;
+}
+
+.sheet-button.green { background: linear-gradient(#4f6b2c, #2c4214); }
+.sheet-button.red   { background: linear-gradient(#8c2e1e, #5a1a10); }
+.sheet-button.ghost { background: transparent; color: #4a321c; }
+.sheet-button:hover { filter: brightness(1.15); }
+
+/* Phones: the score field shrinks, the winner column keeps only its radio button */
+@media (max-width: 480px) {
+    .sheet-grid { grid-template-columns: 1fr; }
+    .sheet-players { grid-template-columns: minmax(0, 1fr) 4.2rem auto 2.6rem; gap: 0.4rem 0.35rem; }
+    .sheet-players .sheet-winner-text { display: none; }
+}

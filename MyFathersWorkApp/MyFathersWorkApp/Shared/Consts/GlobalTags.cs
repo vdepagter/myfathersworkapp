@@ -210,6 +210,25 @@ public static class GlobalTags
     public const string Gallery_WinFor              = "Gallery_WinFor";
     public const string Gallery_FamilyWin           = "Gallery_FamilyWin";
     public const string Gallery_RecordedNote        = "Gallery_RecordedNote";
+    public const string Gallery_EditGame            = "Gallery_EditGame";
+    public const string Gallery_AddGame             = "Gallery_AddGame";
+    public const string Gallery_EditNote            = "Gallery_EditNote";
+    public const string Gallery_AddNote             = "Gallery_AddNote";
+    public const string Gallery_Scenario            = "Gallery_Scenario";
+    public const string Gallery_PlayedOn            = "Gallery_PlayedOn";
+    public const string Gallery_ScoresWinner        = "Gallery_ScoresWinner";
+    public const string Gallery_Winner              = "Gallery_Winner";
+    public const string Gallery_Score               = "Gallery_Score";
+    public const string Gallery_AddPlayer           = "Gallery_AddPlayer";
+    public const string Gallery_RemovePlayer        = "Gallery_RemovePlayer";
+    public const string Gallery_PlayerName          = "Gallery_PlayerName";
+    public const string Gallery_SharedFamilyWin     = "Gallery_SharedFamilyWin";
+    public const string Gallery_DeleteGame          = "Gallery_DeleteGame";
+    public const string Gallery_SureDeleteGame      = "Gallery_SureDeleteGame";
+    public const string Gallery_Cancel              = "Gallery_Cancel";
+    public const string Gallery_Save                = "Gallery_Save";
+    public const string Gallery_NamesInvalid        = "Gallery_NamesInvalid";
+    public const string Gallery_TapToEdit           = "Gallery_TapToEdit";
 
     // Saved Games (Pages/SavedGames.razor)
     public const string MainMenu_SavedGames   = "MainMenu_SavedGames";

@@ -1,0 +1,224 @@
+@using System.Globalization
+@inject AudioService   Audio
+@inject GalleryService Gallery
+
+@* Endings Gallery > Recent Games: one finished game on a parchment sheet. Change its scenario, ending, date, players,
+   scores and winner, or delete it (a test playthrough). With Game == null it adds a game played without this app. *@
+<div class="sheet-overlay">
+    <div class="sheet mfw-parchment mfw-ink mfw-zoom-in" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+        <h2 id="sheet-title" class="sheet-title">@T(Game == null ? GlobalTags.Gallery_AddGame : GlobalTags.Gallery_EditGame)</h2>
+        <p class="sheet-note">@T(Game == null ? GlobalTags.Gallery_AddNote : GlobalTags.Gallery_EditNote)</p>
+
+        <div class="sheet-grid">
+            <label class="sheet-field">
+                @T(GlobalTags.Gallery_Scenario)
+                <select value="@_Scenario" @onchange="OnScenarioChanged">
+                    @foreach (ScenarioId scenario in GalleryTrees.Scenarios)
+                    {
+                        <option value="@scenario">@GalleryTrees.Name(scenario)</option>
+                    }
+                </select>
+            </label>
+
+            @* The browser's own date field: shown in the device's language and date order *@
+            <label class="sheet-field">
+                @T(GlobalTags.Gallery_PlayedOn)
+                <input type="date" @bind="_Date" max="@DateTime.Today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)"/>
+            </label>
+
+            <label class="sheet-field wide">
+                @T(GlobalTags.Gallery_Ending)
+                <select @bind="_Ending">
+                    @foreach (GalleryNode node in Endings())
+                    {
+                        <option value="@node.Ending">@node.Label</option>
+                    }
+                </select>
+            </label>
+        </div>
+
+        <div class="sheet-field">@T(GlobalTags.Gallery_ScoresWinner)</div>
+        <datalist id="sheet-names">
+            @foreach (string name in _KnownNames)
+            {
+                <option value="@name"></option>
+            }
+        </datalist>
+        <div class="sheet-players">
+            @for (int i = 0; i < _Players.Count; i++)
+            {
+                int        index  = i;
+                PlayerLine player = _Players[index];
+                string     label  = player.Name.Trim() == string.Empty ? $"#{index + 1}" : player.Name.Trim();
+                <input class="sheet-name" list="sheet-names" maxlength="15" aria-label="@T(GlobalTags.Gallery_PlayerName)"
+                       placeholder="@T(GlobalTags.Gallery_PlayerName)" @bind="player.Name" @bind:event="oninput"/>
+                <input class="sheet-score" type="number" inputmode="numeric" aria-label="@($"{T(GlobalTags.Gallery_Score)} {label}")"
+                       placeholder="@T(GlobalTags.Gallery_Score)" @bind="player.Score"/>
+                <label class="sheet-winner">
+                    <input type="radio" name="sheet-winner" aria-label="@($"{T(GlobalTags.Gallery_Winner)} {label}")"
+                           checked="@(!_Family && _Winner == index)" @onchange="() => SetWinner(index)"/>
+                    <span class="sheet-winner-text">@T(GlobalTags.Gallery_Winner)</span>
+                </label>
+                <button class="sheet-remove" disabled="@(_Players.Count <= 1)" aria-label="@T(GlobalTags.Gallery_RemovePlayer).FormatWithReplacement(0, label)"
+                        title="@T(GlobalTags.Gallery_RemovePlayer).FormatWithReplacement(0, label)" @onclick="() => RemovePlayer(index)">×</button>
+            }
+        </div>
+        <div class="sheet-row">
+            @if (_Players.Count < 4)
+            {
+                <button class="sheet-small" @onclick="AddPlayer">@T(GlobalTags.Gallery_AddPlayer)</button>
+            }
+            <label class="sheet-winner">
+                <input type="radio" name="sheet-winner" checked="@_Family" @onchange="SetFamily"/>
+                @T(GlobalTags.Gallery_SharedFamilyWin)
+            </label>
+        </div>
+
+        @if (_Invalid)
+        {
+            <p class="sheet-error">@T(GlobalTags.Gallery_NamesInvalid)</p>
+        }
+
+        <div class="sheet-buttons">
+            <span>
+                @if (Game != null)
+                {
+                    <button class="sheet-button red" @onclick="Delete">@T(_SureDelete ? GlobalTags.Gallery_SureDeleteGame : GlobalTags.Gallery_DeleteGame)</button>
+                }
+            </span>
+            <span>
+                <button class="sheet-button ghost" @onclick="Cancel">@T(GlobalTags.Gallery_Cancel)</button>
+                <button class="sheet-button green" @onclick="Save">@T(GlobalTags.Gallery_Save)</button>
+            </span>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Parameter] public GalleryGame?  Game       { get; set; }
+    [Parameter] public GlobalData    GlobalData { get; set; } = null!;
+    [Parameter] public EventCallback OnClose    { get; set; } // after Save, Delete or Cancel
+
+    private sealed class PlayerLine
+    {
+        public string Name  { get; set; } = string.Empty;
+        public int?   Score { get; set; }
+    }
+
+    private ScenarioId       _Scenario = ScenarioId.CostOfDisease;
+    private DateTime         _Date     = DateTime.Today;
+    private int              _Ending;
+    private List<PlayerLine> _Players  = [];
+    private int              _Winner   = -1;
+    private bool             _Family;
+    private bool             _SureDelete;
+    private bool             _Invalid;
+    private List<string>     _KnownNames = [];
+
+    private string T(string tag) => GlobalData.GetLocalizedUITag(tag);
+
+    protected override async Task OnInitializedAsync()
+    {
+        _KnownNames = await Gallery.PlayerNamesAsync();
+
+        if (Game == null)
+        {
+            GalleryData data = await Gallery.GetAsync();
+            _Players = (data.LastTable.Count > 0 ? data.LastTable : ["", ""]).Select(name => new PlayerLine { Name = name }).ToList();
+            _Ending  = Endings().First().Ending;
+            return;
+        }
+
+        _Scenario = Game.Scenario;
+        _Date     = Game.Date.Date;
+        _Ending   = Game.Ending;
+        _Family   = Game.FamilyWinner;
+        _Players  = Game.Players.Select(name => new PlayerLine { Name = name, Score = Game.Scores.TryGetValue(name, out int score) ? score : null }).ToList();
+        _Winner   = Array.IndexOf(Game.Players, Game.Winner);
+    }
+
+    // Each ending once (Cost of Disease ending 4 sits under two branches), in the order of the map
+    private IEnumerable<GalleryNode> Endings() => GalleryTrees.Tree(_Scenario).Where(node => node.IsEnding).DistinctBy(node => node.Ending);
+
+    private void OnScenarioChanged(ChangeEventArgs e)
+    {
+        if (!Enum.TryParse(e.Value?.ToString(), out ScenarioId scenario) || scenario == _Scenario) return;
+        _Scenario = scenario;
+        _Ending   = Endings().First().Ending;
+    }
+
+    private void SetWinner(int index)
+    {
+        _Winner = index;
+        _Family = false;
+    }
+
+    private void SetFamily()
+    {
+        _Family = true;
+        _Winner = -1;
+    }
+
+    private void AddPlayer()
+    {
+        Audio.PlayClick();
+        _Players.Add(new PlayerLine());
+    }
+
+    private void RemovePlayer(int index)
+    {
+        Audio.PlayClick();
+        if (_Players.Count <= 1) return;
+        _Players.RemoveAt(index);
+        if (_Winner == index) _Winner = -1;
+        else if (_Winner > index) _Winner--;
+    }
+
+    private async Task Save()
+    {
+        Audio.PlayClick();
+
+        string[] names = _Players.Select(player => player.Name.Trim()).ToArray();
+        _Invalid = names.Any(name => name.Length is < 2 or > 15) || names.Distinct(StringComparer.CurrentCultureIgnoreCase).Count() != names.Length;
+        if (_Invalid) return;
+
+        bool sameEnding = Game != null && Game.Scenario == _Scenario && Game.Ending == _Ending;
+        GalleryNode node = Endings().First(n => n.Ending == _Ending);
+
+        GalleryGame record = new GalleryGame
+        {
+            Id           = Game?.Id ?? string.Empty,
+            Scenario     = _Scenario,
+            Ending       = _Ending,
+            Title        = sameEnding ? Game!.Title : node.Label, // a played game keeps its heading with the village name
+            Date         = _Date.Date + (Game?.Date.TimeOfDay ?? new TimeSpan(12, 0, 0)),
+            Players      = names,
+            Scores       = _Players.Where(player => player.Score.HasValue).ToDictionary(player => player.Name.Trim(), player => player.Score!.Value),
+            Winner       = !_Family && _Winner >= 0 && _Winner < names.Length ? names[_Winner] : string.Empty,
+            FamilyWinner = _Family
+        };
+
+        await Gallery.SaveGameAsync(record);
+        await OnClose.InvokeAsync();
+    }
+
+    private async Task Delete()
+    {
+        Audio.PlayClick();
+        if (!_SureDelete)
+        {
+            _SureDelete = true;
+            return;
+        }
+
+        await Gallery.DeleteGameAsync(Game!.Id);
+        await OnClose.InvokeAsync();
+    }
+
+    private async Task Cancel()
+    {
+        Audio.PlayClick();
+        await OnClose.InvokeAsync();
+    }
+}
