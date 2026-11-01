@@ -42,31 +42,38 @@
 
     <script>
         // The visible window height as a CSS variable (--mfw-vh) for the frames and the Main Menu. Firefox on Android can
-        // size fixed "inset: 0" layers (and svh) one toolbar height short while its toolbar slides in or out, which lifted
-        // the frame's bottom border over the page; the visual viewport reports what is really on screen.
+        // size fixed "inset: 0" layers (and svh) one toolbar height short while its toolbar slides in or out, and after
+        // the browser comes back from the background it can change the window without any event. So: measure on every
+        // resize/scroll/return, again a few times after it, and once a second while the page is visible.
         (function () {
             const root = document.documentElement;
-            let queued = false;
+            let last = "";
             function measure() {
-                queued = false;
                 const vv = window.visualViewport;
-                const h  = vv ? vv.height * vv.scale : window.innerHeight;
-                root.style.setProperty("--mfw-vh", Math.round(h) + "px");
+                const h  = Math.round(vv ? vv.height * vv.scale : window.innerHeight);
+                if (!(h > 0)) return;
+                const value = h + "px";
+                if (value !== last) {
+                    last = value;
+                    root.style.setProperty("--mfw-vh", value);
+                }
             }
-            function update() {
-                if (queued) return;
-                queued = true;
-                requestAnimationFrame(measure);
+            function settle() {
+                measure();
+                for (const delay of [50, 150, 350, 700, 1200, 2000]) setTimeout(measure, delay);
             }
             measure();
-            window.addEventListener("resize", update);
-            window.addEventListener("orientationchange", () => setTimeout(update, 300));
+            window.addEventListener("resize", settle);
+            window.addEventListener("orientationchange", settle);
+            window.addEventListener("pageshow", settle);
+            window.addEventListener("focus", settle);
+            document.addEventListener("visibilitychange", () => { if (!document.hidden) settle(); });
             if (window.visualViewport) {
-                window.visualViewport.addEventListener("resize", update);
-                window.visualViewport.addEventListener("scroll", update);
+                window.visualViewport.addEventListener("resize", settle);
+                window.visualViewport.addEventListener("scroll", measure);
             }
-            // Toolbars can finish sliding without another event
-            window.addEventListener("scroll", () => setTimeout(update, 250), { passive: true });
+            window.addEventListener("scroll", () => setTimeout(measure, 250), { passive: true });
+            setInterval(() => { if (!document.hidden) measure(); }, 1000);
         })();
     </script>
     <script src="js/audio.js"></script>

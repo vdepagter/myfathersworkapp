@@ -75,15 +75,3 @@ main {
         padding-right: 1.5rem !important;
     }
 }
-
-/* Fixed like the audio toggles, so it stays in the corner while the page scrolls */
-.app-version {
-    position: fixed;
-    z-index: 1;
-    pointer-events: none;
-    bottom: 10px;
-    right: 15px;
-    font-size: 0.9rem;
-    color: #ccc;
-    opacity: 0.8;
-}

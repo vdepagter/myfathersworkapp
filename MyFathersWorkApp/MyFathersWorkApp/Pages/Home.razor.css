@@ -171,10 +171,11 @@
     cursor: default;
 }
 
-/* Fan-made note under the buttons: on a soft dark band so it reads over the art */
+/* Fan-made note under the buttons: on a soft dark band so it reads over the art. Anchored by its bottom edge, so a
+   longer translation or a third line grows upwards instead of below the window. */
 .disclaimer {
     left: 45.59%;
-    top: 88%;
+    bottom: 5.5%;
     width: 48%;
     margin: 0;
     padding: 0.35em 1em;
@@ -191,11 +192,11 @@
 
 /* Windows taller than 16:9: the fan-made note moves down into the room below the canvas, a little larger */
 @media (orientation: landscape) and (max-aspect-ratio: 16 / 10) {
-    .disclaimer { top: 90%; font-size: max(12px, 1.2cqw); }
+    .disclaimer { bottom: 3%; font-size: max(12px, 1.2cqw); }
 }
 
 @media (orientation: landscape) and (max-aspect-ratio: 4 / 3) {
-    .disclaimer { top: 93%; width: 52%; left: 43.59%; font-size: max(12px, 1.35cqw); }
+    .disclaimer { bottom: 0; width: 52%; left: 43.59%; font-size: max(12px, 1.35cqw); }
 }
 
 /* Phone in portrait: the manor (centre at 28% of the canvas) stays in view; logo on top, buttons and note at the bottom */

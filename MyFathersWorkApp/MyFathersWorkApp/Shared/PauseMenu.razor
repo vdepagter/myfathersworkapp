@@ -19,14 +19,14 @@
 
             <DisplaySettings GlobalData="GlobalData!"/>
 
-            <div class="dropdowns">
+            <div class="mfw-settings-group">
                 @if (IsThereAnySavedState)
                 {
                     @if (GlobalData!.UI_Localization.Count > 1)
                     {
-                        <div>
-                            <label>@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_Language)</label>
-                            <select value="@GlobalData.Language" @onchange="OnLanguageChanges">
+                        <div class="mfw-setting-row">
+                            <label class="mfw-setting-label" for="pause-language">@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_Language)</label>
+                            <select id="pause-language" value="@GlobalData.Language" @onchange="OnLanguageChanges">
                                 @foreach (string lang in GlobalData.UI_Localization.Keys)
                                 {
                                     <option value="@lang">@GlobalData.GetLocalizedUITag(lang)</option>
@@ -35,9 +35,9 @@
                         </div>
                     }
 
-                    <div>
-                        <label>@GlobalData.GetLocalizedUITag(GlobalTags.ScenarioLanguage_Title)</label>
-                        <select value="@GlobalData.ScenarioLanguage" @onchange="OnScenarioLanguageChanges">
+                    <div class="mfw-setting-row">
+                        <label class="mfw-setting-label" for="pause-scenario-language">@GlobalData.GetLocalizedUITag(GlobalTags.ScenarioLanguage_Title)</label>
+                        <select id="pause-scenario-language" value="@GlobalData.ScenarioLanguage" @onchange="OnScenarioLanguageChanges">
                             @foreach (string lang in GlobalData.OtherPossibleScenarioLanguages)
                             {
                                 <option value="@lang">@GlobalData.GetLocalizedUITag("ScenarioLang_" + lang)</option>
@@ -47,18 +47,20 @@
                 }
 
                 @* Always shown (not only with a saved game); a change stops the current narration *@
-                <div>
-                    <label>@GlobalData!.GetLocalizedUITag(GlobalTags.Audio_Narration)</label>
-                    <select value="@Audio.Narration" @onchange="OnNarrationChanged">
-                        <option value="@NarrationVoice.Female">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationFemale)</option>
-                        <option value="@NarrationVoice.Male">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationMale)</option>
+                <div class="mfw-setting-row">
+                    <label class="mfw-setting-label" for="pause-narration">@GlobalData!.GetLocalizedUITag(GlobalTags.Audio_Narration)</label>
+                    <select id="pause-narration" value="@Audio.Narration" @onchange="OnNarrationChanged">
                         <option value="@NarrationVoice.Oliver">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationOliver)</option>
+                        <option value="@NarrationVoice.Male">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationMale)</option>
+                        <option value="@NarrationVoice.Female">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationFemale)</option>
                         <option value="@NarrationVoice.Off">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationOff)</option>
                     </select>
                 </div>
             </div>
 
             <VolumeSliders GlobalData="GlobalData!"/>
+
+            <p class="mfw-version">@AppInfo.Version</p>
 
         </div>
     </div>

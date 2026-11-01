@@ -1,4 +1,4 @@
-@page "/Help"
+﻿@page "/Help"
 @using MyFathersWorkApp.Shared
 @inject NavigationManager Nav
 @inject AudioService      Audio
@@ -17,6 +17,8 @@
         <h2>@GlobalData.GetLocalizedUITag("Help_Tab_" + _Page)</h2>
         @((MarkupString)GlobalData.GetLocalizedUITag("Help_" + _Page))
     </div>
+
+    <p class="mp-note">@AppInfo.Version</p>
 </MenuPage>
 
 @code

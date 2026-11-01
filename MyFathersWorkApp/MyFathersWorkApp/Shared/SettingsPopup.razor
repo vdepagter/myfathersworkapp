@@ -1,4 +1,4 @@
-@inject AudioService Audio
+﻿@inject AudioService Audio
 
 @* Settings from the Main Menu (the Unity "Settings UI"): graphics, story text size, narration voice, volumes, language.
    The pause menu shows the same DisplaySettings and VolumeSliders. *@
@@ -10,8 +10,8 @@
 
             <DisplaySettings GlobalData="GlobalData"/>
 
-            <div class="settings-row">
-                <label for="settings-narration">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_Narration)</label>
+            <div class="mfw-setting-row">
+                <label class="mfw-setting-label" for="settings-narration">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_Narration)</label>
                 <select id="settings-narration" value="@Audio.Narration" @onchange="OnNarrationChanged">
                     <option value="@NarrationVoice.Oliver">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationOliver)</option>
                     <option value="@NarrationVoice.Male">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationMale)</option>
@@ -22,8 +22,8 @@
 
             @if (GlobalData.UI_Localization.Count > 1)
             {
-                <div class="settings-row">
-                    <label for="settings-language">@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_Language)</label>
+                <div class="mfw-setting-row">
+                    <label class="mfw-setting-label" for="settings-language">@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_Language)</label>
                     <select id="settings-language" value="@GlobalData.Language" @onchange="OnLanguageChanged">
                         @foreach (string lang in GlobalData.UI_Localization.Keys)
                         {
@@ -36,6 +36,8 @@
             <VolumeSliders GlobalData="GlobalData"/>
 
             <button class="mfw-button green settings-close" @onclick="Close">@GlobalData.GetLocalizedUITag(GlobalTags.Settings_Close)</button>
+
+            <p class="mfw-version">@AppInfo.Version</p>
         </div>
     </div>
 }

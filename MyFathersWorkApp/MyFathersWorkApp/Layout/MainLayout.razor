@@ -15,14 +15,9 @@
 
 <AudioToggles GlobalData="@_GlobalData" />
 <CookieConsent />
-<div class="app-version">@_Version</div>
 
 @code
 {
-    private static readonly string _Version = FormatVersion(typeof(MainLayout).Assembly.GetName().Version);
-
-    private static string FormatVersion(Version? v) => v is null ? "" : $"v{v.Major}.{v.Minor}.{v.Build}.{v.Revision}";
-
     private readonly GlobalData _GlobalData = new();
 
     protected override async Task OnInitializedAsync()
