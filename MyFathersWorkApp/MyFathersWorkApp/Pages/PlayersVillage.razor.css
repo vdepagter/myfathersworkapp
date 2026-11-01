@@ -1,0 +1,15 @@
+/* Villages of earlier games (as the remembered names in PlayersNameEntry.razor.css) */
+.remembered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 40rem;
+}
+
+.remembered-names {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.35rem;
+}

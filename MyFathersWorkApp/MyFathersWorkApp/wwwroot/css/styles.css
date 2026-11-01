@@ -46,18 +46,20 @@ body, html {
    The 200 ms hold of the base ink must match _REVEAL_DELAY_MS in Pages/Gameplay.razor (reveal sound starts with the recede).
    --------------------------------------------------------------------------------------------------------------------- */
 
-/* Ink overlay: above header buttons, toggles and popups; blocks input only while it runs (max 600 ms) */
+/* Ink overlay (Unity UI/TransitionAnim): the 22-frame ink blot flip-book of New_UI_Assets/ScreenTransitions (Transition
+   100-121.png, frame 21 = all black) as one sprite sheet, stretched over the window. Above header buttons, toggles and
+   popups; blocks input only while it runs. The new screen is already rendered, so it starts covered and plays
+   TransitionAnimRev: the ink pulls back into the top-right corner, frame 21 -> 0, with Unity's 0.5 s and frame steps. */
 #screen-transition {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: #000;
     z-index: 3000;
     pointer-events: none;
     visibility: hidden;
-    clip-path: circle(0% at 100% 0%);
+    background: url(../images/ui/transition-ink.webp) 0 0 / 100% 2200% no-repeat;
 }
 
 #screen-transition.mfw-ink-base,
@@ -66,35 +68,25 @@ body, html {
     pointer-events: auto;
 }
 
-/* Story window <-> hub: cover, hold 200 ms, recede 400 ms */
+/* Story window <-> hub: covered, hold 200 ms, recede 500 ms */
 #screen-transition.mfw-ink-base {
-    animation: mfw-ink-base 600ms linear both;
+    animation: mfw-ink-recede 500ms 200ms steps(22, jump-none) both;
 }
 
 /* New setup / end of round / end of generation popup: recede only */
 #screen-transition.mfw-ink-popup {
-    animation: mfw-ink-recede 400ms ease-in both;
-}
-
-@keyframes mfw-ink-base {
-    0%, 33.333% {
-        clip-path: circle(150% at 100% 0%);
-        animation-timing-function: ease-in;
-    }
-    100% {
-        clip-path: circle(0% at 100% 0%);
-    }
+    animation: mfw-ink-recede 500ms steps(22, jump-none) both;
 }
 
 @keyframes mfw-ink-recede {
-    from { clip-path: circle(150% at 100% 0%); }
-    to   { clip-path: circle(0% at 100% 0%); }
+    from { background-position: 0 100%; }
+    to   { background-position: 0 0; }
 }
 
 /* Element entrances (Unity UILayoutAnimator / PopupAnimator): setup dialogs drop from the top and bounce, the other
-   parchment dialogs zoom in with a small overshoot, a story page rises from the bottom */
+   parchment dialogs zoom in from afar and ease into place, a story page rises from the bottom */
 .mfw-enter-drop { animation: mfw-drop-in 650ms cubic-bezier(0.22, 1.25, 0.45, 1) both; }
-.mfw-enter-zoom { animation: mfw-zoom-in 550ms cubic-bezier(0.2, 1.3, 0.4, 1) both; }
+.mfw-enter-zoom { animation: mfw-zoom-in 600ms cubic-bezier(0.16, 1, 0.3, 1) both; }
 .mfw-enter-rise { --mfw-from: 18vh; animation: mfw-slide-in 500ms cubic-bezier(0.2, 0.9, 0.3, 1) both; }
 
 @keyframes mfw-drop-in {

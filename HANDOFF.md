@@ -61,6 +61,16 @@ sparkle, lightning, Graphics quality in localStorage `mfwGraphics`, `html[data-g
   welcome. Load Game left the Main Menu (5 buttons, Settings centred on the last row): loading a save code is the
   "Load a save code" section of Saved Games (`LoadGamePopup` removed). Vote / bid panel sounds from Unity
   ViewBiddingSystem: `sfx-bid-open` (Set up-window appear) when it opens, `sfx-reveal` (Reveal) under the countdown.
+- Mobile feedback (1 Nov): screen transitions use Unity's ink-blot flip-book (`images/ui/transition-ink.webp`, the 22
+  `ScreenTransitions` frames as one sprite sheet, `steps(22)`; menu page navigation recedes it too). Dialogs and menu
+  papers zoom from 0.62 and ease into place in 1.4 s (no slow "breathe"); the pause menu and Settings only fade. No
+  pull-to-refresh (`overscroll-behavior-y`). Frames carry a 100vmax dark shadow so a Firefox Android toolbar change that
+  leaves a fixed layer short shows dark instead of page content; a dark backing under the round bar's windows. Absolute
+  Empire has ascent/descent overrides (capitals centred in the line box in every browser) and `.mfw-button` lifts its
+  label in em (was % of the container width). Countdown / REVEAL! sized in cqw of the plaque. Village names are
+  remembered in the gallery (`GalleryData.Villages`, prefilled + chips). Log Book on Unity's open book (3 + 3 events,
+  arrows, red X); narrow windows get one 9-slice page. Main Menu buttons at 82 % with a larger fan-made note below.
+  Not verified on a real Firefox Android phone (no device here).
 
 ## A Time of War - table play test (October 2026)
 

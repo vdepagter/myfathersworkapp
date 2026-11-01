@@ -9,7 +9,9 @@
 @font-face { font-family: "Averia"; src: url(../fonts/averia-bold.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
 @font-face { font-family: "Averia"; src: url(../fonts/averia-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
 @font-face { font-family: "Averia"; src: url(../fonts/averia-bolditalic.woff2) format("woff2"); font-weight: 700; font-style: italic; font-display: swap; }
-@font-face { font-family: "Absolute Empire"; src: url(../fonts/absolute-empire.woff2) format("woff2"); font-display: swap; }
+/* Ascent / descent set so capitals sit exactly in the middle of the line box in every browser (the font's own metrics
+   put them 0.07 em high, more on some phones) */
+@font-face { font-family: "Absolute Empire"; src: url(../fonts/absolute-empire.woff2) format("woff2"); font-display: swap; ascent-override: 87.2%; descent-override: 12.8%; line-gap-override: 0%; }
 @font-face { font-family: "Evil Dead"; src: url(../fonts/evil-dead.woff2) format("woff2"); font-display: swap; }
 
 :root {
@@ -26,19 +28,22 @@
 /* On html, so it fills the whole window however short the page is; body stays see-through over it */
 html {
     background: #111 url(../images/ui/page-bg.webp) center / cover fixed;
+    overscroll-behavior-y: none; /* no pull-to-refresh on phones (Chrome, Firefox; the game autosaves anyway) */
 }
 
 body {
     background: transparent;
 }
 
-/* Textured button (Unity Blank_Button_Brown / _Green / Button Red). The label sits a little above the middle of the art. */
+/* Textured button (Unity Blank_Button_Brown / _Green / Button Red). The label sits a little above the middle, on the
+   raised face of the art (47% of its height). The bottom padding is in em: a percentage would follow the width of the
+   button's container, so the label moved with the layout. */
 .mfw-button {
     position: relative;
     display: grid;
     place-items: center;
     aspect-ratio: 640 / 229;
-    padding: 0 8% 2%;
+    padding: 0 8% 0.22em;
     border: 0;
     background: url(../images/ui/button-brown.webp) center / 100% 100% no-repeat;
     font-family: var(--mfw-font-button);
@@ -164,19 +169,24 @@ body {
     -webkit-text-stroke: 0.35px currentColor;
 }
 
-/* Dialogs zoom in with a small overshoot, then keep growing very slowly for drama (Unity PopupAnimator) */
+/* Dialogs and menu papers zoom in from afar and ease into place (Unity PopupAnimator / PlayerIntro, shortened). Not on
+   the pause menu and Settings: a moving dialog distracts while changing settings (.mfw-appear only fades). */
 .mfw-zoom-in {
-    animation: mfw-zoom-in 0.55s cubic-bezier(0.2, 1.3, 0.4, 1) both, mfw-breathe 6s 0.55s ease-out forwards;
+    animation: mfw-zoom-scale 1.4s cubic-bezier(0.16, 1, 0.3, 1) both, mfw-fade-in 0.4s ease-out both;
+}
+
+.mfw-appear {
+    animation: mfw-fade-in 0.2s ease-out both;
+}
+
+@keyframes mfw-zoom-scale {
+    from { transform: scale(0.62); }
+    to   { transform: scale(1); }
 }
 
 @keyframes mfw-zoom-in {
-    from { transform: scale(0.82); opacity: 0; }
+    from { transform: scale(0.7); opacity: 0; }
     to   { transform: scale(1); opacity: 1; }
-}
-
-@keyframes mfw-breathe {
-    from { transform: scale(1); }
-    to   { transform: scale(1.03); }
 }
 
 html[data-graphics="low"] .mfw-zoom-in,

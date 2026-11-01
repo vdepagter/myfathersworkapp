@@ -60,16 +60,18 @@
 }
 
 /* Text field (Unity Textbox_512x128) */
+/* Text field (Unity Textbox): a fixed height with the line in the middle of the plate, so every browser centres the text */
 .mp-input {
-    width: min(100%, 26rem);
-    min-height: 3.2rem;
-    padding: 0.4rem 1.4rem;
+    width: min(100%, 22rem);
+    height: 3.6rem;
+    padding: 0 0.8rem;
+    line-height: 1.2;
     border: 18px solid transparent;
     border-image: url(../images/ui/input-box.webp) 40 fill / 18px stretch;
     background: transparent;
     color: #f1e4c4;
     font-family: var(--mfw-font-text);
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     text-align: center;
     outline: none;
 }
@@ -80,6 +82,7 @@
 textarea.mp-input {
     width: 100%;
     height: 7rem;
+    padding: 0.4rem 0.8rem;
     font-size: 0.8rem;
     text-align: left;
     word-break: break-all;
@@ -89,7 +92,7 @@ textarea.mp-input {
 /* Main action: the textured brown button */
 .mp-button {
     min-width: clamp(13rem, calc(460 * var(--u)), 19rem);
-    padding: 0 1.4em 2%; /* a long label (English - Source) widens the button */
+    padding: 0 1.4em 0.22em; /* a long label (English - Source) widens the button */
     font-size: clamp(1.05rem, calc(38 * var(--u)), 1.45rem);
     white-space: nowrap;
 }

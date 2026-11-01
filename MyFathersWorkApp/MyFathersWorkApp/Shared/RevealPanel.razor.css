@@ -35,31 +35,35 @@
     font-size: 1.15rem;
 }
 
-/* Unity MFW_Reveal_BG: the dark plaque the numbers appear on */
+/* Unity MFW_Reveal_BG: the dark plaque the numbers appear on. Sizes in cqw (plaque widths), so the number and REVEAL!
+   fit the plaque on every screen; the bottom margin centres them on its face (45% of its height). */
 .reveal-count {
     justify-self: center;
     display: grid;
     place-items: center;
     width: min(300px, 70vw);
     aspect-ratio: 405 / 224;
+    container-type: inline-size;
     background: url(images/ui/reveal-bg.webp) center / contain no-repeat;
     font-family: var(--mfw-font-heading);
-    font-size: clamp(3rem, 12vw, 5rem);
     line-height: 1;
     color: #f1e4c4;
     text-shadow: 0 0 12px rgba(255, 220, 150, 0.6), 0 3px 4px #000;
 }
 
 .reveal-count span {
+    margin-bottom: 5cqw;
+    font-size: 30cqw;
     animation: reveal-pop 0.9s cubic-bezier(0.2, 1.4, 0.4, 1) both;
 }
 
 .reveal-count.go {
-    font-size: clamp(2.2rem, 9vw, 3.6rem);
     color: #ffd27a;
 }
 
 .reveal-count.go span {
+    font-size: 13cqw;
+    white-space: nowrap;
     animation: reveal-go 0.7s cubic-bezier(0.2, 1.5, 0.4, 1) both;
 }
 
@@ -70,7 +74,7 @@
 }
 
 @keyframes reveal-go {
-    from { transform: scale(0.4); opacity: 0; letter-spacing: 0.4em; }
+    from { transform: scale(0.4); opacity: 0; letter-spacing: 0.25em; }
     to   { transform: scale(1); opacity: 1; letter-spacing: 0.05em; }
 }
 

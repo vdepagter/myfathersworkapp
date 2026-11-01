@@ -5,7 +5,7 @@
 @if (Visible)
 {
     <div class="settings-overlay" @onclick="Close">
-        <div class="settings-panel mfw-dark-panel mfw-zoom-in" role="dialog" aria-labelledby="settings-title" @onclick:stopPropagation="true">
+        <div class="settings-panel mfw-dark-panel mfw-appear" role="dialog" aria-labelledby="settings-title" @onclick:stopPropagation="true">
             <h2 id="settings-title" class="mfw-heading">@GlobalData.GetLocalizedUITag(GlobalTags.Settings_Title)</h2>
 
             <DisplaySettings GlobalData="GlobalData"/>

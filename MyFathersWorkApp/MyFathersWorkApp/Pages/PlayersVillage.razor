@@ -2,6 +2,7 @@
 @using MyFathersWorkApp.Shared
 @inject NavigationManager Nav
 @inject AudioService      Audio
+@inject GalleryService    Gallery
 
 <MenuPage Title="@GlobalData.GetLocalizedUITag(GlobalTags.Village_Title)" OnBack="GoBack" Class="centered">
     <div class="mp-parchment mfw-zoom-in">
@@ -9,8 +10,21 @@
     </div>
 
     <input class="mp-input" @bind="GlobalData.TownName" @bind:event="oninput"
-           @onkeydown="@(e => { if (e.Key is "Enter" or "NumpadEnter") Continue(); })"
+           @onkeydown="@(async e => { if (e.Key is "Enter" or "NumpadEnter") await Continue(); })"
            placeholder="@GlobalData.GetLocalizedUITag(GlobalTags.Village_Placeholder)"/>
+
+    @if (_Remembered.Count > 0)
+    {
+        <div class="remembered">
+            <div class="mp-note">@GlobalData.GetLocalizedUITag(GlobalTags.Village_Remembered)</div>
+            <div class="remembered-names">
+                @foreach (string village in _Remembered)
+                {
+                    <button class="mp-chip @(village == GlobalData.TownName ? "selected" : "")" @onclick="() => PickVillage(village)">@village</button>
+                }
+            </div>
+        </div>
+    }
 
     <button class="mfw-button mp-button" @onclick="Continue">
         @GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_Continue)
@@ -33,13 +47,28 @@
 
     private bool _ShowPopup;
 
+    // Endings Gallery: villages of earlier games, most recent first; the last one is filled in when the name is empty
+    private List<string> _Remembered = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        _Remembered = await Gallery.VillagesAsync();
+        if (string.IsNullOrWhiteSpace(GlobalData.TownName) && _Remembered.Count > 0) GlobalData.TownName = _Remembered[0];
+    }
+
+    private void PickVillage(string village)
+    {
+        Audio.PlayClick();
+        GlobalData.TownName = village;
+    }
+
     private void GoBack()
     {
         Audio.PlayClick();
         Nav.NavigateTo($"PlayersWelcome/{GlobalData.PlayersNum - 1}");
     }
 
-    private void Continue()
+    private async Task Continue()
     {
         Audio.PlayClick();
         if (GlobalData.TownName.Length < 2 || GlobalData.TownName.Length > 20)
@@ -47,7 +76,8 @@
             _ShowPopup = true;
             return;
         }
-        
+
+        await Gallery.NoteVillageAsync(GlobalData.TownName);
         Nav.NavigateTo("PlayersVillageConfirm");
     }
 

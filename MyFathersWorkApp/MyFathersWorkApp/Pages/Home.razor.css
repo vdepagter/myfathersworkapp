@@ -143,11 +143,12 @@
     to   { transform: translateY(1.5%) rotate(0.6deg); }
 }
 
-/* Unity GridButtons: two columns of 357 x 127 with 15 spacing, here at 90% to fit a third row */
+/* Unity GridButtons: two columns of 357 x 127 with 15 spacing, here at 82% (same centre) to fit a third row and leave
+   room for the note below */
 .menu-buttons {
-    left: 52.5%;
-    top: 55.45%;
-    width: 34.17%;
+    left: 54.09%;
+    top: 54%;
+    width: 31%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.25cqh 0.7cqw;
@@ -155,7 +156,7 @@
 
 .menu-buttons .mfw-button {
     aspect-ratio: 357 / 127;
-    font-size: 1.6cqw;
+    font-size: 1.5cqw;
     white-space: nowrap;
 }
 
@@ -166,18 +167,31 @@
     cursor: default;
 }
 
+/* Fan-made note under the buttons: on a soft dark band so it reads over the art */
 .disclaimer {
-    left: 52.5%;
-    top: 90.5%;
-    width: 34.17%;
+    left: 45.59%;
+    top: 88%;
+    width: 48%;
     margin: 0;
+    padding: 0.35em 1em;
+    border-radius: 999px;
+    background: radial-gradient(closest-side, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.35) 75%, transparent);
     text-align: center;
     font-family: var(--mfw-font-text);
-    font-style: italic;
-    font-size: max(9px, 0.85cqw);
+    font-size: max(11px, 1.05cqw);
     line-height: 1.3;
-    color: rgba(225, 215, 195, 0.85);
-    text-shadow: 0 1px 2px #000;
+    letter-spacing: 0.02em;
+    color: #efe4cc;
+    text-shadow: 0 1px 2px #000, 0 0 6px #000;
+}
+
+/* Windows taller than 16:9: the fan-made note moves down into the room below the canvas, a little larger */
+@media (orientation: landscape) and (max-aspect-ratio: 16 / 10) {
+    .disclaimer { top: 90%; font-size: max(12px, 1.2cqw); }
+}
+
+@media (orientation: landscape) and (max-aspect-ratio: 4 / 3) {
+    .disclaimer { top: 93%; width: 52%; left: 43.59%; font-size: max(12px, 1.35cqw); }
 }
 
 /* Phone in portrait: the manor (centre at 28% of the canvas) stays in view; logo on top, buttons and note at the bottom */
@@ -216,19 +230,19 @@
     }
 
     .menu-buttons {
-        width: 100%;
+        width: min(100%, 52svh);
         margin-top: auto;
-        gap: 1.2svh 2vw;
+        gap: 1.1svh 2vw;
     }
 
     .menu-buttons .mfw-button {
-        font-size: max(11px, min(4.1vw, 2.4svh));
+        font-size: max(11px, min(3.8vw, 2.1svh));
     }
 
     .disclaimer {
         width: 100%;
-        margin-top: 1.5svh;
-        font-size: max(9px, min(2.6vw, 1.4svh));
+        margin-top: 2.6svh;
+        font-size: max(11px, min(3.4vw, 1.8svh));
     }
 }
 

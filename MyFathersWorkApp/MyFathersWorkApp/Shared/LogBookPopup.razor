@@ -1,42 +1,54 @@
 @inject AudioService Audio
 
-@* Log Book (Shared/LogBook.cs): the logged events, six per page and oldest first as in the official app (ViewLogBook.cs) *@
+@* Log Book (Shared/LogBook.cs): the logged events, six per page and oldest first as in the official app (ViewLogBook.cs),
+   on Unity's open book (New_UI_Assets/LogBook): three events on each page, page arrows and the red close button. Narrow
+   windows get one tall page. *@
 @if (Visible)
 {
+    string previous = GlobalData.GetLocalizedUITag(GlobalTags.LogBook_Previous);
+    string next     = GlobalData.GetLocalizedUITag(GlobalTags.LogBook_Next);
+    string close    = GlobalData.GetLocalizedUITag(GlobalTags.LogBook_Close);
+    List<LogBookEntry> shown = Entries.Skip(_Page * _PAGE_SIZE).Take(_PAGE_SIZE).ToList();
+
     <div class="logbook-overlay" @onclick="Close">
-        <div class="logbook" @onclick:stopPropagation="true">
-            <h2>@GlobalData.GetLocalizedUITag(GlobalTags.LogBook_Title)</h2>
+        <div class="logbook-wrap mfw-zoom-in" @onclick:stopPropagation="true">
+            <h2 class="logbook-title">@GlobalData.GetLocalizedUITag(GlobalTags.LogBook_Title)</h2>
 
-            @if (Entries.Count == 0)
-            {
-                <p class="logbook-empty">@GlobalData.GetLocalizedUITag(GlobalTags.LogBook_Empty)</p>
-            }
-            else
-            {
-                <ol class="logbook-entries" start="@(_Page * _PAGE_SIZE + 1)">
-                    @foreach (LogBookEntry entry in Entries.Skip(_Page * _PAGE_SIZE).Take(_PAGE_SIZE))
+            <div class="logbook" role="dialog">
+                <button class="logbook-close" @onclick="Close" aria-label="@close" title="@close"></button>
+
+                <div class="logbook-pages">
+                    @if (Entries.Count == 0)
                     {
-                        <li class="logbook-entry">
-                            <div class="logbook-entry-head">
-                                <span class="logbook-entry-title">@entry.Title</span>
-                                <span class="logbook-entry-location">@entry.Location</span>
-                            </div>
-                            <div class="logbook-entry-summary">@entry.Summary</div>
-                        </li>
+                        <p class="logbook-empty mfw-ink">@GlobalData.GetLocalizedUITag(GlobalTags.LogBook_Empty)</p>
                     }
-                </ol>
-            }
+                    else
+                    {
+                        @for (int side = 0; side < 2; side++)
+                        {
+                            <ol class="logbook-entries mfw-ink">
+                                @foreach (LogBookEntry entry in shown.Skip(side * _PAGE_SIZE / 2).Take(_PAGE_SIZE / 2))
+                                {
+                                    <li class="logbook-entry">
+                                        <div class="logbook-entry-title">@entry.Title</div>
+                                        <div class="logbook-entry-location">@entry.Location</div>
+                                        <div class="logbook-entry-summary">@entry.Summary</div>
+                                    </li>
+                                }
+                            </ol>
+                        }
+                    }
+                </div>
 
-            <div class="logbook-nav">
-                <button class="logbook-button" disabled="@(_Page == 0)" @onclick="Previous">◀ @GlobalData.GetLocalizedUITag(GlobalTags.LogBook_Previous)</button>
-                @if (PageCount > 1)
-                {
-                    <span class="logbook-page">@GlobalData.GetLocalizedUITag(GlobalTags.LogBook_Page).FormatWithReplacement(0, (_Page + 1).ToString()).FormatWithReplacement(1, PageCount.ToString())</span>
-                }
-                <button class="logbook-button" disabled="@(_Page >= PageCount - 1)" @onclick="Next">@GlobalData.GetLocalizedUITag(GlobalTags.LogBook_Next) ▶</button>
+                <div class="logbook-nav">
+                    <button class="logbook-arrow previous" disabled="@(_Page == 0)" @onclick="Previous" aria-label="@previous" title="@previous"></button>
+                    @if (PageCount > 1)
+                    {
+                        <span class="logbook-page mfw-ink">@GlobalData.GetLocalizedUITag(GlobalTags.LogBook_Page).FormatWithReplacement(0, (_Page + 1).ToString()).FormatWithReplacement(1, PageCount.ToString())</span>
+                    }
+                    <button class="logbook-arrow" disabled="@(_Page >= PageCount - 1)" @onclick="Next" aria-label="@next" title="@next"></button>
+                </div>
             </div>
-
-            <button class="logbook-button logbook-close" @onclick="Close">@GlobalData.GetLocalizedUITag(GlobalTags.LogBook_Close)</button>
         </div>
     </div>
 }

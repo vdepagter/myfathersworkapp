@@ -16,6 +16,7 @@ public class GalleryData
     public Dictionary<string, List<int>> Reached   { get; set; } = new(); // scenario -> hub ids reached in play
     public Dictionary<string, List<int>> Ticked    { get; set; } = new(); // scenario -> endings ticked off by hand
     public List<string>                  LastTable { get; set; } = [];    // the players of the last game, in seat order
+    public List<string>                  Villages  { get; set; } = [];    // village names played, most recent first
 }
 
 public class GalleryPlayer
@@ -188,7 +189,7 @@ public class GalleryService(IJSRuntime js)
         if (globalData.ScenarioId == ScenarioId.None || hubId == 0) return;
 
         GalleryData data    = await GetAsync();
-        bool        changed = NotePlayers(data, globalData.GetActivePlayers());
+        bool        changed = NotePlayers(data, globalData.GetActivePlayers()) | NoteVillage(data, globalData.TownName);
 
         List<int> reached = Entry(data.Reached, globalData.ScenarioId);
         if (!reached.Contains(hubId))
@@ -254,6 +255,14 @@ public class GalleryService(IJSRuntime js)
         await SaveAsync();
     }
 
+    // Remembered village names, most recently played first
+    public async Task<List<string>> VillagesAsync() => (await GetAsync()).Villages.ToList();
+
+    public async Task NoteVillageAsync(string village)
+    {
+        if (NoteVillage(await GetAsync(), village)) await SaveAsync();
+    }
+
     public async Task ForgetPlayerAsync(string name)
     {
         GalleryData data = await GetAsync();
@@ -312,6 +321,7 @@ public class GalleryService(IJSRuntime js)
         }
 
         if (data.LastTable.Count == 0) data.LastTable = incoming.LastTable;
+        data.Villages.AddRange(incoming.Villages.Where(village => !data.Villages.Contains(village, StringComparer.CurrentCultureIgnoreCase)));
 
         await SaveAsync();
         return true;
@@ -325,6 +335,19 @@ public class GalleryService(IJSRuntime js)
         list     = [];
         map[key] = list;
         return list;
+    }
+
+    private const int _MAX_VILLAGES = 8;
+
+    private static bool NoteVillage(GalleryData data, string village)
+    {
+        village = village.Trim();
+        if (village.Length == 0 || data.Villages.FirstOrDefault() == village) return false;
+
+        data.Villages.RemoveAll(v => string.Equals(v, village, StringComparison.CurrentCultureIgnoreCase));
+        data.Villages.Insert(0, village);
+        if (data.Villages.Count > _MAX_VILLAGES) data.Villages.RemoveRange(_MAX_VILLAGES, data.Villages.Count - _MAX_VILLAGES);
+        return true;
     }
 
     private static bool NotePlayers(GalleryData data, string[] players)

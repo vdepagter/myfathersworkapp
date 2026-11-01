@@ -45,8 +45,8 @@
         Audio.SetMusic(MusicTrack.Title);
     }
 
-    // Setup / menu pages fade in and rise after each navigation (js/transitions.js, "page"). /Gameplay has its own
-    // screen transitions. The layout re-renders with the new page on every navigation.
+    // Setup / menu pages fade in and rise after each navigation (js/transitions.js, "page"), behind the receding ink of
+    // Unity's view change (not on the first page). /Gameplay has its own screen transitions. The layout re-renders with the new page on every navigation.
     private string? _LastEnteredPath;
     private string  _PageLanguage = "en"; // <html lang> in index.html
 
@@ -63,9 +63,11 @@
         }
 
         if (path == _LastEnteredPath) return;
+        bool navigated = _LastEnteredPath != null;
         _LastEnteredPath = path;
         if (IsGameplay(path)) return;
 
+        if (navigated) await Js.InvokeVoidAsync("mfwTransitions.run", "popup");
         await Js.InvokeVoidAsync("mfwTransitions.enter", "page");
     }
 

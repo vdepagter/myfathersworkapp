@@ -33,6 +33,7 @@ Village_Title;The Village
 Village_Subtitle;<p>Now that our given names have been established, we must also search our recollection for the name of the village which our vast estates overlook.<br />Considering the myriad of small towns in the Hungarian countryside, it would be unerringly forward to not allow the group a chance to collectively name the place they will now inhabit.</p><p>Please collectively enter the name of the town in which your inheritance resides.</p>
 Village_Placeholder;Enter village name...
 Village_PopUp;The village name must be between 2 and 20 characters.
+Village_Remembered;Or pick a village from an earlier game:
 //====== Village Confirm Screen ======;
 VillageConfirm_Content;<p>Thank you and please do excuse our forgetfulness.</p><p>Of course, <span class="village-name"><b>{{0=...|London|Dubai|Paris|...}}</b></span> is an appropriate and fitting moniker for a place to conduct important scientific research. In fact, history will remember this name, mark my words.</p>
 //====== Scenario Screen ======;

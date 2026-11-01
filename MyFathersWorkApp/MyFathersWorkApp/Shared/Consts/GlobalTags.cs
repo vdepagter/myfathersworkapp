@@ -41,6 +41,7 @@ public static class GlobalTags
     public const string Village_Subtitle    = "Village_Subtitle";
     public const string Village_Placeholder = "Village_Placeholder";
     public const string Village_PopUp       = "Village_PopUp";
+    public const string Village_Remembered  = "Village_Remembered";
 
     // Village Confirm Screen
     public const string VillageConfirm_Content = "VillageConfirm_Content";

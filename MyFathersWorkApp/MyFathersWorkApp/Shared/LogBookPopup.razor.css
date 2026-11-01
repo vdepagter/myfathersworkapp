@@ -1,121 +1,198 @@
+/* Unity ViewLogBook: the open book (images/ui/logbook-book.webp, 1200 x 716) over the dimmed page. Sizes in cqw of the
+   book, so the text keeps its place on the pages at any window size. */
 .logbook-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.75);
+    inset: 0;
     z-index: 2000;
     display: flex;
-    justify-content: center;
-    align-items: center;
     overflow-y: auto;
-    padding: 1rem 0;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.75);
 }
 
-/* Auto margins centre the box but keep it scrollable when it is taller than the screen */
-.logbook-overlay > * {
+/* Auto margins centre the book but keep it scrollable when it is taller than the screen */
+.logbook-wrap {
+    width: min(1100px, 100%, (100svh - 6rem) * 1200 / 716);
     margin: auto;
 }
 
-.logbook {
-    background: #d4bfa5;
-    border: 3px solid #2e1f14;
-    padding: 1.5rem 2rem;
-    border-radius: 10px;
-    width: min(700px, calc(100% - 2rem));
-    box-sizing: border-box;
-    color: #2e1f14;
+.logbook-title {
+    margin: 0 0 0.4rem;
+    font-family: var(--mfw-font-heading);
+    font-weight: 400;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    line-height: 1.1;
     text-align: center;
+    color: #fff;
+    text-shadow: 0 0 8px #000, 0 2px 3px #000;
 }
 
-.logbook h2 {
-    margin-top: 0;
+.logbook {
+    position: relative;
+    aspect-ratio: 1200 / 716;
+    container-type: inline-size;
+    background: url(images/ui/logbook-book.webp) center / 100% 100% no-repeat;
+    filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.7));
+    font-family: var(--mfw-font-text);
 }
 
-.logbook-empty {
-    font-style: italic;
+/* The two pages of the art (left 7-46 %, right 51-89 % of the book), above the curled bottom edge */
+.logbook-pages {
+    position: absolute;
+    left: 7.5%;
+    right: 11.5%;
+    top: 7%;
+    bottom: 25%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 9%;
 }
 
 .logbook-entries {
     margin: 0;
     padding: 0;
     list-style: none;
-    text-align: left;
+    overflow-y: auto;
 }
 
 .logbook-entry {
-    padding: 0.6rem 0;
-    border-bottom: 1px solid rgba(46,31,20,0.35);
+    padding: 0.7cqw 0 0.9cqw;
+    border-bottom: 1px solid rgba(70, 40, 20, 0.35);
 }
 
 .logbook-entry:last-child {
     border-bottom: none;
 }
 
-.logbook-entry-head {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 0 1rem;
-}
-
 .logbook-entry-title {
-    font-weight: bold;
+    font-family: var(--mfw-font-heading);
+    font-size: max(15px, 2.1cqw);
+    line-height: 1.15;
+    color: #4a1208;
+    -webkit-text-stroke: 0;
 }
 
 .logbook-entry-location {
-    font-size: 0.85rem;
+    font-size: max(11px, 1.2cqw);
     font-style: italic;
-    color: #5c4633;
+    color: #5c3a22;
 }
 
 .logbook-entry-summary {
-    margin-top: 0.2rem;
-    font-size: 0.95rem;
+    margin-top: 0.3cqw;
+    font-size: max(12px, 1.45cqw);
+    line-height: 1.35;
 }
 
+.logbook-empty {
+    grid-column: 1 / -1;
+    align-self: center;
+    font-size: max(14px, 1.8cqw);
+    font-style: italic;
+    text-align: center;
+}
+
+/* Page arrows (Unity next-page-arrow) and the page number along the bottom of the pages */
 .logbook-nav {
+    position: absolute;
+    left: 8%;
+    right: 12%;
+    bottom: 16.5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
 }
 
 .logbook-page {
-    font-size: 0.9rem;
+    font-size: max(12px, 1.4cqw);
 }
 
-.logbook-button {
-    min-height: 44px;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    font-weight: bold;
-    background-color: #5c4633;
-    color: #e0d3b8;
-    border: 2px solid #2e1f14;
-    border-radius: 6px;
+.logbook-arrow {
+    width: max(36px, 4.6cqw);
+    aspect-ratio: 1;
+    padding: 0;
+    border: 0;
+    background: url(images/ui/logbook-arrow.webp) center / contain no-repeat;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.6));
     cursor: pointer;
+    transition: transform 0.12s, filter 0.25s, opacity 0.25s;
 }
 
-.logbook-button:disabled {
-    opacity: 0.4;
-    cursor: default;
+.logbook-arrow.previous {
+    transform: scaleX(-1);
 }
 
+.logbook-arrow:hover:not(:disabled) { filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.6)) brightness(1.3); }
+.logbook-arrow:disabled             { opacity: 0.25; cursor: default; }
+
+/* Unity Close_Button: the red X at the book's top-right corner */
 .logbook-close {
-    margin-top: 1rem;
-    background-color: #3a5c3a;
+    position: absolute;
+    top: -1.5%;
+    right: 4%;
+    z-index: 1;
+    width: max(40px, 5.2cqw);
+    aspect-ratio: 1;
+    padding: 0;
+    border: 0;
+    background: url(images/ui/logbook-close.webp) center / contain no-repeat;
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.7));
+    cursor: pointer;
+    transition: transform 0.12s, filter 0.25s;
 }
 
-@media (max-width: 600px) {
-    .logbook {
-        padding: 1rem;
+.logbook-close:hover  { filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.7)) brightness(1.2); transform: scale(1.06); }
+.logbook-close:active { transform: scale(0.94); }
+
+/* Narrow windows: one tall page (the book's right page) with the six events below each other */
+@media (max-width: 760px), (orientation: portrait) {
+    .logbook-wrap {
+        width: min(560px, 100%);
     }
 
-    .logbook-button {
-        padding: 0.5rem 0.75rem;
+    /* 9-slice of the page (480 x 592), so the curled corner keeps its size however tall the page grows */
+    .logbook {
+        aspect-ratio: auto;
+        padding: 0.4rem 0.6rem 0 0.4rem;
+        border: solid transparent;
+        border-width: 30px 24px 60px 18px;
+        border-image: url(images/ui/logbook-page.webp) 60 48 120 36 fill / 30px 24px 60px 18px stretch;
+        background: none;
+        container-type: normal;
+    }
+
+    .logbook-pages,
+    .logbook-nav {
+        position: static;
+    }
+
+    .logbook-pages {
+        display: block;
+    }
+
+    .logbook-entries {
+        overflow: visible;
+    }
+
+    .logbook-entry { padding: 0.45rem 0 0.6rem; }
+    .logbook-entries:first-child .logbook-entry:last-child { border-bottom: 1px solid rgba(70, 40, 20, 0.35); }
+
+    .logbook-entry-title    { font-size: 1.15rem; }
+    .logbook-entry-location { font-size: 0.8rem; }
+    .logbook-entry-summary  { margin-top: 0.15rem; font-size: 0.92rem; }
+    .logbook-empty          { margin: 2rem 0; font-size: 1rem; }
+
+    .logbook-nav {
+        margin-top: 0.4rem;
+        padding-right: 1.4rem; /* the next arrow stays off the curled corner */
+    }
+
+    .logbook-page  { font-size: 0.9rem; }
+    .logbook-arrow { width: 40px; }
+
+    .logbook-close {
+        top: -44px;
+        right: -26px;
+        width: 44px;
     }
 }

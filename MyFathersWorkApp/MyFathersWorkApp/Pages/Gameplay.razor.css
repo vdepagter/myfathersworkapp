@@ -61,6 +61,9 @@
     pointer-events: none;
     border: calc(140 * var(--u)) solid transparent;
     border-image: url(images/ui/frame-story.webp) 140 / calc(140 * var(--u)) stretch;
+    /* Firefox on Android can leave a fixed layer short of the window edge for a moment while its toolbars slide away,
+       which lifted the bottom border over the page; the shadow keeps everything outside the frame dark */
+    box-shadow: 0 0 0 100vmax #0d0c0b;
 }
 
 .game-frame.hub {
@@ -233,6 +236,18 @@
 .round-tray,
 .round-step {
     position: absolute;
+}
+
+/* Dark backing under the nine windows: the tray's window rims are half transparent, so light page text scrolling
+   behind the bar showed through as a white outline */
+.round-tracker::before {
+    content: "";
+    position: absolute;
+    left: 5.9%;
+    width: 88.2%;
+    top: 55.5%;
+    height: 26%;
+    background: #141414;
 }
 
 .round-bar {
