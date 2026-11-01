@@ -1,82 +1,137 @@
-/* Inside Shared/MenuPage; tabs, chips, notes and boxes from css/menu-pages.css */
+/* Inside Shared/MenuPage; tabs, chips, notes and boxes from css/menu-pages.css. Readability (Nov 2026): lists sit on the
+   dark Settings panel plate instead of on the textured page, secondary text is at least 0.9rem in a light cream. */
 .gallery-container {
     width: 100%;
-    max-width: 40rem;
+    max-width: 62rem;
     text-align: left;
-    color: #e9dcc0;
+    color: #f1e4c4;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-}
-
-/* Win tally */
-.tally-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 44px 44px 44px 52px 32px;
     align-items: center;
-    gap: 4px;
-    padding: 0 12px;
+    gap: 0.9rem;
 }
 
-.tally-head {
-    font-size: 0.75rem;
-    color: #a99c84;
+.gallery-container > * {
+    width: 100%;
 }
 
-.tally-head span:not(:first-child),
-.tally-cell {
-    text-align: center;
+.gallery-tabs {
+    width: auto;
 }
 
-.tally-card {
-    min-height: 52px;
-    padding: 4px 4px;
-    border: 12px solid transparent;
-    border-image: url(images/ui/input-box.webp) 40 fill / 12px stretch;
-}
-
-.tally-card.family {
-    border: 12px solid transparent;
-    border-image: none;
-    outline: 1px dashed #6b5c44;
-    outline-offset: -8px;
-}
-
-.tally-name {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
+.gallery-tabs .mp-chip {
+    min-width: 8.5rem;
     font-size: 1.05rem;
 }
 
-.tally-sub {
-    font-size: 0.75rem;
-    color: #a99c84;
+.gallery-container h2 {
+    text-align: center;
 }
 
-.tally-cell {
-    color: #cfc2a6;
+/* Dark metal plate (Unity SettingsPanel) behind lists; its centre has a glowing line, so the plate is not filled */
+.gallery-panel {
+    border: 22px solid transparent;
+    border-image: url(images/ui/settings-panel.webp) 60 / 22px stretch;
+    background: linear-gradient(#1b1b1d, #121214) padding-box;
+    padding: 4px 8px;
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.6));
 }
 
-.tally-wins {
-    text-align: right;
-    font-size: 1.35rem;
+/* Scenario covers (Unity scenario select art) */
+.cover-1 { background-image: url(images/ui/scenario-1.webp); }
+.cover-2 { background-image: url(images/ui/scenario-2.webp); }
+.cover-3 { background-image: url(images/ui/scenario-3.webp); }
+
+/* ---------- Players ---------- */
+.players-column {
+    max-width: 44rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.tally-scroll {
+    overflow-x: auto;
+}
+
+.tally {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+}
+
+.tally th {
+    padding: 4px 4px 10px;
+    vertical-align: bottom;
+    font-weight: 400;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    color: #d9cbab;
+    text-align: center;
+}
+
+.tally th.tally-name-head {
+    text-align: left;
+}
+
+.tally-scenario {
+    width: 5.5rem;
+}
+
+.tally-cover {
+    width: 40px;
+    height: 54px;
+    margin: 0 auto 4px;
+    border: 2px solid #6b5c44;
+    border-radius: 2px;
+    background-size: cover;
+    background-position: center top;
+}
+
+.tally td {
+    padding: 10px 4px;
+    border-top: 1px solid rgba(201, 163, 90, 0.2);
+    text-align: center;
+    font-size: 1.15rem;
+}
+
+.tally td.zero {
+    color: #7a705f;
+}
+
+.tally td.tally-name {
+    text-align: left;
+}
+
+.tally-name b {
+    display: block;
+    font-size: 1.15rem;
+}
+
+.tally-name small,
+.recent-game small {
+    display: block;
+    font-size: 0.92rem;
+    color: #d9cbab;
+}
+
+.tally td.tally-wins {
+    font-size: 1.6rem;
+    font-weight: 700;
     color: #ffd27a;
 }
 
-.tally-head .tally-wins {
-    font-size: 0.75rem;
-    color: #a99c84;
+.tally tr.family td {
+    color: #d9cbab;
 }
 
 .tally-forget {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border: none;
     background: transparent;
     color: #8f8574;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     cursor: pointer;
 }
 
@@ -87,17 +142,49 @@
 .recent-game {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 12px;
-    padding: 8px 4px;
-    border-bottom: 1px solid #3c3a36;
+    padding: 10px 4px;
+    border-top: 1px solid rgba(201, 163, 90, 0.2);
+}
+
+.recent-game:first-child {
+    border-top: 0;
+}
+
+.recent-game b {
+    font-size: 1.08rem;
 }
 
 .recent-winner {
     color: #ffd27a;
+    font-weight: 700;
     white-space: nowrap;
 }
 
-/* Buttons, export and import */
+/* Backup, export and import: folded away under the lists */
+.gallery-backup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.gallery-backup summary {
+    padding: 0.4rem 0;
+    font-size: 1.05rem;
+    text-align: center;
+    cursor: pointer;
+    text-shadow: 0 1px 2px #000;
+}
+
+.gallery-backup[open] summary {
+    margin-bottom: 0.5rem;
+}
+
+.gallery-backup > * + * {
+    margin-top: 0.6rem;
+}
+
 .gallery-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -105,156 +192,376 @@
     gap: 0.6rem;
 }
 
-/* Endings tree */
-.gallery-container h2 {
-    text-align: center;
-}
-
-.gallery-tabs {
-    align-self: center;
-}
-
-.scenario-tabs {
+/* ---------- Endings: scenario covers ---------- */
+.scenario-posters {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 6px;
+    gap: clamp(8px, 2vw, 20px);
+    max-width: 36rem;
 }
 
-.scenario-tabs .mp-chip {
+.scenario-poster {
+    display: flex;
     flex-direction: column;
-    min-height: 60px;
-    padding: 0.1rem 0.3rem;
-    font-size: 0.85rem;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #f1e4c4;
+    font-family: var(--mfw-font-text);
+    cursor: pointer;
 }
 
-.scenario-count {
+.poster-art {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 437 / 560;
+    background-size: cover;
+    background-position: center top;
+    filter: grayscale(0.6) brightness(0.6);
+    transition: filter 0.2s, transform 0.2s;
+}
+
+.poster-art::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    background: url(images/ui/scenario-border-steel.webp) center / 100% 100% no-repeat;
+}
+
+.scenario-poster:hover .poster-art {
+    filter: grayscale(0.2) brightness(0.9);
+}
+
+.scenario-poster[aria-pressed="true"] .poster-art {
+    filter: none;
+    transform: translateY(-3px);
+}
+
+.scenario-poster[aria-pressed="true"] .poster-art::after {
+    background-image: url(images/ui/scenario-border-gold.webp);
+}
+
+.scenario-poster:focus-visible {
+    outline: 2px solid #c9a35a;
+    outline-offset: 4px;
+}
+
+.poster-name {
+    font-size: clamp(0.85rem, 2.2vw, 1rem);
+    line-height: 1.2;
+    text-align: center;
+    text-shadow: 0 1px 2px #000;
+}
+
+.scenario-poster[aria-pressed="true"] .poster-name {
     color: #ffd27a;
+}
+
+.poster-count {
+    font-size: 0.9rem;
+    color: #d9cbab;
 }
 
 .tree-toolbar {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    font-size: 0.9rem;
-    color: #b3a68c;
+    gap: 10px;
+    font-size: 1.05rem;
+    text-shadow: 0 1px 2px #000;
 }
 
-.tree {
-    display: flex;
-    flex-direction: column;
+.pips {
+    display: inline-flex;
+    gap: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
 }
 
-.tree-row {
-    display: flex;
-    align-items: stretch;
-    min-height: 56px;
-}
-
-.tree-rail {
-    width: 22px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.tree-line {
-    width: 2px;
-    height: 14px;
-    background-color: #5d5547;
-}
-
-.tree-line.grow {
-    flex-grow: 1;
-}
-
-.tree-line.hidden {
-    background: transparent;
-}
-
-.tree-node {
-    width: 12px;
-    height: 12px;
-    flex-shrink: 0;
-    border: 2px solid #5a4e40;
-    border-radius: 6px;
-}
-
-.tree-node.ending {
+.pips i {
+    width: 10px;
+    height: 10px;
+    border: 1.5px solid #7d6c50;
     border-radius: 2px;
 }
 
-.tree-node.lit {
+.pips i.on {
     background-color: #ffd27a;
     border-color: #ffd27a;
 }
 
-.tree-text {
-    flex-grow: 1;
+/* ---------- Endings: the map ---------- */
+/* Wide: one column per generation and the endings on the right, each plaque centred on the endings below it; the lines
+   between them are drawn by js/gallery.js (keep its breakpoint check: it draws only while the svg is shown). Narrow: a top-down tree with left rails. */
+.endings-map {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.map-links {
+    display: none;
+}
+
+.map-head {
+    display: none;
+}
+
+.map-cell {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    margin-left: calc(var(--depth) * 12px);
+}
+
+.map-cell + .map-cell {
+    padding-left: 12px;
+    border-left: 2px solid #5d5547;
+}
+
+.map-cell + .map-cell.lit {
+    border-left-color: #c9a35a;
+}
+
+.map-level {
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #c9a35a;
+}
+
+@media (min-width: 1000px) {
+    .endings-map {
+        display: grid;
+        grid-template-columns: 0.9fr 1fr 1.05fr 1.45fr;
+        column-gap: 34px;
+        row-gap: 8px;
+    }
+
+    .map-links {
+        display: block;
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+    }
+
+    .map-links ::deep path {
+        fill: none;
+        stroke: #5d5547;
+        stroke-width: 2;
+        stroke-dasharray: 4 5;
+    }
+
+    .map-links ::deep path.lit {
+        stroke: #ffd27a;
+        stroke-width: 2.5;
+        stroke-dasharray: none;
+        opacity: 0.9;
+    }
+
+    .map-head {
+        display: block;
+        grid-row: 1;
+        font-size: 0.85rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #c9a35a;
+        text-align: center;
+    }
+
+    .map-cell,
+    .map-cell + .map-cell {
+        justify-content: center;
+        margin-left: 0;
+        padding-left: 0;
+        border-left: 0;
+    }
+
+    .map-level {
+        display: none;
+    }
+}
+
+.plaque {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 58px;
+    padding: 6px 10px;
+    border: 12px solid transparent;
+    border-image: url(images/ui/input-box.webp) 40 fill / 12px stretch;
+    background: transparent;
+    color: #f1e4c4;
+    font-family: var(--mfw-font-text);
+    font-size: 1rem;
+    text-align: left;
+}
+
+.plaque-text {
+    flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     gap: 2px;
-    padding: 6px 8px;
 }
 
-.tree-kicker {
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #a99c84;
+.plaque-text b {
+    font-size: 1.05rem;
+    line-height: 1.25;
 }
 
-.tree-label {
-    color: #b3a68c;
+.plaque-text small {
+    font-size: 0.9rem;
+    line-height: 1.3;
+    color: #d9cbab;
 }
 
-.tree-label.lit {
-    color: #f0e4c8;
+.plaque.branch .plaque-text b {
+    font-family: var(--mfw-font-heading);
+    font-weight: 400;
+    font-size: 1.08rem;
+    letter-spacing: 0.02em;
+    color: #ead9b0;
 }
 
-.tree-label.locked {
-    color: #958c7c;
+.plaque.lit {
+    box-shadow: 0 0 0 2px rgba(255, 196, 92, 0.55);
+    background: rgba(255, 190, 80, 0.08) padding-box;
+}
+
+.plaque.played {
+    box-shadow: 0 0 0 2px #ffd27a, 0 0 16px rgba(255, 196, 92, 0.4);
+    background: rgba(255, 190, 80, 0.14) padding-box;
+}
+
+.plaque.locked {
+    cursor: pointer;
+    opacity: 0.85;
+}
+
+.plaque.locked .plaque-text b,
+.plaque.locked.branch .plaque-text b {
+    font-family: var(--mfw-font-text);
+    font-weight: 400;
     font-style: italic;
+    color: #b1a68f;
 }
 
-.tree-status {
-    font-size: 0.75rem;
-    color: #a99c84;
+.plaque.locked:hover {
+    filter: brightness(1.3);
 }
 
-.tree-status.done {
-    color: #ffd27a;
+.plaque.locked:focus-visible {
+    outline: 2px solid #c9a35a;
+    outline-offset: 2px;
 }
 
-.tree-action {
-    display: flex;
-    align-items: center;
+.plaque-dup {
+    align-self: flex-start;
+    margin-top: 2px;
+    padding: 1px 7px;
+    border: 1px solid #6b5c44;
+    border-radius: 9px;
+    font-size: 0.8rem;
+    color: #d9cbab;
+}
+
+/* State marks: played (star), ticked off (tick), known but not reached (ring), locked (?) */
+.mark {
+    display: inline-grid;
+    place-items: center;
     flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1;
 }
 
-.tree-star {
-    width: 44px;
-    text-align: center;
+.mark.played {
+    background-color: #ffd27a;
+    color: #2a1a06;
+    box-shadow: 0 0 10px rgba(255, 196, 92, 0.6);
+}
+
+.mark.ticked {
+    border: 2px solid #c9a35a;
     color: #ffd27a;
-    font-size: 1.4rem;
+}
+
+.mark.open {
+    border: 2px dashed #8b7a5c;
+}
+
+.mark.locked {
+    background-color: #23201c;
+    border: 1px solid #4a4338;
+    color: #8f8574;
+    font-family: var(--mfw-font-heading);
+    font-weight: 400;
 }
 
 .tree-tick {
-    width: 44px;
-    height: 44px;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
     border: 1px solid #7a5a3c;
     border-radius: 8px;
     background: transparent;
     color: #111;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
+}
+
+.tree-tick:hover {
+    border-color: #c9a35a;
 }
 
 .tree-tick.ticked {
     background-color: #d9b36c;
     border-color: #d9b36c;
+}
+
+.gallery-key {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 18px;
+    font-size: 0.95rem;
+    color: #d9cbab;
+    text-shadow: 0 1px 2px #000;
+}
+
+.gallery-key span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.gallery-legend {
+    max-width: 44rem;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .gallery-panel {
+        border-width: 14px;
+        border-image-width: 14px;
+        padding: 4px;
+    }
 }

@@ -23,146 +23,199 @@
     }
     else if (!_EndingsTab)
     {
-        <div class="tally-row tally-head">
-            <span>@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Player)</span>
-            <span title="@GalleryTrees.Name(ScenarioId.CostOfDisease)">CoD</span>
-            <span title="@GalleryTrees.Name(ScenarioId.FearOfUnknown)">FotU</span>
-            <span title="@GalleryTrees.Name(ScenarioId.TimeOfWar)">AToW</span>
-            <span class="tally-wins">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Wins)</span>
-            <span></span>
-        </div>
+        <div class="players-column">
+            <div class="gallery-panel tally-scroll">
+                <table class="tally">
+                    <thead>
+                        <tr>
+                            <th class="tally-name-head">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Player)</th>
+                            @foreach (ScenarioId scenario in GalleryTrees.Scenarios)
+                            {
+                                <th class="tally-scenario">
+                                    <div class="tally-cover cover-@((int)scenario)" aria-hidden="true"></div>
+                                    @GalleryTrees.Name(scenario)
+                                </th>
+                            }
+                            <th>@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Wins)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (TallyLine line in Tally())
+                        {
+                            <tr class="@(line.Family ? "family" : "")">
+                                <td class="tally-name">
+                                    <b>@line.Name</b>
+                                    <small>@line.Sub</small>
+                                </td>
+                                @foreach (int wins in line.PerScenario)
+                                {
+                                    <td class="@(wins == 0 ? "zero" : "")">@wins</td>
+                                }
+                                <td class="tally-wins">@line.Wins</td>
+                                <td>
+                                    @if (line.Forgettable)
+                                    {
+                                        string label = GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Forget).FormatWithReplacement(0, line.Name);
+                                        <button class="tally-forget" aria-label="@label" title="@label" @onclick="() => Forget(line.Name)">×</button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
 
-        @foreach (TallyLine line in Tally())
-        {
-            <div class="tally-row tally-card @(line.Family ? "family" : "")">
-                <div class="tally-name">
-                    <span>@line.Name</span>
-                    <span class="tally-sub">@line.Sub</span>
+            <h2 class="mp-section-title">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_RecentGames)</h2>
+
+            <div class="gallery-panel">
+                @if (_Data.Games.Count == 0)
+                {
+                    <p class="mp-note">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_NoGames)</p>
+                }
+
+                @foreach (GalleryGame game in _Data.Games.OrderByDescending(game => game.Date).Take(10))
+                {
+                    <div class="recent-game">
+                        <div>
+                            <b>@game.Title</b>
+                            <small>@GalleryTrees.Name(game.Scenario) · @FormatDate(game.Date) · @string.Join(", ", game.Players)</small>
+                        </div>
+                        <span class="recent-winner">@(game.FamilyWinner ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Family) : game.Winner)</span>
+                    </div>
+                }
+            </div>
+
+            <details class="gallery-backup">
+                <summary>@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Backup)</summary>
+                <p class="mp-note">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_BackupNote)</p>
+
+                <div class="gallery-buttons">
+                    <button class="mp-chip" @onclick="Export">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Export)</button>
+                    <button class="mp-chip" @onclick="ShowImport">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Import)</button>
                 </div>
-                @foreach (int wins in line.PerScenario)
+
+                @if (_Export != string.Empty)
                 {
-                    <span class="tally-cell">@wins</span>
+                    <textarea class="mp-input" readonly>@_Export</textarea>
+                    <div class="gallery-buttons">
+                        <button class="mp-chip" @onclick="CopyExport">@GlobalData.GetLocalizedUITag(GlobalTags.Gameplay_Copy)</button>
+                        <button class="mp-chip" @onclick="DownloadExport">@GlobalData.GetLocalizedUITag(GlobalTags.Gameplay_DownloadFile)</button>
+                    </div>
                 }
-                <span class="tally-wins">@line.Wins</span>
-                @if (line.Forgettable)
+
+                @if (_ShowImport)
                 {
-                    string label = GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Forget).FormatWithReplacement(0, line.Name);
-                    <button class="tally-forget" aria-label="@label" title="@label" @onclick="() => Forget(line.Name)">×</button>
+                    <textarea class="mp-input" @bind="_ImportText" placeholder="@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_PasteHere)"></textarea>
+                    <div class="gallery-buttons">
+                        <InputFile OnChange="@LoadImportFile"/>
+                        <button class="mp-chip" @onclick="Import">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Import)</button>
+                    </div>
                 }
-                else
+
+                @if (_ImportMessage != string.Empty)
                 {
-                    <span></span>
+                    <p class="mp-note">@_ImportMessage</p>
                 }
-            </div>
-        }
-
-        <h2 class="mp-section-title">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_RecentGames)</h2>
-
-        @if (_Data.Games.Count == 0)
-        {
-            <p class="mp-note">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_NoGames)</p>
-        }
-
-        @foreach (GalleryGame game in _Data.Games.OrderByDescending(game => game.Date).Take(10))
-        {
-            <div class="recent-game">
-                <div>
-                    <div>@game.Title</div>
-                    <div class="tally-sub">@GalleryTrees.Name(game.Scenario) · @FormatDate(game.Date) · @string.Join(", ", game.Players)</div>
-                </div>
-                <span class="recent-winner">@(game.FamilyWinner ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Family) : game.Winner)</span>
-            </div>
-        }
-
-        <h2 class="mp-section-title">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Backup)</h2>
-        <p class="mp-note">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_BackupNote)</p>
-
-        <div class="gallery-buttons">
-            <button class="mp-chip" @onclick="Export">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Export)</button>
-            <button class="mp-chip" @onclick="ShowImport">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Import)</button>
+            </details>
         </div>
-
-        @if (_Export != string.Empty)
-        {
-            <textarea class="mp-input" readonly>@_Export</textarea>
-            <div class="gallery-buttons">
-                <button class="mp-chip" @onclick="CopyExport">@GlobalData.GetLocalizedUITag(GlobalTags.Gameplay_Copy)</button>
-                <button class="mp-chip" @onclick="DownloadExport">@GlobalData.GetLocalizedUITag(GlobalTags.Gameplay_DownloadFile)</button>
-            </div>
-        }
-
-        @if (_ShowImport)
-        {
-            <textarea class="mp-input" @bind="_ImportText" placeholder="@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_PasteHere)"></textarea>
-            <div class="gallery-buttons">
-                <InputFile OnChange="@LoadImportFile"/>
-                <button class="mp-chip" @onclick="Import">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Import)</button>
-            </div>
-        }
-
-        @if (_ImportMessage != string.Empty)
-        {
-            <p class="mp-note">@_ImportMessage</p>
-        }
     }
     else
     {
-        <div class="scenario-tabs">
+        <div class="scenario-posters">
             @foreach (ScenarioId scenario in GalleryTrees.Scenarios)
             {
-                <button class="mp-chip" aria-pressed="@(scenario == _Scenario)" @onclick="() => SelectScenario(scenario)">
-                    <span>@GalleryTrees.Name(scenario)</span>
-                    <span class="scenario-count">@GalleryService.EndingsDone(_Data, scenario).Count / 8</span>
+                int found = GalleryService.EndingsDone(_Data, scenario).Count;
+                <button class="scenario-poster" aria-pressed="@(scenario == _Scenario)" @onclick="() => SelectScenario(scenario)">
+                    <span class="poster-art cover-@((int)scenario)"></span>
+                    <span class="poster-name">@GalleryTrees.Name(scenario)</span>
+                    <span class="poster-count">@found / 8</span>
                 </button>
             }
         </div>
 
+        int done = GalleryService.EndingsDone(_Data, _Scenario).Count;
         <div class="tree-toolbar">
-            <span>@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_EndingsCount).FormatWithReplacement(0, GalleryService.EndingsDone(_Data, _Scenario).Count.ToString())</span>
+            <span class="tree-count">
+                @GlobalData.GetLocalizedUITag(GlobalTags.Gallery_EndingsCount).FormatWithReplacement(0, done.ToString())
+                <span class="pips" aria-hidden="true">
+                    @for (int i = 0; i < 8; i++)
+                    {
+                        <i class="@(i < done ? "on" : "")"></i>
+                    }
+                </span>
+            </span>
             <button class="mp-chip" @onclick="ToggleShowAll">
                 @GlobalData.GetLocalizedUITag(_ShowAll ? GlobalTags.Gallery_HideSpoilers : GlobalTags.Gallery_ShowAll)
             </button>
         </div>
 
-        <div class="tree">
-            @foreach (TreeRow row in TreeRows())
-            {
-                <div class="tree-row">
-                    <div style="width: @(row.Node.Depth * 18)px; flex-shrink: 0;"></div>
-                    <div class="tree-rail">
-                        <div class="tree-line @(row.Node.Depth == 0 ? "hidden" : "")"></div>
-                        <div class="tree-node @(row.Node.IsEnding ? "ending" : "") @(row.Lit ? "lit" : "")"></div>
-                        <div class="tree-line grow @(row.HasChild ? "" : "hidden")"></div>
-                    </div>
-                    <div class="tree-text">
-                        <span class="tree-kicker">@row.Kicker</span>
-                        <span class="tree-label @(row.Lit ? "lit" : row.Known ? "" : "locked")">@row.Label</span>
-                        @if (row.Status != string.Empty)
+        <div class="gallery-panel">
+            <div class="endings-map" id="gallery-map">
+                <svg class="map-links" aria-hidden="true"></svg>
+                @for (int depth = 0; depth < 4; depth++)
+                {
+                    <div class="map-head" style="grid-column: @(depth + 1)">@LevelName(depth)</div>
+                }
+
+                @foreach (TreeRow row in TreeRows())
+                {
+                    <div class="map-cell @(row.Lit ? "lit" : "")" style="--depth: @row.Node.Depth; grid-column: @(row.Node.Depth + 1); grid-row: @(row.Row) / span @(row.Span);"
+                         data-i="@row.Index" data-parent="@row.Parent" data-lit="@(row.Lit ? "1" : "0")">
+                        @if (row.FirstOfLevel)
                         {
-                            <span class="tree-status @(row.Played || row.Ticked ? "done" : "")">@row.Status</span>
+                            <span class="map-level">@LevelName(row.Node.Depth)</span>
                         }
-                    </div>
-                    <div class="tree-action">
+
                         @if (!row.Known)
                         {
-                            <button class="mp-chip small" @onclick="() => Reveal(row.Key)">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Reveal)</button>
+                            <button class="plaque locked @(row.Node.IsEnding ? "" : "branch")" @onclick="() => Reveal(row.Key)">
+                                @if (row.Node.IsEnding)
+                                {
+                                    <span class="mark locked" aria-hidden="true">?</span>
+                                }
+                                <span class="plaque-text">
+                                    <b>@row.Label</b>
+                                    <small>@row.Status</small>
+                                </span>
+                            </button>
                         }
-                        else if (row.Node.IsEnding && row.Played)
+                        else
                         {
-                            <span class="tree-star" role="img" aria-label="@row.Status">★</span>
-                        }
-                        else if (row.Node.IsEnding)
-                        {
-                            string label = GlobalData.GetLocalizedUITag(row.Ticked ? GlobalTags.Gallery_Untick : GlobalTags.Gallery_TickOff).FormatWithReplacement(0, row.Label);
-                            <button class="tree-tick @(row.Ticked ? "ticked" : "")" aria-pressed="@row.Ticked" aria-label="@label" title="@label"
-                                    @onclick="() => ToggleTick(row.Node.Ending, !row.Ticked)">@(row.Ticked ? "✓" : "")</button>
+                            <div class="plaque @(row.Node.IsEnding ? "" : "branch") @(row.Lit && !row.Node.IsEnding ? "lit" : "") @(row.Played ? "played" : "")">
+                                @if (row.Node.IsEnding)
+                                {
+                                    string mark = row.Played ? "played" : row.Ticked ? "ticked" : "open";
+                                    <span class="mark @mark" aria-hidden="true">@(row.Played ? "★" : row.Ticked ? "✓" : "")</span>
+                                }
+                                <span class="plaque-text">
+                                    <b>@row.Label</b>
+                                    <small>@row.Status</small>
+                                    @if (row.Node.SameAs != string.Empty)
+                                    {
+                                        <span class="plaque-dup">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_AlsoElsewhere).FormatWithReplacement(0, row.Node.SameAs)</span>
+                                    }
+                                </span>
+                                @if (row.Node.IsEnding && !row.Played)
+                                {
+                                    string label = GlobalData.GetLocalizedUITag(row.Ticked ? GlobalTags.Gallery_Untick : GlobalTags.Gallery_TickOff).FormatWithReplacement(0, row.Label);
+                                    <button class="tree-tick @(row.Ticked ? "ticked" : "")" aria-pressed="@row.Ticked" aria-label="@label" title="@label"
+                                            @onclick="() => ToggleTick(row.Node.Ending, !row.Ticked)">@(row.Ticked ? "✓" : "")</button>
+                                }
+                            </div>
                         }
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
 
-        <p class="mp-note">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Legend)</p>
+        <div class="gallery-key">
+            <span><i class="mark played" aria-hidden="true">★</i>@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_KeyPlayed)</span>
+            <span><i class="mark ticked" aria-hidden="true">✓</i>@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_TickedByHand)</span>
+            <span><i class="mark open" aria-hidden="true"></i>@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_KeyOpen)</span>
+            <span><i class="mark locked" aria-hidden="true">?</i>@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_KeyLocked)</span>
+        </div>
+        <p class="mp-note gallery-legend">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Legend)</p>
     }
 </div>
 </MenuPage>
@@ -173,7 +226,10 @@
 
     private record TallyLine(string Name, string Sub, int[] PerScenario, int Wins, bool Family, bool Forgettable);
 
-    private record TreeRow(GalleryNode Node, string Key, string Kicker, string Label, string Status, bool Known, bool Lit, bool Played, bool Ticked, bool HasChild);
+    // One plaque of the endings map. Row / Span: its place in the map grid (one grid row per ending below it); Parent: the
+    // index of the branch it hangs from (-1 for the first branch), for the lines drawn by js/gallery.js
+    private record TreeRow(GalleryNode Node, int Index, string Key, string Label, string Status, bool Known, bool Lit, bool Played, bool Ticked,
+                           int Parent, int Row, int Span, bool FirstOfLevel);
 
     private GalleryData? _Data;
     private bool         _EndingsTab;
@@ -234,12 +290,17 @@
         HashSet<int>  done    = GalleryService.EndingsDone(data, _Scenario);
         List<int>     reached = GalleryService.Entry(data.Reached, _Scenario);
         List<int>     ticked  = GalleryService.Entry(data.Ticked, _Scenario);
+        int           row     = 2; // row 1 holds the level names
 
         for (int i = 0; i < tree.Length; i++)
         {
             GalleryNode node = tree[i];
             string      key  = $"{_Scenario}:{i}";
             bool        lit;
+
+            // Endings below this node (the grid rows it spans)
+            int span = node.IsEnding ? 1 : 0;
+            for (int j = i + 1; !node.IsEnding && j < tree.Length && tree[j].Depth > node.Depth; j++) span += tree[j].IsEnding ? 1 : 0;
 
             if (node.IsEnding) lit = done.Contains(node.Ending);
             else
@@ -249,6 +310,9 @@
                 for (int j = i + 1; !lit && j < tree.Length && tree[j].Depth > node.Depth; j++) lit = tree[j].IsEnding && done.Contains(tree[j].Ending);
             }
 
+            int parent = -1;
+            for (int j = i - 1; j >= 0 && parent < 0; j--) if (tree[j].Depth < node.Depth) parent = j;
+
             bool         known      = lit || _ShowAll || _Revealed.Contains(key);
             GalleryGame? lastPlayed = node.IsEnding ? data.Games.Where(game => game.Scenario == _Scenario && game.Ending == node.Ending).MaxBy(game => game.Date) : null;
             bool         isTicked   = node.IsEnding && ticked.Contains(node.Ending);
@@ -257,22 +321,40 @@
                          : lastPlayed != null && lastPlayed.Title != string.Empty ? lastPlayed.Title
                          : node.Label;
 
-            string status = string.Empty;
-            if (node.IsEnding && known)
-            {
-                status = lastPlayed != null ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Played).FormatWithReplacement(0, FormatDate(lastPlayed.Date))
-                       : isTicked           ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_TickedByHand)
-                       : GlobalData.GetLocalizedUITag(GlobalTags.Gallery_NotReached);
-                if (node.SameAs != string.Empty) status += " · " + GlobalData.GetLocalizedUITag(GlobalTags.Gallery_AlsoElsewhere).FormatWithReplacement(0, node.SameAs);
-            }
-            else if (lit) status = GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Reached);
+            string status = !known            ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Reveal)
+                          : lit && !node.IsEnding ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Reached)
+                          : lastPlayed != null ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Played).FormatWithReplacement(0, FormatDate(lastPlayed.Date)) + " · " +
+                                                 (lastPlayed.FamilyWinner ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_SharedWin)
+                                                  : lastPlayed.Winner != string.Empty ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_WonBy).FormatWithReplacement(0, lastPlayed.Winner)
+                                                  : string.Empty)
+                          : isTicked           ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_TickedByHand)
+                          : GlobalData.GetLocalizedUITag(GlobalTags.Gallery_NotReached);
+            status = status.TrimEnd(' ', '·');
 
-            string kicker = node.IsEnding
-                                ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Ending)
-                                : GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Generation).FormatWithIndex(0, node.Depth);
+            // The level name shows above the first plaque of each level on narrow screens (the map columns have it in their heads)
+            bool firstOfLevel = i == 0 || tree[i - 1].Depth < node.Depth;
 
-            bool hasChild = i + 1 < tree.Length && tree[i + 1].Depth > node.Depth;
-            yield return new TreeRow(node, key, kicker, label, status, known, lit, lastPlayed != null, isTicked, hasChild);
+            yield return new TreeRow(node, i, key, label, status, known, lit, lastPlayed != null, isTicked, parent, row, span, firstOfLevel);
+            if (node.IsEnding) row++;
+        }
+    }
+
+    private string LevelName(int depth) => depth < 3
+                                               ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Generation).FormatWithIndex(0, depth)
+                                               : GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Ending);
+
+    // Draws the lines between the plaques of the endings map (wide screens) after every render of the Endings tab
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_Data == null || !_EndingsTab) return;
+
+        try
+        {
+            await Js.InvokeVoidAsync("mfwGallery.links", "gallery-map");
+        }
+        catch (JSException e)
+        {
+            Console.WriteLine($"Gallery: could not draw the map lines ({e.Message})");
         }
     }
 
