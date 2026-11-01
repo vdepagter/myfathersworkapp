@@ -112,6 +112,16 @@ public static class GlobalTags
     public const string Ending_Recorded      = "Ending_Recorded";
     public const string Ending_UnlockedCount = "Ending_UnlockedCount";
 
+    // Rankings podium (Shared/RankingsView.razor)
+    public const string Rankings_Victorious     = "Rankings_Victorious";
+    public const string Rankings_Family         = "Rankings_Family";
+    public const string Rankings_Place          = "Rankings_Place";
+    public const string Rankings_Points         = "Rankings_Points";
+    public const string Rankings_TieMasterwork  = "Rankings_TieMasterwork";
+    public const string Rankings_TieUpgrades    = "Rankings_TieUpgrades";
+    public const string Rankings_FamilyNote     = "Rankings_FamilyNote";
+    public const string Rankings_Continue       = "Rankings_Continue";
+
     // Gameplay
     public const string Gameplay_Yes                        = "Gameplay_Yes";
     public const string Gameplay_No                         = "Gameplay_No";

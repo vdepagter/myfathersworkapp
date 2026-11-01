@@ -1,4 +1,4 @@
-namespace MyFathersWorkApp;
+﻿namespace MyFathersWorkApp;
 
 // Score entry, tie breakers and rankings at the end of Generation III - the same for every scenario. The texts use the
 // tags below in each scenario's CSV (ScoreEntry_Content, TieBreaker1_Title, ...). Ends in the scenario's FinalEnding.
@@ -167,6 +167,16 @@ public static class FinalScoring
                                                                        .FormatWithReplacement(1, player)
                                                                        .FormatWithReplacement(2, vars.Scores[player].ToString()));
         }
+
+        // The podium: a family win puts everyone on first place (the family shares the win)
+        RankingsTieBreak tieBreak = vars.FamilyWinner                  ? RankingsTieBreak.Family
+                                  : vars.TiedPlayers.Length < 2         ? RankingsTieBreak.None
+                                  : upgradesAsked                       ? RankingsTieBreak.Upgrades
+                                  : RankingsTieBreak.Masterwork;
+        RankingsEntry[] entries = ranking.Select(player => new RankingsEntry(player, vars.Scores[player],
+                                                                             vars.FamilyWinner ? 0 : ranking.Count(other => Key(other).CompareTo(Key(player)) > 0)))
+                                         .ToArray();
+        globalData.ActiveWindow.SetRankings(new RankingsData(entries, tieBreak));
 
         globalData.ActiveWindow.AddNextContent(2, true, content => content
                                                                   .FormatWithReplacement(1, ranking[0])

@@ -1,0 +1,147 @@
+@using System.Globalization
+@using System.Text
+
+@* The final ranking as a podium (mockup "H3 Relic with rain", Nov 2026): the winner's name, the scenario and the branch
+   played, then a plinth per player in gold, silver and bronze (iron for fourth) with a torn, metal-dyed parchment banner.
+   Rain comes from js/atmosphere.js (Pages/Gameplay.razor); the light shafts and candle glow are CSS. UI only. *@
+<div class="rankings @(Data.FamilyWin ? "family" : "")">
+    <div class="rk-shade" aria-hidden="true"></div>
+    <div class="rk-shafts" aria-hidden="true">
+        @foreach ((int angle, int width, double alpha, double seconds) in _Shafts)
+        {
+            <i style="@Css($"--r:{angle}deg;--w:{width};--a:{alpha};--d:{seconds}s")"></i>
+        }
+    </div>
+
+    <div class="rk-headline">
+        <div class="rk-who" translate="no">@(Data.FamilyWin ? Ui(GlobalTags.Rankings_Family) : Data.Entries[0].Name)</div>
+        <div class="rk-tail">@Ui(GlobalTags.Rankings_Victorious)</div>
+        @if (TieNote != null)
+        {
+            <div class="rk-note">@TieNote</div>
+        }
+        <div class="rk-ribbon"><b>@GalleryTrees.Name(GlobalData.ScenarioId)</b>@if (Branch != null)
+            {
+                <span>@Branch</span>
+            }</div>
+    </div>
+
+    <div class="rk-stage">
+        <div class="rk-candle" aria-hidden="true"></div>
+        <ol class="rk-podium">
+            @foreach ((RankingsEntry entry, int position) in PodiumOrder().Select((e, i) => (e, i)))
+            {
+                string metal = Data.FamilyWin ? "gold" : _Metals[Math.Min(entry.Place, 3)];
+                string place = Ui(GlobalTags.Rankings_Place).FormatWithIndex(0, Math.Min(entry.Place, 3));
+                string points = Ui(GlobalTags.Rankings_Points).FormatWithReplacement(0, entry.Score.ToString(CultureInfo.InvariantCulture));
+                <li class="rk-slot @metal @(entry.Place == 0 ? "first" : "")"
+                    style="@Css($"--h:{(Data.FamilyWin ? 330 : _Heights[Math.Min(entry.Place, 3)])};--delay:{Delay(entry, position)}s;--score:{entry.Score}")"
+                    aria-label="@($"{(Data.FamilyWin ? "" : place + ", ")}{entry.Name}, {points}")">
+                    @if (entry.Place == 0)
+                    {
+                        <img class="rk-crown" src="images/ui/crown.webp" alt=""/>
+                    }
+                    <div class="rk-name" translate="no" aria-hidden="true">@entry.Name</div>
+                    <div class="rk-block" aria-hidden="true">
+                        <div class="rk-relic"></div>
+                        <div class="rk-cap"></div>
+                        <div class="rk-banner" style="@Css($"clip-path:{Torn(entry, position)};--sx:{(entry.Name.Length * 37 + position * 23) % 100}%")">
+                            <div class="rk-grime"></div>
+                            <span class="rk-hem"></span>
+                            @if (!Data.FamilyWin)
+                            {
+                                <div class="rk-place">@PlaceMarkup(place)</div>
+                            }
+                            @{
+                                // The number counts up (CSS, .rk-count) when the label starts with it, as in English
+                                string score = entry.Score.ToString(CultureInfo.InvariantCulture);
+                            }
+                            @if (points.StartsWith(score, StringComparison.Ordinal))
+                            {
+                                <div class="rk-points"><span class="rk-count" data-score="@score"></span>@points[score.Length..]</div>
+                            }
+                            else
+                            {
+                                <div class="rk-points">@points</div>
+                            }
+                        </div>
+                    </div>
+                </li>
+            }
+        </ol>
+    </div>
+
+    <button class="mfw-button green rk-continue" @onclick="OnContinue">@Ui(GlobalTags.Rankings_Continue)</button>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public GlobalData   GlobalData { get; set; } = null!;
+    [Parameter, EditorRequired] public RankingsData Data       { get; set; } = null!;
+    [Parameter]                 public EventCallback OnContinue { get; set; }
+
+    private static readonly string[] _Metals  = ["gold", "silver", "bronze", "iron"];
+    private static readonly int[]    _Heights = [380, 310, 260, 210]; // Unity canvas pixels (var(--u))
+
+    private static readonly (int, int, double, double)[] _Shafts =
+        [(-24, 115, 0.35, 5), (-11, 170, 0.45, 7), (0, 230, 0.6, 6), (12, 150, 0.45, 8), (25, 115, 0.32, 5.5)];
+
+    private string Ui(string tag) => GlobalData.GetLocalizedUITag(tag);
+
+    private string? TieNote => Data.TieBreak switch
+    {
+        RankingsTieBreak.Masterwork => Ui(GlobalTags.Rankings_TieMasterwork),
+        RankingsTieBreak.Upgrades   => Ui(GlobalTags.Rankings_TieUpgrades),
+        RankingsTieBreak.Family     => Ui(GlobalTags.Rankings_FamilyNote),
+        _                           => null
+    };
+
+    // The branch played: the title of the Generation III hub (the Endings Gallery tree)
+    private string? Branch => GalleryTrees.Tree(GlobalData.ScenarioId)
+                                          .FirstOrDefault(node => !node.IsEnding && node.HubId != 0 && node.HubId == GalleryTrees.HubId(GlobalData))?.Label;
+
+    // Second, first, third, fourth: the winner in the middle of the top three. A family win keeps the score order.
+    private IEnumerable<RankingsEntry> PodiumOrder()
+    {
+        RankingsEntry[] e = Data.Entries;
+        if (Data.FamilyWin || e.Length < 2) return e;
+        if (e.Length == 2) return [e[1], e[0]];
+        return new[] { e[1], e[0], e[2] }.Concat(e.Skip(3));
+    }
+
+    // Lower places rise first, the winner last
+    private string Delay(RankingsEntry entry, int position) =>
+        (Data.FamilyWin ? 0.2 + position * 0.25 : new[] { 1.1, 0.7, 0.35, 0.1 }[Math.Min(entry.Place, 3)]).ToString(CultureInfo.InvariantCulture);
+
+    // "1st" with the letters raised
+    private static MarkupString PlaceMarkup(string place)
+    {
+        int digits = place.TakeWhile(char.IsDigit).Count();
+        if (digits == 0 || digits == place.Length) return new MarkupString(System.Net.WebUtility.HtmlEncode(place));
+        return new MarkupString($"{System.Net.WebUtility.HtmlEncode(place[..digits])}<sup>{System.Net.WebUtility.HtmlEncode(place[digits..])}</sup>");
+    }
+
+    // A torn lower edge with a notch in the middle and a nibbled side; seeded so it stays the same on every render
+    private static string Torn(RankingsEntry entry, int position)
+    {
+        uint seed = (uint)(7 + position * 131 + entry.Name.Length * 17);
+        double Next()
+        {
+            seed = seed * 1664525u + 1013904223u;
+            return (seed >> 8) / 16777216.0;
+        }
+
+        StringBuilder sb = new("polygon(0% 0%, 100% 0%");
+        const int n = 13;
+        for (int i = 0; i <= n; i++)
+        {
+            double x = 100 - i * 100.0 / n;
+            double v = Math.Abs(x - 50) / 50;
+            double y = 100 - 9 * (1 - v) - Next() * 6;
+            sb.Append(Css($", {x:0.#}% {y:0.#}%"));
+        }
+        sb.Append(Css($", 0% {60 + Next() * 20:0.#}%, {1 + Next() * 2:0.#}% {45 + Next() * 10:0.#}%, 0% 40%)"));
+        return sb.ToString();
+    }
+
+    private static string Css(FormattableString value) => FormattableString.Invariant(value);
+}

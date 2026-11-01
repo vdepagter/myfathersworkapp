@@ -65,6 +65,14 @@
     @if (GlobalData.ActiveMirrorQuestion == null && GlobalData.ActivePopup == null && GlobalData.ActiveInputPopup == null && GlobalData.ActiveWindow != null)
     {
         _SaveGame = true;
+        @if (GlobalData.ActiveWindow.Rankings != null)
+        {
+            // The final ranking as a podium (Shared/RankingsView.razor); Continue follows the window's continue link
+            GameplayWindow rankingsWindow = GlobalData.ActiveWindow;
+            <RankingsView @key="rankingsWindow" GlobalData="@GlobalData" Data="@rankingsWindow.Rankings" OnContinue="() => ContinueRankings(rankingsWindow)"/>
+        }
+        else
+        {
         <h1>@GlobalData.ActiveWindow.Title.InsertImages().ProtectNames(GlobalData).AsMarkup()</h1>
 
         @if (GlobalData.ActiveWindow.Subtitle != string.Empty)
@@ -154,6 +162,7 @@
         {
             // After THE END?: Next opens the ending page (Unity ViewEndingPage)
             <button class="mfw-button green ending-next" @onclick="ShowEndingPage">@GlobalData.GetLocalizedUITag(GlobalTags.Ending_Next)</button>
+        }
         }
     }
     else if (GlobalData.ActiveMirrorQuestion == null && GlobalData.ActivePopup == null && GlobalData.ActiveInputPopup == null && GlobalData.ActiveHub != null)
@@ -323,15 +332,17 @@
     // The narration toggle (Shared/AudioToggles.razor) changed the voice: redraw the narration pill
     private void OnNarrationSettingChanged() => InvokeAsync(StateHasChanged);
 
-    // Embers rise on the round pages only (js/atmosphere.js; Graphics Low draws none)
-    private bool? _EmbersOn;
+    // Embers rise on the round pages, rain falls on the rankings podium (js/atmosphere.js; Graphics Low draws none)
+    private string? _SceneFx;
 
-    private void UpdateEmbers()
+    private void UpdateSceneFx()
     {
-        bool on = IsHubScene;
-        if (_EmbersOn == on) return;
-        _EmbersOn = on;
-        if (on) _ = Js.InvokeVoidAsync("mfwAtmosphere.start", "game-fx", new object[] { new { kind = "ember", count = 50 }, new { kind = "smoke", count = 5 } });
+        // Round pages: embers and smoke; the rankings podium: rain (Shared/RankingsView.razor)
+        string fx = IsHubScene ? "embers" : GlobalData.ActiveWindow?.Rankings != null && GlobalData.ActivePopup == null && GlobalData.ActiveInputPopup == null ? "rain" : "";
+        if (_SceneFx == fx) return;
+        _SceneFx = fx;
+        if (fx == "embers") _ = Js.InvokeVoidAsync("mfwAtmosphere.start", "game-fx", new object[] { new { kind = "ember", count = 50 }, new { kind = "smoke", count = 5 } });
+        else if (fx == "rain") _ = Js.InvokeVoidAsync("mfwAtmosphere.start", "game-fx", new object[] { new { kind = "rainBack", count = 90 }, new { kind = "rainFront", count = 35 } });
         else _ = Js.InvokeVoidAsync("mfwAtmosphere.stop", "game-fx");
     }
 
@@ -372,7 +383,7 @@
         PlayScreenTransition(info);
         ShowSpecialEventBanner(info);
         ScrollToTop(info);
-        UpdateEmbers();
+        UpdateSceneFx();
         UpdateMusic();
         _ = GlobalData.PersistAsync(Js); // the game and its undo history, after every screen and every undo
         _ = NoteGalleryAsync();
@@ -887,6 +898,12 @@
     }
 
     #endregion
+
+    private void ContinueRankings(GameplayWindow window)
+    {
+        GameplayElement? next = window.Elements.LastOrDefault(element => element.Callback != null);
+        if (next != null && ReferenceEquals(GlobalData.ActiveWindow, window)) InvokeWindowCallback(next.Callback!);
+    }
 
     private void InvokeWindowCallback(Action<GlobalData> nextCallback)
     {
