@@ -39,8 +39,9 @@ public class GalleryGame
 }
 
 // One row of a scenario's endings tree: a branch (hub) or an ending. SameAs: the other branch that leads to the same
-// ending (shown twice, ticked and counted once)
-public record GalleryNode(int Depth, string Label, int HubId = 0, int Ending = 0, string SameAs = "")
+// ending (shown twice, ticked and counted once). GalleryName: the gallery always shows Label for this ending, not the
+// heading of its ending page (used where that heading is not a title, e.g. a letter header)
+public record GalleryNode(int Depth, string Label, int HubId = 0, int Ending = 0, string SameAs = "", bool GalleryName = false)
 {
     public bool IsEnding => Ending > 0;
 }
@@ -75,7 +76,7 @@ public static class GalleryTrees
             new(3, "The Spread of Evil", Ending: 4, SameAs: "A Taste of Evil"),
             new(1, "Thriving in Adversity", HubId: (int)CostOfDiseaseHubId.Hospital),
             new(2, "Search for the Cure", HubId: (int)CostOfDiseaseHubId.University),
-            new(3, "Editor's note - August 1923", Ending: 8),
+            new(3, "An Uplifting Tale", Ending: 8, GalleryName: true), // ending page heading: "Editor's note - August 1923" (owner, 1 Nov 2026)
             new(2, "The Crawl", HubId: (int)CostOfDiseaseHubId.NoUniversity),
             new(3, "A Legacy Will Live On", Ending: 7)
         ],
@@ -117,6 +118,11 @@ public static class GalleryTrees
         ],
         _ => []
     };
+
+    // The title the gallery shows for a finished game: the ending page heading as recorded (village / warden names filled
+    // in), or the gallery name of endings whose heading is not a title
+    public static string Title(GalleryGame game) =>
+        Tree(game.Scenario).FirstOrDefault(node => node.IsEnding && node.Ending == game.Ending && node.GalleryName)?.Label ?? game.Title;
 
     public static int HubId(GlobalData globalData) => globalData.ScenarioId switch
     {

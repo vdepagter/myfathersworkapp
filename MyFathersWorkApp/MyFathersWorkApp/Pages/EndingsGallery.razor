@@ -78,7 +78,7 @@
                 {
                     <div class="recent-game">
                         <div>
-                            <b>@game.Title</b>
+                            <b>@GalleryTrees.Title(game)</b>
                             <small>@GalleryTrees.Name(game.Scenario) · @FormatDate(game.Date) · @string.Join(", ", game.Players)</small>
                         </div>
                         <span class="recent-winner">@(game.FamilyWinner ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Family) : game.Winner)</span>
@@ -318,7 +318,7 @@
             bool         isTicked   = node.IsEnding && ticked.Contains(node.Ending);
 
             string label = !known       ? GlobalData.GetLocalizedUITag(node.IsEnding ? GlobalTags.Gallery_LockedEnding : GlobalTags.Gallery_LockedBranch)
-                         : lastPlayed != null && lastPlayed.Title != string.Empty ? lastPlayed.Title
+                         : lastPlayed != null && lastPlayed.Title != string.Empty ? GalleryTrees.Title(lastPlayed)
                          : node.Label;
 
             string status = !known            ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Reveal)

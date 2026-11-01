@@ -179,6 +179,10 @@ ending and the hub hook in `Pages/Gameplay.razor` (`NoteGalleryAsync`), name chi
   the branch (hub id) reached.
 - The endings trees (branch = hub title, endings = `Vars.Ending` numbers) are in `GalleryTrees.Tree`; update them when
   an ending or hub changes. Cost of Disease ending 4 is reachable from A Taste of Evil and Prosperity.
+  Gallery names: an ending whose page heading is not a title gets `GalleryName: true` and the gallery shows its Label
+  (`GalleryTrees.Title`). Cost of Disease ending 8 (heading "Editor's note - August 1923") is "An Uplifting Tale" (owner, 1 Nov 2026).
+- Layout (Nov 2026): Endings tab = scenario covers + a map (one grid column per generation, lines drawn by
+  `wwwroot/js/gallery.js` above 1000px, a top-down tree below). Lists sit on the Settings panel plate.
 - Export / Import (base64 JSON) merges: players, games by id, branches and ticks are combined. The original Unity app
   kept ending titles in PlayerPrefs `GameEndingsData`, matched by title text (village names made duplicates).
 

@@ -466,7 +466,7 @@
                                                                .FormatWithReplacement(0, game.Winner)
                                                                .FormatWithReplacement(1, wins.ToString()),
                                                done,
-                                               window.Title);
+                                               GalleryTrees.Title(game));
                 StateHasChanged();
             }
             else if (GlobalData.ActiveWindow == null && GlobalData.ActiveHub != null)
