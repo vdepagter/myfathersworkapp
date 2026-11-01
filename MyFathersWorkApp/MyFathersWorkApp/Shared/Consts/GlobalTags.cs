@@ -125,7 +125,6 @@ public static class GlobalTags
     // Gameplay
     public const string Gameplay_Yes                        = "Gameplay_Yes";
     public const string Gameplay_No                         = "Gameplay_No";
-    public const string Gameplay_GameSaved                  = "Gameplay_GameSaved";
     public const string Gameplay_PauseMenu                  = "Gameplay_PauseMenu";
     public const string Gameplay_Resume                     = "Gameplay_Resume";
     public const string Gameplay_ReturnToMainMenu           = "Gameplay_ReturnToMainMenu";
