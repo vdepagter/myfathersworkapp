@@ -95,7 +95,8 @@
     font-size: 1.15rem;
 }
 
-.tally td.zero {
+.tally td.zero,
+.tally tr.family td.zero {
     color: #7a705f;
 }
 
@@ -249,6 +250,10 @@
 }
 
 .poster-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.4em; /* two lines, so the counts line up when one name fits on one line */
     font-size: clamp(0.85rem, 2.2vw, 1rem);
     line-height: 1.2;
     text-align: center;
@@ -284,7 +289,8 @@
 .pips i {
     width: 10px;
     height: 10px;
-    border: 1.5px solid #7d6c50;
+    border: 1.5px solid #b39a6e;
+    background-color: rgba(0, 0, 0, 0.45);
     border-radius: 2px;
 }
 
@@ -558,7 +564,40 @@
     text-align: center;
 }
 
+/* Phone: the table fits without sideways scrolling: covers only (name in the tooltip), tighter cells */
 @media (max-width: 600px) {
+    .tally-scenario {
+        width: auto;
+    }
+
+    .tally-scenario-name {
+        display: none;
+    }
+
+    .tally-cover {
+        width: 30px;
+        height: 40px;
+        margin-bottom: 0;
+    }
+
+    .tally th,
+    .tally td {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    .tally td {
+        font-size: 1.05rem;
+    }
+
+    .tally td.tally-wins {
+        font-size: 1.35rem;
+    }
+
+    .tally-forget {
+        width: 32px;
+    }
+
     .gallery-panel {
         border-width: 14px;
         border-image-width: 14px;

@@ -10,10 +10,10 @@
 <div class="gallery-container">
 
     <div class="mp-tabs gallery-tabs" role="tablist">
-        <button role="tab" aria-selected="@(!_EndingsTab)" class="mp-chip" @onclick="() => SelectTab(false)">
+        <button role="tab" aria-selected="@(_EndingsTab ? "false" : "true")" class="mp-chip" @onclick="() => SelectTab(false)">
             @GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Players)
         </button>
-        <button role="tab" aria-selected="@_EndingsTab" class="mp-chip" @onclick="() => SelectTab(true)">
+        <button role="tab" aria-selected="@(_EndingsTab ? "true" : "false")" class="mp-chip" @onclick="() => SelectTab(true)">
             @GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Endings)
         </button>
     </div>
@@ -31,9 +31,9 @@
                             <th class="tally-name-head">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Player)</th>
                             @foreach (ScenarioId scenario in GalleryTrees.Scenarios)
                             {
-                                <th class="tally-scenario">
+                                <th class="tally-scenario" title="@GalleryTrees.Name(scenario)">
                                     <div class="tally-cover cover-@((int)scenario)" aria-hidden="true"></div>
-                                    @GalleryTrees.Name(scenario)
+                                    <span class="tally-scenario-name">@GalleryTrees.Name(scenario)</span>
                                 </th>
                             }
                             <th>@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Wins)</th>
@@ -126,7 +126,7 @@
             @foreach (ScenarioId scenario in GalleryTrees.Scenarios)
             {
                 int found = GalleryService.EndingsDone(_Data, scenario).Count;
-                <button class="scenario-poster" aria-pressed="@(scenario == _Scenario)" @onclick="() => SelectScenario(scenario)">
+                <button class="scenario-poster" aria-pressed="@(scenario == _Scenario ? "true" : "false")" @onclick="() => SelectScenario(scenario)">
                     <span class="poster-art cover-@((int)scenario)"></span>
                     <span class="poster-name">@GalleryTrees.Name(scenario)</span>
                     <span class="poster-count">@found / 8</span>
@@ -199,7 +199,7 @@
                                 @if (row.Node.IsEnding && !row.Played)
                                 {
                                     string label = GlobalData.GetLocalizedUITag(row.Ticked ? GlobalTags.Gallery_Untick : GlobalTags.Gallery_TickOff).FormatWithReplacement(0, row.Label);
-                                    <button class="tree-tick @(row.Ticked ? "ticked" : "")" aria-pressed="@row.Ticked" aria-label="@label" title="@label"
+                                    <button class="tree-tick @(row.Ticked ? "ticked" : "")" aria-pressed="@(row.Ticked ? "true" : "false")" aria-label="@label" title="@label"
                                             @onclick="() => ToggleTick(row.Node.Ending, !row.Ticked)">@(row.Ticked ? "✓" : "")</button>
                                 }
                             </div>
