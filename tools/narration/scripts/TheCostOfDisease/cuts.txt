@@ -1,0 +1,8 @@
+# Tags whose narration stops early or is skipped, besides the automatic cut at choices and rules lines
+# (chunks.auto_cut). 'Tag' = not narrated, 'Tag | <text>' = stop at <text>, 'Tag | -' = no cut.
+# Vote outcome pages are player instructions only (tally the votes, click the result), so their title is not narrated.
+# The Ultimate Disease (Valentijn, 2026-11-01): narrate up to VOTE only. The VOTE block (UniEvent2UltimateDisease_Content1)
+# lives in the Gameplay CSV and is never narrated; the story part is UniEvent2UltimateDisease_Title + _Content.
+UniEvent2UltimateDisease2_Title
+WolvesVote2_Title
+GoodFrenzyEvent2b_Title
