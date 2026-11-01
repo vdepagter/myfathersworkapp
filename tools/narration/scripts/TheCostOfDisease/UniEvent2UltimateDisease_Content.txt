@@ -1,0 +1,8 @@
+# TheCostOfDisease_Localization.csv UniEvent2UltimateDisease_Content, story part only (the VOTE block is gameplay text).
+# "the study of <random player> III" is reworded so no stand-in is needed (Valentijn, 2026-11-01).
+## 0 free
+As the oppressive sunshine illuminated one cousin's study, the family assembled to finalize their creation.
+## 1 free
+With a large piece of parchment sprawled across the desk and delightful bean strudels with heavy cream for refreshment, the scientists began to formulate a blueprint using the knowledge they had gained from recent experimentations.
+
+Some, however, were more forthcoming with information than others.
