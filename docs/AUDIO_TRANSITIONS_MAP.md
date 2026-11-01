@@ -310,8 +310,9 @@ Open points: the recordings read the English source text, so with another scenar
 ### 8.4 Fan-made Oliver narration (not in the Unity app)
 
 Voice setting **Oliver** (`NarrationVoice.Oliver`, `audio.voice` = `oliver`): an AI narration of all story text (ElevenLabs
-library voice "Oliver Silk - Deep Gravel Narrative", model `eleven_v4`, stability 0.8, similarity 0.8; v4 ignores style,
-speed and speaker boost). Female and Male play the original recordings only (8.2/8.3).
+library voice "Oliver Silk - Deep Gravel Narrative", model `eleven_v4`, stability 0.8, similarity 0.8, clone strength 0.5
+(new in v4, separate from similarity; clips rendered before 1 Nov 2026 used the API default); v4 ignores style, speed
+and speaker boost). Female and Male play the original recordings only (8.2/8.3).
 
 - Clips: `tools/narration/chunks.py` takes every window's story text (tags of `<Scenario>_Localization.csv` shown with
   `AddDefaultContent`, `AddNextContent*` or `AddStoryContent`), cuts it at `<b>CHOOSE` and splits it around its

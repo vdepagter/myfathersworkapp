@@ -21,7 +21,8 @@
     "model": "eleven_v4",
     "settings": {
       "stability": 0.8,
-      "similarity_boost": 0.8
+      "similarity_boost": 0.8,
+      "clone_strength": 0.5
     },
     "audio_tags": true
   },
