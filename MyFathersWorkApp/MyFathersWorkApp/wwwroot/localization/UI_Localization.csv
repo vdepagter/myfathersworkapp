@@ -98,7 +98,6 @@ ScenarioLang_Italian_Source;Italian - Source
 //====== Gameplay ======;
 Gameplay_Yes;Yes
 Gameplay_No;No
-Gameplay_GameSaved;Game has been saved
 Gameplay_PauseMenu;Pause Menu
 Gameplay_Resume;Resume
 Gameplay_ReturnToMainMenu;Return to Main Menu

@@ -37,8 +37,6 @@
     }
 </div>
 
-<SaveNotification Visible="@_ShowSaveNotification" GlobalData="GlobalData"/>
-
 @* Round and Generation, in the slot of the frame (Unity Progress: MFW_ProgressBar behind the frame's nine windows). The
    dock is a fixed layer like the frame, so both move together when a phone browser resizes the window. *@
 <div class="round-tracker-dock">
@@ -287,7 +285,6 @@
     [CascadingParameter] private GlobalData GlobalData { get; set; } = null!;
 
     private bool   _SaveGame;
-    private bool   _ShowSaveNotification;
     private bool   _ShowPauseMenu;
     private bool   _IsThereAnySavedState;
     private bool   _ShowSavePopup;
@@ -811,16 +808,11 @@
         StateHasChanged();
     }
 
-    private async void SaveGameAsync()
+    // Hubs are undo points (GlobalData.SaveGame); every screen is saved anyway, so no "Game has been saved" notice
+    // (owner, 1 Nov 2026)
+    private void SaveGameAsync()
     {
         GlobalData.SaveGame();
-
-        _ShowSaveNotification = true;
-        StateHasChanged();
-
-        await Task.Delay(3000);
-        _ShowSaveNotification = false;
-        StateHasChanged();
     }
 
     #region Special events: banner, vote / bid countdown (Shared/RevealPanel.razor)
