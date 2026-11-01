@@ -12,12 +12,14 @@
 .rankings {
     position: relative;
     width: 100%;
-    min-height: calc(100svh - max(4.75rem, calc(190 * var(--u))) - calc(150 * var(--u) + 1.5rem));
+    /* exactly the free height between the header buttons and the round bar (the .gameplay-container padding), so
+       nothing runs under the bar: the plinths take what the headline leaves (.rk-stage) */
+    height: calc(100svh - max(4.75rem, calc(190 * var(--u))) - calc(150 * var(--u) + 1.5rem));
+    min-height: 15rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    gap: max(14px, calc(40 * var(--u)));
+    gap: max(8px, calc(24 * var(--u)));
     font-family: var(--mfw-font-text);
     color: var(--mfw-cream);
 }
@@ -71,7 +73,7 @@
 
 .rk-who {
     font-family: var(--mfw-font-heading);
-    font-size: max(2.2rem, calc(138 * var(--u)));
+    font-size: max(1.7rem, min(calc(130 * var(--u)), 11svh));
     line-height: 1;
     letter-spacing: 0.02em;
     background: linear-gradient(180deg, #fff1c2 10%, #e7b75a 55%, #8a5a1c 95%);
@@ -89,9 +91,13 @@
 }
 
 .rk-note {
-    font-size: max(0.8rem, calc(25 * var(--u)));
-    color: #e7b75a;
-    text-shadow: 0 1px 3px #000;
+    padding: 0.1em 0.8em;
+    border-radius: 1em;
+    background: radial-gradient(closest-side, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.3) 70%, transparent);
+    font-weight: 700;
+    font-size: max(0.85rem, calc(26 * var(--u)));
+    color: #f3d48e;
+    text-shadow: 0 0 6px #000, 0 1px 2px #000, 0 0 2px #000;
 }
 
 .rk-ribbon {
@@ -113,7 +119,18 @@
 .rk-ribbon span { margin-left: 0.6em; }
 
 /* ---- podium ---- */
-.rk-stage { position: relative; }
+.rk-stage {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    container-type: size;
+    /* room above the tallest plinth for the crown and the name */
+    --rk-top: calc(max(30px, calc(88 * var(--u))) + max(15px, calc(42 * var(--u))) * 1.25 + max(6px, calc(17 * var(--u))));
+}
 
 .rk-candle {
     position: absolute;
@@ -141,7 +158,7 @@
 }
 
 .rk-slot {
-    width: max(66px, calc(255 * var(--u)));
+    width: max(64px, calc(210 * var(--u)));
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -177,8 +194,10 @@
 
 .rk-block {
     position: relative;
+    container-type: size; /* the banner text scales with its plinth */
     width: 100%;
-    height: max(calc(var(--h) * 0.3px), calc(var(--h) * var(--u)));
+    /* --h of 380 for first place; scaled to the height the stage has (container query units) */
+    height: max(46px, calc(var(--h) / 380 * clamp(64px, 100cqh - var(--rk-top) - 4px, 340px)));
     margin-top: max(6px, calc(17 * var(--u)));
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6)), url(../images/ui/hub-bg.webp) center / 500% auto;
     box-shadow: 0 0 calc(30 * var(--u)) rgba(0, 0, 0, 0.8);
@@ -222,7 +241,7 @@
     flex-direction: column;
     align-items: center;
     gap: calc(4 * var(--u));
-    padding-top: max(6px, calc(21 * var(--u)));
+    padding-top: min(max(6px, calc(21 * var(--u))), 8cqh);
     background:
         linear-gradient(90deg, var(--c3), var(--c2) 30%, var(--c1) 50%, var(--c2) 70%, var(--c3)),
         url(../images/ui/parchment.webp) var(--sx, 40%) center / cover no-repeat;
@@ -260,7 +279,7 @@
 
 .rk-place {
     font-family: var(--mfw-font-heading);
-    font-size: max(20px, calc(61 * var(--u)));
+    font-size: min(max(20px, calc(61 * var(--u))), 32cqh, 42cqw);
     text-shadow: 0 calc(2 * var(--u)) 0 rgba(255, 240, 200, 0.55), 0 0 calc(15 * var(--u)) rgba(255, 235, 190, 0.35);
 }
 
@@ -268,14 +287,14 @@
 
 .rk-points {
     font-family: var(--mfw-font-button);
-    font-size: max(10px, calc(25 * var(--u)));
+    font-size: min(max(10px, calc(25 * var(--u))), 12cqh, 17cqw);
     letter-spacing: 0.05em;
     white-space: nowrap;
     text-shadow: 0 calc(2 * var(--u)) 0 rgba(255, 240, 200, 0.5);
 }
 
-.rk-slot.first .rk-place  { font-size: max(26px, calc(80 * var(--u))); }
-.rk-slot.first .rk-points { font-size: max(12px, calc(32 * var(--u))); }
+.rk-slot.first .rk-place  { font-size: min(max(26px, calc(80 * var(--u))), 34cqh, 50cqw); }
+.rk-slot.first .rk-points { font-size: min(max(12px, calc(32 * var(--u))), 13cqh, 20cqw); }
 
 .rk-slot.iron .rk-place,
 .rk-slot.iron .rk-points {
@@ -292,8 +311,19 @@
 .rk-count::after { content: counter(rk-n); }
 
 .rk-continue {
+    flex: none;
     width: max(140px, calc(250 * var(--u)));
     font-size: max(14px, calc(30 * var(--u)));
+}
+
+/* landscape: Continue in the bottom right corner beside the podium, so the plinths get the full height */
+@media (orientation: landscape) {
+    .rk-continue {
+        position: absolute;
+        right: max(0px, calc(70 * var(--u) - 12px)); /* clear of the frame's side */
+        bottom: 0;
+        z-index: 2;
+    }
 }
 
 /* ---- entrance: plinths rise (lowest place first), banners unfurl, the name stamps down ---- */

@@ -35,7 +35,7 @@
                 string place = Ui(GlobalTags.Rankings_Place).FormatWithIndex(0, Math.Min(entry.Place, 3));
                 string points = Ui(GlobalTags.Rankings_Points).FormatWithReplacement(0, entry.Score.ToString(CultureInfo.InvariantCulture));
                 <li class="rk-slot @metal @(entry.Place == 0 ? "first" : "")"
-                    style="@Css($"--h:{(Data.FamilyWin ? 300 : _Heights[Math.Min(entry.Place, 3)])};--delay:{Delay(entry, position)}s;--score:{entry.Score}")"
+                    style="@Css($"--h:{(Data.FamilyWin ? 330 : _Heights[Math.Min(entry.Place, 3)])};--delay:{Delay(entry, position)}s;--score:{entry.Score}")"
                     aria-label="@($"{(Data.FamilyWin ? "" : place + ", ")}{entry.Name}, {points}")">
                     @if (entry.Place == 0)
                     {
@@ -80,7 +80,7 @@
     [Parameter]                 public EventCallback OnContinue { get; set; }
 
     private static readonly string[] _Metals  = ["gold", "silver", "bronze", "iron"];
-    private static readonly int[]    _Heights = [380, 285, 220, 160]; // Unity canvas pixels (var(--u))
+    private static readonly int[]    _Heights = [380, 310, 260, 210]; // Unity canvas pixels (var(--u))
 
     private static readonly (int, int, double, double)[] _Shafts =
         [(-24, 115, 0.35, 5), (-11, 170, 0.45, 7), (0, 230, 0.6, 6), (12, 150, 0.45, 8), (25, 115, 0.32, 5.5)];
