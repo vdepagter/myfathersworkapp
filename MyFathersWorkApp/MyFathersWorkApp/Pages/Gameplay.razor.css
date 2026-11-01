@@ -126,6 +126,12 @@
     text-shadow: 0 1px 3px #000;
 }
 
+/* While scrolled, nothing of the page shows above the header buttons (js/transitions.js sets the class and the cut) */
+html.mfw-scrolled .gameplay-container {
+    -webkit-mask-image: linear-gradient(to bottom, transparent var(--mfw-header-cut, 0px), #000 calc(var(--mfw-header-cut, 0px) + 1.25rem));
+    mask-image: linear-gradient(to bottom, transparent var(--mfw-header-cut, 0px), #000 calc(var(--mfw-header-cut, 0px) + 1.25rem));
+}
+
 /* Story text on the Unity Wide_Textbox parchment, black Averia; size from Settings (--mfw-story-scale) */
 .parchment-box {
     width: 100%;

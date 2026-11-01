@@ -115,5 +115,33 @@
         window.scrollTo({ top: clickedAt, left: 0, behavior: "instant" });
     }
 
+    // Scrolled page text must not show behind the header buttons (back, forward, pause, log book) and the audio toggles:
+    // the frame is transparent there. While the page is scrolled, html.mfw-scrolled masks .gameplay-container above
+    // --mfw-header-cut (the bottom of the buttons, in the container's own coordinates) with a short fade (Gameplay.razor.css).
+    // Not at the top, so the Rankings podium (which fits the window, with a fixed shade inside the container) is never cut.
+    let headerFrame = 0;
+
+    function updateHeaderCut() {
+        headerFrame = 0;
+        const root      = document.documentElement;
+        const container = document.querySelector(".gameplay-container");
+        const header    = document.querySelector(".header-buttons");
+        if (!container || !header || window.scrollY <= 0) {
+            root.classList.remove("mfw-scrolled");
+            return;
+        }
+        const cut = header.getBoundingClientRect().bottom + 6 - container.getBoundingClientRect().top;
+        root.style.setProperty("--mfw-header-cut", Math.max(0, Math.round(cut)) + "px");
+        root.classList.add("mfw-scrolled");
+    }
+
+    function queueHeaderCut() {
+        if (!headerFrame) headerFrame = requestAnimationFrame(updateHeaderCut);
+    }
+
+    window.addEventListener("scroll", queueHeaderCut, { passive: true });
+    window.addEventListener("resize", queueHeaderCut);
+    setInterval(() => { if (!document.hidden) queueHeaderCut(); }, 1000);
+
     window.mfwTransitions = { run: run, enter: enter, scrollTop: scrollTop, restoreScroll: restoreScroll };
 })();
