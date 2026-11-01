@@ -143,7 +143,7 @@ Gallery_Players;Players
 Gallery_Endings;Endings
 Gallery_Player;Player
 Gallery_Wins;Wins
-Gallery_GamesPlayed;Games: {{0=...|3}}
+Gallery_GamesPlayed;{{0=...|3}} games played
 Gallery_Family;The Family
 Gallery_FamilyNote;shared win, counted once
 Gallery_RecentGames;Recent games
@@ -152,19 +152,24 @@ Gallery_Forget;Remove {{0=...|Anna}} from the name suggestions
 Gallery_EndingsCount;{{0=...|3}} of 8 endings
 Gallery_ShowAll;Show all
 Gallery_HideSpoilers;Hide spoilers
-Gallery_Reveal;Reveal
+Gallery_Reveal;Tap to reveal
 Gallery_LockedEnding;Locked ending
 Gallery_LockedBranch;Locked branch
-Gallery_Ending;Ending
+Gallery_Ending;Endings
 Gallery_Generation;Generation {{0=|I|II|III}}
 Gallery_Played;Played {{0=...|26 Oct}}
 Gallery_TickedByHand;Ticked off by hand
 Gallery_NotReached;Not reached yet
 Gallery_Reached;Reached
-Gallery_AlsoElsewhere;the same ending as under {{0=...|Prosperity}}, counted once
+Gallery_AlsoElsewhere;also under {{0=...|Prosperity}}, counted once
 Gallery_TickOff;Tick off {{0=...|Committed}}
 Gallery_Untick;Untick {{0=...|Committed}}
-Gallery_Legend;Star: reached in this app. Check box: ticked off by hand, for games played before the gallery existed or with the official app. A branch lights up once you reach it or tick off an ending below it.
+Gallery_WonBy;{{0=...|Anna}} won
+Gallery_SharedWin;shared family win
+Gallery_KeyPlayed;Played in this app
+Gallery_KeyOpen;Known, not reached
+Gallery_KeyLocked;Locked
+Gallery_Legend;Tick off the endings you reached before this gallery existed or with the official app. A branch lights up once you reach it or tick off an ending below it.
 Gallery_Backup;Back up or move to another device
 Gallery_BackupNote;The gallery is stored on this device only and is not part of saved games. Export it to keep a copy, then import it here or on another device: the two are merged.
 Gallery_Export;Export

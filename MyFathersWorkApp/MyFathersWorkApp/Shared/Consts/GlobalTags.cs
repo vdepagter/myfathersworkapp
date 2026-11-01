@@ -183,6 +183,11 @@ public static class GlobalTags
     public const string Gallery_TickOff             = "Gallery_TickOff";
     public const string Gallery_Untick              = "Gallery_Untick";
     public const string Gallery_Legend              = "Gallery_Legend";
+    public const string Gallery_WonBy               = "Gallery_WonBy";
+    public const string Gallery_SharedWin           = "Gallery_SharedWin";
+    public const string Gallery_KeyPlayed           = "Gallery_KeyPlayed";
+    public const string Gallery_KeyOpen             = "Gallery_KeyOpen";
+    public const string Gallery_KeyLocked           = "Gallery_KeyLocked";
     public const string Gallery_Backup              = "Gallery_Backup";
     public const string Gallery_BackupNote          = "Gallery_BackupNote";
     public const string Gallery_Export              = "Gallery_Export";
