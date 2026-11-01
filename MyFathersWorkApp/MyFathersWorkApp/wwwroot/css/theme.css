@@ -25,14 +25,52 @@
     --mfw-cream:        #f1e4c4;
 }
 
-/* On html, so it fills the whole window however short the page is; body stays see-through over it */
 html {
-    background: #111 url(../images/ui/page-bg.webp) center / cover fixed;
+    background: #111;
     overscroll-behavior-y: none; /* no pull-to-refresh on phones (Chrome, Firefox; the game autosaves anyway) */
+}
+
+/* The page background (Unity Main_BG, cropped to its opaque part) on a fixed layer that always fills the window:
+   phone browsers ignore background-attachment: fixed on html */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: url(../images/ui/page-bg.webp) center / cover no-repeat;
+    pointer-events: none;
 }
 
 body {
     background: transparent;
+}
+
+/* Loading screen (index.html) before the app starts: the progress ring and percentage in the middle of the window,
+   in the app's colours */
+.loading-progress {
+    position: fixed;
+    inset: 50% auto auto 50%;
+    width: 7rem;
+    height: 7rem;
+    margin: 0;
+    transform: translate(-50%, -50%);
+}
+
+.loading-progress circle {
+    stroke: rgba(241, 228, 196, 0.15);
+}
+
+.loading-progress circle:last-child {
+    stroke: #c9a35a;
+}
+
+.loading-progress-text {
+    position: fixed;
+    inset: 50% 0 auto 0;
+    transform: translateY(-50%);
+    font-family: var(--mfw-font-text);
+    color: var(--mfw-cream);
+    text-shadow: 0 1px 2px #000;
 }
 
 /* Textured button (Unity Blank_Button_Brown / _Green / Button Red). The label sits a little above the middle, on the
