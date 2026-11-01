@@ -36,14 +36,14 @@ body {
 }
 
 /* Textured button (Unity Blank_Button_Brown / _Green / Button Red). The label sits a little above the middle, on the
-   raised face of the art (47% of its height). The bottom padding is in em: a percentage would follow the width of the
-   button's container, so the label moved with the layout. */
+   raised face of the art (47% of its height). Padding in em: a percentage follows the width of the button's container,
+   so in a wide page the side padding outgrew a narrow button and pushed its label to the right. */
 .mfw-button {
     position: relative;
     display: grid;
     place-items: center;
     aspect-ratio: 640 / 229;
-    padding: 0 8% 0.22em;
+    padding: 0 0.9em 0.22em;
     border: 0;
     background: url(../images/ui/button-brown.webp) center / 100% 100% no-repeat;
     font-family: var(--mfw-font-button);
