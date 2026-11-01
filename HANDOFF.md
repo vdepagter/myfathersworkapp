@@ -65,7 +65,7 @@ sparkle, lightning, Graphics quality in localStorage `mfwGraphics`, `html[data-g
   `ScreenTransitions` frames as one sprite sheet, `steps(22)`; menu page navigation recedes it too). Dialogs and menu
   papers zoom from 0.62 and ease into place in 1.4 s (no slow "breathe"); the pause menu and Settings only fade. No
   pull-to-refresh (`overscroll-behavior-y`). Frames carry a 100vmax dark shadow so a Firefox Android toolbar change that
-  leaves a fixed layer short shows dark instead of page content; a dark backing under the round bar's windows. Absolute
+  leaves a fixed layer short shows dark instead of page content; the round bar sits in a fixed `inset: 0` dock like the frame (was `bottom: 0` + transform, which floated below the lifted frame on Firefox, drawn white). Absolute
   Empire has ascent/descent overrides (capitals centred in the line box in every browser) and `.mfw-button` lifts its
   label in em (was % of the container width). Countdown / REVEAL! sized in cqw of the plaque. Village names are
   remembered in the gallery (`GalleryData.Villages`, prefilled + chips). Log Book on Unity's open book (3 + 3 events,

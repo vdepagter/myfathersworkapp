@@ -39,17 +39,20 @@
 
 <SaveNotification Visible="@_ShowSaveNotification" GlobalData="GlobalData"/>
 
-@* Round and Generation, in the slot of the frame (Unity Progress: MFW_ProgressBar behind the frame's nine windows) *@
-<div class="round-tracker @SceneClass" role="list">
-    <div class="round-bar"></div>
-    @for (int i = 0; i < _RoundLabels.Length; i++)
-    {
-        string state = i < CurrentRoundIndex ? "past" : i == CurrentRoundIndex ? "current" : "future";
+@* Round and Generation, in the slot of the frame (Unity Progress: MFW_ProgressBar behind the frame's nine windows). The
+   dock is a fixed layer like the frame, so both move together when a phone browser resizes the window. *@
+<div class="round-tracker-dock">
+    <div class="round-tracker @SceneClass" role="list">
+        <div class="round-bar"></div>
+        @for (int i = 0; i < _RoundLabels.Length; i++)
+        {
+            string state = i < CurrentRoundIndex ? "past" : i == CurrentRoundIndex ? "current" : "future";
 
-        <div class="round-step @state" role="listitem" style="@_RoundCells[i]"
-             aria-current="@(i == CurrentRoundIndex ? "step" : null)">@_RoundLabels[i]</div>
-    }
-    <div class="round-tray"></div>
+            <div class="round-step @state" role="listitem" style="@_RoundCells[i]"
+                 aria-current="@(i == CurrentRoundIndex ? "step" : null)">@_RoundLabels[i]</div>
+        }
+        <div class="round-tray"></div>
+    </div>
 </div>
 
 @if (GlobalData.ActiveMirrorQuestion != null)

@@ -221,14 +221,23 @@
 }
 
 /* ---- round bar: the frame's slot (Unity Progress), fixed at the bottom; the bar shows through the nine windows ---- */
-.round-tracker {
+/* Fixed with inset: 0 exactly like .game-frame: Firefox on Android sized a bottom: 0 layer differently while its
+   toolbars slid away, so the bar floated below the lifted frame over the page */
+.round-tracker-dock {
     position: fixed;
-    left: 50%;
-    bottom: 0;
+    inset: 0;
     z-index: 950;
+    pointer-events: none;
+}
+
+.round-tracker {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-inline: auto;
     width: calc(1200 * var(--u));
     aspect-ratio: 1200 / 141;
-    transform: translateX(-50%);
     pointer-events: none;
 }
 
