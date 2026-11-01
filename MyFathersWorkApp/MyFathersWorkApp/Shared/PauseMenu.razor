@@ -15,12 +15,6 @@
                         @onclick="Resume">@GlobalData!.GetLocalizedUITag(GlobalTags.Gameplay_Resume)</button>
                 <button class="mfw-button"
                         @onclick="OnReturnToMainMenu">@GlobalData!.GetLocalizedUITag(GlobalTags.Gameplay_ReturnToMainMenu)</button>
-
-                @if (IsThereAnySavedState)
-                {
-                    <button class="mfw-button"
-                            @onclick="ShowSavePopup">@GlobalData!.GetLocalizedUITag(GlobalTags.Gameplay_LocalSaveGame)</button>
-                }
             </div>
 
             <DisplaySettings GlobalData="GlobalData!"/>
@@ -73,7 +67,6 @@
 @code {
     [Parameter] public bool          Visible              { get; set; }
     [Parameter] public EventCallback OnResume             { get; set; }
-    [Parameter] public EventCallback OnShowSavePopup      { get; set; }
     [Parameter] public GlobalData?   GlobalData           { get; set; }
     [Parameter] public bool          IsThereAnySavedState { get; set; }
 
@@ -81,12 +74,6 @@
     {
         Audio.PlayClick();
         return OnResume.InvokeAsync();
-    }
-
-    private Task ShowSavePopup()
-    {
-        Audio.PlayClick();
-        return OnShowSavePopup.InvokeAsync();
     }
 
     private void OnReturnToMainMenu()

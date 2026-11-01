@@ -56,7 +56,8 @@
 /* ---- frame: Unity MFW_Border_Gold2 (story) / MFW_Border_1 (round), the round slot moved to .round-tray ---- */
 .game-frame {
     position: fixed;
-    inset: 0;
+    inset: 0 0 auto 0;
+    height: var(--mfw-vh, 100%); /* the visible window (index.html): Firefox Android can size inset: 0 a toolbar short */
     z-index: 900;
     pointer-events: none;
     border: calc(140 * var(--u)) solid transparent;
@@ -225,7 +226,8 @@
    toolbars slid away, so the bar floated below the lifted frame over the page */
 .round-tracker-dock {
     position: fixed;
-    inset: 0;
+    inset: 0 0 auto 0;
+    height: var(--mfw-vh, 100%);
     z-index: 950;
     pointer-events: none;
 }

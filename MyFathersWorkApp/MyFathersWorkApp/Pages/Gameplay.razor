@@ -273,7 +273,6 @@
 <PauseMenu 
     Visible="@_ShowPauseMenu"
     OnResume="HidePauseMenu"
-    OnShowSavePopup="TriggerSavePopup"
     GlobalData="@GlobalData"
     IsThereAnySavedState="@_IsThereAnySavedState"/>
 
@@ -283,12 +282,6 @@
     GlobalData="@GlobalData"
     OnClose="CloseLogBook"/>
 
-<SavePopup 
-    Visible="@_ShowSavePopup" 
-    Base64Save="@_Base64EncodedGame" 
-    OnBack="HideSavePopup"
-    GlobalData="@GlobalData"/>
-
 @code
 {
     [CascadingParameter] private GlobalData GlobalData { get; set; } = null!;
@@ -296,8 +289,6 @@
     private bool   _SaveGame;
     private bool   _ShowPauseMenu;
     private bool   _IsThereAnySavedState;
-    private bool   _ShowSavePopup;
-    private string _Base64EncodedGame = string.Empty;
 
     private readonly string[] _RoundLabels =
     [
@@ -771,21 +762,6 @@
 
     #endregion
     
-    private async Task TriggerSavePopup()
-    {
-        _ShowPauseMenu     = false;
-        _ShowSavePopup     = true;
-        _Base64EncodedGame = await Js.InvokeAsync<string>("localStorage.getItem", "continue");
-        StateHasChanged();
-    }
-
-    private void HideSavePopup()
-    {
-        _ShowSavePopup = false;
-        _ShowPauseMenu = true;
-        StateHasChanged();
-    }
-
     private void GoBack()
     {
         Audio.PlayClick();

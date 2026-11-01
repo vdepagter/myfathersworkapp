@@ -4,9 +4,9 @@
 .menu-art {
     position: fixed;
     left: 50%;
-    top: 50%;
-    width: max(100vw, 100svh * 1920 / 1082);
-    height: max(100svh, 100vw * 1082 / 1920);
+    top: calc(var(--mfw-vh, 100svh) / 2);
+    width: max(100vw, var(--mfw-vh, 100svh) * 1920 / 1082);
+    height: max(var(--mfw-vh, 100svh), 100vw * 1082 / 1920);
     transform: translate(-50%, -50%);
     overflow: hidden;
     background: #05070b;
@@ -78,12 +78,16 @@
 }
 
 /* Unity Main_Border, a 9-slice frame (180 px corners on the 1920 canvas) around the whole window */
+/* Sized to the visible window (--mfw-vh, index.html) instead of inset: 0: Firefox on Android could size the fixed layer
+   one toolbar height short, which lifted the bottom border over the page. The dark shadow covers anything left outside. */
 .menu-frame {
     position: fixed;
-    inset: 0;
+    inset: 0 0 auto 0;
+    height: var(--mfw-vh, 100%);
     border: solid transparent;
-    border-width: min(9.375vw, 16.64svh);
-    border-image: url(images/ui/main-border.webp) 180 / min(9.375vw, 16.64svh) stretch;
+    border-width: min(9.375vw, calc(var(--mfw-vh, 100svh) * 0.1664));
+    border-image: url(images/ui/main-border.webp) 180 / min(9.375vw, calc(var(--mfw-vh, 100svh) * 0.1664)) stretch;
+    box-shadow: 0 0 0 100vmax #05070b;
     pointer-events: none;
 }
 
@@ -91,8 +95,8 @@
 .menu {
     position: fixed;
     left: 50%;
-    top: 50%;
-    width: min(100vw, 100svh * 1920 / 1082);
+    top: calc(var(--mfw-vh, 100svh) / 2);
+    width: min(100vw, var(--mfw-vh, 100svh) * 1920 / 1082);
     aspect-ratio: 1920 / 1082;
     transform: translate(-50%, -50%);
     container-type: size;
@@ -201,7 +205,8 @@
     }
 
     .menu {
-        inset: 0;
+        inset: 0 0 auto 0;
+        height: var(--mfw-vh, 100%);
         width: auto;
         aspect-ratio: auto;
         transform: none;

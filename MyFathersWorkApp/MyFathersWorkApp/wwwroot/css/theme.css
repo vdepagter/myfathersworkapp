@@ -1,4 +1,4 @@
-/* ---------------------------------------------------------------------------------------------------------------------
+﻿/* ---------------------------------------------------------------------------------------------------------------------
    Look of the Unity app (HANDOFF.md "Visual overhaul"): its fonts, textured buttons, page background and the tap effect.
    Images in images/ui/ are resized WebP copies of UnityOriginalApp/Assets (New_UI_Assets, VFX, JanleyShader).
    html[data-graphics] is set by js/atmosphere.js: "low" stops every moving decoration.
@@ -28,6 +28,15 @@
 html {
     background: #111;
     overscroll-behavior-y: none; /* no pull-to-refresh on phones (Chrome, Firefox; the game autosaves anyway) */
+}
+
+/* The Main Menu never scrolls: on phones a swipe would slide the browser toolbar in and out, and Firefox on Android then
+   redrew the fixed menu layers short or without the fan-made note for a moment */
+html:has(.menu-frame),
+html:has(.menu-frame) body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
 }
 
 /* The page background (Unity Main_BG, cropped to its opaque part) on a fixed layer that always fills the window:

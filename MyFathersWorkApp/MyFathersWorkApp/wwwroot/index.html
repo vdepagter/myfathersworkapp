@@ -40,6 +40,35 @@
     </div>
     <div id="screen-transition" aria-hidden="true"></div>
 
+    <script>
+        // The visible window height as a CSS variable (--mfw-vh) for the frames and the Main Menu. Firefox on Android can
+        // size fixed "inset: 0" layers (and svh) one toolbar height short while its toolbar slides in or out, which lifted
+        // the frame's bottom border over the page; the visual viewport reports what is really on screen.
+        (function () {
+            const root = document.documentElement;
+            let queued = false;
+            function measure() {
+                queued = false;
+                const vv = window.visualViewport;
+                const h  = vv ? vv.height * vv.scale : window.innerHeight;
+                root.style.setProperty("--mfw-vh", Math.round(h) + "px");
+            }
+            function update() {
+                if (queued) return;
+                queued = true;
+                requestAnimationFrame(measure);
+            }
+            measure();
+            window.addEventListener("resize", update);
+            window.addEventListener("orientationchange", () => setTimeout(update, 300));
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener("resize", update);
+                window.visualViewport.addEventListener("scroll", update);
+            }
+            // Toolbars can finish sliding without another event
+            window.addEventListener("scroll", () => setTimeout(update, 250), { passive: true });
+        })();
+    </script>
     <script src="js/audio.js"></script>
     <script src="js/transitions.js"></script>
     <script src="js/atmosphere.js"></script>

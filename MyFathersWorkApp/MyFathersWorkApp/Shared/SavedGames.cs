@@ -1,4 +1,4 @@
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -133,6 +133,9 @@ public class SavedGamesService(IJSRuntime js, GalleryService gallery)
         List<SavedGameInfo> games = await ListAsync();
         if (games.RemoveAll(game => game.Id == id) > 0) await WriteListAsync(games);
     }
+
+    // Removes the game being played (continue, continueTime, undo history); the Endings Gallery is not touched
+    public async Task DeleteCurrentAsync() => await js.InvokeVoidAsync("mfwSaves.clearCurrent");
 
     // The save code of a saved game, as the pause menu shows it for the game being played
     public async Task<string> SaveCodeAsync(string id) => await js.InvokeAsync<string?>("mfwSaves.saveCode", _GAME_PREFIX + id) ?? string.Empty;

@@ -1,4 +1,4 @@
-@page "/SavedGames"
+﻿@page "/SavedGames"
 @using MyFathersWorkApp.Shared
 @using System.Globalization
 @inject NavigationManager Nav
@@ -19,6 +19,15 @@
                 @Describe(_Current)
                 <div class="save-buttons">
                     <button class="mfw-button mp-button save-main" @onclick="ContinueCurrent">@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_Continue)</button>
+                    <button class="mp-chip" @onclick="DownloadCurrentSaveCode">@GlobalData.GetLocalizedUITag(GlobalTags.SavedGames_SaveCode)</button>
+                    @if (_ConfirmDelete == _CURRENT)
+                    {
+                        <button class="mp-chip danger" @onclick="DeleteCurrent">@GlobalData.GetLocalizedUITag(GlobalTags.SavedGames_SureDelete)</button>
+                    }
+                    else
+                    {
+                        <button class="mp-chip" @onclick="() => AskDelete(_CURRENT)">@GlobalData.GetLocalizedUITag(GlobalTags.SavedGames_Delete)</button>
+                    }
                 </div>
             </div>
         }
@@ -80,6 +89,8 @@
 @code
 {
     [CascadingParameter] private GlobalData GlobalData { get; set; } = null!;
+
+    private const string _CURRENT = "<current>"; // _ConfirmDelete value for the game being played
 
     private bool                _Loaded;
     private SavedGameInfo?      _Current;
@@ -146,10 +157,32 @@
     private async Task DownloadSaveCode(SavedGameInfo game)
     {
         Audio.PlayClick();
-        string code = await Saves.SaveCodeAsync(game.Id);
+        await DownloadAsync(game, await Saves.SaveCodeAsync(game.Id));
+    }
+
+    // The game being played: its save code is the "continue" key itself (what the pause menu used to show)
+    private async Task DownloadCurrentSaveCode()
+    {
+        Audio.PlayClick();
+        if (_Current == null) return;
+        await DownloadAsync(_Current, await Js.InvokeAsync<string?>("localStorage.getItem", "continue") ?? string.Empty);
+    }
+
+    private async Task DownloadAsync(SavedGameInfo game, string code)
+    {
         if (code == string.Empty) return;
         string name = $"MyFathersWork_{game.Scenario}_{game.LastPlayed.ToLocalTime():yyyy-MM-dd_HHmm}.txt";
         await Js.InvokeVoidAsync("BlazorDownloadFile", name, "text/plain;charset=utf-8", code);
+    }
+
+    // Deletes the game being played and its undo history; Continue on the Main Menu goes grey. The Endings Gallery keeps
+    // its record of the game (own storage key).
+    private async Task DeleteCurrent()
+    {
+        Audio.PlayClick();
+        _ConfirmDelete = string.Empty;
+        await Saves.DeleteCurrentAsync();
+        _Current = null;
     }
 
     private async Task LoadImportFile(InputFileChangeEventArgs e)

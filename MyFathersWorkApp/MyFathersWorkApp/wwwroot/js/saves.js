@@ -97,6 +97,11 @@ window.mfwSaves = (function () {
             return true;
         },
 
+        // Deletes the game being played (Saved Games, Delete on the current game)
+        clearCurrent() {
+            clearActive();
+        },
+
         // The save code (as in the pause menu) of a packed game
         async saveCode(key) {
             const data = await unpack(localStorage.getItem(key));
