@@ -15,7 +15,7 @@
     /* exactly the free height between the header buttons and the round bar (the .gameplay-container padding), so
        nothing runs under the bar: the plinths take what the headline leaves (.rk-stage) */
     height: calc(100svh - max(4.75rem, calc(190 * var(--u))) - calc(150 * var(--u) + 1.5rem));
-    min-height: 15rem;
+    min-height: 13rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -190,7 +190,7 @@
 .rk-slot.gold   { --c1: #f3d48e; --c2: #c9952f; --c3: #8a5c16; --c4: #3e280a; }
 .rk-slot.silver { --c1: #dfe3e6; --c2: #a3aab2; --c3: #646b74; --c4: #2b2f34; }
 .rk-slot.bronze { --c1: #e2ae7c; --c2: #a8622f; --c3: #6e3a17; --c4: #331a08; }
-.rk-slot.iron   { --c1: #7d8288; --c2: #4c5157; --c3: #2e3135; --c4: #151719; }
+.rk-slot.iron   { --c1: #6a6f75; --c2: #44484e; --c3: #2a2d31; --c4: #141618; }
 
 .rk-block {
     position: relative;
@@ -279,7 +279,7 @@
 
 .rk-place {
     font-family: var(--mfw-font-heading);
-    font-size: min(max(20px, calc(61 * var(--u))), 32cqh, 42cqw);
+    font-size: max(16px, min(max(20px, calc(61 * var(--u))), 32cqh, 42cqw));
     text-shadow: 0 calc(2 * var(--u)) 0 rgba(255, 240, 200, 0.55), 0 0 calc(15 * var(--u)) rgba(255, 235, 190, 0.35);
 }
 
@@ -287,19 +287,19 @@
 
 .rk-points {
     font-family: var(--mfw-font-button);
-    font-size: min(max(10px, calc(25 * var(--u))), 12cqh, 17cqw);
+    font-size: max(10px, min(max(10px, calc(25 * var(--u))), 12cqh, 17cqw));
     letter-spacing: 0.05em;
     white-space: nowrap;
     text-shadow: 0 calc(2 * var(--u)) 0 rgba(255, 240, 200, 0.5);
 }
 
-.rk-slot.first .rk-place  { font-size: min(max(26px, calc(80 * var(--u))), 34cqh, 50cqw); }
-.rk-slot.first .rk-points { font-size: min(max(12px, calc(32 * var(--u))), 13cqh, 20cqw); }
+.rk-slot.first .rk-place  { font-size: max(18px, min(max(26px, calc(80 * var(--u))), 34cqh, 50cqw)); }
+.rk-slot.first .rk-points { font-size: max(11px, min(max(12px, calc(32 * var(--u))), 13cqh, 20cqw)); }
 
 .rk-slot.iron .rk-place,
 .rk-slot.iron .rk-points {
-    color: rgba(230, 225, 215, 0.65);
-    text-shadow: 0 calc(2 * var(--u)) 0 rgba(0, 0, 0, 0.7);
+    color: #ece3cf;
+    text-shadow: 0 1px 2px #000, 0 0 6px rgba(0, 0, 0, 0.8);
 }
 
 /* the score counts up from 0 (falls back to the plain number) */
