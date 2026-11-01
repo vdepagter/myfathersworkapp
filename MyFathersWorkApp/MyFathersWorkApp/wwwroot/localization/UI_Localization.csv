@@ -90,6 +90,14 @@ Ending_Next;Next
 Ending_Unlocked;Ending unlocked!
 Ending_Recorded;Ending reached
 Ending_UnlockedCount;You have unlocked {{0=...|3}} out of 8 endings
+Rankings_Victorious;is victorious!
+Rankings_Family;The Family
+Rankings_Place;{{0=|1st|2nd|3rd|4th}}
+Rankings_Points;{{0=...|40}} VP
+Rankings_TieMasterwork;Won the tie-breaker with a completed Masterwork
+Rankings_TieUpgrades;Won the tie-breaker with the most Estate Upgrades
+Rankings_FamilyNote;Tied at the top with no tie-breaker to settle it, so everyone shares the win
+Rankings_Continue;Continue
 //====== Scenario Settings ======;
 ScenarioLang_English_Source;English - Source
 ScenarioLang_English_Simple;English - Simple

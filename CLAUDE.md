@@ -182,6 +182,15 @@ ending and the hub hook in `Pages/Gameplay.razor` (`NoteGalleryAsync`), name chi
 - Export / Import (base64 JSON) merges: players, games by id, branches and ticks are combined. The original Unity app
   kept ending titles in PlayerPrefs `GameEndingsData`, matched by title text (village names made duplicates).
 
+## Rankings podium
+
+`FinalScoring.Rankings` keeps its text elements but also sets `GameplayWindow.Rankings` (`Shared/Scenarios/RankingsData.cs`);
+`Pages/Gameplay.razor` then shows `Shared/RankingsView.razor` (styles `wwwroot/css/rankings.css`) instead of the text, and
+its Continue button follows the window's continue link. Design: mockup "H3 Relic with rain" (owner's pick, Nov 2026):
+players by their own name (no "III"), the scenario and the Generation III branch (Endings Gallery tree label) instead of
+"Generation III", gold/silver/bronze/iron plinths, original crown (`images/ui/crown.webp`, Unity Ranking/MFW_CrownIcon).
+A family win puts everyone on an equal gold plinth without place numbers. Rain is `mfwAtmosphere` on the scene canvas.
+
 ## Log Book
 
 Ported from the official app (`ViewLogBook.cs`, data `UnityOriginalApp/Assets/CSV/Updated Features MFW - Log Book Data (1).csv`),

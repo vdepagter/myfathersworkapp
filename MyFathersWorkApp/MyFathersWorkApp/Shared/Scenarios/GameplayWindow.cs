@@ -34,6 +34,11 @@ public class GameplayWindow(GlobalData globalData)
 
     public void MarkFinalEnding() => IsFinalEnding = true;
 
+    // The final ranking: Pages/Gameplay.razor shows it as the podium (Shared/RankingsView.razor) instead of the text
+    public RankingsData? Rankings { get; private set; }
+
+    public void SetRankings(RankingsData rankings) => Rankings = rankings;
+
     public void AddDefaultTitle(Func<string, string>? contentProcessor = null, [CallerMemberName] string callerName = "")
     {
         string title                        = globalData.GetScenarioLocalizedTag(callerName + "_Title");
