@@ -271,8 +271,8 @@
     private IEnumerable<TallyLine> Tally()
     {
         GalleryData    data  = _Data!;
-        HashSet<string> names = data.Players.Select(player => player.Name).ToHashSet();
-        names.UnionWith(data.Games.SelectMany(game => game.Players));
+        // Only players of recorded games: deleting a test game removes its test player from the table too
+        HashSet<string> names = data.Games.SelectMany(game => game.Players).ToHashSet();
 
         int[] PerScenario(Func<GalleryGame, bool> won) => GalleryTrees.Scenarios.Select(scenario => data.Games.Count(game => game.Scenario == scenario && won(game))).ToArray();
 

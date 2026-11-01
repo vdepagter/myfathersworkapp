@@ -228,6 +228,7 @@ public static class GlobalTags
     public const string Gallery_Cancel              = "Gallery_Cancel";
     public const string Gallery_Save                = "Gallery_Save";
     public const string Gallery_NamesInvalid        = "Gallery_NamesInvalid";
+    public const string Gallery_EndingLabel         = "Gallery_EndingLabel";
     public const string Gallery_TapToEdit           = "Gallery_TapToEdit";
 
     // Saved Games (Pages/SavedGames.razor)

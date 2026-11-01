@@ -208,6 +208,7 @@ Gallery_SureDeleteGame;Delete for good?
 Gallery_Cancel;Cancel
 Gallery_Save;Save
 Gallery_NamesInvalid;Every player needs a name of 2 to 15 letters, each name once.
+Gallery_EndingLabel;Ending
 Gallery_TapToEdit;Tap a game to change or delete it.
 MainMenu_SavedGames;Saved Games
 SavedGames_Note;Every game is kept on this device. Starting a new game or loading a save code puts the game you were playing here. Open a game to continue it or to look back through it with Back (⬅).

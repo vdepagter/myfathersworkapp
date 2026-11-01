@@ -27,7 +27,7 @@
             </label>
 
             <label class="sheet-field wide">
-                @T(GlobalTags.Gallery_Ending)
+                @T(GlobalTags.Gallery_EndingLabel)
                 <select @bind="_Ending">
                     @foreach (GalleryNode node in Endings())
                     {
@@ -53,7 +53,7 @@
                 <input class="sheet-name" list="sheet-names" maxlength="15" aria-label="@T(GlobalTags.Gallery_PlayerName)"
                        placeholder="@T(GlobalTags.Gallery_PlayerName)" @bind="player.Name" @bind:event="oninput"/>
                 <input class="sheet-score" type="number" inputmode="numeric" aria-label="@($"{T(GlobalTags.Gallery_Score)} {label}")"
-                       placeholder="@T(GlobalTags.Gallery_Score)" @bind="player.Score"/>
+                       placeholder="0" @bind="player.Score"/>
                 <label class="sheet-winner">
                     <input type="radio" name="sheet-winner" aria-label="@($"{T(GlobalTags.Gallery_Winner)} {label}")"
                            checked="@(!_Family && _Winner == index)" @onchange="() => SetWinner(index)"/>
