@@ -16,7 +16,7 @@ public static class Narration
 {
     private const string Cut = "<b>CHOOSE";
 
-    private static readonly Regex Placeholder = new(@"\{\{\d+=(?:[^{}]|\{\{[^{}]*\}\})*\}\}", RegexOptions.Compiled);
+    private static readonly Regex PlaceholderStart = new(@"\{\{\d+=", RegexOptions.Compiled);
 
     private sealed class Manifest
     {
@@ -100,11 +100,11 @@ public static class Narration
         int placeholders = 0;
         int valueStart   = 0;
         int last         = 0;
-        foreach (Match? match in Placeholder.Matches(source).Append(null))
+        foreach ((int Index, int Length)? match in Placeholders(source).Select(span => ((int, int)?)span).Append(null))
         {
             int    chunkStart = last;
-            string chunk      = match == null ? source[last..] : source[last..match.Index];
-            if (match != null) last = match.Index + match.Length;
+            string chunk      = match == null ? source[last..] : source[last..match.Value.Index];
+            if (match != null) last = match.Value.Index + match.Value.Length;
 
             if (chunk != string.Empty)
             {
@@ -117,11 +117,52 @@ public static class Narration
                 placeholders = 0;
             }
 
-            if (match != null && placeholders++ == 0) valueStart = match.Index;
+            if (match != null && placeholders++ == 0) valueStart = match.Value.Index;
         }
 
         if (placeholders > 0 && valueStart >= from && valueStart < to) AddValue(manifest, folder, rendered[position..], urls);
         return true;
+    }
+
+    // The outermost placeholders: "{{<n>=" up to its balanced "}}", so nested placeholders are one (chunks.placeholder_spans)
+    private static List<(int Index, int Length)> Placeholders(string text)
+    {
+        List<(int Index, int Length)> spans = new();
+        int                           start = 0;
+        while (PlaceholderStart.Match(text, start) is { Success: true } match)
+        {
+            int depth = 0;
+            int index = match.Index;
+            while (index < text.Length)
+            {
+                if (string.CompareOrdinal(text, index, "{{", 0, 2) == 0)
+                {
+                    depth++;
+                    index += 2;
+                }
+                else if (string.CompareOrdinal(text, index, "}}", 0, 2) == 0)
+                {
+                    depth--;
+                    index += 2;
+                    if (depth == 0) break;
+                }
+                else
+                {
+                    index++;
+                }
+            }
+
+            if (depth != 0)
+            {
+                start = match.Index + 2;
+                continue;
+            }
+
+            spans.Add((match.Index, index - match.Index));
+            start = index;
+        }
+
+        return spans;
     }
 
     // End of the leading bold header line ("<b>Letter from <name> - <i>date</i></b><br />"), or 0 (chunks.header_end)

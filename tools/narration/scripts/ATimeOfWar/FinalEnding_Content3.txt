@@ -1,0 +1,6 @@
+# ATimeOfWar_Localization.csv FinalEnding_Content3
+# The narrator's own name after "it was I," is skipped.
+## 1
+a small town in Eastern Europe, would become a household name at such a pace? Quite peculiar indeed, isn't it?
+
+For you see, it was I,

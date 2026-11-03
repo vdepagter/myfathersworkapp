@@ -1,0 +1,4 @@
+# ATimeOfWar_Localization.csv ATOWSabotageIntro1Revealed_Content
+# "<faction>' ...": the possessive apostrophe after the faction value clip is not spoken.
+## 1 free
+noble cause? Or perhaps one of my kin could stand to be targeted by my ire?

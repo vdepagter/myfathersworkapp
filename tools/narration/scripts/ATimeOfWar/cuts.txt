@@ -1,0 +1,19 @@
+# Tags whose narration stops early or is skipped, besides the automatic cut at choices and rules lines
+# (chunks.auto_cut). 'Tag' = not narrated, 'Tag | <text>' = stop at <text>, 'Tag | -' = no cut.
+# Story first, then a rules line or a question to the players:
+TownHallSpecial_Content | Each player will now
+PackingHeat1_Content | Choose the name
+ResistEnd2_Content | Count up how many
+ResistEnd3_Content | Count the number
+AMessenger_Content | The messenger turned
+AMessenger2Revealed_Content | Which Flag token
+OldManTokenRevealed_Content | Which Flag token
+TimeMachineExperiment_Content | Does any player
+TimeEnd2_Content2 | <b>How many of the
+Blame1b_Content | Do you accept
+BlameRevealed_Content | Do you have a
+Blame1c_Content | I knew that whoever
+CommemorativeSignIn_Content | Which player visited
+MonuRevealed_Content | If I chose
+# Rules-only text:
+TimeEnd1_Content1

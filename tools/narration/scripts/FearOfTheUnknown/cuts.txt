@@ -3,3 +3,5 @@
 # Rules-only windows:
 PenaltyForDefiance_Content2
 Preparations_Content
+# A question to the players, not story (its value had no clip until nested placeholders were split right):
+ControlledExperiment_Content

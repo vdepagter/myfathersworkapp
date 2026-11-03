@@ -1,0 +1,10 @@
+# ATimeOfWar_Localization.csv FinalEnding_Content6
+# The narrator's own name after "even as I," is skipped.
+## 0
+This is not a story of Icarian fate where rampant ambition overwhelms reason. No, it is a story of wartime oppression and dismissal by inbred monarchs who would blindly penalize neoteric enterprise instead of embracing the glory of modern advanced experimentation.
+
+This is a story of three full generations of dedicated service by a proud Hungarian family with a rich history who were then flippantly cast out of their homes to live in exile. And for what? For revealing an uncomfortable truth? For showing that true science has the power to shape worlds and equally crush them within its grasp? My parents could not evade the royal scrutiny and here I exist, expatriated, wrenched from the work bequeathed to me.
+
+Oh, how I wish I could view the well-kept estate of my youth with its comforting stone walls and ivy-laden iron gates. To gaze out of the northern veranda to the valley and watch the peasants wade through the smog like toads amongst the slough.
+
+But even as I

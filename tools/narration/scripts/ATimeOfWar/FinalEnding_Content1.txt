@@ -1,0 +1,6 @@
+# ATimeOfWar_Localization.csv FinalEnding_Content1
+# The narrator's own name ("<name> IV") is said as "the fourth of my line".
+## 0
+And so it is that this chapter of the story has concluded. It is a story that you no doubt have read about countless times in the newspapers or heard with your family while in the sitting room huddled around your radioscope. The immensity of my family's experiment astounds even myself as I crane my neck to look upon it in all its magnificence.
+
+But damn it all, I swear on my name, the fourth of my line,

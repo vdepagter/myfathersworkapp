@@ -1,0 +1,6 @@
+# ATimeOfWar_Localization.csv FinalEnding_Content5
+# The narrator's own name ("<name> IV") is said as "the fourth of my line".
+## 4
+Three generations of service, dedication, and influence.
+
+My own continued story? Why, as of yet I haven't felt the same inclination to follow in my dear progenitors' footsteps. My service, as newly appointed royal advisor, the fourth of my line,

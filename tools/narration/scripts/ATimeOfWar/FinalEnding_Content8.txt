@@ -1,0 +1,8 @@
+# ATimeOfWar_Localization.csv FinalEnding_Content8
+# The family name ("the <name> name") is said as "the family name"; the signature "- Dr. <name>" is skipped.
+## 0
+I submit this post-script as the fourth generation to take on the family
+## 2
+I am aware of what my lineage represents to the international community, and while I wish to distance myself from the whole affair, I also could not in good conscience allow the manuscripts I unearthed be destroyed. With its release, I hope to show - in all its graphic detail - that not all intentions were negative and that the science still holds true even to this day.
+
+With righteous conviction and humility in my heart, I am forever your servant.

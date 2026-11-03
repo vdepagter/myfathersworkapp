@@ -1,0 +1,8 @@
+# ATimeOfWar_Localization.csv Reign7c2_Content
+# The regal title typed in (Reign7c) cannot be narrated: "refer to me as <title>. Ah, <title>." becomes "as befits my new title. Ah!"
+## 0
+The advisor, when he regained his sense, thanked me for the assistance. I thrice reminded him to refer to me as befits my new title.
+## 1 free
+
+## 2
+Ah! Such a glorious title!

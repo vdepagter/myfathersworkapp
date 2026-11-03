@@ -1,0 +1,4 @@
+# ATimeOfWar_Localization.csv FinalEnding_Content7
+# The author's typed-in name after "Dr." is skipped.
+## 1
+region, as a required companion to the Applied Sciences curriculum. It has been recently revised under the guidance of the author.

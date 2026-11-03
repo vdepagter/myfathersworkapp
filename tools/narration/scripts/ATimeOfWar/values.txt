@@ -1,4 +1,26 @@
 # Placeholder values narrated as their own clip (chunks.py): one per line, exactly as the code formats them, or
 # @<Tag> for every text a one-placeholder tag produces. Player names, the town name and typed names are never narrated.
-Separatists
-Unified Monarchists
+@Faction_Name
+@Token_Name
+@TeaTarget_Name
+@Building_Name
+@DuelField_Name
+# Ending 5 (Reign, so the Unified Monarchists won): the barracks sentence of {{8}} with {{6}} false
+supported the building of a barracks for the royal government.
+were against the move to establish a costly barracks in a region when the prevailing opinions were so strong.
+# Ending 8: {{11}} inside {{10}}
+I can only hope those lost in the tragic biochemical release will find some solace in the revelation herein of the true source of the attack.
+While practical in theory, I recognize that the processing of enemy soldiers into consumable goods was an unfortunate practice that potentially renders this work unreadable to some.
+# Counts (buildings destroyed, experiments needed, ...)
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12

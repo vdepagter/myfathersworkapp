@@ -1,0 +1,5 @@
+# ATimeOfWar_Localization.csv Reign7c2_Title
+# "Thank You, <regal title typed in>": the title is skipped.
+## 0
+Thank You.
+## 1

@@ -1,0 +1,4 @@
+# ATimeOfWar_Localization.csv ATOWSabotageConfirm_Content
+# "<faction>' ...": the possessive apostrophe after the faction value clip is not spoken.
+## 3 free
+position in the village.

@@ -1,0 +1,4 @@
+# ATimeOfWar_Localization.csv DuelResolution1b_Content2
+# "my opponent, <name>": the name is skipped.
+## 0
+I watched as my opponent

@@ -32,8 +32,47 @@ CODE = os.path.join(APP, "Shared", "Scenarios")
 WEB = os.path.join(APP, "wwwroot", "audio", "vo", "oliver")
 SCRIPTS = os.path.join(HERE, "scripts")
 
-# Same as Shared/Narration.cs. One level of nesting ({{6=?|Vlad|{{0=Name}}}}) is one placeholder.
-PLACEHOLDER = re.compile(r"\{\{\d+=(?:[^{}]|\{\{[^{}]*\}\})*\}\}")
+# Same as Shared/Narration.cs: "{{<n>=" up to its balanced "}}", so nested placeholders ({{6=?|Vlad|{{0=Name}}}},
+# A Time of War ending 5 nests three deep) are one placeholder.
+PLACEHOLDER_START = re.compile(r"\{\{\d+=")
+
+
+def placeholder_spans(text):
+    """[(start, end)] of the outermost placeholders."""
+    spans, i = [], 0
+    while (m := PLACEHOLDER_START.search(text, i)) is not None:
+        depth, j = 0, m.start()
+        while j < len(text):
+            if text.startswith("{{", j):
+                depth, j = depth + 1, j + 2
+            elif text.startswith("}}", j):
+                depth, j = depth - 1, j + 2
+                if depth == 0:
+                    break
+            else:
+                j += 1
+        if depth != 0:  # unbalanced: not a placeholder
+            i = m.start() + 2
+            continue
+        spans.append((m.start(), j))
+        i = j
+    return spans
+
+
+def split_top(body):
+    """body split at the "|" that are not inside a nested placeholder."""
+    parts, depth, last, j = [], 0, 0, 0
+    while j < len(body):
+        if body.startswith("{{", j):
+            depth, j = depth + 1, j + 2
+        elif body.startswith("}}", j):
+            depth, j = depth - 1, j + 2
+        elif body[j] == "|" and depth == 0:
+            parts.append(body[last:j])
+            last = j = j + 1
+        else:
+            j += 1
+    return parts + [body[last:]]
 CUT = "<b>CHOOSE"
 
 
@@ -95,10 +134,10 @@ def segment(text):
     """[("s", static) | ("p", placeholder)] of the text before CUT. Statics may be empty."""
     text = text.split(CUT)[0]
     parts, last = [], 0
-    for m in PLACEHOLDER.finditer(text):
-        parts.append(("s", text[last:m.start()]))
-        parts.append(("p", m.group(0)))
-        last = m.end()
+    for start, end in placeholder_spans(text):
+        parts.append(("s", text[last:start]))
+        parts.append(("p", text[start:end]))
+        last = end
     parts.append(("s", text[last:]))
     return parts
 
@@ -108,11 +147,11 @@ def options(placeholder):
     of a replacement ({{0=...|The Butcher|...}}); "..." and player-name previews are not values."""
     body = placeholder[2:-2].split("=", 1)[1]
     if body.startswith("?|"):
-        opts = body[2:].split("|", 1) if "|" in body[2:] else [body[2:], ""]
+        opts = split_top(body[2:])[:2]
     else:
-        opts = body.split("|")[1:] if body.startswith("|") else body.split("|")
+        opts = split_top(body)[1:] if body.startswith("|") else split_top(body)
     return [o for o in opts if o.strip() and o != "..." and o not in ("Oliver", "James", "Olivia") and o not in STAND_INS
-            and "{{" not in o]
+            and o not in STAND_IN_ALIASES and "{{" not in o]
 
 
 # ---- Spoken text -------------------------------------------------------------------------------------------------
@@ -286,7 +325,8 @@ def cut_marker(scenario, tag, text):
         return None
     if pos == 0:
         return ""
-    static = PLACEHOLDER.split(text[pos:])[0]
+    spans = placeholder_spans(text[pos:])
+    static = text[pos:pos + spans[0][0]] if spans else text[pos:]
     for n in range(12, len(static) + 1):
         if text.find(static[:n]) == pos:
             return static[:n]
@@ -315,12 +355,18 @@ STAND_INS = {
     "Steam Titan": ("the warrior", "the warriors"),  # warrior names typed in (Privatized)
     "Iron Maiden": ("the warrior", "the warriors"),
     "Iron Will": ("the program", ""),                # program name typed in (Liberal)
+    "Spam": ("meat", "meat"),                        # the new meat product typed in (A Time of War, Famine)
 }
+# Previews that stand for the same kind of value in another scenario's CSV (A Time of War)
+STAND_IN_ALIASES = {"Anna": "Oliver", "Bob": "Oliver", "Duke Anna": "Oliver", "Testville": "Town"}
 
 
 def stand_in_kind(placeholder):
     body = placeholder[2:-2].split("=", 1)[1].split("|")
-    return next((k for k in STAND_INS if len(body) > 1 and body[0] == "..." and body[1] == k), None)
+    if len(body) < 2 or body[0] != "...":
+        return None
+    kind = STAND_IN_ALIASES.get(body[1], body[1])
+    return kind if kind in STAND_INS else None
 
 
 def plain(html):

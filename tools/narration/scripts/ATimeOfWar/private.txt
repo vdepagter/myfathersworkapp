@@ -1,0 +1,32 @@
+# Windows (method names) read by one player alone, besides the targets of AddDoNotOtherPlayersToSee /
+# AddOnceYouAreReady that chunks.py finds itself: the outcome of a secret talk or choice, before the device is passed on.
+# Their narration is never autoplayed (Play only).
+# Town Hall conversations (Taking Sides)
+RumorD6Confirm
+RumorIngredient
+RumorKnowledge
+RumorPitch
+RumorCreep
+# Sabotage, messengers and duels (Martial)
+ATOWSabotageNO
+ATOWSabotage1
+ATOWSabotageConfirm
+ATOWSabotageMonConfirm
+SabotageSignIn1
+SabotagePlayerChoice1
+SabotagePlayerConfirmed
+Amessyes2
+AMessno2
+DuelDenounce1
+DuelRules1
+DuelDecline1
+AcceptDuel1b
+# Time Travel
+MilitaryNo
+MilitaryYes
+Blame1b
+Blame1c
+# Generation III
+OldManNo
+OldManYes
+FigureontheTrackInb

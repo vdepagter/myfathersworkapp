@@ -1,0 +1,4 @@
+# ATimeOfWar_Localization.csv BattleTime_Content1
+# The player's own typed-in name ("the era of <name> III") is said as "the third generation".
+## 0
+I alone deserved recognition for my glorious, bombastic, chimerical, transformative creations that defied the rigors of known science. I could no longer suffer the egotistical competitive nature of my cousins, whose work so paled in comparison to my own. This was my time. This was the era of the third generation!

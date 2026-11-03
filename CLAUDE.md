@@ -228,12 +228,15 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
 - `python tools/narration/chunks.py plan <Scenario>` (characters still to render), `show <Scenario> <Tag>` (chunks,
   hashes, spoken text), `render <Scenario> [--max=N] [--reserve=N] [--tags=A,B] [--no-private] [--dry]` (checks the
   quota every ~10k characters and stops above the reserve; resumable). Model and settings: `voices.json` `oliver`.
-- `Shared/Narration.cs` must split exactly like `chunks.py` (placeholder regex, `<b>CHOOSE` cut, FNV-1a 64 hash).
+- `Shared/Narration.cs` must split exactly like `chunks.py` (balanced `{{n=...}}` placeholders, nested ones are one, `<b>CHOOSE` cut, FNV-1a 64 hash).
   Scenario code that rewrites story text beyond placeholders makes the split fail: that window is not narrated
   (console "Oliver narration: no clips for <Tag>"). Story text added with `AddCustomContent` is not narrated; use
   `AddStoryContent(tag)` for a plain story tag.
 - New screens read by one player alone: list them in `scripts/<Scenario>/private.txt` unless they are the target of
   `AddDoNotOtherPlayersToSee` / `AddOnceYouAreReady`. New placeholder values worth narrating go in `values.txt`.
+  Rules-only windows go in `skip.txt`. Typed-in values get stand-ins by their CSV preview (`chunks.STAND_INS`;
+  A Time of War previews `Anna` / `Bob` / `Duke Anna` / `Testville` are aliases, `Spam` -> "meat"); where the narrator
+  names themself ("it was I, <name>", "<name> IV") an override drops or rewords the name.
 - A hand-written override (`scripts/<Scenario>/<Tag>.txt`) rewrites text by hand, which drifts: a narrator clause was
   once dropped unnoticed, and listeners reading along got lost. **Always run `python tools/narration/elevenlabs.py
   check`** after editing an override or the CSV text (word-level diff per chunk; render refuses on drift).

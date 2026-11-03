@@ -158,10 +158,34 @@ For the next scenarios: review the `_Title` texts with placeholders (Cost of Dis
 e.g. "Upon a Secret Meeting - Letter - <date>") before rendering; Cost of Disease is now ~157k characters sent
 (titles on, headers off), more than one month of quota.
 
+A Time of War (Scenario III), rendered 3 Nov 2026 (clone strength 0.5): every public window plus part of the private
+ones - 516 clips, 87 MB, 114k characters sent, ~49.4k billed; ~1.1k credits left until 16 Nov. **Still to render: 8.7k
+characters, all private** (`chunks.py plan ATimeOfWar` lists them): AcceptDuel1Revealed, AcceptDuel1b, DuelDecline1,
+DuelDenounce1 (content), BlameRevealed, Blame1b, Blame1c, MilitarytokenRevealed, MilitaryNo, MilitaryYes, OldManTokenRevealed,
+OldManNo, OldManYes, FigureontheTrackInRevealed, FigureontheTrackInb, MonuRevealed. Run `python tools/narration/chunks.py
+render ATimeOfWar` after the reset (only these are sent) and commit the clips + manifest.
+- Review done before rendering: `skip.txt` (36 rules-only windows: votes, bids, tallies, bonuses, warnings, Outpost,
+  University note), `cuts.txt` (rules questions after story text), `private.txt` (outcomes of the secret Town Hall talks,
+  sabotage, messengers, duels, Military token, Blame, Old Man, figure), `values.txt` (factions, tokens, buildings, duel
+  fields, counts 1-12, ending 5 / 8 nested sentences). Titles on, headers off (the bold headers are pass-the-device
+  instructions; the Reign decree headings like "Drifters" and the Warning/Paradox intro headings are therefore not narrated).
+- Typed-in values: ATOW previews `Anna` / `Bob` / `Duke Anna` / `Testville` are stand-in aliases ("a cousin", "the
+  village"), the new meat product `Spam` -> "meat". Overrides where the narrator names themself: BattleTime ("the era of
+  the third generation"), endings 1/5 ("<name> IV" -> "the fourth of my line"), endings 3/6/7/8 (name dropped, "the family
+  name"), Reign7c2 (regal title -> "as befits my new title"), DuelResolution1b_Content2; the faction possessive "' noble
+  cause" apostrophe is not spoken.
+- Placeholders are now split by balanced braces in `chunks.py` and `Narration.cs` (ending 5 nests three deep and was not
+  narratable); identical splits for every other tag of the three scenarios (checked), option lists of nested placeholders
+  no longer contain fragments. FotU `ControlledExperiment_Content` (a rules question) added to its cuts.
+- CSV fixes: the Twine link "[[Click to Continue... -> TimeTravelEvent]]" shown at the end of ParadoxIntro removed;
+  ResistEvent's "All players may again view the Storybook." made bold like the other screens (so it is not narrated).
+- "Ends mid-sound" warnings (44) are nearly all chunks that end before a value or stand-in (mid-sentence by design);
+  worth a listen: TimeEnd1_Title, WhoopsUtopianb_Title, WarningEvent_Content, Stasis_Content, FinalEnding_Content4.
+
 Next steps:
-1. The Cost of Disease (~126k characters sent, ~57k billed) and A Time of War (~106k, ~48k billed); private sections of
-   each last. Cost of Disease fits roughly in the remaining quota; A Time of War after the reset. Both need a `values.txt`,
-   `private.txt` and `skip.txt` like Fear of the Unknown (review `chunks.py plan <Scenario> --list` and the chunk starts).
+1. A Time of War: the 8.7k private characters after 16 Nov (above). The Cost of Disease (~126k characters sent, ~57k
+   billed) needs more than one month of quota; it needs a `values.txt`, `private.txt` and `skip.txt` like the others
+   (review `chunks.py plan TheCostOfDisease --list` and the chunk starts), private sections last.
 2. Listen-through at the table: joins around skipped names, the stand-ins, the private Play button. Size: the three
    scenarios will be ~300 MB of clips; 64 kbps mono would cut that by a third if Pages/LFS limits bite.
 3. Play-test the other scenarios with Oliver once rendered: console lines "Oliver narration: no clips for <Tag>" show
