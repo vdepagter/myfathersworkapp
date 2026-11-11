@@ -397,7 +397,24 @@ public static partial class TheCostOfDisease
     {
         globalData.SaveToUndo();
         globalData.ActivePopup = new GameplayPopup(globalData, PopUpTitle.EndOfGeneration, PopUpIcon.MFWlogo,
-            PopUpButton.Confirm, data => data.TheCostOfDiseaseVars.RandomElement([S5Fate1, S5Fate2], 5).Invoke(data));
+            PopUpButton.Confirm, data => (ForcedFate(data) ?? data.TheCostOfDiseaseVars.RandomElement([S5Fate1, S5Fate2], 5)).Invoke(data));
+    }
+
+    // Village-name secret (Help page): true forces the Hospital, false Devastation, null draws as usual.
+    private static bool? ForcedHospital(GlobalData globalData) => globalData.TownName switch
+    {
+        TheCostOfDiseaseVars.HOSPITAL_TOWN_NAME    => true,
+        TheCostOfDiseaseVars.DEVASTATION_TOWN_NAME => false,
+        _                                          => null,
+    };
+
+    // With a village-name secret the fate screen is not drawn: S5Fate1 when the building agrees (Bank -> Hospital,
+    // Library -> Devastation), else S5Fate2, which picks its number to agree when it can.
+    private static Action<GlobalData>? ForcedFate(GlobalData globalData)
+    {
+        if (ForcedHospital(globalData) is not bool hospital) return null;
+        BankOrLibrary building = globalData.TheCostOfDiseaseVars.Building;
+        return building == (hospital ? BankOrLibrary.Bank : BankOrLibrary.Library) ? S5Fate1 : S5Fate2;
     }
 
     private static void S5Fate1(GlobalData globalData)
@@ -408,16 +425,11 @@ public static partial class TheCostOfDisease
 
         globalData.ActiveWindow.AddDefaultContent(content => content.FormatWithReplacement(0, globalData.TownName));
 
-        if (globalData.TheCostOfDiseaseVars.Building == BankOrLibrary.Bank)
-        {
-            globalData.ActiveWindow.AddNextContent(1, true);
-            globalData.ActiveWindow.AddClickHereToContinue(HospitalIntro);
-        }
-        else
-        {
-            globalData.ActiveWindow.AddNextContent(2, true);
-            globalData.ActiveWindow.AddClickHereToContinue(DevastationIntro);
-        }
+        bool bank     = globalData.TheCostOfDiseaseVars.Building == BankOrLibrary.Bank;
+        bool hospital = ForcedHospital(globalData) ?? bank;
+
+        globalData.ActiveWindow.AddNextContent(bank ? 1 : 2, true);
+        globalData.ActiveWindow.AddClickHereToContinue(hospital ? HospitalIntro : DevastationIntro);
     }
 
     private static void S5Fate2(GlobalData globalData)
@@ -427,6 +439,8 @@ public static partial class TheCostOfDisease
         globalData.ActiveWindow.AddDefaultTitle();
         globalData.ActiveWindow.AddDefaultContent();
 
+        TheCostOfDiseaseVars vars = globalData.TheCostOfDiseaseVars;
+
         int heartNeeded = globalData.PlayersNum switch
         {
             2 => 3,
@@ -434,18 +448,22 @@ public static partial class TheCostOfDisease
             _ => 8 // 4 players
         };
 
-        heartNeeded += globalData.TheCostOfDiseaseVars.RandomElement([1, 2, 3, 4, 5, 6], 6);
+        List<int> rolls  = [1, 2, 3, 4, 5, 6];
+        bool?     forced = ForcedHospital(globalData);
 
-        if (globalData.TheCostOfDiseaseVars.CharityTotal > heartNeeded)
-        {
-            globalData.ActiveWindow.AddNextContent(1, true, content => content.FormatWithReplacement(0, heartNeeded.ToString()));
-            globalData.ActiveWindow.AddClickHereToContinue(HospitalIntro);
-        }
-        else
-        {
-            globalData.ActiveWindow.AddNextContent(2, true, content => content.FormatWithReplacement(0, heartNeeded.ToString()));
-            globalData.ActiveWindow.AddClickHereToContinue(DevastationIntro);
-        }
+        // A village-name secret picks the number among those that agree with it (flavor: nothing is asked in mirror
+        // mode). When none does, the number is drawn as usual and the text is slightly off (the forced link stays).
+        List<int> agreeing = forced is bool hospitalForced
+            ? rolls.Where(roll => (vars.CharityTotal > heartNeeded + roll) == hospitalForced).ToList()
+            : [];
+
+        heartNeeded += agreeing.Count > 0 ? vars.FlavorElement(agreeing, "S5Fate2Hearts") : vars.RandomElement(rolls, 6);
+
+        bool enough   = vars.CharityTotal > heartNeeded;
+        bool hospital = forced ?? enough;
+
+        globalData.ActiveWindow.AddNextContent(enough ? 1 : 2, true, content => content.FormatWithReplacement(0, heartNeeded.ToString()));
+        globalData.ActiveWindow.AddClickHereToContinue(hospital ? HospitalIntro : DevastationIntro);
     }
 
     #endregion Resolving Hearts

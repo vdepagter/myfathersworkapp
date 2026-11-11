@@ -118,6 +118,8 @@ public class TheCostOfDiseaseVars() : ScenarioVars(300 + 1)
 
     public const string WOLVES_EVIL_TOWN_NAME  = "Rage";
     public const string HUNTERS_EVIL_TOWN_NAME = "Kraven";
+    public const string DEVASTATION_TOWN_NAME  = "Plague"; // forces the Generation II branch (Help page)
+    public const string HOSPITAL_TOWN_NAME     = "Mercy";
 
     public override IEnumerable<string> TypedNames() => MwName.Values;
 

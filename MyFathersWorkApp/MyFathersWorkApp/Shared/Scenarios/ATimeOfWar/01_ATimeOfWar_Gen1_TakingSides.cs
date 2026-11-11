@@ -579,14 +579,14 @@ public static partial class ATimeOfWar
             content => content.FormatWithReplacement(0, vp.ToString()));
     }
 
-    // Generation II branch. The town name "Paradox" forces Time Travel, "Destruction" forces war (source easter egg,
-    // applied here in every case - port map 7, B29). Drawn in the click that shows the result (mirror mode).
+    // Generation II branch. The village name "Paradox" forces Time Travel, "Destruction" forces war (source easter egg,
+    // port map 7, B29). War() already applies it on the first draw; it is applied again here in every case so a game
+    // saved before that change still follows the code. Drawn in the click that shows the result (mirror mode).
     private static void GenerationOneWar(GlobalData globalData)
     {
         ATimeOfWarVars vars = Vars(globalData);
 
-        if (globalData.TownName == "Paradox") vars.War = 1;
-        else if (globalData.TownName == "Destruction") vars.War = 2;
+        if (ForcedWar(globalData) is int forced) vars.War = forced;
 
         if (War(globalData) == 1) Warwarn(globalData);
         else GenerationOneWarEnd(globalData);

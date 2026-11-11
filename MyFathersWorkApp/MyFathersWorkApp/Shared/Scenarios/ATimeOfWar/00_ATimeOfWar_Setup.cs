@@ -143,13 +143,22 @@ public static partial class ATimeOfWar
     private static string FigureIcon(GlobalData globalData) => CrestIsSickle(globalData) ? PopUpIcon.S3_ShieldToken : PopUpIcon.S3_SickleToken;
 
     // Generation II branch (originally $war): 1 Time Travel, 2 Martial. Drawn on the first screen that shows it. The
-    // town-name override ("Paradox" / "Destruction") is applied at the end of Generation I (GenerationOneWar).
+    // village names "Paradox" / "Destruction" force it before the draw (port map 7, B29), so every screen that reads it
+    // early (e.g. RumorD3Revealed) agrees with the forced branch - the designer's "known bug" was a late override.
     private static int War(GlobalData globalData)
     {
         ATimeOfWarVars vars = Vars(globalData);
-        if (vars.War == 0) vars.War = vars.RandomElement([1, 2], _RND_WAR);
+        if (vars.War == 0) vars.War = ForcedWar(globalData) ?? vars.RandomElement([1, 2], _RND_WAR);
         return vars.War;
     }
+
+    // Village-name secret (Help page): the Generation II branch it forces, or null.
+    private static int? ForcedWar(GlobalData globalData) => globalData.TownName switch
+    {
+        ATimeOfWarVars.TIME_TRAVEL_TOWN_NAME => 1,
+        ATimeOfWarVars.MARTIAL_TOWN_NAME     => 2,
+        _                                    => null,
+    };
 
     // Separatists only (originally $quarter): troops will be quartered by force. Drawn on the first screen that shows it.
     private static bool Quarter(GlobalData globalData)

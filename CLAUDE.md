@@ -166,6 +166,11 @@ Details per branch: the "Ported" notes in `docs/ATOW_PORT_MAP.md` 2.1-2.8; sourc
   kept) plus Setup, End of Generation, Secret pages, Bids and votes, and This app. Text in `UI_Localization.csv`
   (`Help_Tab_<Page>` label, `Help_<Page>` HTML); the page list is in the razor file.
 - Log Book (📖 in the header): see "Log Book" below.
+- Village name secrets (Help page, case sensitive, compared to `TownName`): Cost of Disease "Rage" / "Kraven" (evil
+  faction), "Plague" / "Mercy" (Devastation / Hospital); Fear of the Unknown "Xenophobia" / "Abomination" (Foreigners /
+  Creature); A Time of War "Paradox" / "Destruction" (Time Travel / Martial). Constants in each Vars class. With a code
+  the Gen I fate screen is not drawn: the one whose text agrees with play is shown (S5Fate2 picks its heart number by
+  flavor among agreeing values); when none agrees the text is slightly off but the link follows the code.
 
 ## Endings Gallery
 

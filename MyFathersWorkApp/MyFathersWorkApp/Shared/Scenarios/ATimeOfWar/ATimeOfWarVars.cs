@@ -90,6 +90,10 @@ public class ATimeOfWarVars() : ScenarioVars(300)
     // Endings
     public int Ending { get; set; } // 1 - 8 (originally ATOW-End1...)
 
+    // Village-name secrets (case sensitive, Help page): force the Generation II branch.
+    public const string TIME_TRAVEL_TOWN_NAME = "Paradox";
+    public const string MARTIAL_TOWN_NAME     = "Destruction";
+
     public override IEnumerable<string> TypedNames() => Titles.Values.Append(NewMeat);
 
     public void Reset(GlobalData globalData)

@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace MyFathersWorkApp;
 
 public static partial class FearOfTheUnknown
@@ -372,34 +374,58 @@ public static partial class FearOfTheUnknown
     {
         globalData.SaveToUndo();
         globalData.ActivePopup = new GameplayPopup(globalData, PopUpTitle.EndOfGeneration, PopUpIcon.MFWlogo, PopUpButton.Confirm,
-            data => Vars(data).RandomElement([Gen1FateVictim, Gen1FateMob], _RND_GEN1_FATE).Invoke(data),
+            data => (ForcedFate(data) ?? Vars(data).RandomElement([Gen1FateVictim, Gen1FateMob], _RND_GEN1_FATE)).Invoke(data),
             content => content.FormatWithCondition(0, () => Vars(globalData).Milestones.Any(claimed => !claimed)));
     }
+
+    // Village-name secret (Help page): true forces Foreigners, false Creature, null draws as usual.
+    private static bool? ForcedForeigners(GlobalData globalData) => globalData.TownName switch
+    {
+        FearOfTheUnknownVars.FOREIGNERS_TOWN_NAME => true,
+        FearOfTheUnknownVars.CREATURE_TOWN_NAME   => false,
+        _                                         => null,
+    };
+
+    // With a village-name secret the fate screen is not drawn: the one whose text agrees with play is shown. When neither
+    // agrees, the Victim screen is shown with a link to the forced branch (its text is then slightly off, as the
+    // designer accepted for the original codes).
+    private static Action<GlobalData>? ForcedFate(GlobalData globalData)
+    {
+        if (ForcedForeigners(globalData) is not bool foreigners) return null;
+        if (VictimLeadsToForeigners(globalData) == foreigners) return Gen1FateVictim;
+        if (MobLeadsToForeigners(globalData) == foreigners) return Gen1FateMob;
+        return Gen1FateVictim;
+    }
+
+    private static bool VictimLeadsToForeigners(GlobalData globalData) => Vars(globalData).Victim == _VICTIM_BUTCHER;
+
+    private static bool MobLeadsToForeigners(GlobalData globalData) => !Vars(globalData).Mobbed;
 
     // Originally S4Witch1: the executed Butcher was innocent -> Foreigners, the Blacksmith was guilty -> Creature
     private static void Gen1FateVictim(GlobalData globalData)
     {
-        bool butcher = Vars(globalData).Victim == _VICTIM_BUTCHER;
-
         globalData.SaveToUndo();
-        globalData.ActiveWindow = new GameplayWindow(globalData);
-        globalData.ActiveWindow.AddDefaultTitle(content => content.FormatWithCondition(0, () => butcher));
-        globalData.ActiveWindow.AddNextContentWithLinks(butcher ? 1 : 2, [butcher ? ForeignersIntro : CreatureIntro], false, content => content
-                                                                                                                                     .FormatWithReplacement(0, RandomPlayer(globalData))
-                                                                                                                                     .FormatWithReplacement(1, globalData.TownName));
+        Gen1Fate(globalData, VictimLeadsToForeigners(globalData));
     }
 
     // Originally S4Witch2: nobody overtaken by the mob -> Foreigners, the mob was appeased -> Creature
     private static void Gen1FateMob(GlobalData globalData)
     {
-        bool mobbed = Vars(globalData).Mobbed;
-
         globalData.SaveToUndo();
+        Gen1Fate(globalData, MobLeadsToForeigners(globalData));
+    }
+
+    // Body of both fate screens (tags of the calling screen): title condition and content 1 when the text leads to
+    // Foreigners, content 2 when to Creature. The link follows a village-name secret when there is one.
+    private static void Gen1Fate(GlobalData globalData, bool textForeigners, [CallerMemberName] string caller = "")
+    {
+        bool foreigners = ForcedForeigners(globalData) ?? textForeigners;
+
         globalData.ActiveWindow = new GameplayWindow(globalData);
-        globalData.ActiveWindow.AddDefaultTitle(content => content.FormatWithCondition(0, () => !mobbed));
-        globalData.ActiveWindow.AddNextContentWithLinks(mobbed ? 2 : 1, [mobbed ? CreatureIntro : ForeignersIntro], false, content => content
-                                                                                                                                   .FormatWithReplacement(0, RandomPlayer(globalData))
-                                                                                                                                   .FormatWithReplacement(1, globalData.TownName));
+        globalData.ActiveWindow.AddDefaultTitle(content => content.FormatWithCondition(0, () => textForeigners), caller);
+        globalData.ActiveWindow.AddNextContentWithLinks(textForeigners ? 1 : 2, [foreigners ? ForeignersIntro : CreatureIntro], false, content => content
+                                                                                                                                       .FormatWithReplacement(0, RandomPlayer(globalData, caller))
+                                                                                                                                       .FormatWithReplacement(1, globalData.TownName), caller);
     }
 
     #endregion End of Generation I

@@ -100,6 +100,10 @@ public class FearOfTheUnknownVars() : ScenarioVars(900)
 
     public const string SUSPECT = "#Suspect"; // the Apprentice who can be the witch with 2 or 3 players
 
+    // Village-name secrets (case sensitive, Help page): force the Generation II branch.
+    public const string FOREIGNERS_TOWN_NAME = "Xenophobia";
+    public const string CREATURE_TOWN_NAME   = "Abomination";
+
     public override IEnumerable<string> TypedNames() => WarriorName.Values.Append(ProgramName);
 
     public void Reset(GlobalData globalData)

@@ -193,7 +193,7 @@ ready, click here to reveal your secret conversation" in one passage: port as a 
 - `TakeEventb`: link label "Nay. We voted against." without the source bold (window links render as plain text).
 - The `RumorD`/`TownHallS1` option "A distinguished gentleman near the stage - his whiskers well-waxed." uses " - " for the
   source ";" (CSV separator) - `sourcecheck.py` lists it, as it lists the "''against''" label.
-- B1 (`GunsAnnouncement`) skipped as shipped, B4 text kept, B29 override applied in `GenerationOneWar`.
+- B1 (`GunsAnnouncement`) skipped as shipped, B4 text kept, B29 override applied when `War` is first drawn (and again in `GenerationOneWar`).
 - Extra enum `Shared/Enums/MartialBuilding.cs` (`None, Barracks, LaborersUnion`) for `SabotagedBuilding` (section 3).
 - Temporary (the Martial intros were replaced in 2.2): `IntroMartialMonarchists`, `IntroMartialSeparatists` (file 02), `TimeTravelIntro` (file 04) and
   `FinalEnding` (file 09) are `// TODO ATOW` stubs showing the `NotYetPorted` text (Gameplay CSV) without a link; the
@@ -1020,7 +1020,7 @@ Proposed decision first; **Owner** = needs the owner's decision (default applies
 | B26 | `ResistEvent` | Only `quarter` "yes" leads to `ResistEvent1`; Monarchists never reach it. | n/a | no |
 | B27 | Martial Monarchists, `BarracksSimple*` | Barracks penalty only while the Barracks stands; the Martial1 section is shown regardless. | Follow shipped. | no |
 | B28 | 5 players | `$nameE`, `Blame5`, `MonuE`, `players == 5` branches. | Drop (app supports 2-4). | no |
-| B29 | Town-name easter eggs | "Paradox"/"Destruction" force the Gen II branch; "debug" prints "v1.0" in Gen III intros. The source applies the override in `SeedGUNS` and `TSBarracksPenalty`, but in `TakeSides3` only when heading to `Warwarn` (so "Paradox" cannot turn a `war == 2` game into Time Travel when the game goes straight to `TowardsWar`). | Keep the override, apply it in every case in `GenerationOneEnd`; drop "v1.0". | no |
+| B29 | Town-name easter eggs | "Paradox"/"Destruction" force the Gen II branch; "debug" prints "v1.0" in Gen III intros. The source applies the override in `SeedGUNS` and `TSBarracksPenalty`, but in `TakeSides3` only when heading to `Warwarn` (so "Paradox" cannot turn a `war == 2` game into Time Travel when the game goes straight to `TowardsWar`). | Keep the override, apply it in every case: `War()` uses it before the first draw (Nov 2026: so `RumorD3Revealed` and other early readers agree, the designer's "known bug"), `GenerationOneWar` applies it again; drop "v1.0". Listed on the Help page (Village name secrets). | no |
 | B30 | `Scoring` | The Time Machine -5VP reminder only exists on the Time Travel path (`TimeMachineExperiment` asks the question only there). | Follow shipped. | no |
 | B31 | `TakeSides` setup | Source redraws tracker/start player on every hub render until the first Town Hall visit. | One draw in `TakingSidesEarlySetup`. | no |
 
