@@ -36,7 +36,8 @@ public static class GalleryAchievements
 
         foreach (GalleryGame game in Chronological(games.Where(game => game.Scenario == scenario)))
         {
-            foreach (string player in game.Players)
+            // The winner first, so a tie for the top score credits the player who won the tie-breaker
+            foreach (string player in game.Players.OrderBy(player => player == game.Winner ? 0 : 1))
             {
                 int score = game.Scores.GetValueOrDefault(player);
                 if (score > 0 && (best == null || score > best.Score)) best = new ScoreRecord(scenario, score, player, game);
@@ -142,7 +143,8 @@ public static class GalleryAchievements
             (GalleryGame game, string player)? hit = null;
             foreach (GalleryGame game in ordered)
             {
-                string? player = game.Players.Where(p => game.Scores.GetValueOrDefault(p) >= level).OrderByDescending(p => game.Scores.GetValueOrDefault(p)).FirstOrDefault();
+                string? player = game.Players.Where(p => game.Scores.GetValueOrDefault(p) >= level).OrderByDescending(p => game.Scores.GetValueOrDefault(p))
+                                      .ThenBy(p => p == game.Winner ? 0 : 1).FirstOrDefault();
                 if (player == null) continue;
                 hit = (game, player);
                 break;

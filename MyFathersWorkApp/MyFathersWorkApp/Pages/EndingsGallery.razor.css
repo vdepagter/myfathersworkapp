@@ -175,14 +175,18 @@
 }
 
 .recent-winner {
+    flex: 0 1 auto;
+    max-width: 45%;
     color: #ffd27a;
     font-weight: 700;
     white-space: nowrap;
     text-align: right;
 }
 
+/* The score line (VP · record · ✦ names) wraps on phones instead of squeezing the game title */
 .recent-winner small {
     display: block;
+    white-space: normal;
     font-weight: 400;
     font-size: 0.88rem;
     color: #d9cbab;
