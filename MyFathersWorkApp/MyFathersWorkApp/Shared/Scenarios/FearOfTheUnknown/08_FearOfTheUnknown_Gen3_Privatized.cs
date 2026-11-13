@@ -648,12 +648,31 @@ public static partial class FearOfTheUnknown
         }
 
         globalData.ActiveWindow.AddNextContent(2, true);
-        globalData.ActiveWindow.AddClickHereToContinue(Battle);
+
+        // Rules line (not narrated): Warriors entered with 0 Life never fight
+        string[] lifeless = globalData.GetActivePlayers().Where(player => vars.Life[player] <= 0).ToArray();
+        if (lifeless.Length > 0)
+        {
+            globalData.ActiveWindow.AddCustomContent(globalData.GetScenarioLocalizedTag("MainEvent_NoLife")
+                                                               .FormatWithReplacement(0, string.Join(", ", lifeless.Select(player => vars.WarriorName[player]))), true);
+        }
+
+        globalData.ActiveWindow.AddClickHereToContinue(BattleBegins);
+    }
+
+    // With fewer than two Warriors able to fight there is no battle: the only one left wins, or nobody when none is
+    private static void BattleBegins(GlobalData globalData)
+    {
+        FearOfTheUnknownVars vars  = Vars(globalData);
+        string[]             alive = globalData.GetActivePlayers().Where(player => vars.Hp[player] > 0).ToArray();
+
+        if (alive.Length > 1) Battle(globalData);
+        else BattleDecided(globalData, alive);
     }
 
     // Originally BattleChecks / BattleStart. The source drew attacker and target among all Warriors, also the eliminated ones,
     // and counted repeated eliminations - a Warrior already destroyed could still attack and win. Only Warriors still
-    // standing fight here, and the last one standing wins.
+    // standing fight here, and the last one standing wins. Warriors entered with 0 Life never fight (BattleBegins).
     private static void Battle(GlobalData globalData)
     {
         FearOfTheUnknownVars vars = Vars(globalData);
@@ -712,8 +731,27 @@ public static partial class FearOfTheUnknown
             return;
         }
 
-        vars.BattleWinner = alive.Length == 0 ? globalData.PlayerAName : alive.MaxBy(player => vars.Hp[player])!;
-        BattleOver(globalData);
+        BattleDecided(globalData, alive);
+    }
+
+    private static void BattleDecided(GlobalData globalData, string[] alive)
+    {
+        FearOfTheUnknownVars vars = Vars(globalData);
+
+        vars.BattleWinner = alive.Length == 0 ? string.Empty : alive.MaxBy(player => vars.Hp[player])!;
+
+        if (vars.BattleWinner == string.Empty) BattleNoWinner(globalData);
+        else BattleOver(globalData);
+    }
+
+    // Every Warrior was entered with 0 Life: nobody fights, nobody gains the 9VP (not narrated)
+    private static void BattleNoWinner(GlobalData globalData)
+    {
+        globalData.SaveToUndo();
+        globalData.ActiveWindow = new GameplayWindow(globalData);
+        globalData.ActiveWindow.AddDefaultTitle(callerName: nameof(BattleOver));
+        globalData.ActiveWindow.AddCustomContent(globalData.GetScenarioLocalizedTag("BattleNoWinner_Content"));
+        globalData.ActiveWindow.AddClickHereToContinue(ObsessionResolution);
     }
 
     // Originally BattleEnd

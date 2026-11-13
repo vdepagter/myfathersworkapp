@@ -135,7 +135,7 @@ Details per branch: the "Ported" notes in `docs/ATOW_PORT_MAP.md` 2.1-2.8; sourc
 - TenseConfirm at the end of the Early Years without overtake shows the "move mob to Romani" branch directly (source needed a second click).
 - Obsession penalty is tied to `Stole` (source used inverted tension checks).
 - AsylumMeet checks the visiting player's own visit count (source checked any player).
-- Battle: only alive warriors fight, the last one standing wins; stalemate / 250-step guard -> most HP. The official battle is buggy, so in mirror mode the battle can differ.
+- Battle: only alive warriors fight, the last one standing wins; stalemate / 250-step guard -> most HP. Warriors entered with 0 Life never fight (rules line on The Main Event); with one Warrior left it wins at once, with none nobody gains the 9VP. The official battle is buggy, so in mirror mode the battle can differ.
 - Salts, everybody refuses: 50% "Risk Too Great", else the story continues (source could jump to the Liberal round 3 hub, skipping events).
 - ExpNo after the last round uses the "return tokens" text.
 - TownHallDestroyed gives no bonus when nobody verified (source gave it to player A). SmugConsequence letter header says "name illegible" (source showed a stale name).

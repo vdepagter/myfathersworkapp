@@ -171,6 +171,8 @@ WarriorAgility_Content;Please enter the VP of your Biology Experiment - your War
 WarriorStrength_Content;Please enter the VP of your Engineering Experiment - your Warrior's Strength.
 WarriorLife_Content;Please enter the VP of your Chemistry and Occult Experiments combined - your Warrior's life.
 WarriorName_Content;Please enter the epic name of your Warrior.
+MainEvent_NoLife;<i>A Warrior with 0 Life cannot fight and is out before the battle begins: {{0=...|Iron Maiden|...}}.</i>
+BattleNoWinner_Content;<i>No Warrior has any Life, so none of them can fight. Nobody wins the battle and nobody gains the <b>9VP</b>.</i>
 BattleOver_0_Content;{{0=...|Oliver|James|Olivia|...}} gains <b>9VP</b>.
 //====== Gen3 - Acceptance ======;
 UnderstandingAndSupport_0_Content;Return the <icon=AngryMob_Icon> Marker to the box. Retrieve the <b>Rehabilitation token</b> <icon=S2_RehabilitationToken> and place it one space to the left of the Suspicion Marker. <i>The Suspicion Marker remains on space {{0=...|7|...}}.</i><br /><br />When your <icon=Creepy_Icon> Marker meets or exceeds the Rehabilitation token <icon=S2_RehabilitationToken>, you will be admitted to the Asylum Program.
