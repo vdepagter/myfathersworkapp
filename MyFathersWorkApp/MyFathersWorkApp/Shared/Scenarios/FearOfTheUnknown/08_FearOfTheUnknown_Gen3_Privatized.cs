@@ -740,16 +740,16 @@ public static partial class FearOfTheUnknown
 
         vars.BattleWinner = alive.Length == 0 ? string.Empty : alive.MaxBy(player => vars.Hp[player])!;
 
-        if (vars.BattleWinner == string.Empty) BattleNoWinner(globalData);
+        if (vars.BattleWinner == string.Empty) BattleOver_NoWinner(globalData);
         else BattleOver(globalData);
     }
 
     // Every Warrior was entered with 0 Life: nobody fights, nobody gains the 9VP (not narrated)
-    private static void BattleNoWinner(GlobalData globalData)
+    private static void BattleOver_NoWinner(GlobalData globalData)
     {
         globalData.SaveToUndo();
         globalData.ActiveWindow = new GameplayWindow(globalData);
-        globalData.ActiveWindow.AddDefaultTitle(callerName: nameof(BattleOver));
+        globalData.ActiveWindow.AddDefaultBaseTitle();
         globalData.ActiveWindow.AddCustomContent(globalData.GetScenarioLocalizedTag("BattleNoWinner_Content"));
         globalData.ActiveWindow.AddClickHereToContinue(ObsessionResolution);
     }
