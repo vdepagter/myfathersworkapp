@@ -36,6 +36,7 @@ public class GalleryGame
     public Dictionary<string, int> Scores       { get; set; } = new();
     public string                  Winner       { get; set; } = string.Empty;
     public bool                    FamilyWinner { get; set; }
+    public string[]                Masterworks  { get; set; } = []; // players who completed their Masterwork (score entry, Nov 2026; older games: none)
 }
 
 // One row of a scenario's endings tree: a branch (hub) or an ending. SameAs: the other branch that leads to the same
@@ -231,7 +232,8 @@ public class GalleryService(IJSRuntime js)
             Players      = players,
             Scores       = players.ToDictionary(player => player, player => vars.Scores.GetValueOrDefault(player)),
             Winner       = vars.FamilyWinner ? string.Empty : vars.Winner,
-            FamilyWinner = vars.FamilyWinner
+            FamilyWinner = vars.FamilyWinner,
+            Masterworks  = vars.Masterworks.Where(players.Contains).ToArray()
         };
 
         bool changed = existing == null || JsonConvert.SerializeObject(existing) != JsonConvert.SerializeObject(record);

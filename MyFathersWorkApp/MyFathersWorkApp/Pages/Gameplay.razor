@@ -264,6 +264,19 @@
                 }
             </div>
             <p>@_GalleryCard.WinLine</p>
+            @if (_GalleryCard.Unlocks.Length > 0)
+            {
+                // New score records and achievements of this game (Shared/GalleryAchievements.cs)
+                <ul class="ending-unlocks">
+                    @foreach (GalleryUnlock unlock in _GalleryCard.Unlocks)
+                    {
+                        <li>
+                            <span class="ending-seal @(unlock.Red ? "red" : "")" aria-hidden="true">@unlock.Seal</span>
+                            <span><b>@unlock.Title</b>@if (unlock.Text != string.Empty){<small>@unlock.Text</small>}</span>
+                        </li>
+                    }
+                </ul>
+            }
             <p class="ending-note">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_RecordedNote)</p>
             <div class="ending-buttons">
                 <button class="mfw-button" @onclick="OpenGallery">@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_Endings)</button>
@@ -428,7 +441,9 @@
 
     #region Endings Gallery
 
-    private record GalleryCard(bool NewEnding, string Progress, string WinLine, int Done, string EndingTitle);
+    private record GalleryCard(bool NewEnding, string Progress, string WinLine, int Done, string EndingTitle, GalleryUnlock[] Unlocks);
+
+    private record GalleryUnlock(string Seal, bool Red, string Title, string Text);
 
     private bool _ShowEndingPage;
 
@@ -467,8 +482,37 @@
                 if (ReferenceEquals(_GalleryNoted, window)) return;
                 _GalleryNoted = window;
 
+                // Achievements and the score record before this game (a replaced record of the same game does not count)
+                GalleryData        before     = await Gallery.GetAsync();
+                string             id         = $"{GlobalData.ScenarioId}:{GlobalData.ScenarioVars.FlavorSeed}";
+                List<GalleryGame>  otherGames = before.Games.Where(other => other.Id != id).ToList();
+                HashSet<string>    hadBefore  = GalleryAchievements.All(GlobalData, otherGames, before.Ticked).Where(a => a.Unlocked).Select(a => a.Id).ToHashSet();
+                ScoreRecord?       oldRecord  = GalleryAchievements.Record(otherGames, GlobalData.ScenarioId);
+
                 (GalleryGame game, bool newEnding) = await Gallery.RecordGameAsync(GlobalData, window.Title);
                 GalleryData data = await Gallery.GetAsync();
+                List<GalleryUnlock> unlocks = [];
+
+                ScoreRecord? newRecord = GalleryAchievements.Record(data.Games, game.Scenario);
+                if (newRecord != null && newRecord.Game.Id == game.Id && (oldRecord == null || newRecord.Score > oldRecord.Score))
+                {
+                    unlocks.Add(new GalleryUnlock(newRecord.Score.ToString(), false,
+                                                  GlobalData.GetLocalizedUITag(GlobalTags.Ach_NewRecord)
+                                                            .FormatWithReplacement(0, GalleryTrees.Name(game.Scenario))
+                                                            .FormatWithReplacement(1, newRecord.Player)
+                                                            .FormatWithReplacement(2, newRecord.Score.ToString()),
+                                                  oldRecord == null ? string.Empty
+                                                      : GlobalData.GetLocalizedUITag(GlobalTags.Ach_NewRecordOld)
+                                                                  .FormatWithReplacement(0, oldRecord.Score.ToString())
+                                                                  .FormatWithReplacement(1, oldRecord.Player)));
+                }
+
+                foreach (Achievement achievement in GalleryAchievements.All(GlobalData, data).Where(a => a.Unlocked && !hadBefore.Contains(a.Id)))
+                {
+                    unlocks.Add(new GalleryUnlock(achievement.Seal, achievement.Kind == SealKind.Red,
+                                                  GlobalData.GetLocalizedUITag(GlobalTags.Ach_Unlocked).FormatWithReplacement(0, GalleryAchievements.Title(GlobalData, achievement)),
+                                                  GalleryAchievements.Text(GlobalData, achievement)));
+                }
                 int         wins = data.Games.Count(other => !other.FamilyWinner && other.Winner == game.Winner);
 
                 int done = GalleryService.EndingsDone(data, game.Scenario).Count;
@@ -483,7 +527,8 @@
                                                                .FormatWithReplacement(0, game.Winner)
                                                                .FormatWithReplacement(1, wins.ToString()),
                                                done,
-                                               GalleryTrees.Title(game));
+                                               GalleryTrees.Title(game),
+                                               unlocks.ToArray());
                 StateHasChanged();
             }
             else if (GlobalData.ActiveWindow == null && GlobalData.ActiveHub != null)

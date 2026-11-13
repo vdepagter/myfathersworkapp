@@ -178,6 +178,14 @@
     color: #ffd27a;
     font-weight: 700;
     white-space: nowrap;
+    text-align: right;
+}
+
+.recent-winner small {
+    display: block;
+    font-weight: 400;
+    font-size: 0.88rem;
+    color: #d9cbab;
 }
 
 .recent-chevron {
@@ -634,5 +642,310 @@
         border-width: 14px;
         border-image-width: 14px;
         padding: 4px;
+    }
+}
+
+/* ---------- Hall of Fame board (records per scenario) ---------- */
+.fame-board {
+    display: grid;
+    grid-template-columns: 9rem repeat(3, minmax(0, 1fr));
+    font-variant-numeric: tabular-nums;
+}
+
+.fame-board > div {
+    padding: 10px 4px;
+    border-top: 1px solid rgba(201, 163, 90, 0.2);
+    text-align: center;
+}
+
+.fame-board > .fame-head {
+    border-top: 0;
+    padding-bottom: 6px;
+    font-size: 0.9rem;
+    color: #d9cbab;
+}
+
+.fame-label {
+    display: flex;
+    align-items: center;
+    text-align: left !important;
+    color: #d9cbab;
+    font-size: 0.95rem;
+}
+
+.fame-cell b {
+    display: block;
+    font-size: 1.35rem;
+    line-height: 1.15;
+    color: #ffd27a;
+}
+
+.fame-cell small {
+    display: block;
+    font-size: 0.92rem;
+    color: #f1e4c4;
+}
+
+.fame-cell.empty b {
+    color: #7a705f;
+}
+
+.fame-mw {
+    color: #ffd27a;
+    letter-spacing: 1px;
+}
+
+/* ---------- Achievements ---------- */
+.ach-progress {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 16px;
+    padding: 4px 2px;
+}
+
+.ach-bar {
+    flex: 1 1 200px;
+    height: 12px;
+    border-radius: 6px;
+    background: #241f19;
+    border: 1px solid #4d4234;
+    overflow: hidden;
+}
+
+.ach-bar i {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, #a57a2c, #ffd27a);
+    box-shadow: 0 0 10px rgba(255, 196, 92, 0.6);
+}
+
+.gallery-container h2.ach-group {
+    margin: 0.3rem 0 0;
+}
+
+.ach-group small {
+    display: block;
+    font-family: var(--mfw-font-text);
+    font-size: 0.92rem;
+    color: #d9cbab;
+    text-shadow: none;
+}
+
+.record-plaques {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    padding-top: 14px;
+}
+
+.record-plaque {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 16px 10px 12px;
+    font: inherit;
+    color: #f1e4c4;
+    text-align: center;
+    border: 3px solid transparent;
+    border-image: url(images/ui/scenario-border-gold.webp) 30 / 3px stretch;
+    background-size: cover;
+    background-position: center;
+    box-shadow: inset 0 0 0 999px rgba(12, 10, 8, 0.78);
+    cursor: pointer;
+}
+
+button.record-plaque:hover {
+    box-shadow: inset 0 0 0 999px rgba(12, 10, 8, 0.66);
+}
+
+button.record-plaque:focus-visible {
+    outline: 2px solid #c9a35a;
+    outline-offset: 2px;
+}
+
+.record-plaque.none {
+    cursor: default;
+    filter: grayscale(0.9) brightness(0.75);
+}
+
+.record-crown {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    translate: -50% 0;
+    width: 36px;
+    height: 27px;
+    background: url(images/ui/crown.webp) center / contain no-repeat;
+    filter: drop-shadow(0 2px 3px #000);
+}
+
+.record-scenario {
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #d9cbab;
+}
+
+.record-score {
+    margin: 4px 0 2px;
+    font: 400 3rem/1 var(--mfw-font-heading);
+    color: #ffd27a;
+    text-shadow: 0 0 14px rgba(255, 196, 92, 0.45), 0 2px 3px #000;
+}
+
+.record-score small {
+    font-size: 1.15rem;
+    color: #c9a35a;
+}
+
+.record-who {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.record-when {
+    font-size: 0.88rem;
+    color: #d9cbab;
+}
+
+.ach-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 18px;
+}
+
+.ach {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 4px;
+    border-top: 1px solid rgba(201, 163, 90, 0.18);
+}
+
+.ach:nth-child(-n + 2) {
+    border-top: 0;
+}
+
+.seal {
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font: 400 1.35rem/1 var(--mfw-font-heading);
+    color: #3a2208;
+    background: radial-gradient(circle at 35% 30%, #ffe7a8, #d9a646 45%, #7c5418 100%);
+    box-shadow: inset 0 0 0 3px rgba(255, 240, 200, 0.35), inset 0 -4px 8px rgba(0, 0, 0, 0.35), 0 0 14px rgba(255, 190, 80, 0.4), 0 3px 6px #000;
+}
+
+.seal.red {
+    color: #ffe2c8;
+    background: radial-gradient(circle at 35% 30%, #d4553e, #8c2416 55%, #4a0f08 100%);
+    box-shadow: inset 0 0 0 3px rgba(255, 200, 170, 0.25), inset 0 -4px 8px rgba(0, 0, 0, 0.4), 0 0 12px rgba(200, 60, 30, 0.35), 0 3px 6px #000;
+}
+
+.seal.lock {
+    color: #8f8574;
+    background: radial-gradient(circle at 35% 30%, #4a443b, #26221d 60%, #141210);
+    box-shadow: inset 0 0 0 2px #4a4338, 0 3px 6px #000;
+}
+
+.ach-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.ach-text b {
+    font-size: 1.08rem;
+    color: #f1e4c4;
+}
+
+.ach.locked .ach-text b {
+    color: #b3a68c;
+}
+
+.ach-text > span {
+    font-size: 0.93rem;
+    color: #d9cbab;
+}
+
+.ach-text em {
+    font-style: normal;
+    font-size: 0.88rem;
+    color: #ffd27a;
+}
+
+.ach.locked .ach-text em {
+    color: #9a8f7c;
+}
+
+.ach-tag {
+    margin-left: 6px;
+    padding: 0 5px;
+    vertical-align: 2px;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: #d9cbab;
+    border: 1px solid #6b5c44;
+    border-radius: 3px;
+}
+
+.ach-mini {
+    display: block;
+    max-width: 220px;
+    height: 6px;
+    margin-top: 5px;
+    border-radius: 3px;
+    background: #241f19;
+    overflow: hidden;
+}
+
+.ach-mini i {
+    display: block;
+    height: 100%;
+    background: #c9a35a;
+}
+
+@media (max-width: 700px) {
+    .record-plaques {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 22px;
+    }
+
+    .ach-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ach:nth-child(2) {
+        border-top: 1px solid rgba(201, 163, 90, 0.18);
+    }
+
+    .fame-board {
+        grid-template-columns: 5.6rem repeat(3, minmax(0, 1fr));
+    }
+
+    .fame-board .tally-scenario-name {
+        display: none;
+    }
+
+    .fame-cell b {
+        font-size: 1.1rem;
+    }
+
+    .fame-cell small {
+        font-size: 0.82rem;
+        overflow-wrap: anywhere;
+    }
+
+    .fame-label {
+        font-size: 0.85rem;
     }
 }
