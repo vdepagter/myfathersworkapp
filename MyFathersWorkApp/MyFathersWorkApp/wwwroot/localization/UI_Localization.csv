@@ -138,6 +138,8 @@ Gameplay_ClickHereAfterBid;Click here after resolving the bid...
 Gameplay_ClickHereAfterVote;Click here after resolving the vote...
 Gameplay_EndOfGeneration_Title;End of Generation
 Gameplay_ClickAtTheEndOfGeneration;Click here at the end of the Generation to continue...
+Gameplay_EndRoundButton;End of Round
+Gameplay_EndGenerationButton;End of Generation
 Gameplay_DrJr;Dr. {{0=...|Oliver|James|Olivia|...}} Jr.
 Gameplay_Dr;Dr. {{0=...|Oliver|James|Olivia|...}}
 Gameplay_Third;{{0=...|Oliver|James|Olivia|...}} III
@@ -236,7 +238,7 @@ Help_StoryActions;<p>Sometimes, the game will require that a player click a cert
 Help_Tab_Setup;Setup
 Help_Setup;<p><b>Setup</b> and <b>Special Setup</b> pop-ups tell you what to change on the board: tokens to place, tiles to add, cards to retrieve, or which page of the Village Chronicle to turn to. The picture shows the piece involved. Make the change before you confirm.</p>
 Help_Tab_EndOfRound;End of Round
-Help_EndOfRound;<p>There are three rounds in each Generation. At the end of each round, you must click the bottom link to resolve any special events and move play to the next round. The screen will then display the current round and changes to gameplay (if any).</p><p>Perform all End of Round actions from the rulebook before you continue.</p>
+Help_EndOfRound;<p>There are three rounds in each Generation. At the end of each round, you must click the bottom link (or the <b>End of Round</b> button under it) to resolve any special events and move play to the next round. On a long round page, the <b>↓ End of Round</b> button above the round bar takes you straight down to it. The screen will then display the current round and changes to gameplay (if any).</p><p>Perform all End of Round actions from the rulebook before you continue.</p>
 Help_Tab_EndOfGeneration;End of Generation
 Help_EndOfGeneration;<p>After the Late Years the app shows an <b>End of Generation</b> page. Remove all player pieces from the board and perform the End of a Generation from the rulebook, plus any extra steps the page lists.</p><p>The story then moves years ahead: the next Generation is played by the heirs of the previous one, and the story may take a different branch depending on what happened.</p>
 Help_Tab_Secret;Secret pages

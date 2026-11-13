@@ -60,8 +60,8 @@ public static partial class ATimeOfWar
                                                                    .FormatWithCondition(1, () => late));
         }
 
-        if (late) memoriam.AddSpecialClickHere(memoriamEndLateSection, Paradox_0, true);
-        else memoriam.AddSpecialClickHere(memoriamEndSection, Paradox_0, true);
+        if (late) memoriam.AddSpecialClickHere(memoriamEndLateSection, Paradox_0, true, endOfRound: true);
+        else memoriam.AddSpecialClickHere(memoriamEndSection, Paradox_0, true, endOfRound: true);
     }
 
     private static void Paradox_0(GlobalData globalData)

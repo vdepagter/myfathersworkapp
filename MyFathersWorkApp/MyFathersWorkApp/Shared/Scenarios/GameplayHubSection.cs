@@ -38,12 +38,13 @@ public class GameplayHubSection(GlobalData globalData, bool main, string titleTa
         Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_ClickHere), callback, fromNewLine));
     }
     
-    public void AddSpecialClickHere(string subName, Action<GlobalData>? callback, bool fromNewLine = false, Func<string, string>? contentFormatter = null, [CallerMemberName] string callerName = "")
+    // endOfRound: the link ends the round or the Generation (A Time of War writes its own end links, see GameplayElement.EndOfRound)
+    public void AddSpecialClickHere(string subName, Action<GlobalData>? callback, bool fromNewLine = false, Func<string, string>? contentFormatter = null, [CallerMemberName] string callerName = "", bool endOfRound = false)
     {
         string click                        = globalData.GetScenarioLocalizedTag(callerName + "_" + subName + "_ClickHere");
         if (contentFormatter != null) click = contentFormatter(click);
         
-        Elements.Add(new GameplayElement(click, callback, fromNewLine));
+        Elements.Add(new GameplayElement(click, callback, fromNewLine, endOfRound));
     }
     
     public void AddClickHereForReward(Action<GlobalData>? callback, bool fromNewLine = false)
@@ -53,11 +54,11 @@ public class GameplayHubSection(GlobalData globalData, bool main, string titleTa
 
     public void AddClickHereContinueNextRound(Action<GlobalData>? callback, bool fromNewLine = false)
     {
-        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_ClickHereContinueNextRound), callback, fromNewLine));
+        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_ClickHereContinueNextRound), callback, fromNewLine, true));
     }
 
     public void AddClickAtTheEndOfGeneration(Action<GlobalData>? callback, bool fromNewLine = false)
     {
-        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_ClickAtTheEndOfGeneration), callback, fromNewLine));
+        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_ClickAtTheEndOfGeneration), callback, fromNewLine, true));
     }
 }

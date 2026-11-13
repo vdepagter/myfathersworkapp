@@ -143,5 +143,50 @@
     window.addEventListener("resize", queueHeaderCut);
     setInterval(() => { if (!document.hidden) queueHeaderCut(); }, 1000);
 
-    window.mfwTransitions = { run: run, enter: enter, scrollTop: scrollTop, restoreScroll: restoreScroll };
+    // End of Round chip (Pages/Gameplay.razor, .end-round-jump in the round bar dock): shown while the End of Round
+    // section's button (#mfw-end-of-round) is below the round bar, hidden once it is in view. Tapping it scrolls there.
+    let endFrame = 0;
+
+    function endOfRoundParts() {
+        const section = document.getElementById("mfw-end-of-round");
+        const tracker = document.querySelector(".round-tracker");
+        if (!section || !tracker) return null;
+        const button = section.querySelector(".end-round-button") || section;
+        const bar    = tracker.getBoundingClientRect();
+        return { section: section, button: button, barTop: bar.top + bar.height * 0.5 };
+    }
+
+    function updateEndOfRound() {
+        endFrame = 0;
+        const parts = endOfRoundParts();
+        const away  = !!parts && parts.button.getBoundingClientRect().bottom > parts.barTop;
+        document.documentElement.classList.toggle("mfw-end-away", away);
+    }
+
+    function queueEndOfRound() {
+        if (!endFrame) endFrame = requestAnimationFrame(updateEndOfRound);
+    }
+
+    function jumpToEndOfRound() {
+        const parts = endOfRoundParts();
+        if (!parts) return;
+        const header = document.querySelector(".header-buttons");
+        const top    = header ? header.getBoundingClientRect().bottom + 16 : 16;
+        const rect   = parts.section.getBoundingClientRect();
+        // the bottom of the section just above the round bar, or its top under the header buttons when it is taller
+        const delta  = Math.min(rect.bottom - parts.barTop + 16, rect.top - top);
+        const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: window.scrollY + delta, left: 0, behavior: smooth ? "smooth" : "instant" });
+        parts.section.classList.remove("mfw-flash");
+        void parts.section.offsetWidth; // restart the glow on a second tap
+        parts.section.classList.add("mfw-flash");
+        setTimeout(() => parts.section.classList.remove("mfw-flash"), 1800);
+    }
+
+    window.addEventListener("scroll", queueEndOfRound, { passive: true });
+    window.addEventListener("resize", queueEndOfRound);
+    new MutationObserver(queueEndOfRound).observe(document.body, { childList: true, subtree: true });
+    setInterval(() => { if (!document.hidden) queueEndOfRound(); }, 1000);
+
+    window.mfwTransitions = { run: run, enter: enter, scrollTop: scrollTop, restoreScroll: restoreScroll, jumpToEndOfRound: jumpToEndOfRound };
 })();

@@ -51,6 +51,13 @@
         }
         <div class="round-tray"></div>
     </div>
+    @if (ShownEndOfRound != null)
+    {
+        // Jumps down to the End of Round section (js/transitions.js shows it while that section's button is out of view)
+        <button type="button" class="end-round-jump" onclick="mfwTransitions.jumpToEndOfRound()">
+            <span class="end-round-jump-arrow" aria-hidden="true">↓</span>@EndOfRoundLabel
+        </button>
+    }
 </div>
 
 @if (GlobalData.ActiveMirrorQuestion != null)
@@ -179,11 +186,13 @@
             <h2>@GlobalData.ActiveHub.Subtitle.InsertImages().ProtectNames(GlobalData).AsMarkup()</h2>
         }
 
+        GameplayElement? endOfRound = ShownEndOfRound;
         foreach (GameplayHubSection hubSection in GlobalData.ActiveHub.Sections)
         {
             @if (hubSection.ShouldShow())
             {
-                <div class="@(hubSection.Main ? "main-panel" : "section-panel")">
+                bool endSection = endOfRound != null && hubSection.Elements.Contains(endOfRound);
+                <div class="@(hubSection.Main ? "main-panel" : "section-panel")" id="@(endSection ? "mfw-end-of-round" : null)">
                     @if (hubSection.Main)
                     {
                         <h3>@hubSection.Title.InsertImages().ProtectNames(GlobalData).AsMarkup()</h3>
@@ -210,6 +219,13 @@
                             <a class="gameplay-link"
                                @onclick="() => InvokeWindowCallback(element.Callback)">[@LinkText(element.Content)]</a>
                         }
+                    }
+
+                    @if (endSection)
+                    {
+                        // The same action as the end link, as a button (the link text stays)
+                        Action<GlobalData> endCallback = endOfRound!.Callback!;
+                        <button class="mfw-button green end-round-button" @onclick="() => InvokeWindowCallback(endCallback)">@EndOfRoundLabel</button>
                     }
                 </div>
             }
@@ -298,6 +314,19 @@
     ];
 
     private int CurrentRoundIndex => (int)GlobalData.Generation * 3 + (int)GlobalData.Years;
+
+    // The link that ends the round or the Generation on the shown hub (GameplayElement.EndOfRound), null on other screens
+    private GameplayElement? ShownEndOfRound =>
+        GlobalData.ActiveMirrorQuestion == null && GlobalData.ActivePopup == null && GlobalData.ActiveInputPopup == null &&
+        GlobalData.ActiveWindow == null && GlobalData.ActiveHub != null
+            ? GlobalData.ActiveHub.Sections.Where(section => section.ShouldShow())
+                        .SelectMany(section => section.Elements)
+                        .FirstOrDefault(element => element.EndOfRound && element.Callback != null)
+            : null;
+
+    private string EndOfRoundLabel => GlobalData.GetLocalizedUITag(GlobalData.Years == Years.Late
+                                                                       ? GlobalTags.Gameplay_EndGenerationButton
+                                                                       : GlobalTags.Gameplay_EndRoundButton);
 
     // The nine windows of the frame's round slot, as left / width in % of images/ui/round-tray-*.webp (1200 px wide)
     private static readonly string[] _RoundCells =

@@ -69,11 +69,11 @@ public static partial class ATimeOfWar
         GameplayHubSection utopianWorld               = globalData.ActiveHub.AddSection(utopianWorldSection);
         utopianWorld.ReplaceShouldShow(() => !early && !stable);
         utopianWorld.AddDefaultContent(utopianWorldSection);
-        if (late) utopianWorld.AddSpecialClickHere(utopianWorldEndLateSection, Warning_0, true);
+        if (late) utopianWorld.AddSpecialClickHere(utopianWorldEndLateSection, Warning_0, true, endOfRound: true);
         else
         {
             utopianWorld.AddNextContent(1, utopianWorldSection, true);
-            utopianWorld.AddSpecialClickHere(utopianWorldEndSection, Warning_0);
+            utopianWorld.AddSpecialClickHere(utopianWorldEndSection, Warning_0, endOfRound: true);
         }
 
         // Stable timeline (originally Warning2time / Warning3time, $stasis == "yes"); the Masterwork section until it is
@@ -90,8 +90,8 @@ public static partial class ATimeOfWar
         GameplayHubSection perseverance               = globalData.ActiveHub.AddSection(perseveranceSection);
         perseverance.ReplaceShouldShow(() => !early && stable);
         perseverance.AddDefaultContent(perseveranceSection);
-        if (late) perseverance.AddSpecialClickHere(perseveranceEndLateSection, Warning_0, true);
-        else perseverance.AddSpecialClickHere(perseveranceEndSection, Warning_0, true);
+        if (late) perseverance.AddSpecialClickHere(perseveranceEndLateSection, Warning_0, true, endOfRound: true);
+        else perseverance.AddSpecialClickHere(perseveranceEndSection, Warning_0, true, endOfRound: true);
     }
 
     private static void Warning_0(GlobalData globalData)
@@ -136,7 +136,7 @@ public static partial class ATimeOfWar
         universityPanel.ReplaceShouldShow(university);
         universityPanel.AddDefaultContent(universitySection, null, caller);
         universityPanel.AddSpecialClickHere(universitySection, UniGen3, false, null, caller);
-        if (endOfRound != null) universityPanel.AddSpecialClickHere("UniversityEnd", endOfRound, true, null, caller);
+        if (endOfRound != null) universityPanel.AddSpecialClickHere("UniversityEnd", endOfRound, true, null, caller, true);
     }
 
     // University explanation. Source bug B21 fixed: "pay $1 to" was only printed in the Paradox rounds, although the

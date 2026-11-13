@@ -238,6 +238,64 @@ html.mfw-scrolled .gameplay-container {
     pointer-events: none;
 }
 
+/* End of Round: a button under the end link of the round page, and a chip above the round bar that jumps down to it
+   while it is out of view (js/transitions.js sets html.mfw-end-away) */
+.end-round-button {
+    width: min(17rem, 80%);
+    margin: 0.9rem auto 0.2rem;
+    font-size: clamp(0.95rem, 2.6vw, 1.1rem);
+    white-space: nowrap;
+}
+
+.end-round-jump {
+    position: absolute;
+    right: max(14px, calc(170 * var(--u)));
+    bottom: calc(150 * var(--u) + 0.5rem);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 40px;
+    padding: 0 14px 0 10px;
+    border: 1px solid #c9a35a;
+    border-radius: 999px;
+    background: rgba(18, 14, 10, 0.94);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+    color: #f1e4c4;
+    font-family: var(--mfw-font-text);
+    font-weight: 700;
+    font-size: 0.92rem;
+    text-shadow: 0 1px 2px #000;
+    cursor: pointer;
+    opacity: 0;
+    translate: 0 1.2rem;
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity 0.25s, translate 0.25s, visibility 0s 0.25s;
+}
+
+html.mfw-end-away .end-round-jump {
+    opacity: 1;
+    translate: 0 0;
+    pointer-events: auto;
+    visibility: visible;
+    transition: opacity 0.25s, translate 0.25s, visibility 0s;
+}
+
+.end-round-jump:hover         { filter: brightness(1.25); }
+.end-round-jump:focus-visible { outline: 2px solid #c9a35a; outline-offset: 2px; }
+.end-round-jump-arrow         { color: #ffd27a; font-size: 1.1rem; line-height: 1; }
+
+.main-panel.mfw-flash,
+.section-panel.mfw-flash {
+    border-color: #ffd27a;
+    box-shadow: 0 0 0 2px rgba(255, 210, 122, 0.6), 0 0 26px rgba(255, 196, 92, 0.45);
+    transition: box-shadow 0.4s, border-color 0.4s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .end-round-jump, html.mfw-end-away .end-round-jump { transition: none; }
+}
+
 .round-tracker {
     position: absolute;
     left: 0;
