@@ -23,8 +23,8 @@
                     {
                         int  index   = i;
                         bool invalid = _Tried && !GameplayPopUp.Validate(_Values[index]);
-                        <label class="input-row">
-                            <span>@GameplayPopUp.Fields[index].InsertImages().ProtectNames(GlobalData).AsMarkup()</span>
+                        <div class="input-row @(HasToggle ? "with-toggle" : "")">
+                            <label for="input-field-@index">@GameplayPopUp.Fields[index].InsertImages().ProtectNames(GlobalData).AsMarkup()</label>
                             <input @ref="_Inputs[index]"
                                    value="@_Values[index]"
                                    @oninput="e => _Values[index] = e.Value?.ToString() ?? string.Empty"
@@ -33,8 +33,17 @@
                                    enterkeyhint="@(index == GameplayPopUp.Fields.Length - 1 ? "done" : "next")"
                                    class="input-field @(invalid ? "invalid" : "")"
                                    placeholder="@GameplayPopUp.Placeholder"
+                                   id="input-field-@index"
                                    @onkeydown="e => OnFieldKeyDown(e, index)" />
-                        </label>
+                            @if (HasToggle)
+                            {
+                                // Masterwork tick at score entry: a red seal when ticked (css/theme.css colours)
+                                <label class="input-toggle">
+                                    <input type="checkbox" checked="@_Toggles[index]" @onchange="e => _Toggles[index] = e.Value is true" />
+                                    <span>@GameplayPopUp.FieldToggle</span>
+                                </label>
+                            }
+                        </div>
                     }
                 </div>
             }
@@ -54,6 +63,9 @@
     
     private string           _Value = string.Empty;
     private string[]         _Values = [];
+    private bool[]           _Toggles = [];
+
+    private bool HasToggle => GameplayPopUp.FieldToggle.Length > 0;
     private ElementReference _First;
     private ElementReference[] _Inputs = [];
     private bool             _Tried;    // Confirm pressed with a wrong value: mark the fields to fix
@@ -64,6 +76,7 @@
         if (_Values.Length == GameplayPopUp.Fields.Length) return;
         _Values = new string[GameplayPopUp.Fields.Length];
         Array.Fill(_Values, string.Empty);
+        _Toggles = new bool[GameplayPopUp.Fields.Length];
         _Inputs = new ElementReference[GameplayPopUp.Fields.Length];
     }
 
@@ -95,7 +108,8 @@
 
         if (GameplayPopUp.Fields.Length > 0)
         {
-            string[] values = _Values.Select(value => value.Trim()).ToArray();
+            string[] values  = _Values.Select(value => value.Trim()).ToArray();
+            bool[]   toggles = _Toggles.ToArray();
             if (!values.All(GameplayPopUp.Validate))
             {
                 _Tried = true;
@@ -105,7 +119,7 @@
             GlobalData.RunScenarioAction(() =>
             {
                 GlobalData.ActiveInputPopup = null;
-                GameplayPopUp.OnCloseFields!(values);
+                GameplayPopUp.OnCloseFields!(values, toggles);
             });
         }
         else

@@ -21,6 +21,7 @@ public abstract class ScenarioVars(int randomCount)
     public int[]                   TieUpgrades  { get; set; } = []; // Estate Upgrades per TieMasterworks entry
     public bool                    FamilyWinner { get; set; }
     public string                  Winner       { get; set; } = string.Empty;
+    public string[]                Masterworks  { get; set; } = []; // players who completed their Masterwork (ticked at score entry)
 
     // Log Book: titles of the logged events in the order they were first shown. Written by Shared/LogBook.cs after a screen
     // is rendered, never by scenario code; kept here so undo forgets the screens it goes back over and load keeps the rest.
@@ -110,6 +111,7 @@ public abstract class ScenarioVars(int randomCount)
         TieUpgrades    = [];
         FamilyWinner   = false;
         Winner         = string.Empty;
+        Masterworks    = [];
         LogBook        = [];
 
         foreach (string player in AllPlayerSlots(globalData)) Scores[player] = 0;

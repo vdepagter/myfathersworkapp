@@ -123,6 +123,7 @@ Gameplay_SpecialSetup;SPECIAL SETUP
 Gameplay_SpecialRule;SPECIAL RULE
 Gameplay_Accept;Accept
 Gameplay_Confirm;Confirm
+Gameplay_Masterwork;Masterwork
 Gameplay_Choose;CHOOSE:
 Gameplay_HandStorybookTo;Carefully hand this storybook device to {{0=...|Oliver|James|Olivia|...}}. This text (and its choice if any) should be read aloud and made in full view of all players.
 Gameplay_DoNotOtherPlayersSee;Carefully hand this storybook device to {{0=...|Oliver|James|Olivia|...}} and do not allow any other players to see the screen.
@@ -192,7 +193,7 @@ Gallery_FamilyWin;Shared win for the family
 Gallery_RecordedNote;Saved in the Endings Gallery on this device. Going back with Undo and correcting a score replaces this result, so a game is never counted twice.
 Gallery_EditGame;Edit game
 Gallery_AddGame;Add a game
-Gallery_EditNote;Changes update the win counts and the Endings map.
+Gallery_EditNote;Changes update the win counts, records, achievements and the Endings map. ✦ marks a completed Masterwork.
 Gallery_AddNote;For a game played without this app. It counts like a game played here.
 Gallery_Scenario;Scenario
 Gallery_PlayedOn;Played on
@@ -210,6 +211,63 @@ Gallery_Save;Save
 Gallery_NamesInvalid;Every player needs a name of 2 to 15 letters, each name once.
 Gallery_EndingLabel;Ending
 Gallery_TapToEdit;Tap a game to change or delete it.
+Gallery_Achievements;Achievements
+Gallery_HallOfFame;Hall of Fame
+Ach_Count;{{0=...|7}} of {{1=...|16}} achievements
+Ach_HighestScores;Highest scores
+Ach_TapRecord;tap a record to open that game
+Ach_NoGameYet;No game yet
+Ach_SetRecord;Finish a game to set a record
+Ach_VP;VP
+Ach_Official;official
+Ach_Legend;Achievements are worked out from your recorded games and the endings you ticked off, so changing or deleting a game in the Hall of Fame updates them. Masterworks count from games where they were ticked at score entry (or in the game sheet).
+Ach_NotYet;Not yet
+Ach_OfCount;{{0=...|3}} of {{1=...|8}}
+Ach_Best;Best: {{0=...|61}}
+Ach_Unlocked;Achievement: {{0=...|A Life's Work}}
+Ach_NewRecord;New record for {{0=...|The Cost of Disease}}: {{1=...|Anna}}, {{2=...|81}} VP
+Ach_NewRecordOld;The old record was {{0=...|75}} ({{1=...|Bram}}).
+Ach_Group_Endings;Endings
+Ach_Group_Masterworks;Masterworks
+Ach_Group_Scores;Scores and the family
+Ach_EndCostOfDisease_Title;The Cost of Disease
+Ach_EndCostOfDisease_Text;Reach the end of The Cost of Disease.
+Ach_AllCostOfDisease_Title;Every Fate of Disease
+Ach_AllCostOfDisease_Text;Complete all 8 endings in The Cost of Disease.
+Ach_EndFearOfUnknown_Title;Fear of the Unknown
+Ach_EndFearOfUnknown_Text;Reach the end of Fear of the Unknown.
+Ach_AllFearOfUnknown_Title;Every Fate of Fear
+Ach_AllFearOfUnknown_Text;Complete all 8 endings in Fear of the Unknown.
+Ach_EndTimeOfWar_Title;A Time of War
+Ach_EndTimeOfWar_Text;Reach the end of A Time of War.
+Ach_AllTimeOfWar_Title;Every Fate of War
+Ach_AllTimeOfWar_Text;Complete all 8 endings in A Time of War.
+Ach_MwFirst_Title;A Life's Work
+Ach_MwFirst_Text;Complete a Masterwork.
+Ach_MwMany_Title;A Workshop of Wonders
+Ach_MwMany_Text;Complete 5 Masterworks between you.
+Ach_MwMost_Title;An Age of Invention
+Ach_MwMost_Text;Complete 10 Masterworks between you.
+Ach_MwEveryone_Title;A Family of Geniuses
+Ach_MwEveryone_Text;Every player completes their Masterwork in the same game.
+Ach_MwAllScenarios_Title;Master of All Trades
+Ach_MwAllScenarios_Text;One player completes a Masterwork in all three scenarios.
+Ach_Score75_Title;Respected Name
+Ach_Score75_Text;Finish with 75 VP or more.
+Ach_Score100_Title;Renowned Name
+Ach_Score100_Text;Finish with 100 VP or more.
+Ach_Score150_Title;Legendary Name
+Ach_Score150_Text;Finish with 150 VP or more.
+Ach_FamilyWin_Title;Shared Legacy
+Ach_FamilyWin_Text;Win together: a shared family win.
+Ach_Dynasty_Title;Dynasty
+Ach_Dynasty_Text;One player wins three games in a row.
+Fame_Best;Best
+Fame_Masterworks;Masterworks
+Fame_Players;{{0=...|3}} players
+Fame_HighestScore;Highest score
+Fame_MostWins;Most wins
+Fame_Record;record
 MainMenu_SavedGames;Saved Games
 SavedGames_Note;Every game is kept on this device. Starting a new game or loading a save code puts the game you were playing here. Open a game to continue it or to look back through it with Back (⬅).
 SavedGames_Current;Playing now
@@ -244,7 +302,7 @@ Help_Secret;<p>Some pages say <i>"Carefully hand this storybook device to … an
 Help_Tab_Bids;Bids and votes
 Help_Bids;<p>For a bid or a vote, the app explains what is at stake. Everyone chooses in secret at the table, for example with money or a card hidden in a closed hand, and then reveals at the same time.</p><p>Then click the link after resolving the bid or vote and pick the result in the app. The screen explains how ties are broken.</p>
 Help_Tab_ThisApp;This app
-Help_ThisApp;<p>This fan-made version adds a few things to the official app.</p><p><b>Back (⬅)</b> undoes the last screen, all the way back to the start of the game. <b>Forward (➡)</b> redoes what you undid, until you make a new choice. Your progress is saved in this browser after every screen, so <b>Continue</b> picks up where you left off, even after closing the page. Starting a new game does not throw the old one away: <b>Saved Games</b> keeps every game on this device, so you can open it again later and page back through it.</p><p><b>Pause (⏸)</b> lets you save a game as text or a file to load elsewhere, change the narration (the original male or female recordings, Oliver's narration, or off) and return to the main menu.</p><p><b>Log Book (📖)</b> lists the events you have played through so far, with where they happened and a one-line summary. The official app had one for The Cost of Disease only - the entries for the other two scenarios are fan-written.</p><p><b>Play along with the official app</b>, chosen when you start a game, rolls nothing at random. Whenever the story depends on chance, you pick what the official app shows, so both apps tell the same story.</p><p>The <b>Endings Gallery</b> counts each player's wins and the endings you have reached. You can tick endings reached elsewhere, and export or import the gallery to move it to another device.</p>
+Help_ThisApp;<p>This fan-made version adds a few things to the official app.</p><p><b>Back (⬅)</b> undoes the last screen, all the way back to the start of the game. <b>Forward (➡)</b> redoes what you undid, until you make a new choice. Your progress is saved in this browser after every screen, so <b>Continue</b> picks up where you left off, even after closing the page. Starting a new game does not throw the old one away: <b>Saved Games</b> keeps every game on this device, so you can open it again later and page back through it.</p><p><b>Pause (⏸)</b> lets you save a game as text or a file to load elsewhere, change the narration (the original male or female recordings, Oliver's narration, or off) and return to the main menu.</p><p><b>Log Book (📖)</b> lists the events you have played through so far, with where they happened and a one-line summary. The official app had one for The Cost of Disease only - the entries for the other two scenarios are fan-written.</p><p><b>Play along with the official app</b>, chosen when you start a game, rolls nothing at random. Whenever the story depends on chance, you pick what the official app shows, so both apps tell the same story.</p><p>The <b>Endings Gallery</b> shows the endings you have reached, achievements (the official app's and new ones for high scores and Masterworks) and a <b>Hall of Fame</b> with wins and records. Tick who completed their Masterwork when you enter the final scores. You can tick endings reached elsewhere, and export or import the gallery to move it to another device.</p>
 Help_Tab_VillageNames;Village name secrets
 Help_VillageNames;<p>A few village names, typed when you name the village before the game, decide where the story goes after Generation I. They are case sensitive: type them exactly as shown.</p><p><b>The Cost of Disease</b></p><ul><li><b>Rage</b> - the Wolves are evil and the Hunters good.</li><li><b>Kraven</b> - the Hunters are evil and the Wolves good.</li><li><b>Plague</b> - Generation II is <i>Devastation</i> (the town falls to the plague).</li><li><b>Mercy</b> - Generation II is <i>Thriving in Adversity</i> (the Hospital).</li></ul><p><b>Fear of the Unknown</b></p><ul><li><b>Xenophobia</b> - Generation II is <i>Blame it on the Foreigners</i>.</li><li><b>Abomination</b> - Generation II is <i>The Creature Re-emerges</i>.</li></ul><p><b>A Time of War</b></p><ul><li><b>Paradox</b> - Generation II is <i>Time Travel</i>.</li><li><b>Destruction</b> - Generation II is <i>Martial Law</i>.</li></ul><p>As the designer noted, a forced story can make a line of dialogue slightly off, when what happened at the table pointed the other way.</p>
 Gameplay_Undo;Back (undo the last screen)

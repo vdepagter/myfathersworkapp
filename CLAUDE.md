@@ -91,7 +91,7 @@ The engine was generalized while porting Fear of the Unknown. A new scenario nee
 
 - A Vars class deriving from `ScenarioVars(randomCount)` whose `Reset(GlobalData)` calls `ResetBase`; a property on `GlobalData` with `ShouldSerialize*`, and cases in `GlobalData.ScenarioVars`, `ScenarioType`, `ResetScenarioVars`, `StartScenario`, `ShowFinalEnding`, `GetHubMethod` and `LoadScenarioLanguagesOptionsAsync` (CSV paths; unknown scenarios navigate home).
 - A hub id enum in `Shared/Enums/`, mapped in `GetHubMethod`.
-- After the last generation link to `FinalScoring.Start`; provide `public static void FinalEnding(GlobalData)` and the shared scoring tags (`ScoreEntry_Content`, `TieBreaker1_*`, `TieBreaker2_Content`, `Rankings_*`) in the scenario CSV.
+- After the last generation link to `FinalScoring.Start`; provide `public static void FinalEnding(GlobalData)` and the shared scoring tags (`ScoreEntry_Content`, `ScoreEntry_Player`, `TieBreaker2_Content`, `Rankings_*`) in the scenario CSV.
 - A `tools/tagcheck.py --scenario=` entry and `test-save-helpers.js` support. Run `tools/sourcecheck.py` and the `PLAYTEST_FINDINGS.md` checklist.
 - `Shared/Enums/Generation.cs` has 3 values; after the last round `Generation` becomes 3 (guard like `EndedYears()` in Fear of the Unknown).
 
@@ -149,7 +149,7 @@ Details per branch: the "Ported" notes in `docs/ATOW_PORT_MAP.md` 2.1-2.8; sourc
 
 - Gen III building tiles: Gloomy Gothic uses `BuildingsExposeValue <= 1`, Prosperity `> 0`. Looks inconsistent, but `<= 1` appears identically in every story version in the Unity project (earlier English edit, latest English, Spanish), so it was kept as the developer shipped it. The owner decided to keep it, but suspects it may be flawed.
 - "Still Wary" popup lists Wolves allies only (source always appended the first player due to an always-true condition).
-- Ties follow the rulebook (End of the Game): most points, then completed Masterwork, then most Estate Upgrades, else the family shares the win. Tie-breakers pick the winner without changing scores (the original app added +1 / the entered number to the score). Rankings (shared `FinalScoring`) give equal players the same place: the score, then Masterwork, then Estate Upgrades (when asked) separate them, so a shared win shows several "1st".
+- Ties follow the rulebook (End of the Game): most points, then completed Masterwork, then most Estate Upgrades, else the family shares the win. Since Nov 2026 the Masterwork is ticked per player at score entry (`ScenarioVars.Masterworks`, `GameplayInputPopup.FieldToggle`); the old "Did X complete their Masterwork?" screen (`TieBreaker1`) is gone. Tie-breakers pick the winner without changing scores (the original app added +1 / the entered number to the score). Rankings (shared `FinalScoring`) give equal players the same place: the score, then Masterwork, then Estate Upgrades (when asked) separate them, so a shared win shows several "1st".
 - "A Return to Evil" keeps the end-of-generation prompt (source jumped straight to scoring).
 - Gen II Hospital end: players who skipped the Hospital lose 6VP and an Estate Upgrade ("Lack of Hospitality"), then
   "A Steady Focus" moves those same players 1 level on a Journal Track. When everybody visited, both are skipped. (Until
@@ -161,7 +161,7 @@ Details per branch: the "Ported" notes in `docs/ATOW_PORT_MAP.md` 2.1-2.8; sourc
   Update discard line in "Escaping The Curse" is shown (source never set its `$tmmasterwork` flag, so it never showed);
   random draws are made where they become visible (factions, buildings, Fever cure rewards, Symposium target).
 - End of Generation texts of Gen II (`DevastationEndOfGeneration`, `HospitalEndOfGeneration`) are separate popups, as the official app shows them on their own screen.
-- Not ported: the original achievements list, sharing, 5-player games. The Endings Gallery replaces the original endings list (see below).
+- Not ported: sharing, 5-player games. The Endings Gallery replaces the original endings and achievements lists (see below).
 - Help (`Pages/Help.razor`, main menu): the official app's tabs (How to use, Story Actions, End of Round, its text
   kept) plus Setup, End of Generation, Secret pages, Bids and votes, and This app. Text in `UI_Localization.csv`
   (`Help_Tab_<Page>` label, `Help_<Page>` HTML); the page list is in the razor file.
@@ -188,6 +188,12 @@ ending and the hub hook in `Pages/Gameplay.razor` (`NoteGalleryAsync`), name chi
   (`GalleryTrees.Title`). Cost of Disease ending 8 (heading "Editor's note - August 1923") is "An Uplifting Tale" (owner, 1 Nov 2026).
 - Layout (Nov 2026): Endings tab = scenario covers + a map (one grid column per generation, lines drawn by
   `wwwroot/js/gallery.js` above 1000px, a top-down tree below). Lists sit on the Settings panel plate.
+- Tabs (Nov 2026): Endings, Achievements, Hall of Fame (was Players). `Shared/GalleryAchievements.cs` computes the
+  achievements and the highest score per scenario from the games and ticks every time (nothing stored, so undo, edits and
+  imports stay right): the official app's six (end of each scenario, all 8 endings of each, Unity `ViewEndings`) plus fan
+  ones for Masterworks (`GalleryGame.Masterworks`, ticked at score entry or in the game sheet), scores (75 / 100 / 150 VP,
+  owner's levels), a family win and a three-win streak. Texts: `Ach_<Id>_Title/_Text` in `UI_Localization.csv`. The
+  ending page lists new records and achievements of the game just recorded (compared with the gallery without it).
 - Export / Import (base64 JSON) merges: players, games by id, branches and ticks are combined. The original Unity app
   kept ending titles in PlayerPrefs `GameEndingsData`, matched by title text (village names made duplicates).
 

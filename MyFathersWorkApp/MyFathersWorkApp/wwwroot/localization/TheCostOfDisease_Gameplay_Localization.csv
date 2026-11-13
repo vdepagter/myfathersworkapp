@@ -378,9 +378,8 @@ Scoring_Content;Each Estate Upgrade is worth 1VP.<br />Add any additional points
 Scoring_Content1;Check to make sure the player with <b>Lycanthropic Strength</b> completed their Masterwork. If they did not, they <b>lose 5VP.</b><br />
 Scoring_Content2;Check to make sure the player with <b>Immortality</b> completed their Masterwork. If they did not, they <b>lose 5VP.</b><br />
 Scoring_Content3;<link=0>Click to tabulate scores for posterity...</link>
-ScoreEntry_Content;Please enter the final score of every player.
+ScoreEntry_Content;Please enter the final score of every player, and tick who completed their Masterwork.
 ScoreEntry_Player;{{0=...|Oliver|James|Olivia|...}} III
-TieBreaker1_Content;The highest score is tied. Did <b>{{0=...|Oliver|James|Olivia|...}} III</b> complete their Masterwork?
 TieBreaker2_Content;More than one tied player completed their Masterwork. Please enter the number of <b>Estate Upgrades</b> owned by <b>{{0=...|Oliver|James|Olivia|...}} III</b>. <i>(The player with the most Estate Upgrades wins. If still tied, the family shares the win.)</i>
 Rankings_Content1;<b>{{0=|1st|2nd|3rd|4th}}</b> - {{1=...|Oliver|James|Olivia|...}} III ({{2=...|40|...}}VP)<br />
 Rankings_Content2;{{0=?|<b>The family is victorious!</b>|<b>{{1=...|Oliver|James|Olivia|...}} III is victorious!</b>}}

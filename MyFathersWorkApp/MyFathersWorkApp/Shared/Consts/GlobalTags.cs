@@ -142,6 +142,7 @@ public static class GlobalTags
     public const string Gameplay_SpecialRule                = "Gameplay_SpecialRule";
     public const string Gameplay_Accept                     = "Gameplay_Accept";
     public const string Gameplay_Confirm                    = "Gameplay_Confirm";
+    public const string Gameplay_Masterwork                 = "Gameplay_Masterwork"; // tick per player at score entry
     public const string Gameplay_Choose                     = "Gameplay_Choose";
     public const string Gameplay_HandStorybookTo            = "Gameplay_HandStorybookTo";
     public const string Gameplay_DoNotOtherPlayersSee       = "Gameplay_DoNotOtherPlayersSee";
@@ -230,6 +231,30 @@ public static class GlobalTags
     public const string Gallery_NamesInvalid        = "Gallery_NamesInvalid";
     public const string Gallery_EndingLabel         = "Gallery_EndingLabel";
     public const string Gallery_TapToEdit           = "Gallery_TapToEdit";
+
+    // Endings Gallery achievements and Hall of Fame (Nov 2026); Ach_<Id>_Title / _Text and Ach_Group_<Group> are built in code
+    public const string Gallery_Achievements        = "Gallery_Achievements";
+    public const string Gallery_HallOfFame          = "Gallery_HallOfFame";
+    public const string Ach_Count                   = "Ach_Count";
+    public const string Ach_HighestScores           = "Ach_HighestScores";
+    public const string Ach_TapRecord               = "Ach_TapRecord";
+    public const string Ach_NoGameYet               = "Ach_NoGameYet";
+    public const string Ach_SetRecord               = "Ach_SetRecord";
+    public const string Ach_VP                      = "Ach_VP";
+    public const string Ach_Official                = "Ach_Official";
+    public const string Ach_Legend                  = "Ach_Legend";
+    public const string Ach_NotYet                  = "Ach_NotYet";
+    public const string Ach_OfCount                 = "Ach_OfCount";
+    public const string Ach_Best                    = "Ach_Best";
+    public const string Ach_Unlocked                = "Ach_Unlocked";
+    public const string Ach_NewRecord               = "Ach_NewRecord";
+    public const string Ach_NewRecordOld            = "Ach_NewRecordOld";
+    public const string Fame_Best                   = "Fame_Best";
+    public const string Fame_Masterworks            = "Fame_Masterworks";
+    public const string Fame_Players                = "Fame_Players";
+    public const string Fame_HighestScore           = "Fame_HighestScore";
+    public const string Fame_MostWins               = "Fame_MostWins";
+    public const string Fame_Record                 = "Fame_Record";
 
     // Saved Games (Pages/SavedGames.razor)
     public const string MainMenu_SavedGames   = "MainMenu_SavedGames";
