@@ -1,3 +1,6 @@
 # Local Claude Code preview-server config
 .claude/launch.json
 __pycache__/
+
+# Windows release output (tools/build-windows.ps1)
+/dist/

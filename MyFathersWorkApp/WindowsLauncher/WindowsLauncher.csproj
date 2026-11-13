@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <!-- Offline Windows launcher: serves the published web app (wwwroot next to the exe) on localhost and opens it.
+         Build the release with tools/build-windows.ps1. -->
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <OutputType>WinExe</OutputType>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <AssemblyName>MyFathersWork</AssemblyName>
+        <RootNamespace>WindowsLauncher</RootNamespace>
+        <ApplicationIcon>..\MyFathersWorkApp\wwwroot\favicon.ico</ApplicationIcon>
+        <Version>0.66.6.0</Version>
+        <Product>My Father's Work - Fan Made Companion App</Product>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <!-- Only used by dotnet publish -r win-x64 -->
+        <SelfContained>true</SelfContained>
+        <PublishSingleFile>true</PublishSingleFile>
+        <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+        <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
+        <!-- No appsettings / web.config / launch profiles needed -->
+        <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
+    </PropertyGroup>
+
+</Project>

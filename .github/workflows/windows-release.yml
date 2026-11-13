@@ -1,0 +1,73 @@
+name: Windows release
+
+# Builds the offline Windows version (tools/build-windows.ps1): MyFathersWork.exe + wwwroot in one zip.
+# - Push a tag v* (e.g. v0.66.6.250): the zip is attached to a GitHub Release for that tag.
+# - Run manually (Actions > Windows release > Run workflow): the zip is only kept as a workflow artifact.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history, needed to count commits for the version number
+          lfs: false
+
+      # Same LFS cache as deploy-pages.yml: only the web app's files, keyed by their object ids
+      - name: List LFS objects of the web app
+        shell: bash
+        run: git lfs ls-files --long --include "MyFathersWorkApp/**" > lfs-objects.txt
+
+      - name: Restore LFS cache
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('lfs-objects.txt') }}
+          restore-keys: lfs-
+
+      - name: Pull LFS files of the web app
+        run: git lfs pull --include "MyFathersWorkApp/**"
+
+      # Version as in deploy-pages.yml: 0.66.6.<commits on main (first parent) since 3d78856, minus 1>
+      - name: Compute version
+        shell: bash
+        run: |
+          REVISION=$(( $(git rev-list --count --first-parent 3d78856..HEAD) - 1 ))
+          if [ "$REVISION" -lt 0 ]; then REVISION=0; fi
+          echo "VERSION=0.66.6.$REVISION" >> "$GITHUB_ENV"
+          echo "Version 0.66.6.$REVISION"
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Build the Windows release
+        shell: pwsh
+        run: ./tools/build-windows.ps1 -Version $env:VERSION
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MyFathersWork-Windows-${{ env.VERSION }}
+          path: dist/MyFathersWork-Windows-${{ env.VERSION }}.zip
+          compression-level: 0 # already a zip
+
+      - name: Attach to the GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ZIP="dist/MyFathersWork-Windows-$VERSION.zip"
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "$ZIP" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" "$ZIP" --title "My Father's Work $VERSION (Windows)" \
+              --notes "Offline Windows version. Unzip the whole folder and double-click MyFathersWork.exe - no installation or internet needed. See README.txt in the zip."
+          fi

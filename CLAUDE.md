@@ -260,4 +260,12 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
 - **Claude sessions:** the cloud container cannot download .NET. Build, run and browser-test in a Remote Control session on the owner's laptop (pre-approved), after pushing the branch.
 - `dotnet build MyFathersWorkApp/MyFathersWorkApp.sln`
 - `dotnet run --project MyFathersWorkApp/MyFathersWorkApp/MyFathersWorkApp.csproj` (http://localhost:5166; use `--no-launch-profile --urls http://localhost:5199` if 5166 is taken).
+- Offline Windows release: `pwsh tools/build-windows.ps1 [-Version x]` -> `dist/MyFathersWork-Windows-<version>.zip`
+  (`MyFathersWork.exe` + `wwwroot`, ~285 MB, mostly audio; needs the LFS files). The exe (`MyFathersWorkApp/WindowsLauncher/`,
+  self-contained, no .NET needed) serves `wwwroot` on the fixed port `http://localhost:51660` (fixed because saves live in
+  localStorage per origin) and opens an Edge app window with its own profile (`%LOCALAPPDATA%\MyFathersWork\Browser`,
+  holds the saves); the server stops when the profile's `lockfile` is released (last window closed). A second start
+  just opens another window; without Edge it falls back to the default browser plus a console window. Push a tag `v*`
+  to have `.github/workflows/windows-release.yml` attach the zip to a GitHub Release (manual runs: workflow artifact).
+  The exe is not code-signed yet (SmartScreen warning).
 - There are no automated tests. Play-test with `tools/test-save-helpers.js`: craft a save at a late-round hub, reload `/Gameplay`, and drive the flow with `run([...])`. Check the browser console for exceptions and run `python tools/tagcheck.py` (and `--scenario=FearOfTheUnknown`). Fear of the Unknown saves: `mkSaveFotU(hubId, {...})`; `auto([...])` / `autoFirst()` click through screens. Static files are served from a build-time snapshot, so inject the helpers with the JS console (or keep them in `localStorage.helpers` and `eval` after reloads) instead of copying them into `wwwroot`. To test mirror mode, pass `mirror: true` to `mkSave`; random click-throughs that report `Mirror:` console lines find draws made too early. Also play through round transitions, not only crafted saves: load and undo rebuild the hub, which hides hub text that was formatted with stale state (`PLAYTEST_FINDINGS.md` #1).
