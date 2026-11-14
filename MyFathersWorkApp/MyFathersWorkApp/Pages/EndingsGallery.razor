@@ -10,33 +10,123 @@
 <div class="gallery-container">
 
     <div class="mp-tabs gallery-tabs" role="tablist">
-        <button role="tab" aria-selected="@(_EndingsTab ? "false" : "true")" class="mp-chip" @onclick="() => SelectTab(false)">
-            @GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Players)
-        </button>
-        <button role="tab" aria-selected="@(_EndingsTab ? "true" : "false")" class="mp-chip" @onclick="() => SelectTab(true)">
-            @GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Endings)
-        </button>
+        @foreach (GalleryTab tab in Enum.GetValues<GalleryTab>())
+        {
+            <button role="tab" aria-selected="@(_Tab == tab ? "true" : "false")" class="mp-chip" @onclick="() => SelectTab(tab)">
+                @GlobalData.GetLocalizedUITag(TabTag(tab))
+            </button>
+        }
     </div>
 
     @if (_Data == null)
     {
     }
-    else if (!_EndingsTab)
+    else if (_Tab == GalleryTab.Achievements)
+    {
+        List<Achievement> achievements = GalleryAchievements.All(GlobalData, _Data);
+        int               unlocked     = achievements.Count(achievement => achievement.Unlocked);
+
+        <div class="gallery-panel">
+            <div class="ach-progress">
+                <span class="tree-count">@GlobalData.GetLocalizedUITag(GlobalTags.Ach_Count).FormatWithReplacement(0, unlocked.ToString()).FormatWithReplacement(1, achievements.Count.ToString())</span>
+                <span class="ach-bar" aria-hidden="true"><i style="width: @((100.0 * unlocked / achievements.Count).ToString("0.#", CultureInfo.InvariantCulture))%"></i></span>
+            </div>
+        </div>
+
+        <h2 class="mp-section-title ach-group">
+            @GlobalData.GetLocalizedUITag(GlobalTags.Ach_HighestScores)
+            <small>@GlobalData.GetLocalizedUITag(GlobalTags.Ach_TapRecord)</small>
+        </h2>
+        <div class="record-plaques">
+            @foreach (ScenarioId scenario in GalleryTrees.Scenarios)
+            {
+                ScoreRecord? record = GalleryAchievements.Record(_Data.Games, scenario);
+                if (record == null)
+                {
+                    <div class="record-plaque none cover-@((int)scenario)">
+                        <span class="record-scenario">@GalleryTrees.Name(scenario)</span>
+                        <span class="record-score">-</span>
+                        <span class="record-who">@GlobalData.GetLocalizedUITag(GlobalTags.Ach_NoGameYet)</span>
+                        <span class="record-when">@GlobalData.GetLocalizedUITag(GlobalTags.Ach_SetRecord)</span>
+                    </div>
+                }
+                else
+                {
+                    <button class="record-plaque cover-@((int)scenario)" @onclick="() => EditGame(record.Game)">
+                        <span class="record-crown" aria-hidden="true"></span>
+                        <span class="record-scenario">@GalleryTrees.Name(scenario)</span>
+                        <span class="record-score">@record.Score <small>@GlobalData.GetLocalizedUITag(GlobalTags.Ach_VP)</small></span>
+                        <span class="record-who">@record.Player</span>
+                        <span class="record-when">@FormatDate(record.Game.Date) · @GalleryTrees.Title(record.Game)</span>
+                    </button>
+                }
+            }
+        </div>
+
+        @foreach (AchievementGroup group in Enum.GetValues<AchievementGroup>())
+        {
+            <h2 class="mp-section-title ach-group">@GlobalData.GetLocalizedUITag($"Ach_Group_{group}")</h2>
+            <div class="gallery-panel">
+                <div class="ach-list">
+                    @foreach (Achievement achievement in achievements.Where(achievement => achievement.Group == group))
+                    {
+                        <div class="ach @(achievement.Unlocked ? "" : "locked")">
+                            <span class="seal @(achievement.Unlocked ? achievement.Kind == SealKind.Red ? "red" : "" : "lock")" aria-hidden="true">@achievement.Seal</span>
+                            <span class="ach-text">
+                                <b>
+                                    @GalleryAchievements.Title(GlobalData, achievement)
+                                    @if (achievement.Official)
+                                    {
+                                        <span class="ach-tag">@GlobalData.GetLocalizedUITag(GlobalTags.Ach_Official)</span>
+                                    }
+                                </b>
+                                <span>@GalleryAchievements.Text(GlobalData, achievement)</span>
+                                <em>@achievement.Detail</em>
+                                @if (!achievement.Unlocked && achievement.Progress is > 0)
+                                {
+                                    <span class="ach-mini" aria-hidden="true"><i style="width: @((100 * achievement.Progress.Value).ToString("0.#", CultureInfo.InvariantCulture))%"></i></span>
+                                }
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        <p class="mp-note gallery-legend">@GlobalData.GetLocalizedUITag(GlobalTags.Ach_Legend)</p>
+    }
+    else if (_Tab == GalleryTab.HallOfFame)
     {
         <div class="players-column">
+            @* Records per scenario (Hall of Fame board) *@
+            <div class="gallery-panel">
+                <div class="fame-board">
+                    <div class="fame-head"></div>
+                    @foreach (ScenarioId scenario in GalleryTrees.Scenarios)
+                    {
+                        <div class="fame-head" title="@GalleryTrees.Name(scenario)">
+                            <div class="tally-cover cover-@((int)scenario)" aria-hidden="true"></div>
+                            <span class="tally-scenario-name">@GalleryTrees.Name(scenario)</span>
+                        </div>
+                    }
+                    @foreach (FameRow fameRow in FameRows())
+                    {
+                        <div class="fame-label">@fameRow.Label</div>
+                        @foreach ((string value, string who) in fameRow.Cells)
+                        {
+                            <div class="fame-cell @(value == "-" ? "empty" : "")"><b>@value</b><small>@who</small></div>
+                        }
+                    }
+                </div>
+            </div>
+
             <div class="gallery-panel tally-scroll">
                 <table class="tally">
                     <thead>
                         <tr>
                             <th class="tally-name-head">@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Player)</th>
-                            @foreach (ScenarioId scenario in GalleryTrees.Scenarios)
-                            {
-                                <th class="tally-scenario" title="@GalleryTrees.Name(scenario)">
-                                    <div class="tally-cover cover-@((int)scenario)" aria-hidden="true"></div>
-                                    <span class="tally-scenario-name">@GalleryTrees.Name(scenario)</span>
-                                </th>
-                            }
                             <th>@GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Wins)</th>
+                            <th>@GlobalData.GetLocalizedUITag(GlobalTags.Fame_Best)</th>
+                            <th>@GlobalData.GetLocalizedUITag(GlobalTags.Fame_Masterworks)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,11 +137,14 @@
                                     <b>@line.Name</b>
                                     <small>@line.Sub</small>
                                 </td>
-                                @foreach (int wins in line.PerScenario)
-                                {
-                                    <td class="@(wins == 0 ? "zero" : "")">@wins</td>
-                                }
-                                <td class="tally-wins">@line.Wins</td>
+                                <td class="tally-wins @(line.Wins == 0 ? "zero" : "")">@line.Wins</td>
+                                <td class="@(line.Best == 0 ? "zero" : "")">@(line.Family ? "" : line.Best == 0 ? "-" : line.Best.ToString())</td>
+                                <td class="@(line.Masterworks == 0 ? "zero" : "")">
+                                    @if (!line.Family)
+                                    {
+                                        <span class="fame-mw" aria-hidden="true">@(new string('✦', Math.Min(line.Masterworks, 5)))</span> @line.Masterworks
+                                    }
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -77,7 +170,10 @@
                             <b>@GalleryTrees.Title(game)</b>
                             <small>@GalleryTrees.Name(game.Scenario) · @FormatDate(game.Date) · @string.Join(", ", game.Players)</small>
                         </span>
-                        <span class="recent-winner">@(game.FamilyWinner ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Family) : game.Winner)</span>
+                        <span class="recent-winner">
+                            @(game.FamilyWinner ? GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Family) : game.Winner)
+                            <small>@RecentScoreLine(game)</small>
+                        </span>
                         <span class="recent-chevron" aria-hidden="true">›</span>
                     </button>
                 }
@@ -236,7 +332,21 @@
 {
     [CascadingParameter] private GlobalData GlobalData { get; set; } = null!;
 
-    private record TallyLine(string Name, string Sub, int[] PerScenario, int Wins, bool Family);
+    private record TallyLine(string Name, string Sub, int Wins, int Best, int Masterworks, bool Family);
+
+    // A row of the Hall of Fame board: per scenario a value and who holds it
+    private record FameRow(string Label, (string value, string who)[] Cells);
+
+    // Endings: the map; Achievements: records and achievements (Shared/GalleryAchievements.cs); Hall of Fame: wins,
+    // records per scenario and the recent games (was the Players tab until Nov 2026)
+    private enum GalleryTab { Endings, Achievements, HallOfFame }
+
+    private static string TabTag(GalleryTab tab) => tab switch
+    {
+        GalleryTab.Achievements => GlobalTags.Gallery_Achievements,
+        GalleryTab.HallOfFame   => GlobalTags.Gallery_HallOfFame,
+        _                       => GlobalTags.Gallery_Endings
+    };
 
     // One plaque of the endings map. Row / Span: its place in the map grid (one grid row per ending below it); Parent: the
     // index of the branch it hangs from (-1 for the first branch), for the lines drawn by js/gallery.js
@@ -244,7 +354,7 @@
                            int Parent, int Row, int Span, bool FirstOfLevel);
 
     private GalleryData? _Data;
-    private bool         _EndingsTab;
+    private GalleryTab   _Tab;
     private ScenarioId   _Scenario = ScenarioId.CostOfDisease;
     private bool         _ShowAll;
     private bool         _AllGames;     // Recent Games: all games instead of the last 10
@@ -268,34 +378,92 @@
 
     private static string FormatDate(DateTime date) => date.ToString("d MMM yyyy", CultureInfo.InvariantCulture);
 
+    private static int PlayerScore(GalleryGame game, string player) => game.Scores.GetValueOrDefault(player);
+
     private IEnumerable<TallyLine> Tally()
     {
         GalleryData    data  = _Data!;
         // Only players of recorded games: deleting a test game removes its test player from the table too
         HashSet<string> names = data.Games.SelectMany(game => game.Players).ToHashSet();
 
-        int[] PerScenario(Func<GalleryGame, bool> won) => GalleryTrees.Scenarios.Select(scenario => data.Games.Count(game => game.Scenario == scenario && won(game))).ToArray();
-
         List<TallyLine> lines = names.Select(name =>
                                      {
-                                         int[] perScenario = PerScenario(game => !game.FamilyWinner && game.Winner == name);
-                                         int   played      = data.Games.Count(game => game.Players.Contains(name));
+                                         GalleryGame[] played = data.Games.Where(game => game.Players.Contains(name)).ToArray();
                                          return new TallyLine(name,
-                                                              GlobalData.GetLocalizedUITag(GlobalTags.Gallery_GamesPlayed).FormatWithReplacement(0, played.ToString()),
-                                                              perScenario, perScenario.Sum(), false);
+                                                              GlobalData.GetLocalizedUITag(GlobalTags.Gallery_GamesPlayed).FormatWithReplacement(0, played.Length.ToString()),
+                                                              played.Count(game => !game.FamilyWinner && game.Winner == name),
+                                                              played.Select(game => PlayerScore(game, name)).DefaultIfEmpty(0).Max(),
+                                                              played.Count(game => game.Masterworks.Contains(name)),
+                                                              false);
                                      })
                                      .OrderByDescending(line => line.Wins)
+                                     .ThenByDescending(line => line.Best)
                                      .ThenBy(line => line.Name, StringComparer.CurrentCultureIgnoreCase)
                                      .ToList();
 
-        int[] family = PerScenario(game => game.FamilyWinner);
-        if (family.Sum() > 0)
+        int family = data.Games.Count(game => game.FamilyWinner);
+        if (family > 0)
         {
             lines.Add(new TallyLine(GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Family), GlobalData.GetLocalizedUITag(GlobalTags.Gallery_FamilyNote),
-                                    family, family.Sum(), true));
+                                    family, 0, 0, true));
         }
 
         return lines;
+    }
+
+    // Hall of Fame board: highest score, most wins, Masterworks and endings per scenario
+    private IEnumerable<FameRow> FameRows()
+    {
+        GalleryData data = _Data!;
+        const string none = "-";
+
+        string Names(IEnumerable<string> names, int max = 2)
+        {
+            string[] list = names.Distinct().ToArray();
+            return list.Length > max ? GlobalData.GetLocalizedUITag(GlobalTags.Fame_Players).FormatWithReplacement(0, list.Length.ToString()) : string.Join(", ", list);
+        }
+
+        (string, string) HighScore(ScenarioId scenario)
+        {
+            ScoreRecord? record = GalleryAchievements.Record(data.Games, scenario);
+            return record == null ? (none, "") : (record.Score.ToString(), record.Player);
+        }
+
+        (string, string) MostWins(ScenarioId scenario)
+        {
+            var wins = data.Games.Where(game => game.Scenario == scenario && !game.FamilyWinner && game.Winner != string.Empty)
+                           .GroupBy(game => game.Winner).Select(group => (name: group.Key, count: group.Count())).ToArray();
+            if (wins.Length == 0) return (none, "");
+            int most = wins.Max(win => win.count);
+            return (most.ToString(), Names(wins.Where(win => win.count == most).Select(win => win.name)));
+        }
+
+        (string, string) Masterworks(ScenarioId scenario)
+        {
+            string[] makers = data.Games.Where(game => game.Scenario == scenario).SelectMany(game => game.Masterworks.Where(game.Players.Contains)).ToArray();
+            return makers.Length == 0 ? (none, "") : (makers.Length.ToString(), Names(makers));
+        }
+
+        (string, string) Endings(ScenarioId scenario) => ($"{GalleryService.EndingsDone(data, scenario).Count}/8", "");
+
+        yield return new FameRow(GlobalData.GetLocalizedUITag(GlobalTags.Fame_HighestScore), GalleryTrees.Scenarios.Select(HighScore).ToArray());
+        yield return new FameRow(GlobalData.GetLocalizedUITag(GlobalTags.Fame_MostWins), GalleryTrees.Scenarios.Select(MostWins).ToArray());
+        yield return new FameRow(GlobalData.GetLocalizedUITag(GlobalTags.Fame_Masterworks), GalleryTrees.Scenarios.Select(Masterworks).ToArray());
+        yield return new FameRow(GlobalData.GetLocalizedUITag(GlobalTags.Gallery_Endings), GalleryTrees.Scenarios.Select(Endings).ToArray());
+    }
+
+    // Recent Games: the winning score, "record" when it is the scenario's highest score, and who completed a Masterwork
+    private string RecentScoreLine(GalleryGame game)
+    {
+        int top = game.Players.Select(player => PlayerScore(game, player)).DefaultIfEmpty(0).Max();
+        if (top == 0 && game.Masterworks.Length == 0) return string.Empty;
+
+        List<string> parts = [];
+        if (top > 0) parts.Add($"{top} {GlobalData.GetLocalizedUITag(GlobalTags.Ach_VP)}");
+        if (top > 0 && GalleryAchievements.Record(_Data!.Games, game.Scenario)?.Game.Id == game.Id) parts.Add(GlobalData.GetLocalizedUITag(GlobalTags.Fame_Record));
+        string[] masterworks = game.Masterworks.Where(game.Players.Contains).ToArray();
+        if (masterworks.Length > 0) parts.Add("✦ " + string.Join(", ", masterworks));
+        return string.Join(" · ", parts);
     }
 
     private IEnumerable<TreeRow> TreeRows()
@@ -361,7 +529,7 @@
     // Draws the lines between the plaques of the endings map (wide screens) after every render of the Endings tab
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (_Data == null || !_EndingsTab) return;
+        if (_Data == null || _Tab != GalleryTab.Endings) return;
 
         try
         {
@@ -379,10 +547,10 @@
         Nav.NavigateTo("");
     }
 
-    private void SelectTab(bool endings)
+    private void SelectTab(GalleryTab tab)
     {
         Audio.PlayClick();
-        _EndingsTab = endings;
+        _Tab = tab;
     }
 
     private void SelectScenario(ScenarioId scenario)

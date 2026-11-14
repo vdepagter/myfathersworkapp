@@ -88,3 +88,64 @@
     margin: 1.2rem auto 0;
     font-size: 1.15rem;
 }
+
+/* Score entry with a Masterwork tick per player: name, score, tick */
+.input-row.with-toggle {
+    grid-template-columns: 1fr 5.5rem auto;
+    gap: 0.7rem;
+}
+
+.input-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 44px;
+    font-size: 0.95rem;
+    font-weight: 400;
+    cursor: pointer;
+    user-select: none;
+}
+
+.input-toggle input {
+    appearance: none;
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    margin: 0;
+    display: grid;
+    place-items: center;
+    border: 2px solid #4a3522;
+    border-radius: 50%;
+    background: rgba(255, 248, 228, 0.55);
+    cursor: pointer;
+}
+
+.input-toggle input:checked {
+    border-color: #4a0f08;
+    background: radial-gradient(circle at 35% 30%, #d4553e, #8c2416 60%, #4a0f08);
+    box-shadow: 0 0 8px rgba(200, 60, 30, 0.45);
+}
+
+.input-toggle input:checked::after {
+    content: "✓";
+    color: #ffe2c8;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.input-toggle input:focus-visible {
+    outline: 2px solid #c9a35a;
+    outline-offset: 2px;
+}
+
+@media (max-width: 420px) {
+    .input-row.with-toggle {
+        grid-template-columns: 1fr 4.5rem;
+    }
+
+    .input-row.with-toggle .input-toggle {
+        grid-column: 1 / -1;
+        justify-self: end;
+        min-height: 36px;
+    }
+}

@@ -17,7 +17,9 @@ public class GameplayInputPopup(GlobalData globalData, string placeholder, PopUp
     public Action<string>     OnClose  { get; } = onClose;
 
     // Several fields on one page (final scores): a label per field, each value checked by Validate, OnCloseFields gets
-    // them in order and replaces OnClose
-    public string[]          Fields        { get; init; } = [];
-    public Action<string[]>? OnCloseFields { get; init; }
+    // them in order and replaces OnClose. FieldToggle: label of a tick box next to every field (the Masterwork at score
+    // entry); its values come second, in the same order (all false without a label)
+    public string[]                  Fields        { get; init; } = [];
+    public string                    FieldToggle   { get; init; } = string.Empty;
+    public Action<string[], bool[]>? OnCloseFields { get; init; }
 }

@@ -89,12 +89,12 @@ public static partial class ATimeOfWar
         const string       endSection = "End";
         GameplayHubSection end        = globalData.ActiveHub.AddSection(endSection);
         end.ReplaceShouldShow(() => years != Years.Late);
-        end.AddSpecialClickHere(endSection, MonarchReign_0);
+        end.AddSpecialClickHere(endSection, MonarchReign_0, endOfRound: true);
 
         const string       endLateSection = "EndLate";
         GameplayHubSection endLate        = globalData.ActiveHub.AddSection(endLateSection);
         endLate.ReplaceShouldShow(() => years == Years.Late);
-        endLate.AddSpecialClickHere(endLateSection, MonarchReign_0);
+        endLate.AddSpecialClickHere(endLateSection, MonarchReign_0, endOfRound: true);
     }
 
     private static void MonarchReign_0(GlobalData globalData)

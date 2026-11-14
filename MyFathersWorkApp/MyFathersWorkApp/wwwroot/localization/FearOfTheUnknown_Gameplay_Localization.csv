@@ -98,10 +98,8 @@ Scoring_Content;Each Estate Upgrade is worth 1VP.<br />Add any additional points
 Scoring_Content1;<b>Creature Masterwork</b><br />The player with <b>The Creature</b> Masterwork loses <b>5VP</b> if the experiment is not completed.<br /><br />
 Scoring_Content2;THE PLAYER WITH THE MOST POINTS IS THE WINNER OF THE GAME.
 Scoring_Content3;<link=0>Click to tabulate scores for posterity...</link>
-ScoreEntry_Content;Please enter the final score of every player.
+ScoreEntry_Content;Please enter the final score of every player, and tick who completed their Masterwork.
 ScoreEntry_Player;{{0=...|Oliver|James|Olivia|...}}
-TieBreaker1_Title;Tie Breaker
-TieBreaker1_Content;The highest score is tied. Did <b>{{0=...|Oliver|James|Olivia|...}}</b> complete their Masterwork?
 TieBreaker2_Content;More than one tied player completed their Masterwork. Please enter the number of <b>Estate Upgrades</b> owned by <b>{{0=...|Oliver|James|Olivia|...}}</b>. <i>(The player with the most Estate Upgrades wins. If still tied, the family shares the win.)</i>
 Rankings_Title;Rankings
 Rankings_Content1;<b>{{0=|1st|2nd|3rd|4th}}</b> - {{1=...|Oliver|James|Olivia|...}} ({{2=...|40|...}}VP)<br />
@@ -171,6 +169,8 @@ WarriorAgility_Content;Please enter the VP of your Biology Experiment - your War
 WarriorStrength_Content;Please enter the VP of your Engineering Experiment - your Warrior's Strength.
 WarriorLife_Content;Please enter the VP of your Chemistry and Occult Experiments combined - your Warrior's life.
 WarriorName_Content;Please enter the epic name of your Warrior.
+MainEvent_NoLife;<i>A Warrior with 0 Life cannot fight and is out before the battle begins: {{0=...|Iron Maiden|...}}.</i>
+BattleNoWinner_Content;<i>No Warrior has any Life, so none of them can fight. Nobody wins the battle and nobody gains the <b>9VP</b>.</i>
 BattleOver_0_Content;{{0=...|Oliver|James|Olivia|...}} gains <b>9VP</b>.
 //====== Gen3 - Acceptance ======;
 UnderstandingAndSupport_0_Content;Return the <icon=AngryMob_Icon> Marker to the box. Retrieve the <b>Rehabilitation token</b> <icon=S2_RehabilitationToken> and place it one space to the left of the Suspicion Marker. <i>The Suspicion Marker remains on space {{0=...|7|...}}.</i><br /><br />When your <icon=Creepy_Icon> Marker meets or exceeds the Rehabilitation token <icon=S2_RehabilitationToken>, you will be admitted to the Asylum Program.

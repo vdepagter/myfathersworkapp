@@ -15,7 +15,8 @@ public static class FinalScoring
         return int.TryParse(value, out int score) && score is >= 0 and <= 999;
     }
 
-    // All final scores on one page, a field per player (Unity ViewScoreEntry asked them one by one)
+    // All final scores on one page, a field per player (Unity ViewScoreEntry asked them one by one), with a Masterwork tick
+    // per player (fan addition, Nov 2026: the tie-breaker and the Endings Gallery achievements use it)
     private static void ScoreEntry(GlobalData globalData)
     {
         ScenarioVars vars    = globalData.ScenarioVars;
@@ -25,9 +26,11 @@ public static class FinalScoring
         globalData.ActiveInputPopup = new GameplayInputPopup(globalData, "0", PopUpButton.Confirm, IsValidScore, _ => { })
         {
             Fields = players.Select(player => globalData.GetScenarioLocalizedTag("ScoreEntry_Player").FormatWithReplacement(0, player)).ToArray(),
-            OnCloseFields = values =>
+            FieldToggle = globalData.GetLocalizedUITag(GlobalTags.Gameplay_Masterwork),
+            OnCloseFields = (values, masterworks) =>
             {
                 for (int i = 0; i < players.Length; i++) vars.Scores[players[i]] = int.Parse(values[i]);
+                vars.Masterworks = players.Where((_, i) => masterworks[i]).ToArray();
                 ScoreResult(globalData);
             }
         };
@@ -54,45 +57,10 @@ public static class FinalScoring
             return;
         }
 
+        // Ties go to the tied players who completed their Masterwork (ticked at score entry), then Estate Upgrades
         vars.TiedPlayers    = tied;
-        vars.TieMasterworks = [];
+        vars.TieMasterworks = tied.Where(vars.Masterworks.Contains).ToArray();
         vars.TieIndex       = 0;
-        TieBreaker1(globalData);
-    }
-
-    // Rulebook, End of the Game: most points wins. Ties go to the player who completed their Masterwork,
-    // then to the player with the most Estate Upgrades. If still tied, the family shares the win.
-    private static void DeclareWinner(string winner, GlobalData globalData)
-    {
-        globalData.ScenarioVars.Winner       = winner;
-        globalData.ScenarioVars.FamilyWinner = string.IsNullOrEmpty(winner);
-        Rankings(globalData);
-    }
-
-    private static void TieBreaker1(GlobalData globalData)
-    {
-        ScenarioVars vars   = globalData.ScenarioVars;
-        string       player = vars.TiedPlayers[vars.TieIndex];
-
-        globalData.SaveToUndo();
-        globalData.ActiveWindow = new GameplayWindow(globalData);
-        globalData.ActiveWindow.AddDefaultTitle();
-        globalData.ActiveWindow.AddDefaultContent(content => content.FormatWithReplacement(0, player));
-        globalData.ActiveWindow.AddYesNo(_ => TieBreaker1Answer(true, globalData), _ => TieBreaker1Answer(false, globalData));
-    }
-
-    private static void TieBreaker1Answer(bool completedMasterwork, GlobalData globalData)
-    {
-        ScenarioVars vars = globalData.ScenarioVars;
-
-        if (completedMasterwork) vars.TieMasterworks = [..vars.TieMasterworks, vars.TiedPlayers[vars.TieIndex]];
-        vars.TieIndex += 1;
-
-        if (vars.TieIndex < vars.TiedPlayers.Length)
-        {
-            TieBreaker1(globalData);
-            return;
-        }
 
         switch (vars.TieMasterworks.Length)
         {
@@ -108,12 +76,20 @@ public static class FinalScoring
             }
             default:
             {
-                vars.TieIndex    = 0;
                 vars.TieUpgrades = new int[vars.TieMasterworks.Length];
                 TieBreaker2(globalData);
                 break;
             }
         }
+    }
+
+    // Rulebook, End of the Game: most points wins. Ties go to the player who completed their Masterwork,
+    // then to the player with the most Estate Upgrades. If still tied, the family shares the win.
+    private static void DeclareWinner(string winner, GlobalData globalData)
+    {
+        globalData.ScenarioVars.Winner       = winner;
+        globalData.ScenarioVars.FamilyWinner = string.IsNullOrEmpty(winner);
+        Rankings(globalData);
     }
 
     private static void TieBreaker2(GlobalData globalData)

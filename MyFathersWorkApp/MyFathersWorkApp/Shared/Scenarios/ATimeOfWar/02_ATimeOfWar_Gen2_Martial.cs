@@ -68,12 +68,12 @@ public static partial class ATimeOfWar
         outpost.ReplaceShouldShow(() => years != Years.Late || vars.BuildingsDestroyed < 2);
         outpost.AddDefaultContent(outpostSection);
         outpost.AddSpecialClickHere(outpostSection, OutpostExplain);
-        if (years != Years.Late) outpost.AddSpecialClickHere(outpostEndSection, Martial_0, true);
+        if (years != Years.Late) outpost.AddSpecialClickHere(outpostEndSection, Martial_0, true, endOfRound: true);
 
         const string       endLateSection = "EndLate";
         GameplayHubSection endLate        = globalData.ActiveHub.AddSection(endLateSection);
         endLate.ReplaceShouldShow(() => years == Years.Late);
-        endLate.AddSpecialClickHere(endLateSection, Martial_0);
+        endLate.AddSpecialClickHere(endLateSection, Martial_0, endOfRound: true);
     }
 
     // Early / Middle: the events are played first and the End of Round only afterwards (port map 1.2)

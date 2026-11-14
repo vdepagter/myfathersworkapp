@@ -47,12 +47,12 @@ public static partial class ATimeOfWar
         final.ReplaceShouldShow(() => years == Years.Late);
         final.AddSpecialClickHere(finalSection, HowtoWar);
         final.AddDefaultContent(finalSection, content => content.FormatWithCondition(0, () => vars.Gas == ExtendedBool.False));
-        final.AddSpecialClickHere(finalEndSection, Peace_0, true);
+        final.AddSpecialClickHere(finalEndSection, Peace_0, true, endOfRound: true);
 
         const string       endSection = "End";
         GameplayHubSection end        = globalData.ActiveHub.AddSection(endSection);
         end.ReplaceShouldShow(() => years != Years.Late);
-        end.AddSpecialClickHere(endSection, Peace_0, false, click => click.FormatWithCondition(0, () => years == Years.Early));
+        end.AddSpecialClickHere(endSection, Peace_0, false, click => click.FormatWithCondition(0, () => years == Years.Early), endOfRound: true);
     }
 
     private static void Peace_0(GlobalData globalData)

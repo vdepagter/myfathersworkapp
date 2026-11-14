@@ -37,7 +37,7 @@ public static partial class ATimeOfWar
         GameplayHubSection pledge        = globalData.ActiveHub.AddSection(pledgeSection);
         pledge.ReplaceShouldShow(() => globalData.Years == Years.Early);
         pledge.AddDefaultContent(pledgeSection);
-        pledge.AddSpecialClickHere(pledgeSection, TakingSides_0, true);
+        pledge.AddSpecialClickHere(pledgeSection, TakingSides_0, true, endOfRound: true);
 
         const string       pledgeMiddleSection = "PledgeMiddle";
         GameplayHubSection pledgeMiddle        = globalData.ActiveHub.AddSection(pledgeMiddleSection);
@@ -66,12 +66,12 @@ public static partial class ATimeOfWar
         const string       endMiddleSection = "EndMiddle";
         GameplayHubSection endMiddle        = globalData.ActiveHub.AddSection(endMiddleSection);
         endMiddle.ReplaceShouldShow(() => globalData.Years == Years.Middle);
-        endMiddle.AddSpecialClickHere(endMiddleSection, TakingSides_0);
+        endMiddle.AddSpecialClickHere(endMiddleSection, TakingSides_0, endOfRound: true);
 
         const string       endLateSection = "EndLate";
         GameplayHubSection endLate        = globalData.ActiveHub.AddSection(endLateSection);
         endLate.ReplaceShouldShow(() => globalData.Years == Years.Late);
-        endLate.AddSpecialClickHere(endLateSection, TakingSides_0);
+        endLate.AddSpecialClickHere(endLateSection, TakingSides_0, endOfRound: true);
     }
 
     private static void TakingSides_0(GlobalData globalData)

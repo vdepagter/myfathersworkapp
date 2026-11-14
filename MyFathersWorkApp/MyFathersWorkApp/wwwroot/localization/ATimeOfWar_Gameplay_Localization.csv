@@ -151,10 +151,8 @@ Scoring_Content;Each Estate Upgrade is worth 1VP.<br />Add any additional points
 Scoring_Content1;<b>Time Machine:</b><br />If the player with the Time Machine Masterwork has not completed it, they must lose 5VP.<br /><br />
 Scoring_Content2;THE PLAYER WITH THE MOST POINTS IS THE WINNER OF THE GAME.
 Scoring_Content3;<link=0>Click to tabulate scores for posterity...</link>
-ScoreEntry_Content;Please enter the final score of every player.
+ScoreEntry_Content;Please enter the final score of every player, and tick who completed their Masterwork.
 ScoreEntry_Player;{{0=...|Oliver|James|Olivia|...}}
-TieBreaker1_Title;Tie Breaker
-TieBreaker1_Content;The highest score is tied. Did <b>{{0=...|Oliver|James|Olivia|...}}</b> complete their Masterwork?
 TieBreaker2_Content;More than one tied player completed their Masterwork. Please enter the number of <b>Estate Upgrades</b> owned by <b>{{0=...|Oliver|James|Olivia|...}}</b>. <i>(The player with the most Estate Upgrades wins. If still tied, the family shares the win.)</i>
 Rankings_Title;Rankings
 Rankings_Content1;<b>{{0=|1st|2nd|3rd|4th}}</b> - {{1=...|Oliver|James|Olivia|...}} ({{2=...|40|...}}VP)<br />

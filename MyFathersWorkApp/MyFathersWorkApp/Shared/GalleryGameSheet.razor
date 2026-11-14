@@ -59,6 +59,10 @@
                            checked="@(!_Family && _Winner == index)" @onchange="() => SetWinner(index)"/>
                     <span class="sheet-winner-text">@T(GlobalTags.Gallery_Winner)</span>
                 </label>
+                <label class="sheet-winner sheet-mw" title="@T(GlobalTags.Gameplay_Masterwork)">
+                    <input type="checkbox" aria-label="@($"{T(GlobalTags.Gameplay_Masterwork)} {label}")" @bind="player.Masterwork"/>
+                    <span aria-hidden="true">✦</span><span class="sheet-winner-text">@T(GlobalTags.Gameplay_Masterwork)</span>
+                </label>
                 <button class="sheet-remove" disabled="@(_Players.Count <= 1)" aria-label="@T(GlobalTags.Gallery_RemovePlayer).FormatWithReplacement(0, label)"
                         title="@T(GlobalTags.Gallery_RemovePlayer).FormatWithReplacement(0, label)" @onclick="() => RemovePlayer(index)">×</button>
             }
@@ -104,6 +108,7 @@
     {
         public string Name  { get; set; } = string.Empty;
         public int?   Score { get; set; }
+        public bool   Masterwork { get; set; }
     }
 
     private ScenarioId       _Scenario = ScenarioId.CostOfDisease;
@@ -134,7 +139,8 @@
         _Date     = Game.Date.Date;
         _Ending   = Game.Ending;
         _Family   = Game.FamilyWinner;
-        _Players  = Game.Players.Select(name => new PlayerLine { Name = name, Score = Game.Scores.TryGetValue(name, out int score) ? score : null }).ToList();
+        _Players  = Game.Players.Select(name => new PlayerLine { Name = name, Score = Game.Scores.TryGetValue(name, out int score) ? score : null,
+                                                            Masterwork = Game.Masterworks.Contains(name) }).ToList();
         _Winner   = Array.IndexOf(Game.Players, Game.Winner);
     }
 
@@ -196,7 +202,8 @@
             Players      = names,
             Scores       = _Players.Where(player => player.Score.HasValue).ToDictionary(player => player.Name.Trim(), player => player.Score!.Value),
             Winner       = !_Family && _Winner >= 0 && _Winner < names.Length ? names[_Winner] : string.Empty,
-            FamilyWinner = _Family
+            FamilyWinner = _Family,
+            Masterworks  = _Players.Where(player => player.Masterwork).Select(player => player.Name.Trim()).ToArray()
         };
 
         await Gallery.SaveGameAsync(record);
