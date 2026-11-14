@@ -30,7 +30,7 @@ public static class Narration
     }
 
     // Where a sentence ends (chunks.BOUNDARY)
-    private static readonly Regex Boundary = new(@"(?<!Dr)(?<!Mr)(?<!Mrs)(?<!St)[.!?][""'”’)]*(?:</[bi]>)*(?=\s|<br|$)|<br\s*/?>",
+    private static readonly Regex Boundary = new(@"(?<!Dr)(?<!Mr)(?<!Mrs)(?<!St)(?<!Jr)[.!?][""'”’)]*(?:</[bi]>)*(?=\s|<br|$)|<br\s*/?>",
                                                  RegexOptions.Compiled);
 
     private static readonly Dictionary<ScenarioId, Manifest> Manifests = new();

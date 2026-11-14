@@ -1,0 +1,24 @@
+# Windows (method names) that are not narrated: only their title would be (rules-only screens: votes, bids, outcomes,
+# the scoring page, and pass-the-device screens whose next window repeats the title with the story).
+Init
+Gen1CreepyTrackRes
+Gen1SanityTrackRes
+S5Special1A
+S5SpecialSetup1B
+FeverHeart_0
+FeverHeart2_0
+Gen1InsanityYes
+Gen1InsanityYes2
+HospitalDefine
+MethodUnicure
+Trigger3Experiments
+EvilHunter1Event2
+HunterConf2
+HunterConf3
+FrenzyBid2
+OptiontoKillQuestion
+ElectionBid
+ElectionBid2
+S5SpecialVote
+S5SpecialVote2
+Scoring

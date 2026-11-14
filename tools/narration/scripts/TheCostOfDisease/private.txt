@@ -1,0 +1,18 @@
+# Windows (method names) read by one player alone, besides the targets of AddDoNotOtherPlayersToSee /
+# AddOnceYouAreReady that chunks.py finds itself: the outcome of a secret choice or letter, before the device is passed
+# on. Their narration is never autoplayed (Play only).
+ExposeConfirmation
+ConcealConfirmation
+HubertusHunters
+HubertusWolves
+HubertusConfirmation
+HuntersConfirmation
+HunterJoin
+WolfJoin
+Gen1CreepyYes
+Gen1CreepyNo
+Gen1SanityYes
+Gen1SanityNo
+NewMasterType
+NewMasterResult
+PanaceaTooOld

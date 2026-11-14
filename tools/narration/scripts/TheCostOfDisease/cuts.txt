@@ -6,3 +6,19 @@
 UniEvent2UltimateDisease2_Title
 WolvesVote2_Title
 GoodFrenzyEvent2b_Title
+# Story first, then a question or instruction to the players (13 Nov 2026 preread):
+S5Special1_Content | This was especially pressing
+LycanthropicMessage_Content | Does any player
+LycanMessageGood_Content | Does any player
+HuntersChoice_Content | Once you have chosen
+HuntNight_Content10 | The <b>Strigoi</b> required
+HuntNight_Content11 | The <b>Moonlight Presence</b> required
+HuntNight_Content12 | The <b>Manticore</b> required
+HuntNight_Content13 | The <b>Golem</b> required
+HuntNight_Content14 | The <b>Shambling Wight</b> required
+HuntNight_Content15 | The <b>Pricolici</b> required
+HuntNight_Content16 | The <b>Troll</b> required
+HuntNight_Content17 | The <b>Priest</b> required
+InsanitySign_Content | Please choose the player
+NewMasterType_Content | My creation could be described
+NewMasterDiscipline_Content | My creation is from

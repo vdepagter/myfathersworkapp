@@ -356,9 +356,11 @@ STAND_INS = {
     "Iron Maiden": ("the warrior", "the warriors"),
     "Iron Will": ("the program", ""),                # program name typed in (Liberal)
     "Spam": ("meat", "meat"),                        # the new meat product typed in (A Time of War, Famine)
+    "Creation": ("the creation", "the creations"),   # a Masterwork name typed in (Cost of Disease, MWComplete)
+    "password": ("the password", ""),                # a Sealed Envelope password typed in (Cost of Disease)
 }
 # Previews that stand for the same kind of value in another scenario's CSV (A Time of War)
-STAND_IN_ALIASES = {"Anna": "Oliver", "Bob": "Oliver", "Duke Anna": "Oliver", "Testville": "Town"}
+STAND_IN_ALIASES = {"Anna": "Oliver", "Bob": "Oliver", "Duke Anna": "Oliver", "Testville": "Town", "London": "Town"}
 
 
 def stand_in_kind(placeholder):
@@ -522,7 +524,7 @@ def tag_chunks(scenario, tag, text):
 # by fnv64 of its key text: its CSV text with every placeholder replaced by the text it was formatted with, except
 # typed-in values (stand-ins), which stay as the placeholder. Shared/Narration.cs computes the same units and key texts.
 
-BOUNDARY = re.compile(r"(?<!\bDr)(?<!\bMr)(?<!\bMrs)(?<!\bSt)[.!?][\"'”’)]*(?:</[bi]>)*(?=\s|<br|$)|<br\s*/?>")
+BOUNDARY = re.compile(r"(?<!Dr)(?<!Mr)(?<!Mrs)(?<!St)(?<!Jr)[.!?][\"'”’)]*(?:</[bi]>)*(?=\s|<br|$)|<br\s*/?>")
 STAND_IN_MARK = re.compile("\x01([^\x02]*)\x02")
 
 
@@ -595,6 +597,8 @@ def placeholder_variants(scenario, raw):
     opts = placeholder_options(raw)
     if opts is None:
         return [(v, v) for v in replacement_values(scenario, raw)]
+    if raw[2:-2].split("=", 1)[1].startswith("|") and any(o.strip() for o in opts):
+        opts = [o for o in opts if o.strip()]  # " " is the None value of an enum: never shown
     return list(dict.fromkeys(v for o in opts for v in text_variants(scenario, o)))
 
 
@@ -613,10 +617,11 @@ def text_variants(scenario, text):
 def stand_in_speech(t):
     """Stand-in marks -> words, by the rules of stand_ins() applied to a whole sentence."""
     single = lambda k: STAND_INS[k][0]
-    start = r"(^|(?<!Dr)(?<!Mr)(?<!Mrs)(?<!St)[.!?:\"]\s+|\n\s*)"
+    start = r"(^|(?<!Dr)(?<!Mr)(?<!Mrs)(?<!St)(?<!Jr)[.!?:\"]\s+|\n\s*)"
     t = re.sub(r"\x01Oliver\x02((?:, \x01Oliver\x02)*,? and \x01Oliver\x02)",
                lambda m: "two of the cousins" if m.group(0).count("\x01") == 2 else "the cousins", t)
     t = re.sub(r"(\x01Oliver\x02) (?:II|III|IV)\b", r"\1", t)
+    t = re.sub(r"(\x01Oliver\x02) Jr\.(?=\s|$)", r"\1", t)  # "<name> Jr."
     t = re.sub(r"\bdear \x01Oliver\x02", "dear cousin", t)
     t = re.sub(r"\b(town|village) of \x01Town\x02", r"\1", t)
     t = re.sub(r"\x01Iron Will\x02\s*(?=Program)", "", t)

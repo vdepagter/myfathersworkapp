@@ -112,7 +112,7 @@ def diff(src, spoken):
     a, b = words(src.split("<b>CHOOSE")[0]), words(spoken)
     problems = []
     for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes():
-        lost = [w for w in a[i1:i2] if not (w.isdigit() or w in ("_", "dr", "ii", "iii", "iv"))]
+        lost = [w for w in a[i1:i2] if not (w.isdigit() or w in ("_", "dr", "ii", "iii", "iv", "jr", "'s"))]
         if op in ("delete", "replace") and lost:
             problems.append(f"{op}: '{' '.join(a[i1:i2])}' -> '{' '.join(b[j1:j2])}'")
     return problems

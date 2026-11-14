@@ -1,0 +1,18 @@
+# Sentence mode: 'Tag | find | replace' on the spoken text of the tag's units (after stand-ins). Checked by
+# elevenlabs.py check: words of the on-screen text must not get lost (a placeholder may).
+# "the study of <random player> III" reworded so no stand-in is needed (Valentijn, 2026-11-01)
+UniEvent2UltimateDisease_Content | illuminated the study of a cousin, the cousins assembled | illuminated the study of one of them, the cousins assembled
+# A typed-in name after "Dr." or in a journal heading is dropped or said as "the doctor" / "the family name"
+HospitalVisitReject_Content | Dr. a cousin's repeated | the doctor's repeated
+MethodUnicure_0_Content | Dr. a cousin was urged | The young doctor was urged
+Unicure1_Content | the name a cousin being | the family name being
+PanaceaUnleash_Title | Journal Entry - eighteen eighty-two a cousin | Journal Entry, eighteen eighty-two
+InfinityClick2_Title | Journal Entry a cousin | Journal Entry
+SymposiumSuccess_Content | when Dr. a cousin began | when the doctor began
+EvilMayor_Content | by the a cousin name | by the family name
+MWComplete_Title | Done - a cousin - Journal | Done - Journal
+SanityChoice_Title | Journal Entry, a cousin - September | Journal Entry - September
+HospitalVisitCheck2_0_Title | Report: Dr. a cousin | Report
+HospitalVisitCheck2_0_Content1 | Dr. a cousin seemed | The doctor seemed
+HospitalVisitCheck2_0_Content2 | Dr. a cousin requested | The doctor requested
+NewMasterDiscipline_Title | My Own - a cousin | My Own
