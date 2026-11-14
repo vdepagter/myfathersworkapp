@@ -126,7 +126,8 @@ public sealed class AudioService(IJSRuntime js)
         Invoke("mfwAudio.voicePlay", 0, clip, voice == NarrationVoice.Male ? "male" : "female", leadIn);
 
     // Plays the Oliver clips of a window (Narration.Clips) one after the other, without a lead-in
-    public int VoicePlayList(IReadOnlyList<string> urls) => Invoke("mfwAudio.voicePlayList", 0, urls);
+    public int VoicePlayList(IReadOnlyList<NarrationClip> clips) =>
+        Invoke("mfwAudio.voicePlayList", 0, clips.Select(clip => clip.Url).ToArray(), clips.Select(clip => clip.Text).ToArray());
 
     public void VoiceStop()   => InvokeVoid("mfwAudio.voiceStop");
     public void VoicePause()  => InvokeVoid("mfwAudio.voicePause");

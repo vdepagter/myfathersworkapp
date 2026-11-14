@@ -1,0 +1,19 @@
+# Sentence mode: 'Tag | find | replace' on the spoken text of the tag's units (after stand-ins). Checked by
+# elevenlabs.py check: words of the on-screen text must not get lost (a placeholder may).
+# Audio tags
+IntroConflict_Content | The spectre of war | [ominous] The spectre of war
+IntroConflict_Content | For all the folderol | [darkly amused] For all the folderol
+IntroConflict_Content | I was quickly able | [decisively] I was quickly able
+# The narrator's own typed-in name or regal title
+BattleTime_Content1 | the era of a cousin! | the era of the third generation!
+FinalEnding_Content1 | my name, a cousin, that | my name, the fourth of my line, that
+FinalEnding_Content3 | it was I, a cousin, editor | it was I, editor
+FinalEnding_Content5 | royal advisor, a cousin, right-hand | royal advisor, the fourth of my line, right-hand
+FinalEnding_Content6 | as I, a cousin, have | as I have
+FinalEnding_Content7 | the author, Dr. a cousin. | the author.
+FinalEnding_Content8 | take on the a cousin name | take on the family name
+FinalEnding_Content8 | Dr. a cousin | 
+Reign7c2_Title | Thank You, a cousin | Thank You.
+Reign7c2_Content | refer to me as a cousin. | refer to me as befits my new title.
+Reign7c2_Content | Ah, a cousin. | Ah!
+DuelResolution1b_Content2 | my opponent, a cousin | my opponent

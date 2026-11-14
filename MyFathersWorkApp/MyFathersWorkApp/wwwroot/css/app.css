@@ -112,3 +112,7 @@ code {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+/* The text Oliver is speaking (js/audio.js highlightClip; global, ::highlight cannot be scoped) */
+::highlight(mfw-narration) {
+    background-color: rgba(214, 168, 72, 0.45);
+}

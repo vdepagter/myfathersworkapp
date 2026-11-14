@@ -11,7 +11,7 @@ were against the move to establish a costly barracks in a region when the prevai
 # Ending 8: {{11}} inside {{10}}
 I can only hope those lost in the tragic biochemical release will find some solace in the revelation herein of the true source of the attack.
 While practical in theory, I recognize that the processing of enemy soldiers into consumable goods was an unfortunate practice that potentially renders this work unreadable to some.
-# Counts (buildings destroyed, experiments needed, ...)
+# Counts (buildings destroyed, defenses, experiments needed: at most 6 in a 4-player game)
 1
 2
 3
@@ -20,7 +20,3 @@ While practical in theory, I recognize that the processing of enemy soldiers int
 6
 7
 8
-9
-10
-11
-12

@@ -1,6 +1,0 @@
-# ATimeOfWar_Localization.csv IntroConflict_Content
-# The faction the town supports (random WarWinner) is a value clip: "Separatists" / "Unified Monarchists" (values.txt).
-## 0
-[ominous] The spectre of war haunted the small village. This ideological tension would erupt in loud displays and gatherings of the peasantry near the Town Hall. [darkly amused] For all the folderol, I began to cherish the moments when the eerie stillness of the evening was broken by anguished yells.
-
-The Separatists felt alienated by the aristocratic government, and wished to secede. Their brash tactics aimed to incite a democratic revolt among the proletariat. The Unified Monarchists feared the anarchic destabilization of the economy at such a key moment during industrialization. [decisively] I was quickly able to determine that the town supported the

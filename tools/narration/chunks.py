@@ -449,6 +449,8 @@ def stand_ins(parts, lo=0, hi=None):
 
 def tag_chunks(scenario, tag, text):
     """[(kind, raw, hash, spoken, free)] for the statics (kind "s") and placeholder values (kind "v")."""
+    if sentence_mode(scenario):
+        return sentence_chunks(scenario, tag, text)
     overrides = read_overrides(scenario, tag)
     parts = segment(text)
     lo, hi = span(scenario, tag, text)
@@ -503,6 +505,201 @@ def tag_chunks(scenario, tag, text):
         else:
             for o in options(raw):
                 out.append(("v", o, fnv64(o), normalize(o), False))
+            for o in placeholder_options(raw) or []:  # an option with nested placeholders: looked up by its key text
+                if "{{" in o and not (placeholder_spans(o) == [(0, len(o))] and stand_in_of(o)):  # not a lone name
+                    out += [("v", key, fnv64(key), stand_in_speech(normalize(speech)), False)
+                            for key, speech in text_variants(scenario, o)]
+    return out
+
+
+
+# ---- Sentence mode (settings.json "sentences": true) ----------------------------------------------------------------
+#
+# A sentence that contains placeholders is one clip per value combination, so a faction name or a number is spoken
+# inside its sentence instead of being joined from a separate clip. The text of a tag is cut into units: the static text
+# between such sentences ("s", named by fnv64 of its CSV text) and sentence groups ("g": from the sentence start before
+# a placeholder to the sentence end after it, several placeholders when no sentence ends between them). A group is named
+# by fnv64 of its key text: its CSV text with every placeholder replaced by the text it was formatted with, except
+# typed-in values (stand-ins), which stay as the placeholder. Shared/Narration.cs computes the same units and key texts.
+
+BOUNDARY = re.compile(r"(?<!\bDr)(?<!\bMr)(?<!\bMrs)(?<!\bSt)[.!?][\"'”’)]*(?:</[bi]>)*(?=\s|<br|$)|<br\s*/?>")
+STAND_IN_MARK = re.compile("\x01([^\x02]*)\x02")
+
+
+def sentence_mode(scenario):
+    return bool(settings(scenario).get("sentences"))
+
+
+def placeholder_options(raw):
+    """Top-level options of an index / condition placeholder, None for a replacement ({{0=...|X|...}}, {{0=X}})."""
+    body = raw[2:-2].split("=", 1)[1]
+    if body.startswith("?|"):
+        return (split_top(body[2:]) + [""])[:2]
+    if body.startswith("|"):
+        return split_top(body)[1:]
+    return None
+
+
+def stand_in_of(raw):
+    """Stand-in kind of a typed-in value placeholder ({{0=...|Anna|...}} or {{0=Town}}), or None."""
+    if placeholder_options(raw) is not None:
+        return None
+    body = raw[2:-2].split("=", 1)[1].split("|")
+    name = body[1] if len(body) > 1 and body[0] == "..." else body[0]
+    kind = STAND_IN_ALIASES.get(name, name)
+    return kind if kind in STAND_INS else None
+
+
+def ends_sentence(option):
+    t = re.sub(r"(?:<[^>]+>|\s)+$", "", option)
+    return t == "" or re.search(r"[.!?][\"'”’)]*$", t) is not None
+
+
+def value_families(scenario):
+    """values.txt as families: every @Tag expansion, and every block of plain lines between comments."""
+    path = os.path.join(SCRIPTS, scenario, "values.txt")
+    families, block = [], []
+    if not os.path.exists(path):
+        return families
+    story = load_csv(scenario)
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.rstrip("\r\n")
+            if not line.strip() or line.startswith("#"):
+                if block:
+                    families.append(block)
+                block = []
+            elif line.startswith("@"):
+                families.append(expand(story, line[1:]))
+            else:
+                block.append(line)
+    if block:
+        families.append(block)
+    return families
+
+
+def replacement_values(scenario, raw):
+    """Texts a replacement placeholder is formatted with: the values.txt families of its preview, or the preview."""
+    body = raw[2:-2].split("=", 1)[1].split("|")
+    preview = body[1] if len(body) > 1 and body[0] == "..." else body[0]
+    values = [v for fam in value_families(scenario) if preview in fam for v in fam]
+    return list(dict.fromkeys(values or [preview]))
+
+
+def placeholder_variants(scenario, raw):
+    """[(key piece, speech piece)] of a placeholder: the key piece goes into the group's key text (as Narration.cs builds
+    it), the speech piece into the spoken text (a stand-in as a \\x01kind\\x02 mark)."""
+    kind = stand_in_of(raw)
+    if kind:
+        return [(raw, f"\x01{kind}\x02")]
+    opts = placeholder_options(raw)
+    if opts is None:
+        return [(v, v) for v in replacement_values(scenario, raw)]
+    return list(dict.fromkeys(v for o in opts for v in text_variants(scenario, o)))
+
+
+def text_variants(scenario, text):
+    """[(key text, speech text)] of a text with (nested) placeholders: every value combination."""
+    results, last = [("", "")], 0
+    for start, end in placeholder_spans(text) + [(len(text), len(text))]:
+        static = text[last:start]
+        results = [(k + static, s + static) for k, s in results]
+        if start < len(text):
+            results = [(k + kp, s + sp) for k, s in results for kp, sp in placeholder_variants(scenario, text[start:end])]
+        last = end
+    return results
+
+
+def stand_in_speech(t):
+    """Stand-in marks -> words, by the rules of stand_ins() applied to a whole sentence."""
+    single = lambda k: STAND_INS[k][0]
+    start = r"(^|(?<!Dr)(?<!Mr)(?<!Mrs)(?<!St)[.!?:\"]\s+|\n\s*)"
+    t = re.sub(r"\x01Oliver\x02((?:, \x01Oliver\x02)*,? and \x01Oliver\x02)",
+               lambda m: "two of the cousins" if m.group(0).count("\x01") == 2 else "the cousins", t)
+    t = re.sub(r"(\x01Oliver\x02) (?:II|III|IV)\b", r"\1", t)
+    t = re.sub(r"\bdear \x01Oliver\x02", "dear cousin", t)
+    t = re.sub(r"\b(town|village) of \x01Town\x02", r"\1", t)
+    t = re.sub(r"\x01Iron Will\x02\s*(?=Program)", "", t)
+    t = re.sub(r"\b([Tt]he) \x01([^\x02]*)\x02", lambda m: m.group(1) + " " + (
+        "village" if m.group(2) == "Town" else re.sub(r"^the ", "", single(m.group(2)))), t)
+    t = re.sub(start + "\x01Oliver\x02(?!'s)", lambda m: m.group(1) + "One of the cousins", t)
+    t = re.sub(start + "\x01([^\x02]*)\x02", lambda m: m.group(1) + single(m.group(2))[0].upper() + single(m.group(2))[1:], t)
+    t = STAND_IN_MARK.sub(lambda m: single(m.group(1)), t)
+    return re.sub(r"(?<=\w) +(?=[.,;:!?])", "", t)
+
+
+def sentence_units(text):
+    """Units of a tag's text (before CUT): [("s" | "g", start, end)], offsets into the text."""
+    text = text.split(CUT)[0]
+    parts = segment(text)
+    offsets, pos = [], 0
+    for _, raw in parts:
+        offsets.append(pos)
+        pos += len(raw)
+    last = len(parts) - 1
+    units, group_start = [], None
+    for k in range(0, len(parts), 2):
+        s, base = parts[k][1], offsets[k]
+        ends = [m.end() for m in BOUNDARY.finditer(s)]
+        if k == 0:
+            h = 0
+        else:  # the part that ends the sentence of the placeholder before; none when every option ends a sentence
+            opts = placeholder_options(parts[k - 1][1])
+            closed = opts is not None and all(ends_sentence(o) for o in opts) and re.match(r"\s|<br", s) is not None
+            h = 0 if closed else (ends[0] if ends else len(s))
+        if group_start is not None and k < last and h == len(s) and not ends:
+            continue  # no sentence ends here: the group goes on past the next placeholder
+        t = len(s) if k == last else max([e for e in ends if e >= h] or [h])
+        if group_start is not None:
+            units.append(("g", group_start, base + h))
+        if t > h:
+            units.append(("s", base + h, base + t))
+        group_start = base + t if k < last else None
+    return units
+
+
+def read_replacements(scenario):
+    """scripts/<Scenario>/replace.txt: 'Tag | find | replace' lines, applied to the spoken text of the tag's units (audio
+    tags, a narrator's own name). Checked like overrides: words of the on-screen text must not get lost."""
+    path = os.path.join(SCRIPTS, scenario, "replace.txt")
+    result = {}
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            for line in f:
+                line = line.rstrip("\r\n")
+                if line.strip() and not line.startswith("#"):
+                    tag, find, repl = [x.strip() for x in line.split("|", 2)]
+                    result.setdefault(tag, []).append((find, repl))
+    return result
+
+
+def sentence_chunks(scenario, tag, text):
+    """[(kind, key text, hash, spoken, free)] of a tag in sentence mode ("s" statics, "g" one per group variant)."""
+    src = text.split(CUT)[0]
+    overrides = read_overrides(scenario, tag)
+    if overrides and placeholder_spans(src):
+        sys.exit(f"{scenario} {tag}: sentence mode - use replace.txt instead of an override file for a tag with placeholders")
+    lo, hi = span(scenario, tag, text)
+    repl = read_replacements(scenario).get(tag, [])
+
+    def speak(s):
+        for find, r in repl:
+            s = s.replace(find, r)
+        return s
+
+    out = []
+    for kind, a, b in sentence_units(text):
+        raw = src[a:b]
+        if kind == "s":
+            if 0 in overrides:
+                spoken = overrides[0][0]
+            else:
+                spoken = speak(normalize(src[max(a, lo):min(b, hi)])) if max(a, lo) < min(b, hi) else ""
+            out.append(("s", raw, fnv64(raw), spoken, False))
+        else:
+            for key, speech in text_variants(scenario, raw):
+                spoken = speak(stand_in_speech(normalize(speech))) if lo <= a < hi else ""
+                out.append(("g", key, fnv64(key), spoken, False))
     return out
 
 
@@ -596,7 +793,7 @@ def plan(scenario, include_private=True):
                 items.append((method, tag, method in private, tag_chunks(scenario, tag, story[tag])))
     items.sort(key=lambda x: x[2])  # private sections last
     values = os.path.join(SCRIPTS, scenario, "values.txt")
-    if os.path.exists(values):  # placeholder values the CSV previews do not show (NPC names, factions, ...)
+    if os.path.exists(values) and not sentence_mode(scenario):  # placeholder values the CSV previews do not show
         with open(values, encoding="utf-8") as f:
             vals = [l.rstrip("\r\n") for l in f if l.strip() and not l.startswith("#")]
         vals = [x for v in vals for x in (expand(story, v[1:]) if v.startswith("@") else [v])]
@@ -613,6 +810,8 @@ def sync_manifest(scenario):
     manifest["private"] = sorted(set(manifest["private"]) | {tag for m, tag, p, c in items if p})
     manifest["titles"] = settings(scenario)["titles"]
     manifest["headers"] = settings(scenario)["headers"]
+    manifest["sentences"] = sentence_mode(scenario)
+    manifest["standIns"] = sorted(set(STAND_INS) | set(STAND_IN_ALIASES))
     manifest["cuts"] = {}
     for method, tag, is_private, chunks in items:
         if tag in story and (marker := cut_marker(scenario, tag, story[tag])) is not None:
@@ -649,11 +848,45 @@ def check(scenario, tag):
     return problems
 
 
+def check_replacements(scenario):
+    """Word diff of every unit changed by replace.txt against its key text (sentence mode)."""
+    import elevenlabs
+    story, problems = load_csv(scenario), []
+    for tag, pairs in read_replacements(scenario).items():
+        if tag not in story:
+            problems.append(f"replace.txt: tag {tag} not in {scenario}_Localization.csv")
+            continue
+        chunks = tag_chunks(scenario, tag, story[tag])
+        plain_chunks = sentence_chunks_plain(scenario, tag, story[tag])
+        used = {find: False for find, _ in pairs}
+        for (kind, key, h, spoken, free), before in zip(chunks, plain_chunks):
+            for find in used:
+                used[find] |= find in before
+            if spoken != before:
+                problems += [f"{tag}: {p}" for p in elevenlabs.diff(key, spoken)]
+        problems += [f"{tag}: '{find}' not found" for find, u in used.items() if not u]
+    return problems
+
+
+def sentence_chunks_plain(scenario, tag, text):
+    """Spoken texts of sentence_chunks without the replacements."""
+    saved = read_replacements
+    try:
+        globals()["read_replacements"] = lambda sc: {}
+        return [c[3] for c in sentence_chunks(scenario, tag, text)]
+    finally:
+        globals()["read_replacements"] = saved
+
+
 def check_all():
     bad = 0
     for scenario in sorted(os.listdir(SCRIPTS)):
+        if os.path.isdir(os.path.join(SCRIPTS, scenario)) and sentence_mode(scenario):
+            problems = check_replacements(scenario)
+            bad += bool(problems)
+            print(f"{scenario}/replace.txt: " + ("ok" if not problems else "DRIFT\n  " + "\n  ".join(problems)))
         for name in sorted(os.listdir(os.path.join(SCRIPTS, scenario))):
-            if name.endswith(".txt") and name not in ("values.txt", "private.txt", "skip.txt", "cuts.txt"):
+            if name.endswith(".txt") and name not in ("values.txt", "private.txt", "skip.txt", "cuts.txt", "replace.txt"):
                 problems = check(scenario, name[:-4])
                 bad += bool(problems)
                 print(f"{scenario}/{name[:-4]}: " + ("ok" if not problems else "DRIFT\n  " + "\n  ".join(problems)))
@@ -698,7 +931,6 @@ def render(scenario, reserve=6000, limit=None, include_private=True, only=None, 
     for method, tag, is_private, chunks in plan(scenario, include_private):
         if only and tag not in only:
             continue
-        spoken_all = [c[3] for c in chunks if c[0] == "s"]
         for kind, raw, h, spoken, free in chunks:
             if not spoken:
                 continue
@@ -720,10 +952,10 @@ def render(scenario, reserve=6000, limit=None, include_private=True, only=None, 
                 done += len(text)
                 continue
             body = {"text": text, "model_id": model, "voice_settings": settings}
-            if kind == "s":
-                i = spoken_all.index(spoken)
-                before = " ".join(x for x in spoken_all[:i] if x)[-300:]
-                after = " ".join(x for x in spoken_all[i + 1:] if x)[:300]
+            if kind in ("s", "g"):  # the neighbouring statics (one variant of a group could mislead)
+                i = next(n for n, c in enumerate(chunks) if c[2] == h)
+                before = " ".join(c[3] for c in chunks[:i] if c[0] == "s" and c[3])[-300:]
+                after = " ".join(c[3] for c in chunks[i + 1:] if c[0] == "s" and c[3])[:300]
                 if before:
                     body["previous_text"] = before if tags else strip_tags(before)
                 if after:
@@ -772,7 +1004,7 @@ if __name__ == "__main__":
     elif len(a) == 3 and a[0] == "show":
         text, i = load_csv(a[1])[a[2]], 0
         for kind, raw, h, spoken, free in tag_chunks(a[1], a[2], text):
-            print(f"[{f'## {i}' if kind == 's' else 'value'} {h}{' free' if free else ''}] {raw[:80]!r}\n    -> {spoken!r}")
+            print(f"[{f'## {i}' if kind == 's' else 'group' if kind == 'g' else 'value'} {h}{' free' if free else ''}] {raw[:80]!r}\n    -> {spoken!r}")
             i += kind == "s"
     elif len(a) == 2 and a[0] == "sync":
         sync_manifest(a[1])

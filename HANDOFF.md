@@ -158,16 +158,19 @@ For the next scenarios: review the `_Title` texts with placeholders (Cost of Dis
 e.g. "Upon a Secret Meeting - Letter - <date>") before rendering; Cost of Disease is now ~157k characters sent
 (titles on, headers off), more than one month of quota.
 
-A Time of War (Scenario III), rendered 3 Nov 2026 (clone strength 0.5): every public window plus part of the private
-ones - 516 clips, 87 MB, 114k characters sent, ~49.4k billed; ~1.1k credits left until 16 Nov. **Still to render: 8.7k
-characters, all private** (`chunks.py plan ATimeOfWar` lists them): AcceptDuel1Revealed, AcceptDuel1b, DuelDecline1,
-DuelDenounce1 (content), BlameRevealed, Blame1b, Blame1c, MilitarytokenRevealed, MilitaryNo, MilitaryYes, OldManTokenRevealed,
-OldManNo, OldManYes, FigureontheTrackInRevealed, FigureontheTrackInb, MonuRevealed. Run `python tools/narration/chunks.py
-render ATimeOfWar` after the reset (only these are sent) and commit the clips + manifest.
+A Time of War (Scenario III): **fully narrated** (13-14 Nov 2026, new API key, Creator quota 131k from 13 Nov): 662
+clips, 108 MB. The 3 Nov render (public windows, part of the private ones) plus, on 13 Nov, sentence mode and the rest:
+66.6k characters sent (~30k billed); Fear of the Unknown got A Palace of Scraps and the nested either/or options
+(2.2k). ~100k credits left. The API key is the user environment variable `ELEVENLABS_API_KEY` (a running shell keeps
+the old value: read it with `[Environment]::GetEnvironmentVariable('ELEVENLABS_API_KEY','User')`).
+- Sentence mode (owner, 13 Nov: "record the sentences in whole"): every sentence with a value (faction, token, count,
+  either/or text, a typed-in name) is one clip per value combination; 298 superseded value / partial clips were removed.
+  `scripts/ATimeOfWar/replace.txt` holds the audio tags and the narrator's own name rewrites (former override files).
+- Highlight: the text of the clip being spoken is highlighted and scrolled into view (all scenarios, Oliver only).
 - Review done before rendering: `skip.txt` (36 rules-only windows: votes, bids, tallies, bonuses, warnings, Outpost,
   University note), `cuts.txt` (rules questions after story text), `private.txt` (outcomes of the secret Town Hall talks,
   sabotage, messengers, duels, Military token, Blame, Old Man, figure), `values.txt` (factions, tokens, buildings, duel
-  fields, counts 1-12, ending 5 / 8 nested sentences). Titles on, headers off (the bold headers are pass-the-device
+  fields, counts 1-8, ending 5 / 8 nested sentences). Titles on, headers off (the bold headers are pass-the-device
   instructions; the Reign decree headings like "Drifters" and the Warning/Paradox intro headings are therefore not narrated).
 - Typed-in values: ATOW previews `Anna` / `Bob` / `Duke Anna` / `Testville` are stand-in aliases ("a cousin", "the
   village"), the new meat product `Spam` -> "meat". Overrides where the narrator names themself: BattleTime ("the era of
@@ -183,9 +186,10 @@ render ATimeOfWar` after the reset (only these are sent) and commit the clips + 
   worth a listen: TimeEnd1_Title, WhoopsUtopianb_Title, WarningEvent_Content, Stasis_Content, FinalEnding_Content4.
 
 Next steps:
-1. A Time of War: the 8.7k private characters after 16 Nov (above). The Cost of Disease (~126k characters sent, ~57k
-   billed) needs more than one month of quota; it needs a `values.txt`, `private.txt` and `skip.txt` like the others
-   (review `chunks.py plan TheCostOfDisease --list` and the chunk starts), private sections last.
+1. The Cost of Disease (~167k characters sent in value-clip mode; sentence mode adds variants) needs more than one month
+   of quota; it needs a `values.txt`, `private.txt`, `skip.txt` and `settings.json` (`"sentences": true` recommended)
+   like A Time of War (review `chunks.py plan TheCostOfDisease --list` and the chunk starts), private sections last.
+   Fear of the Unknown could move to sentence mode too (re-renders the sentences around values).
 2. Listen-through at the table: joins around skipped names, the stand-ins, the private Play button. Size: the three
    scenarios will be ~300 MB of clips; 64 kbps mono would cut that by a third if Pages/LFS limits bite.
 3. Play-test the other scenarios with Oliver once rendered: console lines "Oliver narration: no clips for <Tag>" show

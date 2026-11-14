@@ -4,7 +4,6 @@ SecondHex
 RumorMill
 CitizenshipInspection
 SmugglingConsequences
-PalaceOfScraps
 WarriorEntry
 AgilityConfirmed
 StrengthConfirmed

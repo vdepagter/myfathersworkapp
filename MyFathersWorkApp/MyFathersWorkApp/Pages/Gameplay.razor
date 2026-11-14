@@ -662,10 +662,10 @@
     private bool HasNarration(GameplayWindow window) => window.VoiceOver != null || OliverClips(window) != null;
 
     private GameplayWindow? _OliverWindow; // the window _OliverClips was computed for
-    private List<string>?   _OliverClips;
+    private List<NarrationClip>? _OliverClips;
 
     // Oliver clips of the window when the Oliver voice is chosen, else null (then the original recording, if any, plays)
-    private List<string>? OliverClips(GameplayWindow window)
+    private List<NarrationClip>? OliverClips(GameplayWindow window)
     {
         if (Audio.Narration != NarrationVoice.Oliver) return null;
         if (!ReferenceEquals(window, _OliverWindow))

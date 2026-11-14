@@ -307,6 +307,7 @@
         list:     [],       // every clip of the request, in order (progress bar and seeking)
         index:    0,        // position of clip in list
         lengths:  [],       // duration in seconds per clip of list, NaN until its metadata is loaded
+        texts:    [],       // on-screen text (CSV markup) per clip of list, highlighted while it plays (Oliver only)
         timer:    0,        // lead-in timer
         paused:   false,    // paused by the pause menu
         listener: null      // DotNetObjectReference (Pages/Gameplay.razor), method OnVoiceState(id, state)
@@ -358,7 +359,9 @@
         voice.list   = [];
         voice.index  = 0;
         voice.lengths = [];
+        voice.texts  = [];
         voice.paused = false;
+        clearHighlight();
         try {
             voiceElement.pause();
             voiceElement.removeAttribute("src");
@@ -393,12 +396,14 @@
         return voice.id;
     }
 
-    // urls: the clips of one Oliver narration, played in order without a lead-in. Returns the request id, or 0.
-    function voicePlayList(urls) {
+    // urls: the clips of one Oliver narration, played in order without a lead-in; texts: what each clip says on screen.
+    // Returns the request id, or 0.
+    function voicePlayList(urls, texts) {
         endVoice();
         if (!unlocked || !urls || !urls.length) return 0;
 
         voice.id    = ++voice.counter;
+        voice.texts = texts || [];
         voice.clip  = urls[0];
         voice.queue = urls.slice(1);
         setVoiceList(urls);
@@ -533,6 +538,7 @@
 
     voiceElement.addEventListener("playing", () => {
         if (voice.phase !== "clip") return;
+        highlightClip(voice.texts[voice.index]);
         if (voice.queue.length) {
             preload         = new Audio();
             preload.preload = "auto";
@@ -553,6 +559,104 @@
         // Missing or unsupported file (not the src removal in endVoice)
         if (voice.phase && voiceElement.getAttribute("src")) endVoice();
     });
+
+    // ---- Highlight of the text the narration is speaking, kept in view ---------------------------------------------
+    // The clip's text is looked up in the story window (title and parchment) after the previous clip's text and
+    // marked with the CSS Custom Highlight API (::highlight(mfw-narration), css/app.css), so the page DOM stays as
+    // Blazor rendered it. Browsers without the API only scroll. The page scrolls when the text leaves the view, but
+    // not for a few seconds after the reader scrolled themself.
+
+    const HIGHLIGHT = "mfw-narration";
+    let highlightFrom = 0;          // search position in the window text for the next clip
+    let highlightWindow = null;     // the story window element the search position belongs to
+    let readerScrolled = 0;         // time of the reader's last own scroll
+    for (const type of ["wheel", "touchmove"]) window.addEventListener(type, () => { readerScrolled = Date.now(); }, { passive: true });
+
+    function clearHighlight() {
+        try { if (window.CSS && CSS.highlights) CSS.highlights.delete(HIGHLIGHT); } catch (e) { /* ignore */ }
+    }
+
+    function plainText(markup) {
+        const div = document.createElement("div");
+        div.innerHTML = String(markup).replace(/<br\s*\/?>/gi, " ").replace(/<(icon|sprite)=[^>]*>/gi, " ");
+        return div.textContent.replace(/\s+/g, " ").trim();
+    }
+
+    // Text nodes of the story window with their place in the whitespace-collapsed text
+    function windowText(root) {
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+            acceptNode: node => node.parentElement && node.parentElement.closest(".narration-pill, .story-link, button")
+                ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+        });
+        let text = "";
+        const map = [];  // per character of text: [node, offset]
+        let space = true;
+        for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+            const value = node.nodeValue;
+            for (let i = 0; i < value.length; i++) {
+                if (/\s/.test(value[i])) {
+                    if (space) continue;
+                    space = true;
+                    text += " ";
+                } else {
+                    space = false;
+                    text += value[i];
+                }
+                map.push([node, i]);
+            }
+        }
+        return { text, map };
+    }
+
+    function highlightClip(markup) {
+        clearHighlight();
+        const root = document.querySelector(".gameplay-container");
+        if (!root || !markup) return;
+        const target = plainText(markup);
+        if (!target) return;
+        if (root !== highlightWindow || voice.index === 0) {
+            highlightWindow = root;
+            highlightFrom = 0;
+        }
+
+        const { text, map } = windowText(root);
+        let at = text.indexOf(target, highlightFrom);
+        if (at < 0) at = text.indexOf(target);
+        let length = target.length;
+        if (at < 0) {  // the shown text differs a little (a name written differently): match its start
+            const head = target.slice(0, 40);
+            at = text.indexOf(head, highlightFrom);
+            if (at < 0) return;
+            length = Math.min(target.length, text.length - at);
+        }
+        highlightFrom = at + length;
+
+        const range = document.createRange();
+        const start = map[at], end = map[Math.min(at + length, map.length) - 1];
+        range.setStart(start[0], start[1]);
+        range.setEnd(end[0], end[1] + 1);
+        try { if (window.CSS && CSS.highlights && window.Highlight) CSS.highlights.set(HIGHLIGHT, new Highlight(range)); } catch (e) { /* ignore */ }
+        keepInView(range);
+    }
+
+    function keepInView(range) {
+        if (Date.now() - readerScrolled < 4000) return;
+        const rect = range.getBoundingClientRect();
+        if (!rect || (rect.top === 0 && rect.bottom === 0)) return;
+        const top = 90, bottom = window.innerHeight - 60;   // below the header buttons, above the bottom edge
+        if (rect.top >= top && rect.top <= bottom - Math.min(rect.height, (bottom - top) / 2)) return;
+        const scroller = scrollParent(range.startContainer.parentElement);
+        const delta = rect.top - (top + (bottom - top) * 0.2);
+        scroller.scrollBy({ top: delta, behavior: "smooth" });
+    }
+
+    function scrollParent(element) {
+        for (let e = element; e && e !== document.body; e = e.parentElement) {
+            const overflow = getComputedStyle(e).overflowY;
+            if ((overflow === "auto" || overflow === "scroll") && e.scrollHeight > e.clientHeight) return e;
+        }
+        return window;
+    }
 
     function voicePause() {
         if (!voice.phase || voice.paused) return;
