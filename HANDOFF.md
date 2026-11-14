@@ -158,6 +158,15 @@ For the next scenarios: review the `_Title` texts with placeholders (Cost of Dis
 e.g. "Upon a Secret Meeting - Letter - <date>") before rendering; Cost of Disease is now ~157k characters sent
 (titles on, headers off), more than one month of quota.
 
+The Cost of Disease (Scenario I): **fully narrated** in sentence mode (14 Nov 2026): 864 clips, ~136 MB, 182k
+characters sent (~79k credits); ~21k credits left until the next reset. Preread: `cuts.txt` (questions and rules after
+story text, the Hunt "required a sacrifice" lines), `skip.txt` (22 title-only or rules windows), `private.txt` (15
+outcome screens of secret choices and letters), `replace.txt` ("Dr. <name>" -> "the doctor", the narrator's own name in
+journal headings). New stand-ins: the Masterwork name ("the creation"), the Sealed Envelope password, `London` (village
+preview); "<name> Jr." drops the "Jr.". Replacement placeholders with several previews ({{0=...|2|3|4|...}}) get all of
+them as values; an enum's " " option is kept (some titles use it, e.g. DetEffectRandom). Walks: Gen I-III no gaps; the
+headless browser crashed when it clicked "start the vote" repeatedly (also with narration off: not narration).
+
 A Time of War (Scenario III): **fully narrated** (13-14 Nov 2026, new API key, Creator quota 131k from 13 Nov): 662
 clips, 108 MB. The 3 Nov render (public windows, part of the private ones) plus, on 13 Nov, sentence mode and the rest:
 66.6k characters sent (~30k billed); Fear of the Unknown got A Palace of Scraps and the nested either/or options
@@ -186,10 +195,9 @@ the old value: read it with `[Environment]::GetEnvironmentVariable('ELEVENLABS_A
   worth a listen: TimeEnd1_Title, WhoopsUtopianb_Title, WarningEvent_Content, Stasis_Content, FinalEnding_Content4.
 
 Next steps:
-1. The Cost of Disease (~167k characters sent in value-clip mode; sentence mode adds variants) needs more than one month
-   of quota; it needs a `values.txt`, `private.txt`, `skip.txt` and `settings.json` (`"sentences": true` recommended)
-   like A Time of War (review `chunks.py plan TheCostOfDisease --list` and the chunk starts), private sections last.
-   Fear of the Unknown could move to sentence mode too (re-renders the sentences around values).
+1. Fear of the Unknown in sentence mode (owner, 14 Nov: after Cost of Disease): `settings.json` `"sentences": true`,
+   convert its override files to `replace.txt`, keep titles off / headers on; re-renders the sentences around values
+   (~22k credits left until the next reset, check `chunks.py plan FearOfTheUnknown` after switching).
 2. Listen-through at the table: joins around skipped names, the stand-ins, the private Play button. Size: the three
    scenarios will be ~300 MB of clips; 64 kbps mono would cut that by a third if Pages/LFS limits bite.
 3. Play-test the other scenarios with Oliver once rendered: console lines "Oliver narration: no clips for <Tag>" show

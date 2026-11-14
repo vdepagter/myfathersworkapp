@@ -581,11 +581,12 @@ def value_families(scenario):
 
 
 def replacement_values(scenario, raw):
-    """Texts a replacement placeholder is formatted with: the values.txt families of its preview, or the preview."""
+    """Texts a replacement placeholder is formatted with: its previews ({{0=...|2|3|4|...}}) and their values.txt
+    families."""
     body = raw[2:-2].split("=", 1)[1].split("|")
-    preview = body[1] if len(body) > 1 and body[0] == "..." else body[0]
-    values = [v for fam in value_families(scenario) if preview in fam for v in fam]
-    return list(dict.fromkeys(values or [preview]))
+    previews = [p for p in body[1:] if p != "..."] if len(body) > 1 and body[0] == "..." else [body[0]]
+    values = previews + [v for fam in value_families(scenario) if any(p in fam for p in previews) for v in fam]
+    return list(dict.fromkeys(values))
 
 
 def placeholder_variants(scenario, raw):
@@ -597,8 +598,6 @@ def placeholder_variants(scenario, raw):
     opts = placeholder_options(raw)
     if opts is None:
         return [(v, v) for v in replacement_values(scenario, raw)]
-    if raw[2:-2].split("=", 1)[1].startswith("|") and any(o.strip() for o in opts):
-        opts = [o for o in opts if o.strip()]  # " " is the None value of an enum: never shown
     return list(dict.fromkeys(v for o in opts for v in text_variants(scenario, o)))
 
 

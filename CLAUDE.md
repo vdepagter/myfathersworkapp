@@ -260,12 +260,12 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
   scenarios: titles on, headers off. Fear of the Unknown was rendered with titles off and headers on and keeps that
   (changing it would re-render ~41k characters). Cuts and settings go into the manifest (`chunks.py sync`), and
   `Narration.cs` applies the same header rule and cut markers.
-- Sentence mode (`settings.json` `"sentences": true`, A Time of War since 13 Nov 2026): a sentence with placeholders is
+- Sentence mode (`settings.json` `"sentences": true`, A Time of War since 13 Nov 2026, The Cost of Disease since 14 Nov): a sentence with placeholders is
   one clip per value combination (no joins around a value); its clip is named by the sentence's "key text" (CSV text,
   values filled in, typed-in names kept as the placeholder). Values come from the options or, for replacements, the
   `values.txt` family of the preview (a `@Tag` line or a block of plain lines). Overrides become `replace.txt` lines
   (`Tag | find | replace`, drift-checked). `Narration.SentenceUnits` must match `chunks.sentence_units`. Fear of the
-  Unknown and Cost of Disease still use value clips; an either/or option with a nested name is one clip there too.
+  Unknown still uses value clips; an either/or option with a nested name is one clip there too.
 - While Oliver speaks, `js/audio.js` highlights the clip's text (CSS Custom Highlight API, `::highlight(mfw-narration)`
   in `css/app.css`) and scrolls it into view (not for 4 s after the reader scrolled). The text comes from
   `NarrationClip.Text`.
