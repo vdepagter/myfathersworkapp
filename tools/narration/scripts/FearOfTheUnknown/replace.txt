@@ -1,0 +1,24 @@
+# Sentence mode: 'Tag | find | replace' on the spoken text of the tag's units (after stand-ins). Checked by
+# elevenlabs.py check: words of the on-screen text must not get lost (a placeholder may).
+# The header names a random player ("Journal Entry - <name> - 14 July, 1831"): read as a generic header without the name.
+SharedMania_Content | my demeanor - and it certainly is to my spouse - but I | my demeanor... and it certainly is to my spouse... [wondering] but I
+SharedMania_Content | soil and make | soil, and make
+SharedMania_Content | seed ready | seed, ready
+SharedMania_Content | This collective mania - it | [intense] This collective mania... it
+SharedMania_Content | However, I will | [with growing conviction] However, I will
+SharedMania_Content | focused and determined! | focused... and determined!
+# Ending 8 header: the author is Vlad or a player (typed-in name)
+FinalEnding_Content8 | Letter from Vlad III Dracula - the twelfth | A letter from Vlad III Dracula. The twelfth
+FinalEnding_Content8 | Letter from a cousin - the twelfth | A letter from a cousin. The twelfth
+# "patient <name>" -> "the patient"
+AssessmentResults_Content1 | patient a cousin | the patient
+AssessmentResults_Content2 | Patient a cousin | The patient
+AssessmentResults_Content3 | patient a cousin | the patient
+AssessmentResults_Content4 | patient a cousin | the patient
+AssessmentResults_Content5 | patient a cousin | the patient
+AssessmentResults_Content6 | Patient a cousin | The patient
+CountAssessmentResults_Content3 | the to-be-released a cousin | the to-be-released patient
+AssessmentResults_Content3 | care to a cousin. | care to the patient.
+# A typed-in name set off by commas
+CursedRemoval_Content3 | Poor, a cousin, spat | Our poor cousin spat
+FinalEnding_Content4 | crossed, a cousin, the Fourth! | crossed the Fourth of my line!

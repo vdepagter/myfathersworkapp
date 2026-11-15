@@ -131,7 +131,8 @@ public static class Narration
 
         if (first >= 0) runs[first] = (spans.Count - first, rendered[position..], position);
 
-        if (manifest.Sentences) return AddSentences(manifest, folder, source, rendered, spans, runs, chunks, from, to, urls);
+        if (manifest.Sentences)
+            return AddSentences(manifest, folder, source, rendered, spans, runs, chunks, from, to, manifest.Headers && !tag.EndsWith("_Title") ? HeaderEnd(source) : 0, urls);
 
         foreach ((int start, string chunk, _) in chunks)
         {
@@ -152,7 +153,7 @@ public static class Narration
     // Sentence mode: static text between sentences and whole sentences with their values (chunks.sentence_chunks)
     private static bool AddSentences(Manifest manifest, string folder, string source, string rendered, List<(int Index, int Length)> spans,
                                      Dictionary<int, (int Count, string Value, int Rendered)> runs,
-                                     List<(int Start, string Chunk, int Rendered)> chunks, int from, int to, List<NarrationClip> urls)
+                                     List<(int Start, string Chunk, int Rendered)> chunks, int from, int to, int header, List<NarrationClip> urls)
     {
         // Where a source offset at a unit edge lies in the rendered text (for the text shown with the clip)
         int Map(int position)
@@ -173,8 +174,9 @@ public static class Narration
             if (group && !(start >= from && start < to)) continue; // not played: its values need no clip (choices, rules)
 
             string key;
-            if (!group)
+            if (!group || (start < header && spans.Any(span => span.Index >= start && span.Index < end && Options(source.Substring(span.Index, span.Length)) == null)))
             {
+                // static text, or a header line group with a name / date / number: named by its CSV text (chunks.header_group)
                 key = source[start..end];
             }
             else

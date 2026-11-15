@@ -1,4 +1,5 @@
 {
  "titles": false,
- "headers": true
+ "headers": true,
+ "sentences": true
 }

@@ -449,13 +449,14 @@ def stand_ins(parts, lo=0, hi=None):
     return result
 
 
-def tag_chunks(scenario, tag, text):
-    """[(kind, raw, hash, spoken, free)] for the statics (kind "s") and placeholder values (kind "v")."""
-    if sentence_mode(scenario):
+def tag_chunks(scenario, tag, text, value_mode=False):
+    """[(kind, raw, hash, spoken, free)] for the statics (kind "s") and placeholder values (kind "v"). value_mode: the
+    split without sentences, overrides and cuts (a header line in sentence mode, header_speech)."""
+    if sentence_mode(scenario) and not value_mode:
         return sentence_chunks(scenario, tag, text)
-    overrides = read_overrides(scenario, tag)
+    overrides = {} if value_mode else read_overrides(scenario, tag)
     parts = segment(text)
-    lo, hi = span(scenario, tag, text)
+    lo, hi = (0, len(text)) if value_mode else span(scenario, tag, text)
     extra = stand_ins(parts, lo, hi)
     out, i, dollars, off = [], 0, False, 0
     for n, (kind, raw) in enumerate(parts):
@@ -700,11 +701,30 @@ def sentence_chunks(scenario, tag, text):
             else:
                 spoken = speak(normalize(src[max(a, lo):min(b, hi)])) if max(a, lo) < min(b, hi) else ""
             out.append(("s", raw, fnv64(raw), spoken, False))
+        elif settings(scenario)["headers"] and not tag.endswith("_Title") and header_group(src, a, raw):
+            spoken = speak(header_speech(scenario, tag, raw)) if lo <= a < hi else ""
+            out.append(("g", raw, fnv64(raw), spoken, False))
         else:
             for key, speech in text_variants(scenario, raw):
                 spoken = speak(stand_in_speech(normalize(speech))) if lo <= a < hi else ""
                 out.append(("g", key, fnv64(key), spoken, False))
     return out
+
+
+def header_group(src, start, raw):
+    """A sentence group in the leading header line with a replacement value (a player's name, a random date, a case
+    number): one clip named by its CSV text, spoken as a generic header ("Letter from <name> - <date>" -> "A letter.")
+    with the values left out, as before sentence mode. Only where headers are narrated, not in titles. Narration.cs: the
+    same rule in AddSentences."""
+    return start < header_end(src) and any(placeholder_options(raw[a:b]) is None for a, b in placeholder_spans(raw))
+
+
+def header_speech(scenario, tag, raw):
+    text = raw if header_end(raw) else raw + "</b>"  # a group that ends inside the header line (". Romania.</i></b>")
+    spoken = " ".join(sp for kind, _, _, sp, _ in tag_chunks(scenario, tag, text, True) if kind == "s" and sp)
+    spoken = re.sub(r"\s*[-:]$", ".", spoken)  # a date or number left out at the end ("A cousin's Journal -")
+    spoken = spoken.replace(" - ", ". ")  # "A cousin's Journal - <date>" -> "A cousin's Journal. The ..."
+    return re.sub(r"([.!?:] )([a-z])", lambda m: m.group(1) + m.group(2).upper(), spoken)
 
 
 # ---- Windows of a scenario (static parse of the scenario code) ----------------------------------------------------
