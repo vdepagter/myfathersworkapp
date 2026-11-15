@@ -734,6 +734,7 @@ def header_speech(scenario, tag, raw):
 # ---- Windows of a scenario (static parse of the scenario code) ----------------------------------------------------
 
 METHOD = re.compile(r"^\s*(?:private|public) static void (\w+)\([^)]*GlobalData globalData\)", re.M)
+HELPER = re.compile(r"^\s*(?:private|public) static void (\w+)\(GlobalData globalData,[^)]*\[CallerMemberName\] string caller[^)]*\)", re.M)
 
 
 def windows(scenario):
@@ -747,9 +748,15 @@ def windows(scenario):
             continue
         with open(os.path.join(folder, name), encoding="utf-8-sig") as f:
             code = f.read()
-        heads = list(METHOD.finditer(code))
+        heads = sorted(list(METHOD.finditer(code)) + list(HELPER.finditer(code)), key=lambda h: h.start())
+        bodies = [code[m.end():heads[k + 1].start() if k + 1 < len(heads) else len(code)] for k, m in enumerate(heads)]
+        helpers = {m.group(1): bodies[k] for k, m in enumerate(heads) if m.re is HELPER}
         for k, m in enumerate(heads):
-            body = code[m.end():heads[k + 1].start() if k + 1 < len(heads) else len(code)]
+            if m.re is HELPER:
+                continue
+            body = bodies[k]
+            # a shared body that builds the window with the caller's tags ([CallerMemberName] string caller)
+            body += "".join(helpers[h] for h in helpers if re.search(r"\b" + h + r"\(globalData", body))
             for p in re.finditer(r"AddDoNotOtherPlayersToSee\([^;]*?,\s*(\w+)\)|AddOnceYouAreReady\((\w+)\)", body):
                 private.add(p.group(1) or p.group(2))
             if "new GameplayWindow" not in body:

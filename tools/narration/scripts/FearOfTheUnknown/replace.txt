@@ -22,3 +22,5 @@ AssessmentResults_Content3 | care to a cousin. | care to the patient.
 # A typed-in name set off by commas
 CursedRemoval_Content3 | Poor, a cousin, spat | Our poor cousin spat
 FinalEnding_Content4 | crossed, a cousin, the Fourth! | crossed the Fourth of my line!
+# Smuggling letter header without an author
+SmugglingConsequences_Content | Letter from name illegible. | A letter from someone whose name is illegible.

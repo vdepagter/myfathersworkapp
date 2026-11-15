@@ -197,6 +197,18 @@ the old value: read it with `[Environment]::GetEnvironmentVariable('ELEVENLABS_A
 - "Ends mid-sound" warnings (44) are nearly all chunks that end before a value or stand-in (mid-sentence by design);
   worth a listen: TimeEnd1_Title, WhoopsUtopianb_Title, WarningEvent_Content, Stasis_Content, FinalEnding_Content4.
 
+Fear of the Unknown (Scenario II) in sentence mode (15 Nov 2026): 689 clips, ~97k characters sent (~43k credits: the
+old account's last ~20k plus the new, upgraded account; API key file from the owner, the user variable still holds the
+old key). 353 superseded value / partial clips removed; `pauses.json` regenerated. Titles off, headers on as before:
+a header line with a typed-in name or random date is one clip named by its CSV text and spoken as the generic header
+("A letter. <date>"), `chunks.header_group` / `Narration.AddSentences`. The `SharedMania` override became
+`replace.txt` lines; new replace lines for "patient <name>" -> "the patient", ending 4 ("the Fourth of my line"),
+ending 8's header, "Poor <name>". `Milestone_Content` (name prompt) is cut. `chunks.windows` now follows a shared
+body with `[CallerMemberName] string caller` (`Gen1Fate`): `Gen1FateVictim` was missing from the plan. Values: "0"
+added to the numbers (a total of $0 in donations). Muted headless walks of every Gen II/III hub found no window without
+clips except crafted-save artifacts (an unset hex location) and the skipped input screens. "Ends mid-sound" warnings
+to listen to: headers without a full stop (e.g. FinalEnding_Content1/3/4/6), SurprisingRebuke, UnwelcomeReturnRevealed.
+
 Read-aloud audit (15 Nov 2026, branch `claude/project-thread-vapt9q`): every window with a hand-over / "read aloud" /
 "All players may again view the Storybook" line was checked against its clips.
 - **To render after the quota reset (4 Dec 2026; 93 credits were left):**
@@ -204,20 +216,16 @@ Read-aloud audit (15 Nov 2026, branch `claude/project-thread-vapt9q`): every win
     `chunks.auto_cut` took its bold heading (after two leading line breaks) for a rules line. Fixed in `auto_cut` (no
     other tag changes); `replace.txt` drops the narrator's name from the heading. 973 characters (~440 credits):
     `chunks.py render TheCostOfDisease`, then `pauses.py TheCostOfDisease`, then play-test `ChooseScience`.
-  - Fear of the Unknown `RumorMill`, `CitizenshipInspection`, `SmugglingConsequences`, `MainEvent` left `skip.txt`
-    (public story before a pick-a-player list; `RumorMill_Content3` and `MainEvent_Content1` are cut). ~2,800
-    characters in value mode, more in sentence mode: render them on top of the sentence-mode switch (next step 1).
+  - (Done 15 Nov with the sentence-mode render below: Fear of the Unknown `RumorMill`, `CitizenshipInspection`,
+    `SmugglingConsequences`, `MainEvent`.)
 - Done without credits: A Time of War `Amessyes2`, `DuelDenounce1`, `FigureontheTrackInb` left `private.txt` and the
   manifest's private list (their text opens the screen to everyone), so they autoplay (browser-checked: Firm Rebuke).
 - The manifest's private list is a union in `sync_manifest`: a window taken off `private.txt` must also be removed
   from `<Scenario>.json` by hand.
 
 Next steps:
-1. Fear of the Unknown in sentence mode (owner, 14 Nov: after Cost of Disease): `settings.json` `"sentences": true`,
-   convert its override files to `replace.txt`, keep titles off / headers on; re-renders the sentences around values
-   (~22k credits left until the next reset, check `chunks.py plan FearOfTheUnknown` after switching).
-2. Listen-through at the table: joins around skipped names, the stand-ins, the private Play button. Size: the three
+1. Listen-through at the table: joins around skipped names, the stand-ins, the private Play button. Size: the three
    scenarios will be ~300 MB of clips; 64 kbps mono would cut that by a third if Pages/LFS limits bite.
-3. Play-test the other scenarios with Oliver once rendered: console lines "Oliver narration: no clips for <Tag>" show
+2. Play-test the other scenarios with Oliver once rendered: console lines "Oliver narration: no clips for <Tag>" show
    windows whose text code changes beyond placeholders (not narrated); fix the split or accept.
 4. User play-test of Fear of the Unknown with Oliver first; the other scenarios start in a new session.

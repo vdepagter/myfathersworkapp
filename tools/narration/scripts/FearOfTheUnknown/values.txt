@@ -6,6 +6,7 @@
 @HexLocation1
 @HexLocation2
 @CreatureRequest
+0
 1
 2
 3
