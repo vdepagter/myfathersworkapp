@@ -56,6 +56,19 @@
                         <option value="@NarrationVoice.Off">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationOff)</option>
                     </select>
                 </div>
+
+                @if (Audio.Narration == NarrationVoice.Oliver)
+                {
+                    <div class="mfw-setting-row">
+                        <label class="mfw-setting-label" for="pause-scroll">@GlobalData!.GetLocalizedUITag(GlobalTags.Audio_Scroll)</label>
+                        <select id="pause-scroll" value="@Audio.NarrationScroll" @onchange="e => Audio.SetNarrationScroll(e.Value?.ToString() ?? string.Empty)">
+                            @foreach (string mode in AudioService.ScrollModes)
+                            {
+                                <option value="@mode">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_Scroll + "_" + mode)</option>
+                            }
+                        </select>
+                    </div>
+                }
             </div>
 
             <VolumeSliders GlobalData="GlobalData!"/>
