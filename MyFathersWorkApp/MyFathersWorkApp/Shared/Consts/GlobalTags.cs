@@ -86,6 +86,7 @@ public static class GlobalTags
     public const string Audio_NarrationOff    = "Audio_NarrationOff";
     public const string Audio_NarrationOliver = "Audio_NarrationOliver";
     public const string Audio_Scroll          = "Audio_Scroll";       // how the page follows Oliver; options Audio_Scroll_<mode>
+    public const string Audio_Highlight       = "Audio_Highlight";    // how the spoken sentence is marked; options Audio_Highlight_<style>
     public const string Narration_Narrated    = "Narration_Narrated";
     public const string Narration_Available   = "Narration_Available";
     public const string Narration_Starting    = "Narration_Starting";

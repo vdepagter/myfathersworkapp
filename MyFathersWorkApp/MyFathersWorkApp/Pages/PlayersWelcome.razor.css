@@ -1,31 +1,48 @@
-/* Unity PlayerIntro: the welcome on the torn paper strip (MFWpaper, images/ui/paper-strip.webp) */
+/* Unity PlayerIntro: the welcome on the torn paper strip (MFWpaper, images/ui/paper-strip.webp, 1200 x 559).
+   The image has a transparent margin with the shadow around the paper (about 75px, more under the torn bottom edge),
+   so the paper is drawn as a border image: the edges keep their size and only the middle grows with the text, which
+   then never reaches the edge of the paper, however narrow the window or large the font. */
 .welcome-paper {
+    container-type: inline-size; /* 100cqw = the width of the strip */
+    width: min(100%, 42rem);
+    filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.75));
+}
+
+.welcome-strip {
+    --edge: min(8vw, 3.3rem); /* browsers without container units */
+    --edge-bottom: calc(var(--edge) * 130 / 95);
     display: grid;
     place-items: center;
-    width: min(100%, 42rem);
     aspect-ratio: 1200 / 559; /* grows taller when the text needs it */
-    padding: 2rem 4rem;
-    background: url(images/ui/paper-strip.webp) center / 100% 100% no-repeat;
+    border-style: solid;
+    border-color: transparent;
+    border-width: var(--edge) var(--edge) var(--edge-bottom);
+    border-image: url(images/ui/paper-strip.webp) 95 95 130 fill / var(--edge) var(--edge) var(--edge-bottom) stretch;
+    padding: 0.5rem 1.1rem 0.3rem;
     color: #17100a;
     font-family: var(--mfw-font-text);
     font-size: 1.3rem;
     line-height: 1.45;
     letter-spacing: 0.02em;
     -webkit-text-stroke: 0.35px currentColor;
-    filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.75));
 }
 
-.welcome-paper p { margin: 0; }
+@supports (width: 1cqw) {
+    .welcome-strip { --edge: calc(100cqw * 95 / 1200); }
+}
+
+.welcome-strip p { margin: 0; }
 
 .welcome-paper ::deep .player-name {
     font-family: var(--mfw-font-heading);
-    font-size: 2.6rem;
+    font-size: clamp(1.9rem, 9cqw, 2.6rem);
     font-weight: 400;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
     -webkit-text-stroke: 0;
     color: #5a1a0e;
 }
 
 @media (max-width: 480px) {
-    /* the strip grows with the text, clear of the torn edges */
-    .welcome-paper { aspect-ratio: auto; min-height: 13rem; padding: 2.2rem 1.6rem 2.8rem; font-size: 1.05rem; }
+    .welcome-strip { padding-inline: 0.5rem; font-size: 1.05rem; }
 }
