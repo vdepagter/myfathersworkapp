@@ -273,9 +273,9 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
   clip can hold a whole page: `js/narration-sync.js` splits its text (`NarrationClip.Text`, the narrated part only) into
   sentences and matches the sentence ends with the clip's pauses (`<Scenario>.pauses.json`). A clip without pauses, or
   whose length differs from the list (rendered again, `pauses.py` not run), is timed by text length, which can be
-  seconds off in a long clip. How the page follows is a trial setting in the pause menu (15 Nov 2026, `audio.scroll`:
-  `start` glide when a sentence starts, `lead` 0.8 s before the previous one ends, `flow` continuous, `page` a screen
-  at a time); the owner picks one, then the others can go. The glide is animated in `audio.js` (the browser's smooth
+  seconds off in a long clip. How the page follows is the "Scrolling" setting in the pause menu (`audio.scroll`; owner's
+  choice, 15 Nov 2026): `lead` (default) glides 0.8 s before a sentence ends so the next one is in place, `flow`
+  moves continuously, `page` a screen at a time. The glide is animated in `audio.js` (the browser's smooth
   scroll jumps with reduced motion). No word-level timing: that needs real timestamps (ElevenLabs with-timestamps at render
   time, or a local aligner).
 

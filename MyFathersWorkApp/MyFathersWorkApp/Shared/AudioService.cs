@@ -108,7 +108,7 @@ public sealed class AudioService(IJSRuntime js)
     }
 
     // How the page follows the Oliver narration (audio.js SCROLL_MODES, stored per device)
-    public static readonly string[] ScrollModes = ["start", "lead", "flow", "page"];
+    public static readonly string[] ScrollModes = ["lead", "flow", "page"];
     public string NarrationScroll               => Invoke("mfwAudio.getScroll", ScrollModes[0]);
     public void   SetNarrationScroll(string mode) => InvokeVoid("mfwAudio.setScroll", mode);
 

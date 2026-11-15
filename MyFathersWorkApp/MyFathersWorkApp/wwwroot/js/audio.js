@@ -742,12 +742,13 @@
     }
 
     // ---- How the page follows the narration (pause menu, stored per device) ---------------------------------------
-    //   start - glides when a sentence starts outside the comfortable part of the view
-    //   lead  - the same glide, but just before the sentence before it ends
+    //   lead  - glides just before a sentence ends when the next one is outside the comfortable part of the view, so
+    //           it is in place when it lights up (the default, owner's pick 15 Nov 2026; a sentence that still starts
+    //           out of place, e.g. after a seek, glides when it starts)
     //   flow  - moves all the time, so the words being spoken stay at one height (like a teleprompter)
     //   page  - only when the sentence would leave the view, then by nearly a whole screen
     const KEY_SCROLL    = "audio.scroll";
-    const SCROLL_MODES  = ["start", "lead", "flow", "page"];
+    const SCROLL_MODES  = ["lead", "flow", "page"];
     const LEAD_SECONDS  = 0.8;
     let scrollMode = SCROLL_MODES[0];
     try {
@@ -901,7 +902,7 @@
         },
         isUnlocked: () => unlocked,
         // Voice-over
-        // How the page follows the Oliver narration: "start" | "lead" | "flow" | "page"
+        // How the page follows the Oliver narration: "lead" | "flow" | "page"
         getScroll: () => scrollMode,
         setScroll: mode => {
             if (SCROLL_MODES.indexOf(mode) < 0) return;

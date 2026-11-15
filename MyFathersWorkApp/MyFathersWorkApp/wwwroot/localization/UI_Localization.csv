@@ -69,7 +69,6 @@ Audio_NarrationMale;Male voice
 Audio_NarrationOliver;Oliver
 Audio_NarrationOff;Off
 Audio_Scroll;Scrolling
-Audio_Scroll_start;When a sentence starts
 Audio_Scroll_lead;Just before the next sentence
 Audio_Scroll_flow;All the time, slowly
 Audio_Scroll_page;A screen at a time
