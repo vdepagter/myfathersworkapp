@@ -152,6 +152,13 @@ Gameplay_EndOfGeneration_Title;End of Generation
 Gameplay_ClickAtTheEndOfGeneration;Click here at the end of the Generation to continue...
 Gameplay_EndRoundButton;End of Round
 Gameplay_EndGenerationButton;End of Generation
+Gameplay_ContinueButton;Continue
+Gameplay_BidResolvedButton;Bid Resolved
+Gameplay_VoteResolvedButton;Vote Resolved
+Gameplay_RevealButton;Reveal
+Gameplay_RevealLead;Once you are ready, reveal your secret conversation.
+Gameplay_FinalScoringButton;Final Scoring
+Gameplay_TabulateScoresButton;Tabulate Scores
 Gameplay_DrJr;Dr. {{0=...|Oliver|James|Olivia|...}} Jr.
 Gameplay_Dr;Dr. {{0=...|Oliver|James|Olivia|...}}
 Gameplay_Third;{{0=...|Oliver|James|Olivia|...}} III

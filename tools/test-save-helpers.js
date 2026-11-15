@@ -78,7 +78,9 @@ window.mkSaveATOW = (hub, opts = {}) => {
 };
 
 window.clickText = t => {
-  const els = [...document.querySelectorAll("a,button")].filter(e => e.innerText.includes(t));
+  // Case-insensitive: buttons show their label in capitals. A button that replaces a link ("Click here to continue...",
+  // "Once you are ready, ...") keeps the link text in data-link, so the old link texts still find it.
+  const els = [...document.querySelectorAll("a,button")].filter(e => (e.innerText + " | " + (e.dataset.link || "")).toLowerCase().includes(t.toLowerCase()));
   if (!els.length) return "NOTFOUND: " + t;
   els[els.length - 1].click();
   return "clicked";
