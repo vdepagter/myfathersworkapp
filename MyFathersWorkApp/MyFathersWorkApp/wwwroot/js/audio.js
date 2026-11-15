@@ -572,7 +572,9 @@
     // reader scrolled themself.
 
     const HIGHLIGHT = "mfw-narration";
-    const places = { id: 0, root: null, ends: [] };   // where each clip's text ended in the window text (current request)
+    // Where each clip's text ended in the window text (current request), and the first and last character found
+    // ([node, offset]; all clips once `complete`)
+    const places = { id: 0, root: null, ends: [], first: null, last: null, at: 0, to: 0, complete: false };
     let reading = null;             // the clip on screen: { index, parts, ranges, times, exact, shown, led }
     let readerScrolled = 0;         // time of the reader's last own scroll
     for (const type of ["wheel", "touchmove"]) window.addEventListener(type, () => { readerScrolled = Date.now(); }, { passive: true });
@@ -603,7 +605,7 @@
 
     function clearHighlight() {
         reading = null;
-        try { if (window.CSS && CSS.highlights) CSS.highlights.delete(HIGHLIGHT); } catch (e) { /* ignore */ }
+        clearMarks();
     }
 
     function plainText(markup) {
@@ -660,6 +662,8 @@
             places.id   = voice.id;
             places.root = root;
             places.ends = [];
+            places.first = places.last = null;
+            places.complete = false;
         }
         let from = 0;   // after the nearest earlier clip that was found
         for (let i = index - 1; i >= 0 && !from; i--) from = places.ends[i] || 0;
@@ -675,6 +679,8 @@
             length = Math.min(target.length, text.length - at);
         }
         places.ends[index] = at + length;
+        if (!places.first || at < places.at) { places.first = map[at]; places.at = at; }
+        if (!places.last || at + length > places.to) { places.last = map[Math.min(at + length, map.length) - 1]; places.to = at + length; }
 
         const parts  = mfwNarrationSync.sentences(markup, plainText);
         const ranges = [];
@@ -721,8 +727,10 @@
         const range = reading.ranges[shown];
         if (shown !== reading.shown) {
             reading.shown = shown;
-            try { if (window.CSS && CSS.highlights && window.Highlight) CSS.highlights.set(HIGHLIGHT, new Highlight(range)); } catch (e) { /* ignore */ }
+            markSentence(range);
             if (scrollMode !== "flow") keepInView(range);
+        } else if (lines.length) {
+            placeLines(range);   // the layout may have moved (text size, a turned phone)
         }
         if (!timed) return;
 
@@ -741,13 +749,123 @@
         }
     }
 
+    // ---- How the spoken sentence is marked (pause menu, stored per device) -----------------------------------------
+    //   gold      - a gold backlight behind the text (::highlight)
+    //   ember     - the text itself glows like embers
+    //   shimmer   - the text turns gold and a glint passes over it
+    //   underline - a line under the text
+    //   dim       - the rest of the narrated text fades, the sentence keeps its ink (::highlight)
+    //   off       - no mark (the page still follows the narration)
+    // ember, shimmer and underline are bars laid over the lines of the sentence (children of <body>, css/app.css
+    // .mfw-reading-line), so the page DOM stays as Blazor rendered it. The ember and shimmer bars only colour what is
+    // darker than they are (mix-blend-mode: lighten): the ink, not the parchment. They are parchment only: on the
+    // title (light text on the dark scene) they would show as a block.
+    const KEY_MARK       = "audio.highlight";
+    const MARKS          = ["gold", "ember", "shimmer", "underline", "dim", "off"];
+    const HIGHLIGHT_REST = "mfw-narration-rest";
+    let markStyle = MARKS[0];
+    try {
+        const stored = localStorage.getItem(KEY_MARK);
+        if (MARKS.indexOf(stored) >= 0) markStyle = stored;
+    } catch (e) { /* default */ }
+    let lines = [];       // the bars on the page
+    let linesKey = "";    // where they are, to leave them alone while nothing moved
+
+    function setHighlight(name, ranges) {
+        try { if (ranges.length && window.CSS && CSS.highlights && window.Highlight) CSS.highlights.set(name, new Highlight(...ranges)); } catch (e) { /* ignore */ }
+    }
+
+    function clearMarks() {
+        try {
+            if (window.CSS && CSS.highlights) {
+                CSS.highlights.delete(HIGHLIGHT);
+                CSS.highlights.delete(HIGHLIGHT_REST);
+            }
+        } catch (e) { /* ignore */ }
+        for (const line of lines) line.remove();
+        lines = [];
+        linesKey = "";
+    }
+
+    function markSentence(range) {
+        clearMarks();
+        const box = range.startContainer.parentElement && range.startContainer.parentElement.closest(".parchment-box");
+        if (markStyle === "gold") setHighlight(HIGHLIGHT, [range]);
+        else if (markStyle === "dim") setHighlight(HIGHLIGHT_REST, restOf(range, box));
+        else if (markStyle === "underline" || (box && markStyle !== "off")) placeLines(range);
+    }
+
+    // The narrated text of the sentence's parchment before and after the sentence
+    function restOf(range, box) {
+        if (!box) return [];
+        if (!places.complete) {
+            for (let i = 0; i < voice.texts.length; i++) locateClip(i);
+            places.complete = true;
+        }
+        const result = [];
+        if (!places.first || !places.last) return result;
+        try {
+            const before = document.createRange(), after = document.createRange();
+            if (box.contains(places.first[0])) before.setStart(places.first[0], places.first[1]); else before.setStart(box, 0);
+            before.setEnd(range.startContainer, range.startOffset);
+            after.setStart(range.endContainer, range.endOffset);
+            if (box.contains(places.last[0])) after.setEnd(places.last[0], places.last[1] + 1); else after.setEnd(box, box.childNodes.length);
+            if (!before.collapsed) result.push(before);
+            if (!after.collapsed) result.push(after);
+        } catch (e) { /* ignore */ }
+        return result;
+    }
+
+    // One bar per line of the sentence, in page coordinates
+    function placeLines(range) {
+        const rows = [];
+        for (const rect of range.getClientRects()) {
+            if (rect.width < 1 || rect.height < 1) continue;
+            const middle = (rect.top + rect.bottom) / 2;
+            const row = rows.find(r => Math.abs((r.top + r.bottom) / 2 - middle) < Math.min(r.bottom - r.top, rect.height) / 2);
+            if (row) {
+                row.left   = Math.min(row.left, rect.left);
+                row.right  = Math.max(row.right, rect.right);
+                row.top    = Math.min(row.top, rect.top);
+                row.bottom = Math.max(row.bottom, rect.bottom);
+            } else {
+                rows.push({ left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom });
+            }
+        }
+        const x = window.scrollX, y = window.scrollY;
+        const boxes = rows.map(r => [Math.round(r.left + x) - 2, Math.round(r.top + y), Math.round(r.right - r.left) + 4, Math.round(r.bottom - r.top)]);
+        const key = markStyle + boxes.join(";");
+        if (key === linesKey) return;
+        for (const line of lines) line.remove();
+        linesKey = key;
+        lines = boxes.map(box => {
+            const bar = document.createElement("div");
+            bar.className    = "mfw-reading-line mfw-reading-" + markStyle;
+            bar.style.left   = box[0] + "px";
+            bar.style.top    = box[1] + "px";
+            bar.style.width  = box[2] + "px";
+            bar.style.height = box[3] + "px";
+            document.body.appendChild(bar);
+            return bar;
+        });
+    }
+
+    // Where a scroller is and how far it can go. Asking for a place outside that range is not harmless everywhere:
+    // near the end of a narration the app kept asking for a scroll past the bottom of the page, and Firefox on Android
+    // then drew a black bar over the header buttons, sometimes flickering.
+    function scrollRoom(scroller) {
+        const element = scroller === window ? (document.scrollingElement || document.documentElement) : scroller;
+        return { top: element.scrollTop, max: Math.max(0, element.scrollHeight - element.clientHeight) };
+    }
+
     // ---- How the page follows the narration (pause menu, stored per device) ---------------------------------------
-    //   start - glides when a sentence starts outside the comfortable part of the view
-    //   lead  - the same glide, but just before the sentence before it ends
+    //   lead  - glides just before a sentence ends when the next one is outside the comfortable part of the view, so
+    //           it is in place when it lights up (the default, owner's pick 15 Nov 2026; a sentence that still starts
+    //           out of place, e.g. after a seek, glides when it starts)
     //   flow  - moves all the time, so the words being spoken stay at one height (like a teleprompter)
     //   page  - only when the sentence would leave the view, then by nearly a whole screen
     const KEY_SCROLL    = "audio.scroll";
-    const SCROLL_MODES  = ["start", "lead", "flow", "page"];
+    const SCROLL_MODES  = ["lead", "flow", "page"];
     const LEAD_SECONDS  = 0.8;
     let scrollMode = SCROLL_MODES[0];
     try {
@@ -788,8 +906,10 @@
         if (Math.abs(off) < 1) return;
         const step = Math.abs(off) > 400 ? off * 0.2 : off * 0.06;   // far away (a seek): catch up faster
         const scroller = scrollParent(range.startContainer.parentElement);
-        const from = scroller === window ? window.scrollY : scroller.scrollTop;
-        scroller.scrollTo({ top: from + step, behavior: "instant" });
+        const room = scrollRoom(scroller);
+        const to   = Math.min(room.max, Math.max(0, room.top + step));
+        if (Math.abs(to - room.top) < 0.5) return;
+        scroller.scrollTo({ top: to, behavior: "instant" });
     }
 
     // Scrolls by delta pixels in a short glide. Animated here: the browser's own smooth scroll jumps when the device
@@ -797,8 +917,10 @@
     let glide = 0, glideUntil = 0;
     function glideBy(scroller, delta) {
         cancelAnimationFrame(glide);
-        const page    = scroller === window;
-        const from    = page ? window.scrollY : scroller.scrollTop;
+        const room = scrollRoom(scroller);
+        const from = room.top;
+        delta = Math.min(room.max, Math.max(0, from + delta)) - from;   // never past the top or the bottom of the page
+        if (Math.abs(delta) < 4) return;
         const time    = Math.min(900, Math.max(450, Math.abs(delta) * 2));   // milliseconds
         const started = performance.now(), asked = Date.now();
         glideUntil = started + time;
@@ -901,13 +1023,25 @@
         },
         isUnlocked: () => unlocked,
         // Voice-over
-        // How the page follows the Oliver narration: "start" | "lead" | "flow" | "page"
+        // How the page follows the Oliver narration: "lead" | "flow" | "page"
         getScroll: () => scrollMode,
         setScroll: mode => {
             if (SCROLL_MODES.indexOf(mode) < 0) return;
             scrollMode = mode;
             try {
                 localStorage.setItem(KEY_SCROLL, mode);
+            } catch (e) {
+                // Storage unavailable: keep the setting for this session only
+            }
+        },
+        // How the spoken sentence is marked: "gold" | "ember" | "shimmer" | "underline" | "dim" | "off"
+        getHighlight: () => markStyle,
+        setHighlight: mode => {
+            if (MARKS.indexOf(mode) < 0) return;
+            markStyle = mode;
+            if (reading) reading.shown = -1;   // drawn again in the new style on the next frame
+            try {
+                localStorage.setItem(KEY_MARK, mode);
             } catch (e) {
                 // Storage unavailable: keep the setting for this session only
             }

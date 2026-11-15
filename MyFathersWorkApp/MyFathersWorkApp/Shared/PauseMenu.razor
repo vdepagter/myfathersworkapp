@@ -60,6 +60,15 @@
                 @if (Audio.Narration == NarrationVoice.Oliver)
                 {
                     <div class="mfw-setting-row">
+                        <label class="mfw-setting-label" for="pause-highlight">@GlobalData!.GetLocalizedUITag(GlobalTags.Audio_Highlight)</label>
+                        <select id="pause-highlight" value="@Audio.NarrationHighlight" @onchange="e => Audio.SetNarrationHighlight(e.Value?.ToString() ?? string.Empty)">
+                            @foreach (string mode in AudioService.HighlightStyles)
+                            {
+                                <option value="@mode">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_Highlight + "_" + mode)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mfw-setting-row">
                         <label class="mfw-setting-label" for="pause-scroll">@GlobalData!.GetLocalizedUITag(GlobalTags.Audio_Scroll)</label>
                         <select id="pause-scroll" value="@Audio.NarrationScroll" @onchange="e => Audio.SetNarrationScroll(e.Value?.ToString() ?? string.Empty)">
                             @foreach (string mode in AudioService.ScrollModes)
