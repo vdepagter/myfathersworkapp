@@ -275,7 +275,12 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
   whose length differs from the list (rendered again, `pauses.py` not run), is timed by text length, which can be
   seconds off in a long clip. How the page follows is the "Scrolling" setting in the pause menu (`audio.scroll`; owner's
   choice, 15 Nov 2026): `lead` (default) glides 0.8 s before a sentence ends so the next one is in place, `flow`
-  moves continuously, `page` a screen at a time. The glide is animated in `audio.js` (the browser's smooth
+  moves continuously, `page` a screen at a time. Scroll targets are clamped to the page: Firefox on Android drew a
+  black bar over the header buttons when the app kept asking for a scroll past the bottom. How the sentence is marked
+  is a trial setting next to it (`audio.highlight`, 15 Nov 2026, the owner picks): `gold` backlight and `dim` (fade the
+  rest) are `::highlight` styles; `ember`, `shimmer` and `underline` are bars over the sentence's lines (children of
+  `<body>`, `.mfw-reading-line` in `css/app.css`; ember and shimmer colour only the ink with `mix-blend-mode:
+  lighten`, parchment only); `off`. The glide is animated in `audio.js` (the browser's smooth
   scroll jumps with reduced motion). No word-level timing: that needs real timestamps (ElevenLabs with-timestamps at render
   time, or a local aligner).
 
