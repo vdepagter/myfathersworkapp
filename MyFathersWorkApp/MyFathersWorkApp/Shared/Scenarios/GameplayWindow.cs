@@ -151,17 +151,17 @@ public class GameplayWindow(GlobalData globalData)
 
     public void AddClickHereToContinue(Action<GlobalData> nextCallback)
     {
-        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_ClickHereToContinue), nextCallback, true, continueButton: true));
+        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_ClickHereToContinue), nextCallback, true, buttonTag: GlobalTags.Gameplay_ContinueButton));
     }
 
     public void AddClickHereAfterBid(Action<GlobalData> nextCallback)
     {
-        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_ClickHereAfterBid), nextCallback, true));
+        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_ClickHereAfterBid), nextCallback, true, buttonTag: GlobalTags.Gameplay_BidResolvedButton));
     }
 
     public void AddClickHereAfterVote(Action<GlobalData> nextCallback)
     {
-        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_ClickHereAfterVote), nextCallback, true));
+        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_ClickHereAfterVote), nextCallback, true, buttonTag: GlobalTags.Gameplay_VoteResolvedButton));
     }
 
     public void AddChoose()
@@ -188,13 +188,13 @@ public class GameplayWindow(GlobalData globalData)
     
     public void AddOnceYouAreReady(Action<GlobalData> nextCallback)
     {
-        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_OnceYouAreReady), nextCallback, true));
+        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_OnceYouAreReady), nextCallback, true, buttonTag: GlobalTags.Gameplay_RevealButton));
     }
 
     public void AddDoNotOtherPlayersToSee(string who, Action<GlobalData> nextCallback)
     {
         Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_DoNotOtherPlayersSee).FormatWithReplacement(0, who)));
-        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_OnceYouAreReady), nextCallback, true));
+        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_OnceYouAreReady), nextCallback, true, buttonTag: GlobalTags.Gameplay_RevealButton));
     }
 
     public void AddAllPlayersNamesAsOptions(Action<string> nextCallback, PlayerFormatterTag playerFormatterTag = PlayerFormatterTag.None, Func<string, bool>? showPlayer = null)

@@ -167,7 +167,7 @@ html.mfw-scrolled .gameplay-container {
     text-decoration: underline;
 }
 
-/* "Click here to continue..." as the green button of the round pages' End of Round */
+/* The one way on from a story page (Continue, Bid Resolved, Reveal, ...) as the green button of the round pages' End of Round */
 .continue-row {
     display: flex;
     justify-content: center;

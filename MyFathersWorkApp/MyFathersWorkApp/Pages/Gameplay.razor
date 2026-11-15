@@ -140,18 +140,25 @@
                     afterRevealButton = true; // the button's own margins replace the link's blank line
                     bool bid = revealKind == true;
                     <div class="reveal-start">
-                        <button class="mfw-button green" @onclick="() => OpenReveal(bid, null)">
+                        <button class="mfw-button green continue-button" @onclick="() => OpenReveal(bid, null)">
                             @GlobalData.GetLocalizedUITag(bid ? GlobalTags.Reveal_StartBid : GlobalTags.Reveal_StartVote)
                         </button>
                     </div>
                 }
 
-                if (IsContinueLink(GlobalData.ActiveWindow, element))
+                string? buttonTag = LinkButtonTag(GlobalData.ActiveWindow, element);
+                if (buttonTag != null)
                 {
-                    // "Click here to continue..." as a button, like End of Round on a round page
+                    // The one way on from the page as a button, like End of Round on a round page
+                    if (buttonTag == GlobalTags.Gameplay_RevealButton)
+                    {
+                        <br/>
+                        <br/>
+                        @GlobalData.GetLocalizedUITag(GlobalTags.Gameplay_RevealLead)
+                    }
                     <div class="continue-row">
-                        <button class="mfw-button green continue-button" @onclick="() => OnWindowLinkClicked(element)">
-                            @GlobalData.GetLocalizedUITag(GlobalTags.Gameplay_ContinueButton)
+                        <button class="mfw-button green continue-button" data-link="@element.Content" @onclick="() => OnWindowLinkClicked(element)">
+                            @GlobalData.GetLocalizedUITag(buttonTag)
                         </button>
                     </div>
                     continue;
@@ -910,12 +917,29 @@
     }
 
     private static readonly System.Text.RegularExpressions.Regex _ContinueLink = new(@"^Click (here )?to continue(\.{3}|…)?$");
+    private static readonly System.Text.RegularExpressions.Regex _TabulateLink = new(@"^Click to tabulate scores\b");
+    private static readonly System.Text.RegularExpressions.Regex _ScoringLink  = new(@"^(Continue|Click to (continue|move)) to (Final )?Scoring(\.{3}|…)?$");
+    private static readonly System.Text.RegularExpressions.Regex _StartLink    = new(@"^Click (here )?to start the (vote|bid)\.*$");
 
-    // The Continue button: the shared "Click here to continue..." link (GameplayElement.Continue), or a scenario's own
-    // link with that text when it is the window's only link. A link inside a sentence or next to a choice stays a link.
-    private static bool IsContinueLink(GameplayWindow window, GameplayElement element) =>
-        element.Callback != null &&
-        (element.Continue || (_ContinueLink.IsMatch(element.Content.Trim()) && window.Elements.Count(other => other.Callback != null) == 1));
+    // UI tag of the button shown instead of a window link, null when it stays a link. The shared links
+    // (GameplayElement.ButtonTag: continue, bid / vote resolved, reveal) and a scenario's own link that stands alone:
+    // "Click here to start the vote...", or as the window's only link "Click (here) to continue..." and the links to
+    // Final Scoring. A link inside a sentence or next to a choice stays a link.
+    private static string? LinkButtonTag(GameplayWindow window, GameplayElement element)
+    {
+        if (element.Callback == null) return null;
+        if (element.ButtonTag != null) return element.ButtonTag;
+
+        string text  = element.Content.Trim();
+        var    start = _StartLink.Match(text);
+        if (start.Success) return start.Groups[2].Value == "bid" ? GlobalTags.Reveal_StartBid : GlobalTags.Reveal_StartVote;
+        if (window.Elements.Count(other => other.Callback != null) != 1) return null;
+
+        return _ContinueLink.IsMatch(text) ? GlobalTags.Gameplay_ContinueButton
+             : _TabulateLink.IsMatch(text) ? GlobalTags.Gameplay_TabulateScoresButton
+             : _ScoringLink.IsMatch(text)  ? GlobalTags.Gameplay_FinalScoringButton
+             : null;
+    }
 
     private void OnWindowLinkClicked(GameplayElement element)
     {
