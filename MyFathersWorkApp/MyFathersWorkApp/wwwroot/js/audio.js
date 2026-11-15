@@ -729,7 +729,7 @@
             reading.shown = shown;
             markSentence(range);
             if (scrollMode !== "flow") keepInView(range);
-        } else if (lines.length) {
+        } else if (rows.length) {
             placeLines(range);   // the layout may have moved (text size, a turned phone)
         }
         if (!timed) return;
@@ -743,33 +743,42 @@
                        : voice.index + 1 < voice.list.length ? (locateClip(voice.index + 1) || { ranges: [] }).ranges[0] : null;
             if (next) keepInView(next);
         }
-        if (scrollMode === "flow" && !voice.paused) {
-            const start = reading.times[shown];
-            followLine(range, end > start ? Math.min(1, Math.max(0, (now - start) / (end - start))) : 0);
-        }
+        const start    = reading.times[shown];
+        const progress = end > start ? Math.min(1, Math.max(0, (now - start) / (end - start))) : 0;
+        if (voice.paused) return;
+        if (scrollMode === "flow") followLine(range, progress);
+        animateMarks(progress);
     }
 
     // ---- How the spoken sentence is marked (pause menu, stored per device) -----------------------------------------
-    //   gold      - a gold backlight behind the text (::highlight)
-    //   ember     - the text itself glows like embers
-    //   shimmer   - the text turns gold and a glint passes over it
-    //   underline - a line under the text
-    //   dim       - the rest of the narrated text fades, the sentence keeps its ink (::highlight)
-    //   off       - no mark (the page still follows the narration)
-    // ember, shimmer and underline are bars laid over the lines of the sentence (children of <body>, css/app.css
-    // .mfw-reading-line), so the page DOM stays as Blazor rendered it. The ember and shimmer bars only colour what is
-    // darker than they are (mix-blend-mode: lighten): the ink, not the parchment. They are parchment only: on the
-    // title (light text on the dark scene) they would show as a block.
+    //   gold        - a gold backlight behind the text (::highlight)
+    //   glow        - soft candlelight on the parchment around the sentence
+    //   ember       - the text itself glows like embers
+    //   embersparks - ember, with sparks rising from the lines
+    //   sparks      - plain ink, sparks around the lines (the look of the page tap)
+    //   wisp        - plain ink, a spark that travels under the words as they are spoken and leaves a short trail
+    //   underline   - a line under the text
+    //   dim         - the rest of the narrated text fades a little, the sentence keeps its ink (::highlight)
+    //   off         - no mark (the page still follows the narration)
+    // Everything but gold and dim is drawn over the page (children of <body> in page coordinates, css/app.css
+    // .mfw-reading-*), so the page DOM stays as Blazor rendered it: bars over the lines of the sentence (BARS), sparks
+    // and the wisp. The ember bars only colour what is darker than they are (mix-blend-mode: lighten): the ink, not the
+    // parchment. All of them are parchment only (on the title they would show as blocks), except the underline.
+    // Sparks and the wisp are left out when Graphics is Low (Settings; reduced motion).
     const KEY_MARK       = "audio.highlight";
-    const MARKS          = ["gold", "ember", "shimmer", "underline", "dim", "off"];
+    const MARKS          = ["gold", "glow", "ember", "embersparks", "sparks", "wisp", "underline", "dim", "off"];
+    const BARS           = { glow: "glow", ember: "ember", embersparks: "ember", underline: "underline" };
     const HIGHLIGHT_REST = "mfw-narration-rest";
     let markStyle = MARKS[0];
     try {
         const stored = localStorage.getItem(KEY_MARK);
         if (MARKS.indexOf(stored) >= 0) markStyle = stored;
     } catch (e) { /* default */ }
+    let rows = [];        // the lines of the sentence in page coordinates: [left, top, width, height]
+    let rowsKey = "";     // to leave everything alone while nothing moved
     let lines = [];       // the bars on the page
-    let linesKey = "";    // where they are, to leave them alone while nothing moved
+    let wisp = null;      // the travelling spark
+    let sparkAt = 0;      // time of the last spark
 
     function setHighlight(name, ranges) {
         try { if (ranges.length && window.CSS && CSS.highlights && window.Highlight) CSS.highlights.set(name, new Highlight(...ranges)); } catch (e) { /* ignore */ }
@@ -783,8 +792,11 @@
             }
         } catch (e) { /* ignore */ }
         for (const line of lines) line.remove();
+        if (wisp) wisp.remove();
         lines = [];
-        linesKey = "";
+        rows = [];
+        rowsKey = "";
+        wisp = null;
     }
 
     function markSentence(range) {
@@ -816,31 +828,32 @@
         return result;
     }
 
-    // One bar per line of the sentence, in page coordinates
+    // Where the lines of the sentence are, and one bar per line for the styles that have bars
     function placeLines(range) {
-        const rows = [];
+        const found = [];
         for (const rect of range.getClientRects()) {
             if (rect.width < 1 || rect.height < 1) continue;
             const middle = (rect.top + rect.bottom) / 2;
-            const row = rows.find(r => Math.abs((r.top + r.bottom) / 2 - middle) < Math.min(r.bottom - r.top, rect.height) / 2);
+            const row = found.find(r => Math.abs((r.top + r.bottom) / 2 - middle) < Math.min(r.bottom - r.top, rect.height) / 2);
             if (row) {
                 row.left   = Math.min(row.left, rect.left);
                 row.right  = Math.max(row.right, rect.right);
                 row.top    = Math.min(row.top, rect.top);
                 row.bottom = Math.max(row.bottom, rect.bottom);
             } else {
-                rows.push({ left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom });
+                found.push({ left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom });
             }
         }
         const x = window.scrollX, y = window.scrollY;
-        const boxes = rows.map(r => [Math.round(r.left + x) - 2, Math.round(r.top + y), Math.round(r.right - r.left) + 4, Math.round(r.bottom - r.top)]);
+        const boxes = found.map(r => [Math.round(r.left + x) - 2, Math.round(r.top + y), Math.round(r.right - r.left) + 4, Math.round(r.bottom - r.top)]);
         const key = markStyle + boxes.join(";");
-        if (key === linesKey) return;
+        if (key === rowsKey) return;
         for (const line of lines) line.remove();
-        linesKey = key;
-        lines = boxes.map(box => {
+        rowsKey = key;
+        rows    = boxes;
+        lines   = !BARS[markStyle] ? [] : boxes.map(box => {
             const bar = document.createElement("div");
-            bar.className    = "mfw-reading-line mfw-reading-" + markStyle;
+            bar.className    = "mfw-reading-line mfw-reading-" + BARS[markStyle];
             bar.style.left   = box[0] + "px";
             bar.style.top    = box[1] + "px";
             bar.style.width  = box[2] + "px";
@@ -850,9 +863,59 @@
         });
     }
 
-    // Where a scroller is and how far it can go. Asking for a place outside that range is not harmless everywhere:
-    // near the end of a narration the app kept asking for a scroll past the bottom of the page, and Firefox on Android
-    // then drew a black bar over the header buttons, sometimes flickering.
+    // Sparks and the wisp (every animation frame while a sentence with rows is spoken). progress: 0-1 through the sentence
+    function animateMarks(progress) {
+        if (!rows.length || document.documentElement.dataset.graphics === "low") return;
+        const now = performance.now();
+        if ((markStyle === "sparks" || markStyle === "embersparks") && now - sparkAt > 150) {
+            sparkAt = now;
+            const row = rows[Math.floor(Math.random() * rows.length)];
+            const up  = Math.random() < 0.6;   // along the top of the line, or its bottom
+            spark(row[0] + Math.random() * row[2], up ? row[1] + 3 : row[1] + row[3] - 3,
+                  (Math.random() - 0.5) * 18, (up ? -1 : 1) * (5 + Math.random() * 12), 9 + Math.random() * 7);
+        }
+        if (markStyle === "wisp") {
+            // the sentence's time ends with its pause: the words are done a little earlier
+            let along = Math.min(1, progress * 1.1) * rows.reduce((sum, r) => sum + r[2], 0);
+            let row = rows[rows.length - 1], x = row[0] + row[2];
+            for (const r of rows) {
+                if (along <= r[2]) { row = r; x = r[0] + along; break; }
+                along -= r[2];
+            }
+            const y = row[1] + row[3] * 0.86;   // under the words, not over them
+            if (!wisp) {
+                wisp = document.createElement("div");
+                wisp.className = "mfw-reading-wisp";
+                document.body.appendChild(wisp);
+            }
+            wisp.style.transform = "translate(" + x.toFixed(1) + "px, " + y.toFixed(1) + "px)";
+            if (now - sparkAt > 80) {
+                sparkAt = now;
+                spark(x, y, (Math.random() - 0.5) * 6, 2 + Math.random() * 7, 5 + Math.random() * 4);
+            }
+        }
+    }
+
+    function spark(x, y, dx, dy, size) {
+        const dot = document.createElement("div");
+        dot.className = "mfw-reading-spark";
+        dot.style.left   = x.toFixed(1) + "px";
+        dot.style.top    = y.toFixed(1) + "px";
+        dot.style.width  = dot.style.height = size.toFixed(1) + "px";
+        dot.style.setProperty("--dx", dx.toFixed(1) + "px");
+        dot.style.setProperty("--dy", dy.toFixed(1) + "px");
+        document.body.appendChild(dot);
+        setTimeout(() => dot.remove(), 900);
+    }
+
+    // Firefox on Android: a scroll the page sets itself, frame by frame, left the frame and the header buttons one
+    // toolbar height too low, with the page background (a black bar) above them until the next tap. There the browser
+    // runs the scroll (behavior: "smooth"), which takes the same path as a finger scroll.
+    const BROWSER_GLIDE = /Android/.test(navigator.userAgent) && /Firefox\//.test(navigator.userAgent);
+    let flowAt = 0;   // time of the last flow step where the browser runs the scroll
+
+    // Where a scroller is and how far it can go: scrolls are kept inside that range, and left out when they would
+    // not move the page
     function scrollRoom(scroller) {
         const element = scroller === window ? (document.scrollingElement || document.documentElement) : scroller;
         return { top: element.scrollTop, max: Math.max(0, element.scrollHeight - element.clientHeight) };
@@ -909,6 +972,13 @@
         const room = scrollRoom(scroller);
         const to   = Math.min(room.max, Math.max(0, room.top + step));
         if (Math.abs(to - room.top) < 0.5) return;
+        if (BROWSER_GLIDE) {   // small smooth steps instead of a move every frame
+            const wanted = Math.min(room.max, Math.max(0, room.top + off));
+            if (performance.now() - flowAt < 450 || Math.abs(wanted - room.top) < 6) return;
+            flowAt = performance.now();
+            scroller.scrollTo({ top: wanted, behavior: "smooth" });
+            return;
+        }
         scroller.scrollTo({ top: to, behavior: "instant" });
     }
 
@@ -921,6 +991,11 @@
         const from = room.top;
         delta = Math.min(room.max, Math.max(0, from + delta)) - from;   // never past the top or the bottom of the page
         if (Math.abs(delta) < 4) return;
+        if (BROWSER_GLIDE) {
+            glideUntil = performance.now() + 700;
+            scroller.scrollTo({ top: from + delta, behavior: "smooth" });
+            return;
+        }
         const time    = Math.min(900, Math.max(450, Math.abs(delta) * 2));   // milliseconds
         const started = performance.now(), asked = Date.now();
         glideUntil = started + time;
@@ -1034,7 +1109,7 @@
                 // Storage unavailable: keep the setting for this session only
             }
         },
-        // How the spoken sentence is marked: "gold" | "ember" | "shimmer" | "underline" | "dim" | "off"
+        // How the spoken sentence is marked: one of MARKS ("gold", "glow", "ember", ..., "off")
         getHighlight: () => markStyle,
         setHighlight: mode => {
             if (MARKS.indexOf(mode) < 0) return;
