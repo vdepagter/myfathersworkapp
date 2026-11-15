@@ -5,9 +5,11 @@
 
 <MenuPage OnBack="GoBack" Class="centered">
     <div class="welcome-paper mfw-zoom-in">
-        <p>
-            @GetWelcomeText().ProtectNames(GlobalData).AsMarkup()
-        </p>
+        <div class="welcome-strip">
+            <p>
+                @GetWelcomeText().ProtectNames(GlobalData).AsMarkup()
+            </p>
+        </div>
     </div>
 
     <button class="mfw-button mp-button" @onclick="Continue">

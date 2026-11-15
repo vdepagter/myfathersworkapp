@@ -85,6 +85,8 @@ public static class GlobalTags
     public const string Audio_NarrationMale   = "Audio_NarrationMale";
     public const string Audio_NarrationOff    = "Audio_NarrationOff";
     public const string Audio_NarrationOliver = "Audio_NarrationOliver";
+    public const string Audio_Scroll          = "Audio_Scroll";       // how the page follows Oliver; options Audio_Scroll_<mode>
+    public const string Audio_Highlight       = "Audio_Highlight";    // how the spoken sentence is marked; options Audio_Highlight_<style>
     public const string Narration_Narrated    = "Narration_Narrated";
     public const string Narration_Available   = "Narration_Available";
     public const string Narration_Starting    = "Narration_Starting";
@@ -160,6 +162,13 @@ public static class GlobalTags
     public const string Gameplay_ClickAtTheEndOfGeneration  = "Gameplay_ClickAtTheEndOfGeneration";
     public const string Gameplay_EndRoundButton             = "Gameplay_EndRoundButton";
     public const string Gameplay_EndGenerationButton        = "Gameplay_EndGenerationButton";
+    public const string Gameplay_ContinueButton             = "Gameplay_ContinueButton";
+    public const string Gameplay_BidResolvedButton          = "Gameplay_BidResolvedButton";
+    public const string Gameplay_VoteResolvedButton         = "Gameplay_VoteResolvedButton";
+    public const string Gameplay_RevealButton               = "Gameplay_RevealButton";
+    public const string Gameplay_RevealLead                 = "Gameplay_RevealLead";
+    public const string Gameplay_FinalScoringButton         = "Gameplay_FinalScoringButton";
+    public const string Gameplay_TabulateScoresButton       = "Gameplay_TabulateScoresButton";
     public const string Gameplay_DrJr                       = "Gameplay_DrJr";
     public const string Gameplay_Dr                         = "Gameplay_Dr";
     public const string Gameplay_Third                      = "Gameplay_Third";

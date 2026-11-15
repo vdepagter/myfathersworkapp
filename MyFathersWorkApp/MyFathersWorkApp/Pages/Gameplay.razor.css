@@ -167,6 +167,22 @@ html.mfw-scrolled .gameplay-container {
     text-decoration: underline;
 }
 
+/* The one way on from a story page (Continue, Bid Resolved, Reveal, ...) as the green button of the round pages' End of Round */
+.continue-row {
+    display: flex;
+    justify-content: center;
+    margin: 1.4rem 0 0.3rem;
+}
+
+.continue-row:first-child { margin-top: 0.3rem; }
+
+.continue-button {
+    width: min(17rem, 80%);
+    font-size: clamp(0.95rem, 2.6vw, 1.1rem);
+    white-space: nowrap;
+    -webkit-text-stroke: 0;
+}
+
 .scenario-image {
     width: 180px;
     margin-top: 1rem;

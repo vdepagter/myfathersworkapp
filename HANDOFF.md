@@ -198,8 +198,8 @@ the old value: read it with `[Environment]::GetEnvironmentVariable('ELEVENLABS_A
   worth a listen: TimeEnd1_Title, WhoopsUtopianb_Title, WarningEvent_Content, Stasis_Content, FinalEnding_Content4.
 
 Fear of the Unknown (Scenario II) in sentence mode (15 Nov 2026): 689 clips, ~97k characters sent (~43k credits: the
-old account's last ~20k plus the new, upgraded account; API key file from the owner, the user variable still holds the
-old key). 353 superseded value / partial clips removed; `pauses.json` regenerated. Titles off, headers on as before:
+old account's last ~20k plus the new, upgraded account, now in `ELEVENLABS_API_KEY`). 353 superseded value / partial
+clips removed; `pauses.json` regenerated. Titles off, headers on as before:
 a header line with a typed-in name or random date is one clip named by its CSV text and spoken as the generic header
 ("A letter. <date>"), `chunks.header_group` / `Narration.AddSentences`. The `SharedMania` override became
 `replace.txt` lines; new replace lines for "patient <name>" -> "the patient", ending 4 ("the Fourth of my line"),
@@ -211,13 +211,15 @@ to listen to: headers without a full stop (e.g. FinalEnding_Content1/3/4/6), Sur
 
 Read-aloud audit (15 Nov 2026, branch `claude/project-thread-vapt9q`): every window with a hand-over / "read aloud" /
 "All players may again view the Storybook" line was checked against its clips.
-- **To render after the quota reset (4 Dec 2026; 93 credits were left):**
-  - The Cost of Disease `ChooseScience_Content` ("Universal Interest" journal entry): was cut entirely because
-    `chunks.auto_cut` took its bold heading (after two leading line breaks) for a rules line. Fixed in `auto_cut` (no
-    other tag changes); `replace.txt` drops the narrator's name from the heading. 973 characters (~440 credits):
-    `chunks.py render TheCostOfDisease`, then `pauses.py TheCostOfDisease`, then play-test `ChooseScience`.
-  - (Done 15 Nov with the sentence-mode render below: Fear of the Unknown `RumorMill`, `CitizenshipInspection`,
-    `SmugglingConsequences`, `MainEvent`.)
+- **Rendered 15 Nov 2026** (new API key: the owner's upgraded Creator account, 131k, the Oliver library voice added
+  to it; the key is the user environment variable `ELEVENLABS_API_KEY`): The Cost of Disease `ChooseScience_Content`
+  ("Universal Interest" journal entry). It was cut entirely because `chunks.auto_cut` took its bold heading (after two
+  leading line breaks) for a rules line. Fixed in `auto_cut` (no other tag changes); `replace.txt` drops the narrator's
+  name from the heading. 4 clips, 973 characters (428 credits); `73435fe4e5aee8bb` was rendered twice (the first take
+  ended mid-sound). `pauses.py` run; browser-checked (autoplay, 1:03, sentence highlight). Masters:
+  main checkout `tools/narration/out/master/oliver/TheCostOfDisease/`.
+- Fear of the Unknown `RumorMill`, `CitizenshipInspection`, `SmugglingConsequences`, `MainEvent` left `skip.txt`
+  (`RumorMill_Content3` and `MainEvent_Content1` cut): rendered with the sentence-mode switch (15 Nov, above).
 - Done without credits: A Time of War `Amessyes2`, `DuelDenounce1`, `FigureontheTrackInb` left `private.txt` and the
   manifest's private list (their text opens the screen to everyone), so they autoplay (browser-checked: Firm Rebuke).
 - The manifest's private list is a union in `sync_manifest`: a window taken off `private.txt` must also be removed
