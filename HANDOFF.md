@@ -199,14 +199,17 @@ the old value: read it with `[Environment]::GetEnvironmentVariable('ELEVENLABS_A
 
 Read-aloud audit (15 Nov 2026, branch `claude/project-thread-vapt9q`): every window with a hand-over / "read aloud" /
 "All players may again view the Storybook" line was checked against its clips.
-- **To render after the quota reset (4 Dec 2026; 93 credits were left):**
-  - The Cost of Disease `ChooseScience_Content` ("Universal Interest" journal entry): was cut entirely because
-    `chunks.auto_cut` took its bold heading (after two leading line breaks) for a rules line. Fixed in `auto_cut` (no
-    other tag changes); `replace.txt` drops the narrator's name from the heading. 973 characters (~440 credits):
-    `chunks.py render TheCostOfDisease`, then `pauses.py TheCostOfDisease`, then play-test `ChooseScience`.
-  - Fear of the Unknown `RumorMill`, `CitizenshipInspection`, `SmugglingConsequences`, `MainEvent` left `skip.txt`
-    (public story before a pick-a-player list; `RumorMill_Content3` and `MainEvent_Content1` are cut). ~2,800
-    characters in value mode, more in sentence mode: render them on top of the sentence-mode switch (next step 1).
+- **Rendered 15 Nov 2026** (new API key: the owner's upgraded Creator account, 131k, the Oliver library voice added
+  to it; the key is the user environment variable `ELEVENLABS_API_KEY`): The Cost of Disease `ChooseScience_Content`
+  ("Universal Interest" journal entry). It was cut entirely because `chunks.auto_cut` took its bold heading (after two
+  leading line breaks) for a rules line. Fixed in `auto_cut` (no other tag changes); `replace.txt` drops the narrator's
+  name from the heading. 4 clips, 973 characters (428 credits); `73435fe4e5aee8bb` was rendered twice (the first take
+  ended mid-sound). `pauses.py` run; browser-checked (autoplay, 1:03, sentence highlight). Masters:
+  main checkout `tools/narration/out/master/oliver/TheCostOfDisease/`.
+- **Still to render:** Fear of the Unknown `RumorMill`, `CitizenshipInspection`, `SmugglingConsequences`, `MainEvent`
+  left `skip.txt` (public story before a pick-a-player list; `RumorMill_Content3` and `MainEvent_Content1` are cut).
+  ~2,800 characters in value mode, more in sentence mode: they are part of the sentence-mode render (next step 1)
+  once that branch has merged main.
 - Done without credits: A Time of War `Amessyes2`, `DuelDenounce1`, `FigureontheTrackInb` left `private.txt` and the
   manifest's private list (their text opens the screen to everyone), so they autoplay (browser-checked: Firm Rebuke).
 - The manifest's private list is a union in `sync_manifest`: a window taken off `private.txt` must also be removed
