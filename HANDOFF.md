@@ -197,6 +197,21 @@ the old value: read it with `[Environment]::GetEnvironmentVariable('ELEVENLABS_A
 - "Ends mid-sound" warnings (44) are nearly all chunks that end before a value or stand-in (mid-sentence by design);
   worth a listen: TimeEnd1_Title, WhoopsUtopianb_Title, WarningEvent_Content, Stasis_Content, FinalEnding_Content4.
 
+Read-aloud audit (15 Nov 2026, branch `claude/project-thread-vapt9q`): every window with a hand-over / "read aloud" /
+"All players may again view the Storybook" line was checked against its clips.
+- **To render after the quota reset (4 Dec 2026; 93 credits were left):**
+  - The Cost of Disease `ChooseScience_Content` ("Universal Interest" journal entry): was cut entirely because
+    `chunks.auto_cut` took its bold heading (after two leading line breaks) for a rules line. Fixed in `auto_cut` (no
+    other tag changes); `replace.txt` drops the narrator's name from the heading. 973 characters (~440 credits):
+    `chunks.py render TheCostOfDisease`, then `pauses.py TheCostOfDisease`, then play-test `ChooseScience`.
+  - Fear of the Unknown `RumorMill`, `CitizenshipInspection`, `SmugglingConsequences`, `MainEvent` left `skip.txt`
+    (public story before a pick-a-player list; `RumorMill_Content3` and `MainEvent_Content1` are cut). ~2,800
+    characters in value mode, more in sentence mode: render them on top of the sentence-mode switch (next step 1).
+- Done without credits: A Time of War `Amessyes2`, `DuelDenounce1`, `FigureontheTrackInb` left `private.txt` and the
+  manifest's private list (their text opens the screen to everyone), so they autoplay (browser-checked: Firm Rebuke).
+- The manifest's private list is a union in `sync_manifest`: a window taken off `private.txt` must also be removed
+  from `<Scenario>.json` by hand.
+
 Next steps:
 1. Fear of the Unknown in sentence mode (owner, 14 Nov: after Cost of Disease): `settings.json` `"sentences": true`,
    convert its override files to `replace.txt`, keep titles off / headers on; re-renders the sentences around values
