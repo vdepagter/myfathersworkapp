@@ -253,6 +253,8 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
   check`** after editing an override or the CSV text (word-level diff per chunk; render refuses on drift).
 - A CSV text change makes new hashes: render the scenario again (only the changed chunks are sent) and commit the clips
   and `wwwroot/audio/vo/oliver/<Scenario>.json`.
+- **After every render run `python tools/narration/pauses.py <Scenario>`** (ffmpeg, no credits) and commit
+  `<Scenario>.pauses.json`: the pauses of every clip, used to highlight the sentence being spoken.
 - What is narrated (28 Oct 2026): story only. `chunks.auto_cut` stops a tag at the first choice paragraph (a link,
   "OR") or bold rules line ("Choose:", "Please choose your name:", "SPECIAL RULE", "At the End of the Generation ...
   VP"); bold questions stay. Manual cuts in `scripts/<Scenario>/cuts.txt`. `scripts/<Scenario>/settings.json`:
@@ -266,9 +268,13 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
   `values.txt` family of the preview (a `@Tag` line or a block of plain lines). Overrides become `replace.txt` lines
   (`Tag | find | replace`, drift-checked). `Narration.SentenceUnits` must match `chunks.sentence_units`. Fear of the
   Unknown still uses value clips; an either/or option with a nested name is one clip there too.
-- While Oliver speaks, `js/audio.js` highlights the clip's text (CSS Custom Highlight API, `::highlight(mfw-narration)`
-  in `css/app.css`) and scrolls it into view (not for 4 s after the reader scrolled). The text comes from
-  `NarrationClip.Text`.
+- While Oliver speaks, `js/audio.js` highlights the sentence being spoken (CSS Custom Highlight API,
+  `::highlight(mfw-narration)` in `css/app.css`) and scrolls it into view (not for 4 s after the reader scrolled). A
+  clip can hold a whole page: `js/narration-sync.js` splits its text (`NarrationClip.Text`, the narrated part only) into
+  sentences and matches the sentence ends with the clip's pauses (`<Scenario>.pauses.json`). A clip without pauses, or
+  whose length differs from the list (rendered again, `pauses.py` not run), is timed by text length, which can be
+  seconds off in a long clip. No word-level timing: that needs real timestamps (ElevenLabs with-timestamps at render
+  time, or a local aligner).
 
 ## Build, run, test
 

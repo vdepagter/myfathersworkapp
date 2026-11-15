@@ -175,7 +175,10 @@ the old value: read it with `[Environment]::GetEnvironmentVariable('ELEVENLABS_A
 - Sentence mode (owner, 13 Nov: "record the sentences in whole"): every sentence with a value (faction, token, count,
   either/or text, a typed-in name) is one clip per value combination; 298 superseded value / partial clips were removed.
   `scripts/ATimeOfWar/replace.txt` holds the audio tags and the narrator's own name rewrites (former override files).
-- Highlight: the text of the clip being spoken is highlighted and scrolled into view (all scenarios, Oliver only).
+- Highlight: the sentence being spoken is highlighted and scrolled into view (all scenarios, Oliver only). Since
+  15 Nov per sentence instead of per clip (owner: the whole block lit up): sentence ends are matched with the pauses
+  of the clip (`tools/narration/pauses.py` -> `<Scenario>.pauses.json`, run it after every render). Clips rendered
+  after the list was made fall back to a text-length estimate until `pauses.py` runs again.
 - Review done before rendering: `skip.txt` (36 rules-only windows: votes, bids, tallies, bonuses, warnings, Outpost,
   University note), `cuts.txt` (rules questions after story text), `private.txt` (outcomes of the secret Town Hall talks,
   sabotage, messengers, duels, Military token, Blame, Old Man, figure), `values.txt` (factions, tokens, buildings, duel

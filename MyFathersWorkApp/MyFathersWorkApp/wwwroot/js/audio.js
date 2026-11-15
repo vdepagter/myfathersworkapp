@@ -404,6 +404,7 @@
 
         voice.id    = ++voice.counter;
         voice.texts = texts || [];
+        loadPauses(urls[0]);
         voice.clip  = urls[0];
         voice.queue = urls.slice(1);
         setVoiceList(urls);
@@ -499,6 +500,7 @@
                 if (label) label.textContent = text;
             });
         }
+        syncHighlight();
         requestAnimationFrame(drawProgress);
     }
     requestAnimationFrame(drawProgress);
@@ -560,19 +562,47 @@
         if (voice.phase && voiceElement.getAttribute("src")) endVoice();
     });
 
-    // ---- Highlight of the text the narration is speaking, kept in view ---------------------------------------------
-    // The clip's text is looked up in the story window (title and parchment) after the previous clip's text and
-    // marked with the CSS Custom Highlight API (::highlight(mfw-narration), css/app.css), so the page DOM stays as
-    // Blazor rendered it. Browsers without the API only scroll. The page scrolls when the text leaves the view, but
-    // not for a few seconds after the reader scrolled themself.
+    // ---- Highlight of the sentence the narration is speaking, kept in view -----------------------------------------
+    // The clip's text is looked up in the story window (title and parchment) after the previous clip's text. A clip
+    // can hold a whole page, so its text is split into sentences and the one being spoken is marked: js/narration-sync.js
+    // works out when each sentence starts from the pauses of the clip (audio/vo/oliver/<Scenario>.pauses.json), or from
+    // the text length when the clip has no pause list. The mark uses the CSS Custom Highlight API
+    // (::highlight(mfw-narration), css/app.css), so the page DOM stays as Blazor rendered it. Browsers without the API
+    // only scroll. The page scrolls when the sentence nears the edge of the view, but not for a few seconds after the
+    // reader scrolled themself.
 
     const HIGHLIGHT = "mfw-narration";
-    let highlightFrom = 0;          // search position in the window text for the next clip
-    let highlightWindow = null;     // the story window element the search position belongs to
+    const places = { id: 0, root: null, ends: [] };   // where each clip's text ended in the window text (current request)
+    let reading = null;             // the clip on screen: { index, markup, parts, ranges, times, exact, shown }
     let readerScrolled = 0;         // time of the reader's last own scroll
     for (const type of ["wheel", "touchmove"]) window.addEventListener(type, () => { readerScrolled = Date.now(); }, { passive: true });
 
+    // Pause lists per scenario folder: undefined = not asked, null = loading, object = { hash: [duration, start, end, ...] }
+    const pauseLists = {};
+    const CLIP_URL = /^(audio\/vo\/oliver\/[^\/]+)\/([0-9a-f]+)\.mp3/;
+
+    function loadPauses(url) {
+        const match = CLIP_URL.exec(url || "");
+        if (!match || pauseLists[match[1]] !== undefined) return;
+        pauseLists[match[1]] = null;
+        fetch(match[1] + ".pauses.json")
+            .then(response => response.ok ? response.json() : {})
+            .then(list => { pauseLists[match[1]] = list || {}; })
+            .catch(() => { pauseLists[match[1]] = {}; });
+    }
+
+    // The pauses of a clip: an array, null when it has none (or another length: rendered again), undefined while loading
+    function clipPauses(url, duration) {
+        const match = CLIP_URL.exec(url || "");
+        if (!match) return null;
+        const list = pauseLists[match[1]];
+        if (!list) return list === null ? undefined : null;
+        const pauses = list[match[2]];
+        return pauses && Math.abs(pauses[0] - duration) < 0.3 ? pauses : null;
+    }
+
     function clearHighlight() {
+        reading = null;
         try { if (window.CSS && CSS.highlights) CSS.highlights.delete(HIGHLIGHT); } catch (e) { /* ignore */ }
     }
 
@@ -582,16 +612,27 @@
         return div.textContent.replace(/\s+/g, " ").trim();
     }
 
-    // Text nodes of the story window with their place in the whitespace-collapsed text
+    // Text nodes of the story window with their place in the whitespace-collapsed text. A line break or the start of a
+    // block counts as a space, as in plainText().
     function windowText(root) {
-        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-            acceptNode: node => node.parentElement && node.parentElement.closest(".narration-pill, .story-link, button")
-                ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, {
+            acceptNode: node => {
+                const element = node.nodeType === 1 ? node : node.parentElement;
+                return element && element.closest(".narration-pill, .story-link, button") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+            }
         });
         let text = "";
         const map = [];  // per character of text: [node, offset]
         let space = true;
         for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+            if (node.nodeType === 1) {
+                if (!space && map.length && /^(BR|P|DIV|H[1-6]|LI|UL|OL|TABLE|TR)$/.test(node.nodeName)) {
+                    space = true;
+                    text += " ";
+                    map.push(map[map.length - 1]);
+                }
+                continue;
+            }
             const value = node.nodeValue;
             for (let i = 0; i < value.length; i++) {
                 if (/\s/.test(value[i])) {
@@ -608,45 +649,88 @@
         return { text, map };
     }
 
+    // Finds the text of the clip that starts to play and prepares one range per sentence
     function highlightClip(markup) {
         clearHighlight();
         const root = document.querySelector(".gameplay-container");
-        if (!root || !markup) return;
+        if (!root || !markup || !window.mfwNarrationSync) return;
         const target = plainText(markup);
         if (!target) return;
-        if (root !== highlightWindow || voice.index === 0) {
-            highlightWindow = root;
-            highlightFrom = 0;
+        if (places.id !== voice.id || places.root !== root) {
+            places.id   = voice.id;
+            places.root = root;
+            places.ends = [];
         }
+        let from = 0;   // after the nearest earlier clip that was found
+        for (let i = voice.index - 1; i >= 0 && !from; i--) from = places.ends[i] || 0;
 
         const { text, map } = windowText(root);
-        let at = text.indexOf(target, highlightFrom);
+        let at = text.indexOf(target, from);
         if (at < 0) at = text.indexOf(target);
         let length = target.length;
         if (at < 0) {  // the shown text differs a little (a name written differently): match its start
             const head = target.slice(0, 40);
-            at = text.indexOf(head, highlightFrom);
+            at = text.indexOf(head, from);
             if (at < 0) return;
             length = Math.min(target.length, text.length - at);
         }
-        highlightFrom = at + length;
+        places.ends[voice.index] = at + length;
 
-        const range = document.createRange();
-        const start = map[at], end = map[Math.min(at + length, map.length) - 1];
-        range.setStart(start[0], start[1]);
-        range.setEnd(end[0], end[1] + 1);
+        const parts  = mfwNarrationSync.sentences(markup, plainText);
+        const ranges = [];
+        let offset = 0;
+        for (const part of parts) {
+            const begin = Math.min(offset, length - 1), end = Math.min(offset + part.text.length, length);
+            const first = map[at + begin], last = map[Math.min(at + Math.max(end, begin + 1), map.length) - 1];
+            const range = document.createRange();
+            range.setStart(first[0], first[1]);
+            range.setEnd(last[0], last[1] + 1);
+            ranges.push(range);
+            offset += part.text.length + 1;
+        }
+        if (!ranges.length) return;
+        reading = { index: voice.index, markup, parts, ranges, times: null, exact: false, shown: -1 };
+        syncHighlight();
+    }
+
+    // Marks the sentence at the clip's current time (every animation frame; does nothing while it stays the same)
+    function syncHighlight() {
+        if (!reading || voice.phase !== "clip" || reading.index !== voice.index) return;
+        if (!reading.ranges[0].startContainer.isConnected) {  // the page was rendered again: find the text again
+            highlightClip(reading.markup);
+            return;
+        }
+
+        const duration = voiceElement.duration;
+        let shown = 0;
+        if (isFinite(duration) && duration > 0) {
+            if (!reading.exact) {
+                const pauses = clipPauses(voice.clip, duration);   // undefined: the pause list is still loading
+                if (!reading.times || pauses !== undefined) reading.times = mfwNarrationSync.starts(reading.parts, duration, pauses || null);
+                reading.exact = pauses !== undefined;
+            }
+            const now = voiceElement.currentTime || 0;
+            while (shown + 1 < reading.times.length && reading.times[shown + 1] <= now) shown++;
+        }
+        if (shown === reading.shown) return;
+        reading.shown = shown;
+
+        const range = reading.ranges[shown];
         try { if (window.CSS && CSS.highlights && window.Highlight) CSS.highlights.set(HIGHLIGHT, new Highlight(range)); } catch (e) { /* ignore */ }
         keepInView(range);
     }
 
+    // Scrolls when the sentence is above the view or reaches its lower part, so the reader sees what comes next
     function keepInView(range) {
         if (Date.now() - readerScrolled < 4000) return;
         const rect = range.getBoundingClientRect();
         if (!rect || (rect.top === 0 && rect.bottom === 0)) return;
         const top = 90, bottom = window.innerHeight - 60;   // below the header buttons, above the bottom edge
-        if (rect.top >= top && rect.top <= bottom - Math.min(rect.height, (bottom - top) / 2)) return;
+        const height = bottom - top;
+        if (rect.top >= top && rect.bottom <= top + height * 0.7) return;
+        if (rect.top >= top && rect.top <= top + height * 0.3) return;   // a sentence too long for that: fine near the top
         const scroller = scrollParent(range.startContainer.parentElement);
-        const delta = rect.top - (top + (bottom - top) * 0.2);
+        const delta = rect.top - (top + height * 0.2);
         scroller.scrollBy({ top: delta, behavior: "smooth" });
     }
 

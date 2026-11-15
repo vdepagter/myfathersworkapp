@@ -140,7 +140,8 @@ public static class Narration
                 if (spans[k].Index >= from && spans[k].Index < to) AddValue(manifest, folder, count == 1 ? source.Substring(spans[k].Index, spans[k].Length) : null, value, urls);
 
             if (!manifest.Clips.TryGetValue(Hash(chunk), out string? script)) return false;
-            if (script != string.Empty && start + chunk.Length > from && start < to) urls.Add(new(Url(folder, chunk, script), chunk));
+            if (script != string.Empty && start + chunk.Length > from && start < to)
+                urls.Add(new(Url(folder, chunk, script), source[Math.Max(start, from)..Math.Min(start + chunk.Length, to)]));
         }
 
         foreach ((int k, (int count, string value, _)) in runs.Where(run => spans[run.Key + run.Value.Count - 1].Index + spans[run.Key + run.Value.Count - 1].Length == source.Length))
@@ -200,7 +201,7 @@ public static class Narration
             if (!manifest.Clips.TryGetValue(Hash(key), out string? script)) return false;
             bool played = group ? start >= from && start < to : end > from && start < to;
             int textStart = Map(start), textEnd = Map(end);
-            string text = !group ? key : textStart >= 0 && textEnd >= textStart ? rendered[textStart..textEnd] : string.Empty;
+            string text = !group ? played ? source[Math.Max(start, from)..Math.Min(end, to)] : key : textStart >= 0 && textEnd >= textStart ? rendered[textStart..textEnd] : string.Empty;
             if (script != string.Empty && played) urls.Add(new(Url(folder, key, script), text));
         }
 
@@ -425,5 +426,6 @@ public static class Narration
     }
 }
 
-// One Oliver clip: its url and the on-screen text it speaks (CSV markup; js/audio.js highlights it while it plays)
+// One Oliver clip: its url and the on-screen text it speaks (CSV markup, only the narrated part of a chunk that holds
+// a skipped header or a cut; js/audio.js highlights it sentence by sentence while it plays)
 public readonly record struct NarrationClip(string Url, string Text);
