@@ -729,9 +729,26 @@
         const height = bottom - top;
         if (rect.top >= top && rect.bottom <= top + height * 0.7) return;
         if (rect.top >= top && rect.top <= top + height * 0.3) return;   // a sentence too long for that: fine near the top
-        const scroller = scrollParent(range.startContainer.parentElement);
-        const delta = rect.top - (top + height * 0.2);
-        scroller.scrollBy({ top: delta, behavior: "smooth" });
+        glideBy(scrollParent(range.startContainer.parentElement), rect.top - (top + height * 0.2));
+    }
+
+    // Scrolls by delta pixels in a short glide. Animated here: the browser's own smooth scroll jumps when the device
+    // asks for reduced motion. The reader's own scroll stops it.
+    let glide = 0;
+    function glideBy(scroller, delta) {
+        cancelAnimationFrame(glide);
+        const page    = scroller === window;
+        const from    = page ? window.scrollY : scroller.scrollTop;
+        const time    = Math.min(900, Math.max(450, Math.abs(delta) * 2));   // milliseconds
+        const started = performance.now(), asked = Date.now();
+        const step = now => {
+            if (readerScrolled >= asked) return;
+            const p     = Math.min(1, (now - started) / time);
+            const eased = p < 0.5 ? 2 * p * p : 1 - (2 - 2 * p) * (2 - 2 * p) / 2;
+            (page ? window : scroller).scrollTo({ top: from + delta * eased, behavior: "instant" });
+            if (p < 1) glide = requestAnimationFrame(step);
+        };
+        glide = requestAnimationFrame(step);
     }
 
     function scrollParent(element) {
