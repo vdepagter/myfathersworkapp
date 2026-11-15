@@ -78,7 +78,10 @@ window.mkSaveATOW = (hub, opts = {}) => {
 };
 
 window.clickText = t => {
-  const els = [...document.querySelectorAll("a,button")].filter(e => e.innerText.includes(t));
+  // Case-insensitive: buttons show their label in capitals. "Click here to continue" is the Continue button on story windows.
+  const find = text => [...document.querySelectorAll("a,button")].filter(e => e.innerText.toLowerCase().includes(text.toLowerCase()));
+  let els = find(t);
+  if (!els.length && /^click here to continue/i.test(t)) els = find("continue").filter(e => e.classList.contains("continue-button"));
   if (!els.length) return "NOTFOUND: " + t;
   els[els.length - 1].click();
   return "clicked";

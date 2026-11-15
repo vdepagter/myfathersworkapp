@@ -146,6 +146,17 @@
                     </div>
                 }
 
+                if (IsContinueLink(GlobalData.ActiveWindow, element))
+                {
+                    // "Click here to continue..." as a button, like End of Round on a round page
+                    <div class="continue-row">
+                        <button class="mfw-button green continue-button" @onclick="() => OnWindowLinkClicked(element)">
+                            @GlobalData.GetLocalizedUITag(GlobalTags.Gameplay_ContinueButton)
+                        </button>
+                    </div>
+                    continue;
+                }
+
                 if (element.FromNewLine && !afterRevealButton)
                 {
                     <br/>
@@ -897,6 +908,14 @@
         if (System.Text.RegularExpressions.Regex.IsMatch(text, @"\bvot(e|es|ed|ing)\b", System.Text.RegularExpressions.RegexOptions.IgnoreCase)) return false;
         return null;
     }
+
+    private static readonly System.Text.RegularExpressions.Regex _ContinueLink = new(@"^Click (here )?to continue(\.{3}|…)?$");
+
+    // The Continue button: the shared "Click here to continue..." link (GameplayElement.Continue), or a scenario's own
+    // link with that text when it is the window's only link. A link inside a sentence or next to a choice stays a link.
+    private static bool IsContinueLink(GameplayWindow window, GameplayElement element) =>
+        element.Callback != null &&
+        (element.Continue || (_ContinueLink.IsMatch(element.Content.Trim()) && window.Elements.Count(other => other.Callback != null) == 1));
 
     private void OnWindowLinkClicked(GameplayElement element)
     {

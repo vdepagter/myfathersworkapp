@@ -151,7 +151,7 @@ public class GameplayWindow(GlobalData globalData)
 
     public void AddClickHereToContinue(Action<GlobalData> nextCallback)
     {
-        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_ClickHereToContinue), nextCallback, true));
+        Elements.Add(new GameplayElement(globalData.GetLocalizedUITag(GlobalTags.Gameplay_ClickHereToContinue), nextCallback, true, continueButton: true));
     }
 
     public void AddClickHereAfterBid(Action<GlobalData> nextCallback)

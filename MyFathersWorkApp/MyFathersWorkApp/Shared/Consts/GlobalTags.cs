@@ -161,6 +161,7 @@ public static class GlobalTags
     public const string Gameplay_ClickAtTheEndOfGeneration  = "Gameplay_ClickAtTheEndOfGeneration";
     public const string Gameplay_EndRoundButton             = "Gameplay_EndRoundButton";
     public const string Gameplay_EndGenerationButton        = "Gameplay_EndGenerationButton";
+    public const string Gameplay_ContinueButton             = "Gameplay_ContinueButton";
     public const string Gameplay_DrJr                       = "Gameplay_DrJr";
     public const string Gameplay_Dr                         = "Gameplay_Dr";
     public const string Gameplay_Third                      = "Gameplay_Third";
