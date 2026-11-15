@@ -1,6 +1,8 @@
 # Windows (method names) read by one player alone, besides the targets of AddDoNotOtherPlayersToSee /
 # AddOnceYouAreReady that chunks.py finds itself: the outcome of a secret talk or choice, before the device is passed on.
 # Their narration is never autoplayed (Play only).
+# Not listed: screens whose own text opens them to everyone ("All players may again view the Storybook", "This
+# passage is then read aloud to all players": Amessyes2, DuelDenounce1, FigureontheTrackInb).
 # Town Hall conversations (Taking Sides)
 RumorD6Confirm
 RumorIngredient
@@ -15,9 +17,7 @@ ATOWSabotageMonConfirm
 SabotageSignIn1
 SabotagePlayerChoice1
 SabotagePlayerConfirmed
-Amessyes2
 AMessno2
-DuelDenounce1
 DuelRules1
 DuelDecline1
 AcceptDuel1b
@@ -29,4 +29,3 @@ Blame1c
 # Generation III
 OldManNo
 OldManYes
-FigureontheTrackInb

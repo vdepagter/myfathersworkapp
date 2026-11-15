@@ -1,13 +1,9 @@
 # Windows (method names) that are not narrated: input forms and pick-a-player screens, the warrior builder and the battle.
 FirstHex
 SecondHex
-RumorMill
-CitizenshipInspection
-SmugglingConsequences
 WarriorEntry
 AgilityConfirmed
 StrengthConfirmed
 LifeConfirmed
 WarriorComplete
-MainEvent
 Battle
