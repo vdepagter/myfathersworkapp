@@ -7,3 +7,6 @@ Preparations_Content
 ControlledExperiment_Content
 # The name prompt of the Milestone window (an instruction)
 Milestone_Content
+# Pick-a-player line and the roster of typed-in warrior names after story text (un-skipped 15 Nov 2026):
+RumorMill_Content3
+MainEvent_Content1

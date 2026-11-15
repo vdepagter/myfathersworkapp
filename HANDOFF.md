@@ -175,7 +175,10 @@ the old value: read it with `[Environment]::GetEnvironmentVariable('ELEVENLABS_A
 - Sentence mode (owner, 13 Nov: "record the sentences in whole"): every sentence with a value (faction, token, count,
   either/or text, a typed-in name) is one clip per value combination; 298 superseded value / partial clips were removed.
   `scripts/ATimeOfWar/replace.txt` holds the audio tags and the narrator's own name rewrites (former override files).
-- Highlight: the text of the clip being spoken is highlighted and scrolled into view (all scenarios, Oliver only).
+- Highlight: the sentence being spoken is highlighted and scrolled into view (all scenarios, Oliver only). Since
+  15 Nov per sentence instead of per clip (owner: the whole block lit up): sentence ends are matched with the pauses
+  of the clip (`tools/narration/pauses.py` -> `<Scenario>.pauses.json`, run it after every render). Clips rendered
+  after the list was made fall back to a text-length estimate until `pauses.py` runs again.
 - Review done before rendering: `skip.txt` (36 rules-only windows: votes, bids, tallies, bonuses, warnings, Outpost,
   University note), `cuts.txt` (rules questions after story text), `private.txt` (outcomes of the secret Town Hall talks,
   sabotage, messengers, duels, Military token, Blame, Old Man, figure), `values.txt` (factions, tokens, buildings, duel
@@ -193,6 +196,21 @@ the old value: read it with `[Environment]::GetEnvironmentVariable('ELEVENLABS_A
   ResistEvent's "All players may again view the Storybook." made bold like the other screens (so it is not narrated).
 - "Ends mid-sound" warnings (44) are nearly all chunks that end before a value or stand-in (mid-sentence by design);
   worth a listen: TimeEnd1_Title, WhoopsUtopianb_Title, WarningEvent_Content, Stasis_Content, FinalEnding_Content4.
+
+Read-aloud audit (15 Nov 2026, branch `claude/project-thread-vapt9q`): every window with a hand-over / "read aloud" /
+"All players may again view the Storybook" line was checked against its clips.
+- **To render after the quota reset (4 Dec 2026; 93 credits were left):**
+  - The Cost of Disease `ChooseScience_Content` ("Universal Interest" journal entry): was cut entirely because
+    `chunks.auto_cut` took its bold heading (after two leading line breaks) for a rules line. Fixed in `auto_cut` (no
+    other tag changes); `replace.txt` drops the narrator's name from the heading. 973 characters (~440 credits):
+    `chunks.py render TheCostOfDisease`, then `pauses.py TheCostOfDisease`, then play-test `ChooseScience`.
+  - Fear of the Unknown `RumorMill`, `CitizenshipInspection`, `SmugglingConsequences`, `MainEvent` left `skip.txt`
+    (public story before a pick-a-player list; `RumorMill_Content3` and `MainEvent_Content1` are cut). ~2,800
+    characters in value mode, more in sentence mode: render them on top of the sentence-mode switch (next step 1).
+- Done without credits: A Time of War `Amessyes2`, `DuelDenounce1`, `FigureontheTrackInb` left `private.txt` and the
+  manifest's private list (their text opens the screen to everyone), so they autoplay (browser-checked: Firm Rebuke).
+- The manifest's private list is a union in `sync_manifest`: a window taken off `private.txt` must also be removed
+  from `<Scenario>.json` by hand.
 
 Next steps:
 1. Fear of the Unknown in sentence mode (owner, 14 Nov: after Cost of Disease): `settings.json` `"sentences": true`,

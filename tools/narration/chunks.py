@@ -278,12 +278,15 @@ def auto_cut(text):
     - or a rules line: a whole bold paragraph after the first that ends with ":" ("Please choose your name:", "Choose:"),
       reads like a heading ("SPECIAL RULE", "Accepting the Offer") or names VP / gain / lose ("At the End of the
       Generation, ..."). Bold questions ("Did we create the Puppy?") and bold story sentences stay.
-    The cut is at the line break before that paragraph (or 0 when it is the first one)."""
+    The cut is at the line break before that paragraph (or 0 when it is the first one). "First" is the first paragraph
+    with words: a heading after leading line breaks ("<br /><br /><b>"Universal Interest" - Journal Entry ...</b>") is
+    not a rules line."""
     starts, ends = [0], []
     for m in BREAKS.finditer(text):
         ends.append(m.start())
         starts.append(m.end())
     ends.append(len(text))
+    first = True
     for k, (a, b) in enumerate(zip(starts, ends)):
         para = text[a:b].strip()
         words = plain(re.sub(r"\{\{\d+=[^|}]*\|([^|}]*)[^}]*\}\}", r"\1", para)).strip()
@@ -291,10 +294,11 @@ def auto_cut(text):
             continue
         choice = para.startswith("<link=") or words == "OR" or (
             "<link=" in para and not re.search(r"[.!?\"']\s*$", plain(para.split("<link=")[0]).strip()))
-        rules = k > 0 and re.fullmatch(r"<b>.*</b>", para) is not None and "</b>" not in para[3:-4] \
+        rules = not first and re.fullmatch(r"<b>.*</b>", para) is not None and "</b>" not in para[3:-4] \
             and not words.endswith("?") and (words.endswith(":") or not re.search(r"[.!?\"]$", words) or RULE_WORDS.search(words))
         if choice or rules:
             return a if k == 0 else ends[k - 1]
+        first = False
     return None
 
 

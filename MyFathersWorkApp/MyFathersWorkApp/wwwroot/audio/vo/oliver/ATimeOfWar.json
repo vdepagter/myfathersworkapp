@@ -826,8 +826,6 @@
   "AcceptDuel1Revealed_Title",
   "AcceptDuel1b_Content",
   "AcceptDuel1b_Title",
-  "Amessyes2_Content",
-  "Amessyes2_Title",
   "AmessyesRevealed_Content",
   "Blame1b_Content",
   "Blame1b_Content1",
@@ -839,15 +837,11 @@
   "BlameRevealed_Title",
   "DuelDecline1_Content",
   "DuelDecline1_Title",
-  "DuelDenounce1_Content",
-  "DuelDenounce1_Title",
   "DuelRules1_Content",
   "DuelRules1_Content1",
   "DuelRules1_Title",
   "FigureontheTrackInRevealed_Content",
   "FigureontheTrackInRevealed_Title",
-  "FigureontheTrackInb_Content",
-  "FigureontheTrackInb_Title",
   "MilitaryNo_Content",
   "MilitaryNo_Title",
   "MilitaryYes_Content",
@@ -977,14 +971,17 @@
  "standIns": [
   "Anna",
   "Bob",
+  "Creation",
   "Duke Anna",
   "Iron Maiden",
   "Iron Will",
+  "London",
   "Oliver",
   "Spam",
   "Steam Titan",
   "Testville",
   "The Town Ledger",
-  "Town"
+  "Town",
+  "password"
  ]
 }
