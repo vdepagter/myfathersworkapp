@@ -119,34 +119,56 @@ code {
 
 /* "Fade the rest": the narrated text around the spoken sentence */
 ::highlight(mfw-narration-rest) {
-    color: rgba(23, 16, 10, 0.4);
+    color: rgba(23, 16, 10, 0.58);
 }
 
-/* Bars over the lines of the spoken sentence (js/audio.js placeLines; children of <body>, page coordinates; above the
-   page, below the frame). Ember and shimmer only colour what is darker than they are: the ink, not the parchment. */
-.mfw-reading-line {
+/* Drawn over the spoken sentence (js/audio.js placeLines / animateMarks; children of <body>, page coordinates; above
+   the page, below the frame): bars over its lines, sparks, the wisp. */
+.mfw-reading-line,
+.mfw-reading-spark,
+.mfw-reading-wisp {
     position: absolute;
     z-index: 2;
     pointer-events: none;
 }
 
-.mfw-reading-ember,
-.mfw-reading-shimmer {
-    mix-blend-mode: lighten;
-}
-
+/* Ember: only colours what is darker than the bar - the ink, not the parchment */
 .mfw-reading-ember {
+    mix-blend-mode: lighten;
     background: linear-gradient(100deg, #8a1400 0, #d8560c 150px, #a31c00 290px, #e2700f 430px, #8a1400 600px) 0 0 / 600px 100%;
     animation: mfw-reading-drift 9s linear infinite, mfw-reading-flicker 2.3s ease-in-out infinite;
 }
 
-.mfw-reading-shimmer {
-    background: linear-gradient(105deg, #7d4b00 0, #7d4b00 42%, #e0aa2a 50%, #7d4b00 58%, #7d4b00 100%) 0 0 / 520px 100%;
-    animation: mfw-reading-glint 3.4s linear infinite;
+/* Candle glow: the parchment around the sentence lights up, the ink stays dark */
+.mfw-reading-glow {
+    mix-blend-mode: overlay;
+    background: rgba(255, 190, 96, 0.9);
+    box-shadow: 0 0 0 5px rgba(255, 190, 96, 0.9);
+    border-radius: 10px;
+    filter: blur(7px);
+    animation: mfw-reading-candle 3.1s ease-in-out infinite;
 }
 
 .mfw-reading-underline {
     border-bottom: 2px solid rgba(160, 82, 8, 0.85);
+}
+
+.mfw-reading-spark {
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff8dc 0, #ffc44e 34%, rgba(255, 120, 20, 0.6) 58%, transparent 72%);
+    animation: mfw-reading-spark 0.85s ease-out forwards;
+}
+
+.mfw-reading-wisp {
+    left: 0;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    margin: -6px 0 0 -6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fffbe6 0, #ffd060 40%, rgba(255, 130, 20, 0.6) 65%, transparent 76%);
+    box-shadow: 0 0 10px 3px rgba(255, 160, 40, 0.6);
+    transition: transform 0.12s linear;
 }
 
 @keyframes mfw-reading-drift {
@@ -160,13 +182,23 @@ code {
     80%      { opacity: 0.9; }
 }
 
-@keyframes mfw-reading-glint {
-    to { background-position: 520px 0; }
+@keyframes mfw-reading-candle {
+    0%, 100% { opacity: 0.95; }
+    30%      { opacity: 0.78; }
+    55%      { opacity: 1; }
+    75%      { opacity: 0.86; }
+}
+
+@keyframes mfw-reading-spark {
+    from { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+    20%  { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    to   { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2); opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .mfw-reading-ember,
-    .mfw-reading-shimmer {
+    .mfw-reading-glow {
         animation: none;
     }
 }
+

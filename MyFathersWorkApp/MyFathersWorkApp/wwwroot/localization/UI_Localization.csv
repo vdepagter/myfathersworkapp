@@ -70,8 +70,11 @@ Audio_NarrationOliver;Oliver
 Audio_NarrationOff;Off
 Audio_Highlight;Highlight
 Audio_Highlight_gold;Gold backlight
+Audio_Highlight_glow;Candle glow
 Audio_Highlight_ember;Ember text
-Audio_Highlight_shimmer;Gold shimmer
+Audio_Highlight_embersparks;Ember text with sparks
+Audio_Highlight_sparks;Sparks
+Audio_Highlight_wisp;Travelling spark
 Audio_Highlight_underline;Underline
 Audio_Highlight_dim;Fade the rest
 Audio_Highlight_off;None
