@@ -7,7 +7,19 @@
 A free, fan-made companion app for the board game *My Father's Work* by Renegade Game Studios. It runs in any modern
 browser on a phone, tablet or computer, with nothing to install.
 
-### ▶️ Play now: https://vdepagter.github.io/myfathersworkapp/
+## Play now
+
+There are two ways to play:
+
+1. **In your browser: https://vdepagter.github.io/myfathersworkapp/**
+   Open the link on a phone, tablet or computer. Nothing to install, and it always runs the latest version. On a phone
+   you can add it to your home screen from the browser menu.
+2. **Offline on Windows:** download `MyFathersWork-Windows-<version>.zip` from the
+   [latest release](https://github.com/vdepagter/myfathersworkapp/releases/latest), unzip the whole folder anywhere and
+   double-click `MyFathersWork.exe`. The app opens in its own window and needs no internet connection and no
+   installation. Saved games are kept on that PC and stay when you unzip a newer version over the old one. The exe is
+   not code-signed yet, so Windows SmartScreen may warn about an unknown publisher the first time: choose
+   **More info > Run anyway**.
 
 ## Why this exists
 
@@ -28,40 +40,54 @@ which ported the first two Generations of *The Cost of Disease*. Starting from t
 
 | Scenario | Status |
 |---|---|
-| **The Cost of Disease** | ✅ Complete, played at the table |
-| **Fear of the Unknown** | ✅ Complete, played at the table |
-| **A Time of War** | ✅ Complete, played through in the browser; waiting for a game at the table |
+| **The Cost of Disease** | ✅ Complete, played at the table, narrated by Oliver |
+| **Fear of the Unknown** | ✅ Complete, played at the table, narrated by Oliver |
+| **A Time of War** | ✅ Complete, played at the table, narrated by Oliver |
 
 ## Features
 
 **Everything the official app did**
 - The full original story text of all three scenarios, for 2 to 4 players
 - Setup instructions with pictures, round screens with the active rules, and the end-of-round and end-of-generation steps
-- Final score entry, tie-breakers, rankings and all endings
-- Music, sound effects, page transitions and the original male and female voice recordings
+- The vote and bid countdown, final score entry, tie-breakers, rankings and all endings
+- The original look: the manor main menu, parchment story pages, ink-blot page transitions, rain and embers
+- Music, sound effects and the original male and female voice recordings
 - The Log Book of events you have played through, now for every scenario (the official app had one for *The Cost of
   Disease* only)
 
 **Added in this app**
-- **Oliver**, a narrator who reads all story text aloud (*Fear of the Unknown* so far; the other scenarios are next).
-  Private pass-the-device passages only play when the reader presses play.
-- **Back (⬅)** undoes any step, all the way to the start of the game.
-- **Auto-save**: close the page and continue later on the exact same screen.
+- **Oliver**, a narrator who reads all story text aloud in all three scenarios. The sentence he is speaking is
+  highlighted and the page scrolls along with him; the pause menu lets you choose how the page follows (just before the
+  next sentence, continuously, or a screen at a time) and how the sentence is marked. Private pass-the-device pages only
+  play when the reader presses play.
+- **Clear buttons** to move on: every story page ends in a green button (Continue, Reveal, Start Voting, Final Scoring,
+  ...), and every round screen ends with an **End of Round** button, with a shortcut arrow that jumps down to it.
+- **Back (⬅) and Forward (➡)**: undo any step, all the way to the start of the game, and redo what you undid.
+- **Auto-save and Saved Games**: close the page and continue later on the exact same screen. Starting a new game keeps
+  the old one, so every game on the device can be opened again and paged back through.
 - **Save and load** a game as text or a file, to continue on another device.
+- **Endings Gallery**: a map of every scenario's branches and endings showing which you have reached, achievements (the
+  official app's and new ones for Masterworks, high scores, family wins and win streaks), and a **Hall of Fame** with
+  wins, records and recent games you can correct, add or delete. Export and import move it to another device.
+- **Rankings podium** at the end of a game, and score entry on one page where you tick who completed their Masterwork.
+- **Remembered names**: players and village names from earlier games can be picked with one tap.
+- **Village name secrets**: a few village names decide which way the story goes after Generation I (listed in Help).
 - **Play along with the official app**: if someone else runs the official app, this app asks for its random outcomes
   so both stay in step.
-- **Endings Gallery**: the endings you have reached per scenario, remembered players and a win tally, with its own
-  export and import.
 - **Help** pages that explain setup, the round screens, secret pages, bids and votes.
-- Separate volume sliders for music, effects and speech.
+- **Settings** for graphics quality, story text size and separate volumes for music, effects and speech.
+- **An offline Windows version** (see Play now).
 - Many fixes to the original stories: unreachable or always-true conditions, rules that contradicted each other,
   missing and duplicated text. Each deviation is written down in [`CLAUDE.md`](CLAUDE.md).
 
 ## Still to do
 
-- Play *A Time of War* at the table.
-- Oliver's narration for *The Cost of Disease* and *A Time of War*.
-- Test on iPhone and iPad (Safari).
+- [x] Port all three scenarios with scoring and all endings
+- [x] Play every scenario at the table
+- [x] Oliver's narration for all three scenarios
+- [x] Offline Windows version
+- [ ] Test on iPhone and iPad (Safari)
+- [ ] Code-sign the Windows exe, the last step before version 1.0
 
 ## Feedback and bug reports
 
@@ -81,9 +107,9 @@ If your report is about a game in progress, a saved game helps us see exactly wh
 
 No GitHub account? You can also ask in the **My Father's Work Fanmade App** Discord (link below).
 
-## Running it on your own computer
+## To test locally for development purposes
 
-You only need this if you want to change the app. To play, just open the link above.
+You only need this if you want to change the app. To play, use one of the options under [Play now](#play-now).
 
 1. **Install the .NET SDK.** Go to https://dotnet.microsoft.com/download, download the **.NET 9 SDK** (not just the
    runtime) for your system and run the installer. To check it worked, open a terminal (on Windows: press Start, type
@@ -136,6 +162,8 @@ is published under the [Creative Commons Attribution-NonCommercial 4.0](LICENSE)
 the same terms: free to use, share and adapt for non-commercial purposes, with credit to Renegade Game Studios. This
 app changes the original: the stories were ported to a new web app, bugs were fixed, and features and narration were
 added.
+
+This version of the app was developed by Valentijn de Pagter (Inny) using Claude
 
 Oliver's narration is generated with [ElevenLabs](https://elevenlabs.io) text-to-speech (voice "Oliver Silk") on a paid
 plan.

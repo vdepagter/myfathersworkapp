@@ -4,16 +4,19 @@ Blazor WebAssembly (.NET) re-implementation of the official *My Father's Work* c
 stories were written in Twine/Harlowe and compiled to C# by Cradle). Players make choices on a phone/tablet next to the
 board game; the app tells them what to set up and narrates the story over 3 Generations x 3 rounds.
 
-## Status (October 2026)
+## Status (November 2026)
 
 **Active work, open tasks and next steps are in [`HANDOFF.md`](HANDOFF.md) - read it first and keep it current.**
 When a piece of work is finished, move its section to [`HANDOFF_ARCHIVE.md`](HANDOFF_ARCHIVE.md) so the handoff stays short.
 
+All three scenarios are complete, played at the table (November 2026) and fully narrated by Oliver. Left before v1.0:
+a test on iPhone / iPad (Safari) and code-signing the Windows exe.
+
 | Scenario | Web app | Notes |
 |---|---|---|
-| The Cost of Disease (`ScenarioId.CostOfDisease`) | **Complete, play testing** - Gen I, II, III, final scoring, all 8 endings | Only English text. |
-| Fear of the Unknown (`FearOfUnknown`) | **Ported, browser play test done** - all branches, battle, asylum assessment, scoring, 8 endings | Waiting for a table play test. See the section below. |
-| A Time of War (`TimeOfWar`) | **Fully ported, browser play test per branch done** - Gen I Taking Sides, Gen II Martial / Time Travel, Gen III Heavy is the Crown / Peace Through War / Future Consequences / You Cant Stop Progress, scoring, all 8 endings | Played through from the menu in the browser (all four Gen III branches); waiting for a table play test. Spec: `docs/ATOW_PORT_MAP.md`. See the section below. |
+| The Cost of Disease (`ScenarioId.CostOfDisease`) | **Complete, played at the table** - Gen I, II, III, final scoring, all 8 endings | Only English text. |
+| Fear of the Unknown (`FearOfUnknown`) | **Complete, played at the table** - all branches, battle, asylum assessment, scoring, 8 endings | See the section below. |
+| A Time of War (`TimeOfWar`) | **Complete, played at the table** - Gen I Taking Sides, Gen II Martial / Time Travel, Gen III Heavy is the Crown / Peace Through War / Future Consequences / You Cant Stop Progress, scoring, all 8 endings | Spec: `docs/ATOW_PORT_MAP.md`. See the section below. |
 
 ## Repository layout
 

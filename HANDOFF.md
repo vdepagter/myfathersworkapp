@@ -3,6 +3,15 @@
 Only work in progress lives here. When a section is finished, move it to [`HANDOFF_ARCHIVE.md`](HANDOFF_ARCHIVE.md)
 (newest first) and delete it from this file. Conventions are in [`CLAUDE.md`](CLAUDE.md).
 
+## Before v1.0 (November 2026)
+
+All three scenarios have been played at the table (November 2026) and are fully narrated by Oliver; the table play
+test sections moved to the archive. Left before version 1.0:
+- Test on a real iPhone / iPad (Safari): autoplay unlock, MP3 playback, Oliver's sentence highlight and scrolling.
+- Code-sign the Windows exe (`MyFathersWorkApp/WindowsLauncher/`, `tools/build-windows.ps1`), so SmartScreen stops
+  warning about an unknown publisher. This is the step before v1.0.
+- Still open, defaults applied: the A Time of War owner questions in `docs/ATOW_PORT_MAP.md` section 7.
+
 ## Visual overhaul (October 2026)
 
 Bringing the Unity app's look into the web app. Plan (owner approved 30 Oct 2026, original fonts):
@@ -72,32 +81,6 @@ sparkle, lightning, Graphics quality in localStorage `mfwGraphics`, `html[data-g
   arrows, red X); narrow windows get one 9-slice page. Main Menu buttons at 82 % with a larger fan-made note below.
   Not verified on a real Firefox Android phone (no device here).
 
-## A Time of War - table play test (October 2026)
-
-Fully ported and played through in the browser (details in the archive). Spec: [`docs/ATOW_PORT_MAP.md`](docs/ATOW_PORT_MAP.md).
-
-Next steps:
-- Table play test.
-- Owner questions (defaults applied, map section 7): B1 GunsAnnouncement text, B4 TowardsWar wording, B9 figure-token
-  holder may not exist, B10 duel death odds, B14 first-visit text, B16 2-player CoW text, B17 Church costs "X/X/X",
-  B19 random paradox only after a release (fixed), B21 University "pay $1" in Warning (fixed); endings 1/5 print
-  "The family IV" on a shared win (as the source), ending 8 "the The family name" / "Dr. The family" and ending 6 "I, The family" likewise; the Drifters decree popup starts with a dangling "Then,"
-  when the Crown does not move (source `{$crownL} Then, ...`).
-- Not play-tested from the menu: the Martial duel / bribe-success / tea-yay sub-chains, Peace gas release, Warning
-  stable timeline + Stasis, Paradox figure path with two Wooden Figures (covered by the per-branch crafted-save runs).
-
-## Fear of the Unknown - table play test (October 2026)
-
-Port and browser play test are done and live at https://vdepagter.github.io/myfathersworkapp/ (repository
-`vdepagter/myfathersworkapp`, renamed from `vdepagter/MyFathersWork-FanMadeCompanionApp` on 30 Oct 2026). A PR to the
-original repository (`Deusald/MyFathersWork-FanMadeCompanionApp`) can be opened from `main` at any time.
-
-Next steps:
-- Play a real game at the table (only crafted-save runs so far).
-- Random sub-events not yet seen in the browser (they share code paths with tested ones): Liberal salts / Arise My
-  Love / bribe / policy vote, Isolation smuggling trial outcomes, Foreigners Wall "Acceptance" + caravan visits,
-  Creature cure accepted path, Gen I fates other than Creature, 2- and 4-player games.
-
 ## Music, sound effects, voice-over and screen transitions (October 2026)
 
 Implemented and deployed; mapping from the Unity app in `docs/AUDIO_TRANSITIONS_MAP.md`.
@@ -106,7 +89,7 @@ toggles in `Shared/AudioToggles.razor`. Sounds and transitions are derived in `P
 scenario code only sets `GameplayWindow.SetCue` / `MarkFinalEnding` - never call audio from scenario code (mirror sandbox, undo, load).
 
 Next steps:
-- Test on a real iPhone/iPad (Safari autoplay unlock, MP3 playback) and at the table (volume of the effects vs music).
+- Test on a real iPhone/iPad (Safari autoplay unlock, MP3 playback). The table play tests are done.
 - Voice-over: 17 narrated passages in Cost of Disease / Fear of the Unknown (map section 8), Female/Male/Oliver/Off (default Oliver since 30 Oct 2026; Unity defaulted to Male), "Narrated" pill on those windows.
   Uncertain: the female `GloomyWolvesIntro` clip lives in Unity's male folder (judged female by pitch). Recordings follow the
   English source text, so other text versions differ from the narration.
@@ -225,9 +208,5 @@ Read-aloud audit (15 Nov 2026, branch `claude/project-thread-vapt9q`): every win
 - The manifest's private list is a union in `sync_manifest`: a window taken off `private.txt` must also be removed
   from `<Scenario>.json` by hand.
 
-Next steps:
-1. Listen-through at the table: joins around skipped names, the stand-ins, the private Play button. Size: the three
-   scenarios will be ~300 MB of clips; 64 kbps mono would cut that by a third if Pages/LFS limits bite.
-2. Play-test the other scenarios with Oliver once rendered: console lines "Oliver narration: no clips for <Tag>" show
-   windows whose text code changes beyond placeholders (not narrated); fix the split or accept.
-4. User play-test of Fear of the Unknown with Oliver first; the other scenarios start in a new session.
+Next steps: none open. All three scenarios are rendered and were played at the table (November 2026). If GitHub
+Pages / LFS limits bite: the clips are ~340 MB, and 64 kbps mono would cut that by a third.
