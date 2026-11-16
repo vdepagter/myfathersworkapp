@@ -17,7 +17,8 @@ There are two ways to play:
    [Add it to your home screen](#add-it-to-your-home-screen) below).
 2. **Offline on Windows:** download `MyFathersWork-Windows-<version>.zip` from the
    [latest release](https://github.com/vdepagter/myfathersworkapp/releases/latest), unzip the whole folder anywhere and
-   double-click `MyFathersWork.exe`. The app opens in its own window and needs no internet connection and no
+   double-click `MyFathersWork.exe`. Short on space or bandwidth? The `-light.zip` has smaller audio files (narration
+   at a lower quality) and the `-no-audio.zip` leaves out music, sound and narration altogether. The app opens in its own window and needs no internet connection and no
    installation. Saved games are kept on that PC and stay when you unzip a newer version over the old one. The exe is
    not code-signed yet, so Windows SmartScreen may warn about an unknown publisher the first time: choose
    **More info > Run anyway**.
@@ -115,7 +116,10 @@ which ported the first two Generations of *The Cost of Disease*. Starting from t
   size and separate volumes for music, effects and speech.
 - **An offline Windows version** (see Play now).
 - Many fixes to the original stories: unreachable or always-true conditions, rules that contradicted each other,
-  missing and duplicated text. Each deviation is written down in [`CLAUDE.md`](CLAUDE.md).
+  missing and duplicated text. Each deviation is written down in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md).
+
+What changed in each version: [`CHANGELOG.md`](MyFathersWorkApp/MyFathersWorkApp/wwwroot/CHANGELOG.md), also in the
+app under **Help > What's new**.
 
 ## Still to do
 
@@ -178,8 +182,9 @@ It prints the addresses to open on the phone (port 5199; pass another port as th
 to allow the port on the private network once; the command is at the top of `tools/lan-serve.cs`. Changes to JavaScript,
 CSS and the story `.csv` files show on a reload, C# changes need the build again.
 
-**Build the offline Windows version** with `pwsh tools/build-windows.ps1 -Version <version>`; the zip lands in `dist/`.
-Pushing a tag `v*` makes GitHub build it and attach it to a release.
+**Build the offline Windows version** with `pwsh tools/build-windows.ps1 -Version <version>`: the full, light and
+no-audio zips land in `dist/` (the light one needs `ffmpeg`; `-Edition Full` builds only one). Pushing a tag `v*` makes
+GitHub build all three and attach them to a release.
 
 ## How the scenarios were ported
 
@@ -193,7 +198,8 @@ Pushing a tag `v*` makes GitHub build it and attach it to a release.
 5. **Verify:** scripts check that every text the code asks for exists. Every branch is then played through in the
    browser, using crafted save files to jump straight to later Generations.
 
-Developer details (conventions, pitfalls, deliberate deviations from the original) are in [`CLAUDE.md`](CLAUDE.md).
+Developer details (conventions and pitfalls) are in [`CLAUDE.md`](CLAUDE.md), deliberate deviations from the
+original in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md).
 Current work is tracked in [`HANDOFF.md`](HANDOFF.md).
 
 ## Other community projects

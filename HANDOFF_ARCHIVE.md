@@ -316,7 +316,7 @@ section in `CLAUDE.md`.
 - All Fear of the Unknown passages ported (Gen I Witch Hunt, Gen II Foreigners/Creature/Obsessions, Gen III
   Isolation/Tension/Privatized/Liberal, battle, asylum assessment, endings) with both CSV files.
 - New tools: `tools/cradle_dump.py`; `tools/tagcheck.py --scenario=`.
-- Deliberate deviations: CLAUDE.md "Fear of the Unknown - notes and deliberate deviations".
+- Deliberate deviations: `docs/DEVIATIONS.md` "Fear of the Unknown - notes and deliberate deviations".
 
 ## The Cost of Disease (September 2026)
 

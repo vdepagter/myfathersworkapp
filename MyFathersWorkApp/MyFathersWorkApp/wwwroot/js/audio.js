@@ -15,6 +15,9 @@
 (function () {
     "use strict";
 
+    // The Windows download without audio files (js/edition.js): nothing is loaded or played
+    const AVAILABLE = !(window.mfwEdition && window.mfwEdition.audio === false);
+
     const EFFECTS = ["sfx-click", "sfx-transition-cover", "sfx-transition-reveal", "sfx-setup", "sfx-end-of-round",
                      "sfx-special-event", "sfx-welcome", "sfx-footsteps", "sfx-bid-open", "sfx-reveal"];
     const VOLUMES       = { "sfx-transition-cover": 0.6, "sfx-transition-reveal": 0.6 }; // page flips: 60% (play test)
@@ -80,7 +83,7 @@
     // ---- Effects --------------------------------------------------------------------------------------------------
 
     const clips = {};
-    for (const name of EFFECTS) {
+    for (const name of AVAILABLE ? EFFECTS : []) {
         const element   = new Audio();
         element.preload = "auto";
         element.src     = src(name);
@@ -88,7 +91,7 @@
     }
 
     function applyEffectsVolume() {
-        for (const name of EFFECTS) clips[name].volume = (VOLUMES[name] ?? 1) * volumes.effects / 100;
+        for (const name of Object.keys(clips)) clips[name].volume = (VOLUMES[name] ?? 1) * volumes.effects / 100;
     }
 
     applyEffectsVolume();
@@ -240,6 +243,7 @@
 
     // name: track file name without extension, or null/"" for silence
     function setMusic(name, loop) {
+        if (!AVAILABLE) return;
         const targetName = name || null;
         if ((wanted ? wanted.name : null) === targetName) return;
         wanted = targetName ? { name: targetName, loop: loop !== false } : null;
@@ -378,6 +382,7 @@
     // Returns the request id, or 0 when nothing starts (audio not unlocked by a user gesture yet).
     function voicePlay(name, which, leadIn) {
         endVoice();
+        if (!AVAILABLE) return 0;
         if (!unlocked || !name) return 0;
 
         voice.id   = ++voice.counter;
@@ -400,6 +405,7 @@
     // Returns the request id, or 0.
     function voicePlayList(urls, texts) {
         endVoice();
+        if (!AVAILABLE) return 0;
         if (!unlocked || !urls || !urls.length) return 0;
 
         voice.id    = ++voice.counter;
@@ -1297,7 +1303,8 @@
                 // Storage unavailable: keep the setting for this session only
             }
         },
-        getVoice: () => voice.setting,
+        available: () => AVAILABLE,
+        getVoice: () => AVAILABLE ? voice.setting : "off",
         // The voice before narration was switched off (the narration toggle switches back to it)
         getLastVoice: () => {
             try {

@@ -11,15 +11,18 @@
 
             <DisplaySettings GlobalData="GlobalData"/>
 
-            <div class="mfw-setting-row">
-                <label class="mfw-setting-label" for="settings-narration">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_Narration)</label>
-                <select id="settings-narration" value="@Audio.Narration" @onchange="OnNarrationChanged">
-                    <option value="@NarrationVoice.Oliver">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationOliver)</option>
-                    <option value="@NarrationVoice.Male">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationMale)</option>
-                    <option value="@NarrationVoice.Female">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationFemale)</option>
-                    <option value="@NarrationVoice.Off">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationOff)</option>
-                </select>
-            </div>
+            @if (Audio.Available)
+            {
+                <div class="mfw-setting-row">
+                    <label class="mfw-setting-label" for="settings-narration">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_Narration)</label>
+                    <select id="settings-narration" value="@Audio.Narration" @onchange="OnNarrationChanged">
+                        <option value="@NarrationVoice.Oliver">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationOliver)</option>
+                        <option value="@NarrationVoice.Male">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationMale)</option>
+                        <option value="@NarrationVoice.Female">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationFemale)</option>
+                        <option value="@NarrationVoice.Off">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_NarrationOff)</option>
+                    </select>
+                </div>
+            }
 
             @if (GlobalData.UI_Localization.Count > 1)
             {

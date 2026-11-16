@@ -773,7 +773,7 @@
     private bool WillAutoplay(GameplayWindow window, bool suppressed) =>
         !suppressed && Audio.Narration != NarrationVoice.Off && Audio.IsUnlocked && !(OliverClips(window) != null && Narration.IsPrivate(GlobalData, window));
 
-    private bool HasNarration(GameplayWindow window) => window.VoiceOver != null || OliverClips(window) != null;
+    private bool HasNarration(GameplayWindow window) => Audio.Available && (window.VoiceOver != null || OliverClips(window) != null);
 
     private GameplayWindow? _OliverWindow; // the window _OliverClips was computed for
     private List<NarrationClip>? _OliverClips;
