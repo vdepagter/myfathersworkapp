@@ -69,16 +69,14 @@ Audio_NarrationMale;Male voice
 Audio_NarrationOliver;Oliver
 Audio_NarrationOff;Off
 Audio_Highlight;Highlight
-Audio_Highlight_glow;Candle glow
-Audio_Highlight_wisp;Travelling spark
-Audio_Highlight_wispsoft;Travelling spark, soft
-Audio_Highlight_firefly;Firefly
-Audio_Highlight_quill;Quill line
-Audio_Highlight_emberglow;Ember by candlelight
-Audio_Highlight_candlemotes;Candle glow with motes
-Audio_Highlight_dim;Fade the rest
 Audio_Highlight_off;None
+Audio_Highlight_dim;Fade the rest
+Audio_Highlight_quill;Quill line
+Audio_Highlight_glow;Candle glow
+Audio_Highlight_emberglow;Ember by candlelight
+Audio_Highlight_wisp;Travelling spark
 Audio_Scroll;Scrolling
+Audio_Scroll_off;None
 Audio_Scroll_lead;Just before the next sentence
 Audio_Scroll_flow;All the time, slowly
 Audio_Scroll_page;A screen at a time

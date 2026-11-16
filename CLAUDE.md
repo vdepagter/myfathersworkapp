@@ -284,17 +284,17 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
   black bar over the header buttons when the app kept asking for a scroll past the bottom; for the page itself the
   end is measured against the large viewport (`100lvh`, toolbar hidden), so the app never scrolls into the last
   toolbar height (Firefox keeps `clientHeight` at the small viewport; diag showed `visualViewport.offsetTop` -64 at
-  that end). How the sentence is marked is a trial setting next to it (`audio.highlight`, `STYLES` in `audio.js`,
-  menu order None, Fade the rest, Candle glow, Ember by candlelight, Candle glow with motes, Travelling spark (soft),
-  Firefly, Quill line - owner, 16 Nov 2026; dropped: Gold backlight, Underline, Ember text (with sparks), Sparks,
-  Wandering wisp): `off`, `dim` (fade the rest, `::highlight`), `glow` (candle light bars, `mix-blend-mode: overlay`,
-  the default), `emberglow` (candle glow + flat ember-brown ink + slow lingering sparks), `candlemotes` (candle glow +
-  rising motes, overlay so they seem behind the words), travelling lights `wisp` / `wispsoft` / `firefly` (`LIGHTS`:
-  they move from the sentence's first word to its last, by `narration-sync.js` `starts().spoken`, fade in from just
-  before it a moment ahead of it, trail off past the end and at line wraps; both sparks wander off their route and
-  sit on a faint haze; the calm ones fade the rest slightly, `::highlight(mfw-narration-soft)`), `quill` (a line of
-  light under the spoken words). Bars and lights are children of `<body>` in page coordinates (`.mfw-reading-*` in
-  `css/app.css`), parchment only. Sparks, motes and lights
+  that end). The scroll style `off` leaves the page alone. How the sentence is marked is a trial setting next to it
+  (`audio.highlight`, `STYLES` in `audio.js`, menu order None, Fade the rest, Quill line, Candle glow, Ember by
+  candlelight, Travelling spark - owner, 16 Nov 2026; dropped: Gold backlight, Underline, Ember text (with sparks),
+  Sparks, Wandering wisp, soft travelling spark, Firefly, Candle glow with motes): `off`, `dim` (fade the rest,
+  `::highlight`), `quill` (a line of light under the spoken words; the rest fades slightly,
+  `::highlight(mfw-narration-soft)`), `glow` (candle light bars, `mix-blend-mode: overlay`), `emberglow` (candle glow
+  + flat ember-brown ink + embers born around the words being spoken, moved every frame on their own loop with a
+  wandering heading, overlay so they drift behind the words) and `wisp` (the default for now: a spark that moves from
+  the sentence's first word to its last, by `narration-sync.js` `starts().spoken`, fades in a moment ahead of it,
+  trails off past the end and at line wraps, wanders off its route, on a faint haze). Bars and lights are children
+  of `<body>` in page coordinates (`.mfw-reading-*` in `css/app.css`), parchment only. Embers and the spark
   are left out when Graphics is Low. The glide is animated in `audio.js` (the browser's smooth scroll jumps with
   reduced motion), except on Firefox for Android, where a scroll set frame by frame left the frame and the header
   buttons a toolbar height too low with a black bar above until the next tap (owner's phone, not reproducible on a

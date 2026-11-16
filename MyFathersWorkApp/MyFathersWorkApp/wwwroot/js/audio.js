@@ -754,37 +754,33 @@
     // ---- How the spoken sentence is marked (pause menu, stored per device) -----------------------------------------
     //   off         - no mark (the page still follows the narration)
     //   dim         - the rest of the narrated text fades a little, the sentence keeps its ink (::highlight)
-    //   glow        - soft candlelight on the parchment around the sentence (the default; replaced the gold backlight)
-    //   emberglow   - candle glow with warm ember-brown ink and a few slow sparks that linger
-    //   candlemotes - candle glow with motes of light rising slowly behind the lines
-    //   wisp        - a spark that travels under the words as they are spoken, wandering a little, with a trail
-    //   wispsoft    - a smaller, warmer travelling spark with a fainter trail; the rest of the text fades slightly
-    //   firefly     - a soft light without a bright core that floats under the words; the rest fades slightly
     //   quill       - a thin line of light that draws itself under the words; the rest fades slightly
+    //   glow        - soft candlelight on the parchment around the sentence
+    //   emberglow   - candle glow with warm ember-brown ink, and embers drifting behind the words being spoken
+    //   wisp        - a spark that travels under the words as they are spoken, wandering a little, with a trail (the
+    //                 default for now, owner 16 Nov 2026)
     // Order as in the pause menu (owner, 16 Nov 2026).
     // Bars, sparks and lights are drawn over the page (children of <body> in page coordinates, css/app.css
     // .mfw-reading-*), so the page DOM stays as Blazor rendered it. The ember-ink bar only colours what is darker
     // than it is (mix-blend-mode: lighten): the ink, not the parchment. All marks are parchment only (on the title
     // they would show as blocks). The fades use the CSS Custom Highlight API. Sparks, motes and lights are left out
-    // when Graphics is Low (Settings; reduced motion). Ember text (with sparks), Sparks and Wandering wisp (now the
-    // motion of both travelling sparks) were dropped 16 Nov 2026.
+    // when Graphics is Low (Settings; reduced motion). Dropped 16 Nov 2026: Gold backlight, Underline, Ember text (with
+    // sparks), Sparks, Wandering wisp (now the motion of the travelling spark), soft travelling spark, Firefly, Candle
+    // glow with motes.
     //   bars:   classes of the bars laid over each line (.mfw-reading-<class>), in drawing order
     //   rest:   ::highlight name for the rest of the narrated text
-    //   light:  the travelling light (LIGHTS); sparks: [milliseconds between, kind] around the lines; quill: the line
+    //   light:  the travelling light (LIGHTS); embers: embers around the words being spoken; quill: the line
     const HIGHLIGHT_REST = "mfw-narration-rest";
     const HIGHLIGHT_SOFT = "mfw-narration-soft";
     const STYLES = {
-        off:         {},
-        dim:         { rest: HIGHLIGHT_REST },
-        glow:        { bars: ["glow"] },
-        emberglow:   { bars: ["glow", "ember-ink"], sparks: [520, "linger"] },
-        candlemotes: { bars: ["glow"], sparks: [210, "mote"] },
-        wisp:        { bars: ["haze"], light: "wisp" },
-        wispsoft:    { bars: ["haze"], rest: HIGHLIGHT_SOFT, light: "wispsoft" },
-        firefly:     { rest: HIGHLIGHT_SOFT, light: "firefly" },
-        quill:       { rest: HIGHLIGHT_SOFT, quill: true }
+        off:       {},
+        dim:       { rest: HIGHLIGHT_REST },
+        quill:     { rest: HIGHLIGHT_SOFT, quill: true },
+        glow:      { bars: ["glow"] },
+        emberglow: { bars: ["glow", "ember-ink"], embers: true },
+        wisp:      { bars: ["haze"], light: "wisp" }
     };
-    const DEFAULT_MARK = "glow";
+    const DEFAULT_MARK = "wisp";
     const KEY_MARK = "audio.highlight";
     const MARKS    = Object.keys(STYLES);
     let markStyle = DEFAULT_MARK;
@@ -798,7 +794,6 @@
     let quills = [];      // the quill line, one per row
     let light = null;     // the travelling light
     let sparkAt = 0;      // time of the last spark
-    let sparkGap = 0;     // milliseconds until the next one (random for the calm styles)
 
     function setHighlight(name, ranges) {
         try { if (ranges.length && window.CSS && CSS.highlights && window.Highlight) CSS.highlights.set(name, new Highlight(...ranges)); } catch (e) { /* ignore */ }
@@ -903,8 +898,7 @@
     const ease  = t => t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
     const clamp = t => Math.min(1, Math.max(0, t));
 
-    // The quill line, sparks, motes and the travelling lights (every animation frame while a sentence with rows is
-    // spoken). words: 0-1 from the first word of the sentence to its last; since / after: seconds since the first word
+    // The quill line, embers and the travelling light (every animation frame while a sentence with rows is spoken). words: 0-1 from the first word of the sentence to its last; since / after: seconds since the first word
     // started and since the last one ended (negative before)
     function animateMarks(words, since, after) {
         if (!rows.length) return;
@@ -918,32 +912,70 @@
         }
         if (document.documentElement.dataset.graphics === "low") return;
         const now = performance.now();
-        if (style.sparks && now - sparkAt > sparkGap) {
-            sparkAt  = now;
-            sparkGap = style.sparks[0] * (0.6 + Math.random() * 0.8);
-            const [x, at] = atLength(Math.random());   // more on the longer lines
+        // embers: born around the words being spoken (by the time passed in the sentence), while it is spoken
+        if (style.embers && since > -0.2 && after < 0.3 && now - sparkAt > 45) {
+            sparkAt = now;
+            const spread = (Math.random() + Math.random() + Math.random() - 1.5) * 50;   // mostly close to the words
+            const total  = rows.reduce((sum, r) => sum + r[2], 0) || 1;
+            const [x, at] = atLength(clamp(words + spread / total));
             const row = rows[at];
-            if (style.sparks[1] === "linger") {
-                // a few, from the top of the line, rising slowly and staying a while before they fade
-                spark(x, row[1] + 3 + Math.random() * row[3] * 0.4,
-                      (Math.random() - 0.5) * 14, -(8 + Math.random() * 14), 5 + Math.random() * 3, 3200 + Math.random() * 1400, "mfw-reading-linger");
-            } else {
-                // motes: around the line, rising and drifting slowly
-                spark(x, row[1] - 4 + Math.random() * (row[3] + 8),
-                      (Math.random() - 0.5) * 26, -(4 + Math.random() * 14), 8 + Math.random() * 5, 3200 + Math.random() * 1500, "mfw-reading-mote");
-            }
+            emitEmber(x, row[1] - 3 + Math.random() * (row[3] + 6));
         }
         if (style.light) moveLight(LIGHTS[style.light], words, since, after, now);
+    }
+
+    // Embers: small glowing specks, drawn in overlay so the ink stays on top and they seem to drift behind the words.
+    // Each one wanders: its heading turns a little at random every frame, with a slight pull upwards, and it flickers
+    // and fades out. They keep moving on their own loop after the sentence or the narration ends.
+    const embers = [];
+    let emberFrame = 0, emberTime = 0;
+
+    function emitEmber(x, y) {
+        if (embers.length >= 70) return;
+        const el = document.createElement("div");
+        el.className = "mfw-reading-ember";
+        const size = 4 + Math.random() * 6;
+        el.style.width = el.style.height = size.toFixed(1) + "px";
+        el.style.opacity = "0";
+        document.body.appendChild(el);
+        embers.push({ el, x, y, heading: Math.random() * Math.PI * 2, speed: 10 + Math.random() * 22, turn: (Math.random() - 0.5) * 2,
+                      age: 0, life: 1.4 + Math.random() * 1.8, seed: Math.random() * 10 });
+        if (!emberFrame) {
+            emberTime  = performance.now();
+            emberFrame = requestAnimationFrame(stepEmbers);
+        }
+    }
+
+    function stepEmbers(time) {
+        const dt = Math.max(0, Math.min(0.05, (time - emberTime) / 1000));
+        emberTime = time;
+        for (let i = embers.length - 1; i >= 0; i--) {
+            const e = embers[i];
+            e.age += dt;
+            if (e.age >= e.life) {
+                e.el.remove();
+                embers.splice(i, 1);
+                continue;
+            }
+            e.turn     = Math.max(-2.5, Math.min(2.5, e.turn + (Math.random() - 0.5) * 9 * dt));   // the turn itself drifts
+            e.heading += e.turn * dt;
+            e.x += Math.cos(e.heading) * e.speed * dt;
+            e.y += Math.sin(e.heading) * e.speed * dt - 7 * dt;   // warm air: a slight pull upwards
+            const t = e.age / e.life;
+            const flicker = 0.7 + 0.3 * Math.sin(e.age * 14 + e.seed) * Math.sin(e.age * 5.3 + e.seed * 2);
+            const opacity = Math.min(1, e.age / 0.2) * (t > 0.55 ? (1 - t) / 0.45 : 1) * flicker;
+            e.el.style.transform = "translate(" + e.x.toFixed(1) + "px, " + e.y.toFixed(1) + "px) scale(" + (1 - t * 0.5).toFixed(2) + ")";
+            e.el.style.opacity   = opacity.toFixed(3);
+        }
+        emberFrame = embers.length ? requestAnimationFrame(stepEmbers) : 0;
     }
 
     // Travelling lights: they come in from just before the first word, a moment ahead of it, and trail off past the
     // last one (and past the end of a line where the sentence goes on below), instead of jumping.
     //   below: pixels under the line; trail: [milliseconds between sparks, spark class, size, life]; wander: drifts
-    //   off its route like a will-o'-the-wisp; bob: floats up and down a little
+    //   off its route like a will-o'-the-wisp
     const LIGHTS = {
-        wisp:     { className: "mfw-reading-wisp", below: 5, wander: true, trail: [35, "", 6, 1500] },
-        wispsoft: { className: "mfw-reading-wisp mfw-reading-wisp-soft", below: 5, wander: true, trail: [42, "mfw-reading-spark-soft", 4, 1600] },
-        firefly:  { className: "mfw-reading-wisp mfw-reading-firefly", below: 2, bob: true }
+        wisp: { className: "mfw-reading-wisp", below: 5, wander: true, trail: [35, "", 6, 1500] }
     };
     // seconds: the fade in starts LIGHT_EARLY before the first word and takes LIGHT_IN, the trail off takes LIGHT_OUT
     const LIGHT_EARLY = 0.35, LIGHT_IN = 0.45, LIGHT_OUT = 0.7;
@@ -964,7 +996,6 @@
             x += Math.sin(now / 610) * 5 + Math.sin(now / 237 + 1.3) * 2;
             y += Math.sin(now / 430 + 0.4) * 3.5 + Math.sin(now / 1130) * 2;
         }
-        if (kind.bob) y += Math.sin(now / 520) * 1.6;
         if (!light) {
             light = document.createElement("div");
             light.className = kind.className;
@@ -1060,15 +1091,16 @@
     }
 
     // ---- How the page follows the narration (pause menu, stored per device) ---------------------------------------
+    //   off   - the page does not move by itself
     //   lead  - glides just before a sentence ends when the next one is outside the comfortable part of the view, so
     //           it is in place when it lights up (the default, owner's pick 15 Nov 2026; a sentence that still starts
     //           out of place, e.g. after a seek, glides when it starts)
     //   flow  - moves all the time, so the words being spoken stay at one height (like a teleprompter)
     //   page  - only when the sentence would leave the view, then by nearly a whole screen
     const KEY_SCROLL    = "audio.scroll";
-    const SCROLL_MODES  = ["lead", "flow", "page"];
+    const SCROLL_MODES  = ["off", "lead", "flow", "page"];
     const LEAD_SECONDS  = 0.8;
-    let scrollMode = SCROLL_MODES[0];
+    let scrollMode = "lead";
     try {
         const stored = localStorage.getItem(KEY_SCROLL);
         if (SCROLL_MODES.indexOf(stored) >= 0) scrollMode = stored;
@@ -1082,7 +1114,7 @@
 
     // Glides when the sentence is not where the scroll style wants it (not while the reader scrolls or a glide runs)
     function keepInView(range) {
-        if (Date.now() - readerScrolled < 4000 || performance.now() < glideUntil) return;
+        if (scrollMode === "off" || Date.now() - readerScrolled < 4000 || performance.now() < glideUntil) return;
         const rect = range.getBoundingClientRect();
         if (!rect || (rect.top === 0 && rect.bottom === 0)) return;
         const { top, bottom, height } = readingArea();
