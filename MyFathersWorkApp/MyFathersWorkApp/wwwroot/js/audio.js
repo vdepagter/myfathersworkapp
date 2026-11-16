@@ -752,41 +752,42 @@
     }
 
     // ---- How the spoken sentence is marked (pause menu, stored per device) -----------------------------------------
+    //   off         - no mark (the page still follows the narration)
+    //   dim         - the rest of the narrated text fades a little, the sentence keeps its ink (::highlight)
     //   glow        - soft candlelight on the parchment around the sentence (the default; replaced the gold backlight)
-    //   wisp        - plain ink, a spark that travels under the words as they are spoken and leaves a trail
+    //   emberglow   - candle glow with warm ember-brown ink and a few slow sparks that linger
+    //   candlemotes - candle glow with motes of light rising slowly behind the lines
+    //   wisp        - a spark that travels under the words as they are spoken, wandering a little, with a trail
     //   wispsoft    - a smaller, warmer travelling spark with a fainter trail; the rest of the text fades slightly
-    //   wander      - the soft spark further under the words, drifting off its route like a will-o'-the-wisp
     //   firefly     - a soft light without a bright core that floats under the words; the rest fades slightly
     //   quill       - a thin line of light that draws itself under the words; the rest fades slightly
-    //   emberglow   - candle glow with warm ember-brown ink and a few slow sparks that linger
-    //   candlemotes - candle glow with motes of light rising slowly around the lines
-    //   dim         - the rest of the narrated text fades a little, the sentence keeps its ink (::highlight)
-    //   off         - no mark (the page still follows the narration)
+    // Order as in the pause menu (owner, 16 Nov 2026).
     // Bars, sparks and lights are drawn over the page (children of <body> in page coordinates, css/app.css
     // .mfw-reading-*), so the page DOM stays as Blazor rendered it. The ember-ink bar only colours what is darker
     // than it is (mix-blend-mode: lighten): the ink, not the parchment. All marks are parchment only (on the title
     // they would show as blocks). The fades use the CSS Custom Highlight API. Sparks, motes and lights are left out
-    // when Graphics is Low (Settings; reduced motion). Ember text (with sparks) and Sparks were dropped 16 Nov 2026.
+    // when Graphics is Low (Settings; reduced motion). Ember text (with sparks), Sparks and Wandering wisp (now the
+    // motion of both travelling sparks) were dropped 16 Nov 2026.
     //   bars:   classes of the bars laid over each line (.mfw-reading-<class>), in drawing order
     //   rest:   ::highlight name for the rest of the narrated text
     //   light:  the travelling light (LIGHTS); sparks: [milliseconds between, kind] around the lines; quill: the line
     const HIGHLIGHT_REST = "mfw-narration-rest";
     const HIGHLIGHT_SOFT = "mfw-narration-soft";
     const STYLES = {
+        off:         {},
+        dim:         { rest: HIGHLIGHT_REST },
         glow:        { bars: ["glow"] },
-        wisp:        { bars: ["haze"], light: "wisp" },
-        wispsoft:    { rest: HIGHLIGHT_SOFT, light: "wispsoft" },
-        wander:      { rest: HIGHLIGHT_SOFT, light: "wander" },
-        firefly:     { rest: HIGHLIGHT_SOFT, light: "firefly" },
-        quill:       { rest: HIGHLIGHT_SOFT, quill: true },
         emberglow:   { bars: ["glow", "ember-ink"], sparks: [520, "linger"] },
         candlemotes: { bars: ["glow"], sparks: [210, "mote"] },
-        dim:         { rest: HIGHLIGHT_REST },
-        off:         {}
+        wisp:        { bars: ["haze"], light: "wisp" },
+        wispsoft:    { bars: ["haze"], rest: HIGHLIGHT_SOFT, light: "wispsoft" },
+        firefly:     { rest: HIGHLIGHT_SOFT, light: "firefly" },
+        quill:       { rest: HIGHLIGHT_SOFT, quill: true }
     };
+    const DEFAULT_MARK = "glow";
     const KEY_MARK = "audio.highlight";
     const MARKS    = Object.keys(STYLES);
-    let markStyle = MARKS[0];
+    let markStyle = DEFAULT_MARK;
     try {
         const stored = localStorage.getItem(KEY_MARK);   // gold and underline were removed: back to the default
         if (MARKS.indexOf(stored) >= 0) markStyle = stored;
@@ -929,31 +930,31 @@
             } else {
                 // motes: around the line, rising and drifting slowly
                 spark(x, row[1] - 4 + Math.random() * (row[3] + 8),
-                      (Math.random() - 0.5) * 26, -(4 + Math.random() * 14), 6 + Math.random() * 4, 3200 + Math.random() * 1500, "mfw-reading-mote");
+                      (Math.random() - 0.5) * 26, -(4 + Math.random() * 14), 8 + Math.random() * 5, 3200 + Math.random() * 1500, "mfw-reading-mote");
             }
         }
         if (style.light) moveLight(LIGHTS[style.light], words, since, after, now);
     }
 
-    // Travelling lights: they come in from just before the first word and trail off past the last one (and past the end
-    // of a line where the sentence goes on below), instead of jumping.
+    // Travelling lights: they come in from just before the first word, a moment ahead of it, and trail off past the
+    // last one (and past the end of a line where the sentence goes on below), instead of jumping.
     //   below: pixels under the line; trail: [milliseconds between sparks, spark class, size, life]; wander: drifts
     //   off its route like a will-o'-the-wisp; bob: floats up and down a little
     const LIGHTS = {
-        wisp:     { className: "mfw-reading-wisp", below: 1, trail: [35, "", 6, 1300] },
-        wispsoft: { className: "mfw-reading-wisp mfw-reading-wisp-soft", below: 3, trail: [42, "mfw-reading-spark-soft", 4, 1300] },
-        wander:   { className: "mfw-reading-wisp mfw-reading-wisp-soft", below: 6, wander: true, trail: [48, "mfw-reading-spark-soft", 4, 1700] },
+        wisp:     { className: "mfw-reading-wisp", below: 5, wander: true, trail: [35, "", 6, 1500] },
+        wispsoft: { className: "mfw-reading-wisp mfw-reading-wisp-soft", below: 5, wander: true, trail: [42, "mfw-reading-spark-soft", 4, 1600] },
         firefly:  { className: "mfw-reading-wisp mfw-reading-firefly", below: 2, bob: true }
     };
-    const LIGHT_IN = 0.4, LIGHT_OUT = 0.7;   // seconds
+    // seconds: the fade in starts LIGHT_EARLY before the first word and takes LIGHT_IN, the trail off takes LIGHT_OUT
+    const LIGHT_EARLY = 0.35, LIGHT_IN = 0.45, LIGHT_OUT = 0.7;
 
     function moveLight(kind, words, since, after, now) {
         let [x, at] = atLength(words);
         const row = rows[at];
         let y = row[1] + row[3] + kind.below;
-        const fadeIn  = ease(clamp(since / LIGHT_IN));
+        const fadeIn  = ease(clamp((since + LIGHT_EARLY) / LIGHT_IN));
         const fadeOut = ease(clamp(after / LIGHT_OUT));
-        let opacity = since < 0 ? 0 : fadeIn * (1 - fadeOut);
+        let opacity = fadeIn * (1 - fadeOut);
         x += -(1 - fadeIn) * 28 + fadeOut * 34;
         y -= fadeOut * 5;
         // where the sentence goes on on the next line: dim towards the end of this one and up again on the next

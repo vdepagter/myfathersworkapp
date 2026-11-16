@@ -285,14 +285,16 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
   end is measured against the large viewport (`100lvh`, toolbar hidden), so the app never scrolls into the last
   toolbar height (Firefox keeps `clientHeight` at the small viewport; diag showed `visualViewport.offsetTop` -64 at
   that end). How the sentence is marked is a trial setting next to it (`audio.highlight`, `STYLES` in `audio.js`,
-  15-16 Nov 2026, the owner picks; dropped 16 Nov: Gold backlight, Underline, Ember text (with sparks), Sparks):
-  `glow` (candle light bars, `mix-blend-mode: overlay`, the default), travelling lights `wisp` / `wispsoft` /
-  `wander` (drifts off its route) / `firefly` (`LIGHTS`: they move from the sentence's first word to its last, by
-  `narration-sync.js` `starts().spoken`, fade in from just before it, trail off past the end and at line wraps; the
-  calm ones fade the rest slightly, `::highlight(mfw-narration-soft)`), `quill` (a line of light under the spoken
-  words), `emberglow` (candle glow + flat ember-brown ink + slow lingering sparks), `candlemotes` (candle glow +
-  rising motes), `dim` (fade the rest, `::highlight`) and `off`. Bars and lights are children of `<body>` in page
-  coordinates (`.mfw-reading-*` in `css/app.css`), parchment only. Sparks, motes and lights
+  menu order None, Fade the rest, Candle glow, Ember by candlelight, Candle glow with motes, Travelling spark (soft),
+  Firefly, Quill line - owner, 16 Nov 2026; dropped: Gold backlight, Underline, Ember text (with sparks), Sparks,
+  Wandering wisp): `off`, `dim` (fade the rest, `::highlight`), `glow` (candle light bars, `mix-blend-mode: overlay`,
+  the default), `emberglow` (candle glow + flat ember-brown ink + slow lingering sparks), `candlemotes` (candle glow +
+  rising motes, overlay so they seem behind the words), travelling lights `wisp` / `wispsoft` / `firefly` (`LIGHTS`:
+  they move from the sentence's first word to its last, by `narration-sync.js` `starts().spoken`, fade in from just
+  before it a moment ahead of it, trail off past the end and at line wraps; both sparks wander off their route and
+  sit on a faint haze; the calm ones fade the rest slightly, `::highlight(mfw-narration-soft)`), `quill` (a line of
+  light under the spoken words). Bars and lights are children of `<body>` in page coordinates (`.mfw-reading-*` in
+  `css/app.css`), parchment only. Sparks, motes and lights
   are left out when Graphics is Low. The glide is animated in `audio.js` (the browser's smooth scroll jumps with
   reduced motion), except on Firefox for Android, where a scroll set frame by frame left the frame and the header
   buttons a toolbar height too low with a black bar above until the next tap (owner's phone, not reproducible on a
@@ -305,6 +307,10 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
 ## Build, run, test
 
 - **Claude sessions:** the cloud container cannot download .NET. Build, run and browser-test in a Remote Control session on the owner's laptop (pre-approved), after pushing the branch.
+- **Phone test over the LAN:** `dotnet build MyFathersWorkApp/MyFathersWorkApp.sln -p:DebugType=none -p:DebugSymbols=false`,
+  then `dotnet run tools/lan-serve.cs` (.NET 10 SDK) and open `http://<laptop Wi-Fi IP>:5199`. Not `dotnet run --urls
+  http://0.0.0.0:...`: the Blazor dev server (DevServer 9.0.5) sends the whole file for a byte-range request, so audio
+  jumps back to its start mid-clip (the highlight keeps going). JS/CSS/CSV changes show on a reload, C# needs the build.
 - `dotnet build MyFathersWorkApp/MyFathersWorkApp.sln`
 - `dotnet run --project MyFathersWorkApp/MyFathersWorkApp/MyFathersWorkApp.csproj` (http://localhost:5166; use `--no-launch-profile --urls http://localhost:5199` if 5166 is taken).
 - Offline Windows release: `pwsh tools/build-windows.ps1 [-Version x]` -> `dist/MyFathersWork-Windows-<version>.zip`

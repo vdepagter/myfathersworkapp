@@ -190,10 +190,13 @@ code {
     animation-timing-function: ease-in-out;
 }
 
-/* Motes: specks of candlelight rising slowly around the lines (warm orange, so they show on the glow) */
+/* Motes: specks of candlelight rising slowly behind the lines. Overlay brightens the parchment and leaves the ink
+   dark, so they seem to pass behind the words. */
 .mfw-reading-mote {
-    background: radial-gradient(circle, #fff6d8 0, #ffb53c 34%, rgba(226, 104, 12, 0.6) 58%, transparent 74%);
-    box-shadow: 0 0 6px 1px rgba(240, 120, 20, 0.55);
+    z-index: 2;
+    mix-blend-mode: overlay;
+    background: radial-gradient(circle, #fff8d8 0, #ffb030 32%, rgba(255, 130, 10, 0.85) 52%, transparent 72%);
+    box-shadow: 0 0 10px 3px rgba(255, 140, 20, 0.7);
     animation-name: mfw-reading-mote;
     animation-timing-function: ease-in-out;
 }
