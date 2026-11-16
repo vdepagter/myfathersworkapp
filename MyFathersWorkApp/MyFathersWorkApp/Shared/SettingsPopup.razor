@@ -1,6 +1,7 @@
 ﻿@inject AudioService Audio
 
-@* Settings from the Main Menu (the Unity "Settings UI"): graphics, story text size, narration voice, volumes, language.
+@* Settings from the Main Menu (the Unity "Settings UI"): graphics, story text size, narration voice, volumes, language,
+   Guided mode and the tester option "Play along with the official app".
    The pause menu shows the same DisplaySettings and VolumeSliders. *@
 @if (Visible)
 {
@@ -34,6 +35,8 @@
             }
 
             <VolumeSliders GlobalData="GlobalData"/>
+
+            <PlayOptions GlobalData="GlobalData" ShowMirror="true"/>
 
             <button class="mfw-button green settings-close" @onclick="Close">@GlobalData.GetLocalizedUITag(GlobalTags.Settings_Close)</button>
 

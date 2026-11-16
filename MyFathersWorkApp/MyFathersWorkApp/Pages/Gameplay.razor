@@ -179,6 +179,8 @@
                     <a class="story-link" @onclick="() => OnWindowLinkClicked(element)">[@LinkText(element.Content)]</a>
                 }
             }
+
+            <GuideBox GlobalData="GlobalData"/>
         </div>
 
         @if (GlobalData.ActiveWindow.IsFinalEnding && _GalleryCard != null && ReferenceEquals(_GalleryNoted, GlobalData.ActiveWindow))
@@ -203,6 +205,8 @@
         {
             <h2>@GlobalData.ActiveHub.Subtitle.InsertImages().ProtectNames(GlobalData).AsMarkup()</h2>
         }
+
+        <GuideBox GlobalData="GlobalData" Hub="true"/>
 
         GameplayElement? endOfRound = ShownEndOfRound;
         foreach (GameplayHubSection hubSection in GlobalData.ActiveHub.Sections)

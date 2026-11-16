@@ -1,0 +1,44 @@
+Tag;English
+// Guided mode hints (Shared/Guide/CostOfDiseaseGuide.cs). Not narrated. [[hub:<CostOfDiseaseHubId>]] and [[end:<n>]] become
+// the Endings Gallery names with a found mark. No semicolons in the text (CSV separator), no | or } inside {{n=...}} options.
+//====== Headings ======;
+Guide_Title;Guide
+Guide_Route1;Where Generation I leads
+Guide_Route2;Where Generation II leads
+Guide_Route3;Where this branch ends
+//====== Generation I ======;
+Guide_Fever;Generation II is [[hub:Hospital]] or [[hub:Devastation]]. At the end of this Generation the Fates use one of two tests, 50/50:<ul><li><b>The building</b> the Mayor chose: Bank → [[hub:Hospital]], Library → [[hub:Devastation]].</li><li><b>The Hearts</b> all players gave to charity: more than {{0=8}} plus a die roll builds the Hospital. {{3=15}} or more always does, {{4=9}} or fewer never.</li></ul>
+Guide_Fever_Now;<b>Now:</b> {{0=|the Mayor chooses the building at the end of the Middle Years|the Bank was chosen (→ [[hub:Hospital]] if the building decides)|the Library was chosen (→ [[hub:Devastation]] if the building decides)}}.
+Guide_Fever_NowForced;<b>Now:</b> your village name decides it: {{0=?|[[hub:Hospital]]|[[hub:Devastation]]}}, whatever the Fates test.
+Guide_MayorBid;The new Mayor chooses the new building, Bank or Library. If the Fates test the building at the end of this Generation (50/50 with the Hearts), the Bank leads to [[hub:Hospital]] and the Library to [[hub:Devastation]].
+Guide_Building;This choice can decide Generation II. At the end of this Generation the Fates test either the building or the Hearts, 50/50. If they test the building: Bank → [[hub:Hospital]], Library → [[hub:Devastation]].
+Guide_Hearts;If the Fates test the Hearts (50/50 with the building), more than {{0=8}} plus a die roll builds the Hospital: {{3=15}} or more → [[hub:Hospital]] for sure, {{4=9}} or fewer → [[hub:Devastation]].
+//====== Devastation ======;
+Guide_Devastation;Generation III is [[hub:Prosperity]] or [[hub:GloomyGothic]], decided by the three Suspicious buildings. Each investigation secretly reveals (+1) or conceals (−1) a building, and a building revealed more often than concealed is <b>Exposed</b> at the end of the Generation:<ul><li>2 or 3 buildings Exposed → [[hub:Prosperity]]</li><li>0 or 1 Exposed → [[hub:GloomyGothic]]</li></ul>Investigations are secret, so the guide keeps no tally.
+Guide_Investigate;Reveal adds 1 to this building, Conceal takes 1 away. At the end of Generation II, 2 or more Exposed buildings → [[hub:Prosperity]], fewer → [[hub:GloomyGothic]].
+//====== Hospital ======;
+Guide_Hospital;Generation III is [[hub:University]] or [[hub:NoUniversity]]. At the end of this Generation one of three tests is drawn at random (1 in 3 each), and passing it builds the University:<ul><li><b>Immortality:</b> {{0=|1 or 2 players (drawn at random)|2 players|2 or 3 players (drawn at random)}} found the Secret to Immortality.</li><li><b>The Symposium</b> built the University.</li><li><b>The Panacea</b> was published, not unleashed.</li></ul>Pass all three to be sure.
+Guide_Hospital_Now;<b>Now:</b> {{0=1}} with the Secret to Immortality - University {{1=|not decided yet|not built|built|built}} - Panacea {{2=?|published|not published}}.
+Guide_Immortality;Each player with the Secret to Immortality counts for one of the three tests at the end of Generation II: {{0=|1 or 2 players (drawn at random)|2 players|2 or 3 players (drawn at random)}} needed for [[hub:University]].
+Guide_FeverCure;A published cure turns a middle result at the Symposium into a success, and the University it builds passes one of the three tests for [[hub:University]]. A patented cure does not.
+Guide_Symposium;Success builds the University, one of the three tests for [[hub:University]] at the end of the Generation. The middle result {{0=?|counts as a success, as the Yellow Fever cure was published|fails, as the Yellow Fever cure was not published}}.
+Guide_Panacea;Publish → passes the Panacea test for [[hub:University]] (one of three tests, drawn at random at the end of the Generation). Unleash → fails it.
+//====== A Taste of Evil ======;
+Guide_GloomyHunters;This branch ends in [[end:1]] or [[end:2]]. At the end of the Early Years you vote to Confront or Believe the Hunters (with 2 players you always confront them).<ul><li>Confront, then reach the target with the VP of the Experiment cards donated at the end of the Middle Years → [[end:1]]</li><li>Believe them, or fall short of the target → [[end:2]]</li></ul>
+Guide_GloomyHunters_Now;<b>Now:</b> {{0=?|you confronted the Hunters|you believed the Hunters → [[end:2]]}}{{1=|.|, and reached the target → [[end:1]].|, but fell short → [[end:2]].|.}}
+Guide_GloomyWolves;This branch ends in [[end:3]] or [[end:4]]. At the end of the Middle Years you vote on unleashing a cleansing concoction (players with a Disease card in their Stored Experiments must vote Nay):<ul><li>Cleanse wins → [[end:3]]</li><li>Otherwise {{0=Oliver}} chooses: Cleanse → [[end:3]], sell the vial → [[end:4]]</li></ul>
+Guide_GloomyWolves_Now;<b>Now:</b> the vial was {{0=?|used to cleanse the land → [[end:3]]|sold → [[end:4]]}}.
+Guide_Confront;Confront → [[end:1]] is still possible (reach the target with the VP of the donated Experiment cards). Believe → [[end:2]].
+Guide_HuntTarget;Reach the target → [[end:1]]. Fall short → [[end:2]].
+Guide_CleanseVote;Cleanse → [[end:3]]. Nay → {{0=Oliver}} chooses between Cleanse ([[end:3]]) and selling the vial ([[end:4]]).
+Guide_Vial;Cleanse → [[end:3]]. Sell → [[end:4]].
+//====== The Good Fight ======;
+Guide_ProsperityOrder;This branch ends in [[end:6]] or [[end:4]]. At the end of the Middle Years you vote (2 players: bid) on encouraging a Frenzy:<ul><li>Encourage it → evil returns → [[end:4]]</li><li>Do not → [[end:6]]</li></ul>
+Guide_ProsperityHunters;This branch ends in [[end:5]] or [[end:4]]. Two hunts, at the end of the Early and the Middle Years. After the second hunt:<ul><li>2 hunts won → [[end:5]]</li><li>1 won → 50/50</li><li>none won → the beasts overrun the village → [[end:4]]</li></ul>
+Guide_ProsperityHunters_Now;<b>Now:</b> {{0=0}} of 2 hunts won.
+Guide_ProsperityEvil;Evil has returned to the village: this branch now ends in [[end:4]].
+Guide_Frenzy;Encourage the Frenzy → evil returns → [[end:4]]. Do not → [[end:6]].
+Guide_Hunt;After the second hunt: 2 hunts won → [[end:5]], 1 → 50/50, none → [[end:4]].
+//====== Search for the Cure / The Crawl ======;
+Guide_University;This branch has one ending: [[end:8]].
+Guide_NoUniversity;This branch has one ending: [[end:7]].

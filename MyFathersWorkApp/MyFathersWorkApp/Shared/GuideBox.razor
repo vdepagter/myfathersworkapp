@@ -1,0 +1,82 @@
+@implements IDisposable
+@inject GameOptions    Options
+@inject GuideService   Guide
+@inject GalleryService Gallery
+@inject AudioService   Audio
+
+@* Guided mode hint for the screen on display (Shared/Guide/GuideService.cs). Hub: the route card of a round screen;
+   otherwise the note of the window or popup whose screen method is GlobalData.ResumeMethod. Not narrated (no story
+   tag) and skipped by the narration highlight (js/audio.js rejects .guide-note). *@
+@if (Options.GuidedMode && _Note != null)
+{
+    bool folded = Hub && Options.GuideFolded;
+    <aside class="guide-note @(Hub ? "hub" : "") @(folded ? "folded" : "")" aria-label="@_Note.Title">
+        @if (Hub)
+        {
+            // The route card folds to its heading (remembered on this device)
+            <button class="guide-title guide-fold" aria-expanded="@(folded ? "false" : "true")" @onclick="ToggleFold">
+                <span class="guide-icon" aria-hidden="true">🧭</span> @((MarkupString)_Note.Title)
+                <span class="guide-chevron" aria-hidden="true">@(folded ? "▸" : "▾")</span>
+            </button>
+        }
+        else
+        {
+            <div class="guide-title"><span class="guide-icon" aria-hidden="true">🧭</span> @((MarkupString)_Note.Title)</div>
+        }
+        @if (!folded)
+        {
+            <div class="guide-body">@((MarkupString)_Note.Body)</div>
+            @if (!string.IsNullOrEmpty(_Note.Now))
+            {
+                <div class="guide-now">@((MarkupString)_Note.Now)</div>
+            }
+        }
+    </aside>
+}
+
+@code
+{
+    [Parameter] public GlobalData GlobalData { get; set; } = null!;
+    [Parameter] public bool       Hub        { get; set; }
+
+    private GuideNote? _Note;
+
+    protected override void OnInitialized() => Options.Changed += OnOptionsChanged;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!Options.GuidedMode)
+        {
+            _Note = null;
+            return;
+        }
+
+        await Guide.LoadAsync(GlobalData.ScenarioId);
+
+        GalleryData data  = await Gallery.GetAsync();
+        GuideFound  found = new(GalleryService.Entry(data.Reached, GlobalData.ScenarioId).ToHashSet(), GalleryService.EndingsDone(data, GlobalData.ScenarioId));
+
+        _Note = Guide.Note(GlobalData, Hub ? null : GlobalData.ResumeMethod, found);
+    }
+
+    private async void OnOptionsChanged()
+    {
+        try
+        {
+            await OnParametersSetAsync();
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine($"Guide: refresh failed ({exception.Message})");
+        }
+    }
+
+    private void ToggleFold()
+    {
+        Audio.PlayClick();
+        Options.SetGuideFolded(!Options.GuideFolded);
+    }
+
+    public void Dispose() => Options.Changed -= OnOptionsChanged;
+}

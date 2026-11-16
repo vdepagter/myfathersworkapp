@@ -3,19 +3,12 @@
 @inject NavigationManager Nav
 @inject AudioService      Audio
 @inject HttpClient        Http
+@inject GameOptions       Options
 
 <MenuPage Title="@GlobalData.GetLocalizedUITag(GlobalTags.ScenarioLanguage_Title)" OnBack="GoBack" Class="centered">
     <p class="mp-lead">@GlobalData.GetLocalizedUITag(GlobalTags.ScenarioLanguage_Subtitle)</p>
 
     <div class="mfw-dark-panel mp-panel options">
-        <label class="mirror-option">
-            <input type="checkbox" @bind="_MirrorMode"/>
-            <span>
-                <b>@GlobalData.GetLocalizedUITag(GlobalTags.ScenarioLanguage_Mirror)</b><br/>
-                @GlobalData.GetLocalizedUITag(GlobalTags.ScenarioLanguage_MirrorDesc)
-            </span>
-        </label>
-
         <label class="narration-option">
             <b>@GlobalData.GetLocalizedUITag(GlobalTags.Audio_Narration)</b>
             <select value="@Audio.Narration" @onchange="OnNarrationChanged">
@@ -45,8 +38,6 @@
     private readonly Dictionary<string, Dictionary<string, string>> _ScenarioGameplayLocalizations = new();
 
     private readonly Dictionary<string, string> _LocalizationOptions = new();
-
-    private bool _MirrorMode;
 
     private void GoBack()
     {
@@ -84,7 +75,7 @@
         GlobalData.ActiveHub        = null;
         GlobalData.ActivePopup      = null;
         GlobalData.ActiveInputPopup = null;
-        GlobalData.MirrorMode       = _MirrorMode;
+        GlobalData.MirrorMode       = Options.MirrorMode; // tester option in Settings (Shared/PlayOptions.razor)
         
         GlobalData.ResetScenarioVars();
 

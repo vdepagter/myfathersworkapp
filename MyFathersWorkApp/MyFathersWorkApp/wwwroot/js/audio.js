@@ -618,7 +618,7 @@
         const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, {
             acceptNode: node => {
                 const element = node.nodeType === 1 ? node : node.parentElement;
-                return element && element.closest(".narration-pill, .story-link, button") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+                return element && element.closest(".narration-pill, .story-link, button, .guide-note") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
             }
         });
         let text = "";
