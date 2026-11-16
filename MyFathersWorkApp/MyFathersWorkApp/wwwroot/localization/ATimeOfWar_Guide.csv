@@ -1,0 +1,42 @@
+Tag;English
+// Guided mode hints (Shared/Guide/ATimeOfWarGuide.cs). Not narrated. [[hub:<ATimeOfWarHubId>]] and [[end:<n>]] become the
+// Endings Gallery names with a found mark. No semicolons in the text (CSV separator), no | or } inside {{n=...}} options.
+// {{0=?|Unified Monarchists|Separatists}} is the faction the town supported in Generation I, {{1=?|...}} the other one.
+//====== Headings ======;
+Guide_Title;Guide
+Guide_Route1;Where Generation I leads
+Guide_Route2;Where Generation II leads
+Guide_Route3;Where this branch ends
+//====== Taking Sides ======;
+Guide_TakingSides;Generation II is [[hub:Martial]] or [[hub:TimeTravel]]. The Fates chose it at random (50/50) when the game began, and nothing you do changes it. Some of the rumors at the Town Hall hint at which one it will be.
+Guide_TakingSides_NowForced;<b>Now:</b> your village name decides it: {{0=?|[[hub:TimeTravel]]|[[hub:Martial]]}}.
+//====== Martial Law ======;
+Guide_Martial;Generation III follows whoever wins the war: the Unified Monarchists → [[hub:MonarchReign]], the Separatists → [[hub:Peace]]. The town holds with the {{0=?|Unified Monarchists|Separatists}}, and the {{1=?|Unified Monarchists|Separatists}} resist. At the end of this Generation one of three tests is drawn at random (1 in 3 each):<ul><li><b>Sabotage:</b> 1 or 2 buildings destroyed (drawn at random) → the {{1=?|Unified Monarchists|Separatists}} win.</li><li><b>Flags:</b> the faction with the most face-up Flag tokens wins (a tie goes to the {{0=?|Unified Monarchists|Separatists}}).</li><li><b>Weapons:</b> enough completed Advanced Weaponry Experiments (the number is drawn) → the {{1=?|Unified Monarchists|Separatists}} win.</li></ul>
+Guide_Martial_Now;<b>Now:</b> buildings destroyed: {{2=0}}.
+Guide_ResistSides;Flipping your Flag token counts if the Fates test the Flags. The Unified Monarchists winning the war → [[hub:MonarchReign]], the Separatists → [[hub:Peace]].
+Guide_ResistBuildings;The {{1=?|Unified Monarchists|Separatists}} winning → {{1=?|[[hub:MonarchReign]]|[[hub:Peace]]}}. The {{0=?|Unified Monarchists|Separatists}} holding the town → {{0=?|[[hub:MonarchReign]]|[[hub:Peace]]}}.
+Guide_ResistFlags;The Unified Monarchists → [[hub:MonarchReign]]. The Separatists → [[hub:Peace]].
+Guide_ResistWeapons;The {{1=?|Unified Monarchists|Separatists}} successful → {{1=?|[[hub:MonarchReign]]|[[hub:Peace]]}}. The {{0=?|Unified Monarchists|Separatists}} defending the town → {{0=?|[[hub:MonarchReign]]|[[hub:Peace]]}}.
+//====== Time Travel ======;
+Guide_TimeTravel;Generation III is [[hub:Paradox]] or [[hub:Warning]]. At the end of this Generation the Fates use one of two tests, 50/50:<ul><li><b>Paradox tokens</b> left on all players' Experiments: at least a number drawn from {{0=1}} to {{1=3}} → [[hub:Warning]] (the timeline is altered), fewer → [[hub:Paradox]].</li><li><b>The Time Machine:</b> all three repairs completed → [[hub:Paradox]], otherwise [[hub:Warning]].</li></ul>
+Guide_TimeTravel_Now;<b>Now:</b> the Time Machine {{0=?|is repaired|is not repaired yet}}.
+Guide_Repaired;A repaired Time Machine leads to [[hub:Paradox]] if the Fates test the Time Machine at the end of this Generation (50/50 with the Paradox tokens).
+Guide_ParadoxTokens;Enough tokens → [[hub:Warning]]. Fewer → [[hub:Paradox]].
+Guide_TimeMachine;Repaired → [[hub:Paradox]]. Not repaired → [[hub:Warning]].
+//====== Monarchy Reigns ======;
+Guide_Reign;This branch ends in [[end:5]] or [[end:6]]: at most {{0=1}} Crown penalties by the end of the Generation → [[end:5]], more → [[end:6]].
+Guide_Reign_Now;<b>Now:</b> Crown penalties so far: {{0=0}}.
+Guide_Crown;Every Crown penalty counts: at most {{0=1}} by the end of the Generation → [[end:5]], more → [[end:6]].
+//====== World Conquest ======;
+Guide_Peace;This branch ends in [[end:7]] or [[end:8]]. [[end:7]] needs both:<ul><li>accepting the new meat in the famine vote (end of the Early Years)</li><li>releasing the gas (end of the Middle Years)</li></ul>Anything else → [[end:8]].
+Guide_Peace_Now;<b>Now:</b> {{0=?|the new meat was accepted|no new meat yet}} - {{1=|the gas vote is still to come|the gas was not released|the gas was released|the gas was released}}.
+Guide_Famine;Accept the new meat → [[end:7]] stays possible (the gas must be released too). Refuse it → [[end:8]].
+Guide_Gas;Release the gas → [[end:7]] if the new meat was accepted. Do not → [[end:8]].
+//====== Peaceful Return ======;
+Guide_Warning;This branch ends in [[end:3]] or [[end:4]]. The timeline becomes stable after enough time shifts (a hidden number). Complete your great-grandfather's Masterwork while it is stable → [[end:3]], otherwise [[end:4]].
+Guide_Warning_Now;<b>Now:</b> the timeline {{0=?|is stable|is not stable yet}} - Masterwork {{1=?|completed → [[end:3]]|not completed}}.
+Guide_Stasis;Completed in the stable timeline → [[end:3]].
+//====== Forward to Progress ======;
+Guide_Paradox;This branch ends in [[end:1]] or [[end:2]]: at the end of the Generation, {{0=1}} or more players with a completed Giant Masterwork → [[end:1]], fewer → [[end:2]]. If anyone released the Time Machine schematics (a secret choice), one Giant Masterwork fewer counts.
+Guide_Schematics;Releasing the schematics costs one Giant Masterwork at the end of the Generation: {{0=1}} or more completed (one fewer after a release) → [[end:1]], fewer → [[end:2]].
+Guide_Giants;{{0=1}} or more (one fewer if the schematics were released) → [[end:1]]. Fewer → [[end:2]].

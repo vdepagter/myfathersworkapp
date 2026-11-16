@@ -1,0 +1,107 @@
+/* Guided mode hint: a note in the margin of the story, in blue-green ink so it never reads as story text */
+.guide-note {
+    margin: 1.2rem 0 0.2rem;
+    padding: 0.6rem 0.9rem 0.65rem;
+    border-left: 3px solid #2e5f63;
+    border-radius: 0 6px 6px 0;
+    background: rgba(46, 95, 99, 0.09);
+    color: #1f3a3c;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 0.78em;
+    font-weight: normal;
+    line-height: 1.45;
+    text-align: left;
+    -webkit-text-stroke: 0;
+    text-shadow: none;
+}
+
+.guide-title {
+    margin-bottom: 0.25rem;
+    color: #2e5f63;
+    font-size: 0.82em;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.guide-fold {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.guide-chevron {
+    margin-left: auto;
+    font-size: 1.1em;
+}
+
+.guide-note.folded .guide-title {
+    margin-bottom: 0;
+}
+
+.guide-icon {
+    letter-spacing: 0;
+}
+
+.guide-body ::deep ul {
+    margin: 0.3rem 0 0.2rem;
+    padding-left: 1.2rem;
+}
+
+.guide-body ::deep li {
+    margin: 0.15rem 0;
+}
+
+.guide-now {
+    margin-top: 0.45rem;
+    padding-top: 0.4rem;
+    border-top: 1px dashed rgba(46, 95, 99, 0.4);
+}
+
+.guide-note ::deep .guide-branch {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.guide-note ::deep .guide-branch.found {
+    color: #36612a;
+}
+
+.guide-note ::deep .guide-branch.new {
+    color: #8c4f00;
+}
+
+/* On a round screen: the route card at the top, in the dark panels' colours */
+.guide-note.hub {
+    width: 100%;
+    max-width: 52rem;
+    margin: 0 0 1.1rem;
+    border-left-color: #7fc4c2;
+    background: rgba(20, 44, 46, 0.72);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+    color: #dceceb;
+    font-size: 0.95rem;
+}
+
+.guide-note.hub .guide-title {
+    color: #9fdcd9;
+}
+
+.guide-note.hub .guide-now {
+    border-top-color: rgba(159, 220, 217, 0.35);
+}
+
+.guide-note.hub ::deep .guide-branch.found {
+    color: #a8e08f;
+}
+
+.guide-note.hub ::deep .guide-branch.new {
+    color: #ffc66b;
+}

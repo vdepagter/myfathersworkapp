@@ -135,13 +135,6 @@ code {
     pointer-events: none;
 }
 
-/* Ember by candlelight: the ink turns one warm ember brown (only what is darker than the bar - the ink, not the
-   parchment); one flat colour, so it reads as easily as black */
-.mfw-reading-ember-ink {
-    mix-blend-mode: lighten;
-    background: #6a1f04;
-}
-
 /* Candle glow: the parchment around the sentence lights up, the ink stays dark */
 .mfw-reading-glow {
     mix-blend-mode: overlay;
@@ -184,7 +177,7 @@ code {
     border-radius: 50%;
     mix-blend-mode: overlay;
     background: radial-gradient(circle, #ffe9a0 0, #ff7a10 34%, rgba(214, 50, 0, 0.95) 56%, transparent 74%);
-    box-shadow: 0 0 8px 3px rgba(230, 70, 0, 0.75);
+    box-shadow: 0 0 6px 2px rgba(230, 70, 0, 0.55);
     will-change: transform, opacity;
 }
 

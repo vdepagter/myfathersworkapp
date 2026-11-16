@@ -62,7 +62,7 @@
     }
 
     // Until a player moves a slider: music 80%, effects 40%, speech 100%
-    const DEFAULT_VOLUMES = { music: 80, effects: 40, voice: 100 };
+    const DEFAULT_VOLUMES = { music: 25, effects: 25, voice: 75 }; // owner, 16 Nov 2026
 
     function readVolume(kind) {
         try {
@@ -618,7 +618,7 @@
         const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, {
             acceptNode: node => {
                 const element = node.nodeType === 1 ? node : node.parentElement;
-                return element && element.closest(".narration-pill, .story-link, button") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+                return element && element.closest(".narration-pill, .story-link, button, .guide-note") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
             }
         });
         let text = "";
@@ -754,17 +754,16 @@
     // ---- How the spoken sentence is marked (pause menu, stored per device) -----------------------------------------
     //   off         - no mark (the page still follows the narration)
     //   dim         - the rest of the narrated text fades a little, the sentence keeps its ink (::highlight)
-    //   quill       - a thin line of light that draws itself under the words; the rest fades slightly
     //   glow        - soft candlelight on the parchment around the sentence
-    //   emberglow   - candle glow with warm ember-brown ink, and embers drifting behind the words being spoken
-    //   wisp        - a spark that travels under the words as they are spoken, wandering a little, with a trail (the
-    //                 default for now, owner 16 Nov 2026)
+    //   quill       - a thin line of light that draws itself under the words; the rest fades slightly
+    //   emberglow   - candle glow with embers drifting behind the words being spoken; the ink stays black (the
+    //                 default, owner 16 Nov 2026: the ember-brown ink was dropped, it made the text harder to read)
+    //   wisp        - a spark that travels under the words as they are spoken, wandering a little, with a trail
     // Order as in the pause menu (owner, 16 Nov 2026).
     // Bars, sparks and lights are drawn over the page (children of <body> in page coordinates, css/app.css
-    // .mfw-reading-*), so the page DOM stays as Blazor rendered it. The ember-ink bar only colours what is darker
-    // than it is (mix-blend-mode: lighten): the ink, not the parchment. All marks are parchment only (on the title
+    // .mfw-reading-*), so the page DOM stays as Blazor rendered it. All marks are parchment only (on the title
     // they would show as blocks). The fades use the CSS Custom Highlight API. Sparks, motes and lights are left out
-    // when Graphics is Low (Settings; reduced motion). Dropped 16 Nov 2026: Gold backlight, Underline, Ember text (with
+    // when Graphics Low was chosen in Settings (graphicsChosenLow). Dropped 16 Nov 2026: Gold backlight, Underline, Ember text (with
     // sparks), Sparks, Wandering wisp (now the motion of the travelling spark), soft travelling spark, Firefly, Candle
     // glow with motes.
     //   bars:   classes of the bars laid over each line (.mfw-reading-<class>), in drawing order
@@ -775,12 +774,12 @@
     const STYLES = {
         off:       {},
         dim:       { rest: HIGHLIGHT_REST },
-        quill:     { rest: HIGHLIGHT_SOFT, quill: true },
         glow:      { bars: ["glow"] },
-        emberglow: { bars: ["glow", "ember-ink"], embers: true },
+        quill:     { rest: HIGHLIGHT_SOFT, quill: true },
+        emberglow: { bars: ["glow"], embers: true },
         wisp:      { bars: ["haze"], light: "wisp" }
     };
-    const DEFAULT_MARK = "wisp";
+    const DEFAULT_MARK = "emberglow"; // owner, 16 Nov 2026
     const KEY_MARK = "audio.highlight";
     const MARKS    = Object.keys(STYLES);
     let markStyle = DEFAULT_MARK;
@@ -895,6 +894,13 @@
         return [rows[last][0] + rows[last][2], last];
     }
 
+    // Embers and the travelling spark are left out only when the reader chose Graphics Low in Settings. Not for the
+    // reduced-motion default of atmosphere.js: Android's power saving / "remove animations" turns that on, and the
+    // owner's phone and tablet then showed the glow without its embers or spark (16 Nov 2026).
+    function graphicsChosenLow() {
+        try { return localStorage.getItem("mfwGraphics") === "low"; } catch (e) { return false; }
+    }
+
     const ease  = t => t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
     const clamp = t => Math.min(1, Math.max(0, t));
 
@@ -910,7 +916,7 @@
                 bar.style.width = width.toFixed(1) + "px";
             });
         }
-        if (document.documentElement.dataset.graphics === "low") return;
+        if (graphicsChosenLow()) return;
         const now = performance.now();
         // embers: born around the words being spoken (by the time passed in the sentence), while it is spoken
         if (style.embers && since > -0.2 && after < 0.3 && now - sparkAt > 45) {

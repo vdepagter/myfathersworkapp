@@ -11,5 +11,7 @@ builder.Services.AddScoped<AudioService>();
 builder.Services.AddScoped<GalleryService>();
 builder.Services.AddScoped<LogBookService>();
 builder.Services.AddScoped<SavedGamesService>();
+builder.Services.AddScoped<GameOptions>();
+builder.Services.AddScoped<GuideService>();
 
 await builder.Build().RunAsync();
