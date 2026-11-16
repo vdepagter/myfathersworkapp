@@ -756,10 +756,14 @@
     private GameplayWindow? _OliverWindow; // the window _OliverClips was computed for
     private List<NarrationClip>? _OliverClips;
 
-    // Oliver clips of the window when the Oliver voice is chosen, else null (then the original recording, if any, plays)
+    // The voice the Play button uses: the chosen one, or while narration is off the one used before (Oliver unless
+    // another was chosen). Off used to play the female recording.
+    private NarrationVoice PlayVoice => Audio.Narration != NarrationVoice.Off ? Audio.Narration : Audio.LastNarration;
+
+    // Oliver clips of the window when the Play voice is Oliver, else null (then the original recording, if any, plays)
     private List<NarrationClip>? OliverClips(GameplayWindow window)
     {
-        if (Audio.Narration != NarrationVoice.Oliver) return null;
+        if (PlayVoice != NarrationVoice.Oliver) return null;
         if (!ReferenceEquals(window, _OliverWindow))
         {
             _OliverWindow = window;
@@ -795,8 +799,8 @@
         {
             if (_VoiceWindow.VoiceOver == null) return;
 
-            // Off has no chosen voice: its Play button uses the female voice. Oliver falls back to the male recording.
-            NarrationVoice voice = Audio.Narration is NarrationVoice.Male or NarrationVoice.Oliver ? NarrationVoice.Male : NarrationVoice.Female;
+            // Oliver falls back to the male recording
+            NarrationVoice voice = PlayVoice == NarrationVoice.Female ? NarrationVoice.Female : NarrationVoice.Male;
             _VoiceRequest = Audio.VoicePlay(_VoiceWindow.VoiceOver, voice, leadIn);
         }
 

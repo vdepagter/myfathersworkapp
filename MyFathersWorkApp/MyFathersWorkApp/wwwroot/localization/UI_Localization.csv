@@ -72,13 +72,11 @@ Audio_Highlight;Highlight
 Audio_Highlight_glow;Candle glow
 Audio_Highlight_wisp;Travelling spark
 Audio_Highlight_wispsoft;Travelling spark, soft
+Audio_Highlight_wander;Wandering wisp
 Audio_Highlight_firefly;Firefly
 Audio_Highlight_quill;Quill line
 Audio_Highlight_emberglow;Ember by candlelight
 Audio_Highlight_candlemotes;Candle glow with motes
-Audio_Highlight_ember;Ember text
-Audio_Highlight_embersparks;Ember text with sparks
-Audio_Highlight_sparks;Sparks
 Audio_Highlight_dim;Fade the rest
 Audio_Highlight_off;None
 Audio_Scroll;Scrolling
@@ -95,6 +93,8 @@ Narration_Back;Back 10 seconds
 Narration_Forward;Forward 10 seconds
 Narration_Position;Narration position
 Audio_NarrationToggle;Narration on or off
+Audio_Mute;Mute
+Audio_Unmute;Unmute
 Reveal_StartVote;Start Voting
 Reveal_StartBid;Start Bidding
 Reveal_DetailsVote;Click on the 'Start Voting' button to start the vote. This will start a 3-second countdown.

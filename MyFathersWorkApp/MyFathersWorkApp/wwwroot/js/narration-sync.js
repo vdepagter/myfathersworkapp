@@ -57,15 +57,21 @@ window.mfwNarrationSync = (function () {
 
     // Second at which each sentence starts to be shown (the first at 0).
     // pauses: [duration, start, end, start, end, ...] of the clip, or null (estimate by text length).
+    // The result also has .spoken: [first word, last word] in seconds per sentence (the pause before and after left
+    // out where the sentence end has a pause; without pauses the span to the next sentence start).
     function starts(parts, duration, pauses) {
         const n = parts.length;
-        if (n <= 1 || !(duration > 0)) return parts.map(() => 0);
-
-        const w = weights(parts);
         const list = [];
         if (pauses) for (let i = 1; i + 1 < pauses.length; i += 2) list.push([pauses[i], pauses[i + 1]]);
         const lead  = list.length && list[0][0] < EDGE ? list[0][1] : 0;
         const tail  = list.length && list[list.length - 1][1] > duration - EDGE ? list[list.length - 1][0] : duration;
+        if (n <= 1 || !(duration > 0)) {
+            const none = parts.map(() => 0);
+            none.spoken = parts.map(() => [lead, duration > 0 ? tail : 0]);
+            return none;
+        }
+
+        const w = weights(parts);
         const inner = list.filter(p => p[0] >= EDGE && p[1] <= duration - EDGE && p[1] - p[0] >= MIN_PAUSE);
 
         // Expected middle of the pause after sentence k
@@ -101,6 +107,12 @@ window.mfwNarrationSync = (function () {
                 result[k + 1] = Math.max((pause[0] + pause[1]) / 2, pause[1] - SWITCH_BEFORE);
             }
             from = k;
+        }
+        result.spoken = [];
+        for (let k = 0; k < n; k++) {
+            const begin = k === 0 ? lead : assigned[k - 1] >= 0 ? inner[assigned[k - 1]][1] : result[k];
+            const end   = k === n - 1 ? tail : assigned[k] >= 0 ? inner[assigned[k]][0] : result[k + 1];
+            result.spoken.push([begin, Math.max(begin, end)]);
         }
         return result;
     }

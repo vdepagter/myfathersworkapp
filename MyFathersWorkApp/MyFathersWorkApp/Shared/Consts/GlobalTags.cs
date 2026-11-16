@@ -97,6 +97,8 @@ public static class GlobalTags
     public const string Narration_Forward     = "Narration_Forward";
     public const string Narration_Position    = "Narration_Position";
     public const string Audio_NarrationToggle = "Audio_NarrationToggle";
+    public const string Audio_Mute            = "Audio_Mute";            // header volume pop-up: switch the channel off
+    public const string Audio_Unmute          = "Audio_Unmute";          // ... and on again
 
     // Vote / bid countdown (Shared/RevealPanel.razor) and the special event banner
     public const string Reveal_StartVote   = "Reveal_StartVote";

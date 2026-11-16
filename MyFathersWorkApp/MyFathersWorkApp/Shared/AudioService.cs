@@ -113,22 +113,23 @@ public sealed class AudioService(IJSRuntime js)
     public void   SetNarrationScroll(string mode) => InvokeVoid("mfwAudio.setScroll", mode);
 
     // How the sentence Oliver is speaking is marked (audio.js MARKS, stored per device)
-    public static readonly string[] HighlightStyles = ["glow", "wisp", "wispsoft", "firefly", "quill", "emberglow", "candlemotes", "ember", "embersparks", "sparks", "dim", "off"];
+    public static readonly string[] HighlightStyles = ["glow", "wisp", "wispsoft", "wander", "firefly", "quill", "emberglow", "candlemotes", "dim", "off"];
     public string NarrationHighlight                 => Invoke("mfwAudio.getHighlight", HighlightStyles[0]);
     public void   SetNarrationHighlight(string mode) => InvokeVoid("mfwAudio.setHighlight", mode);
 
     // Raised by SetNarration, so a page showing the narration state (Pages/Gameplay.razor) can redraw
     public event Action? NarrationChanged;
 
+    // The voice used before narration was switched off (Oliver when none was chosen yet)
+    public NarrationVoice LastNarration => Invoke("mfwAudio.getLastVoice", "oliver") switch
+    {
+        "female" => NarrationVoice.Female,
+        "male"   => NarrationVoice.Male,
+        _        => NarrationVoice.Oliver
+    };
+
     // Narration toggle next to the sound toggles: Off, or back to the voice used before
-    public void ToggleNarration() => SetNarration(Narration != NarrationVoice.Off
-        ? NarrationVoice.Off
-        : Invoke("mfwAudio.getLastVoice", "oliver") switch
-        {
-            "female" => NarrationVoice.Female,
-            "male"   => NarrationVoice.Male,
-            _        => NarrationVoice.Oliver
-        });
+    public void ToggleNarration() => SetNarration(Narration != NarrationVoice.Off ? NarrationVoice.Off : LastNarration);
 
     // Plays the original recording of a narrated window (GameplayWindow.VoiceOver) in the given voice (Male or Female),
     // optionally after the thunder lead-in. Returns the request id reported to the listener, or 0 when nothing started.

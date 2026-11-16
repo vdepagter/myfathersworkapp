@@ -285,13 +285,14 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
   end is measured against the large viewport (`100lvh`, toolbar hidden), so the app never scrolls into the last
   toolbar height (Firefox keeps `clientHeight` at the small viewport; diag showed `visualViewport.offsetTop` -64 at
   that end). How the sentence is marked is a trial setting next to it (`audio.highlight`, `STYLES` in `audio.js`,
-  15-16 Nov 2026, the owner picks; Gold backlight and Underline were dropped 16 Nov, Candle glow is the default):
-  `glow` (candle light bars, `mix-blend-mode: overlay`), `wisp` / `wispsoft` / `firefly` (a light that travels under
-  the words by the time passed in the sentence; the calm two fade the rest slightly, `::highlight(mfw-narration-soft)`),
-  `quill` (a line of light drawn under the spoken words), `emberglow` (candle glow + calm ember ink + slow lingering
-  sparks), `candlemotes` (candle glow + drifting motes), `ember` (bars that colour only the ink, `lighten`),
-  `embersparks`, `sparks`, `dim` (fade the rest, `::highlight`) and `off`. Bars and lights are children of `<body>`
-  in page coordinates (`.mfw-reading-*` in `css/app.css`), parchment only. Sparks, motes and lights
+  15-16 Nov 2026, the owner picks; dropped 16 Nov: Gold backlight, Underline, Ember text (with sparks), Sparks):
+  `glow` (candle light bars, `mix-blend-mode: overlay`, the default), travelling lights `wisp` / `wispsoft` /
+  `wander` (drifts off its route) / `firefly` (`LIGHTS`: they move from the sentence's first word to its last, by
+  `narration-sync.js` `starts().spoken`, fade in from just before it, trail off past the end and at line wraps; the
+  calm ones fade the rest slightly, `::highlight(mfw-narration-soft)`), `quill` (a line of light under the spoken
+  words), `emberglow` (candle glow + flat ember-brown ink + slow lingering sparks), `candlemotes` (candle glow +
+  rising motes), `dim` (fade the rest, `::highlight`) and `off`. Bars and lights are children of `<body>` in page
+  coordinates (`.mfw-reading-*` in `css/app.css`), parchment only. Sparks, motes and lights
   are left out when Graphics is Low. The glide is animated in `audio.js` (the browser's smooth scroll jumps with
   reduced motion), except on Firefox for Android, where a scroll set frame by frame left the frame and the header
   buttons a toolbar height too low with a black bar above until the next tap (owner's phone, not reproducible on a

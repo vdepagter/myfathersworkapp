@@ -745,44 +745,42 @@
         const progress = end > start ? Math.min(1, Math.max(0, (now - start) / (end - start))) : 0;
         if (voice.paused) return;
         if (scrollMode === "flow") followLine(range, progress);
-        animateMarks(progress);
+        // from the first word to the last (the sentence is shown a little before it is spoken and stays through its pause)
+        const spoken = reading.times.spoken && reading.times.spoken[shown] || [start, end];
+        const words  = spoken[1] > spoken[0] ? Math.min(1, Math.max(0, (now - spoken[0]) / (spoken[1] - spoken[0]))) : progress;
+        animateMarks(words, now - spoken[0], now - spoken[1]);
     }
 
     // ---- How the spoken sentence is marked (pause menu, stored per device) -----------------------------------------
     //   glow        - soft candlelight on the parchment around the sentence (the default; replaced the gold backlight)
-    //   wisp        - plain ink, a spark that travels under the words as they are spoken and leaves a short trail
-    //   wispsoft    - a smaller, dimmer travelling spark with a faint trail; the rest of the text fades slightly
+    //   wisp        - plain ink, a spark that travels under the words as they are spoken and leaves a trail
+    //   wispsoft    - a smaller, warmer travelling spark with a fainter trail; the rest of the text fades slightly
+    //   wander      - the soft spark further under the words, drifting off its route like a will-o'-the-wisp
     //   firefly     - a soft light without a bright core that floats under the words; the rest fades slightly
     //   quill       - a thin line of light that draws itself under the words; the rest fades slightly
-    //   emberglow   - candle glow with calm ember-coloured ink and a few slow sparks that linger
-    //   candlemotes - candle glow with motes of light drifting slowly over the lines
-    //   ember       - the text itself glows like embers
-    //   embersparks - ember, with sparks rising from the lines
-    //   sparks      - plain ink, sparks around the lines (the look of the page tap)
+    //   emberglow   - candle glow with warm ember-brown ink and a few slow sparks that linger
+    //   candlemotes - candle glow with motes of light rising slowly around the lines
     //   dim         - the rest of the narrated text fades a little, the sentence keeps its ink (::highlight)
     //   off         - no mark (the page still follows the narration)
-    // Bars, sparks and the wisp are drawn over the page (children of <body> in page coordinates, css/app.css
-    // .mfw-reading-*), so the page DOM stays as Blazor rendered it. Ember bars only colour what is darker than they are
-    // (mix-blend-mode: lighten): the ink, not the parchment. All marks are parchment only (on the title they would show
-    // as blocks). The fades use the CSS Custom Highlight API. Sparks, motes and the wisps are left out when Graphics is
-    // Low (Settings; reduced motion).
+    // Bars, sparks and lights are drawn over the page (children of <body> in page coordinates, css/app.css
+    // .mfw-reading-*), so the page DOM stays as Blazor rendered it. The ember-ink bar only colours what is darker
+    // than it is (mix-blend-mode: lighten): the ink, not the parchment. All marks are parchment only (on the title
+    // they would show as blocks). The fades use the CSS Custom Highlight API. Sparks, motes and lights are left out
+    // when Graphics is Low (Settings; reduced motion). Ember text (with sparks) and Sparks were dropped 16 Nov 2026.
     //   bars:   classes of the bars laid over each line (.mfw-reading-<class>), in drawing order
     //   rest:   ::highlight name for the rest of the narrated text
-    //   wisp:   class of the travelling light; trail: [milliseconds between sparks, spark class] or none
-    //   sparks: [milliseconds between, kind] for sparks around the lines; quill: the line under the words
+    //   light:  the travelling light (LIGHTS); sparks: [milliseconds between, kind] around the lines; quill: the line
     const HIGHLIGHT_REST = "mfw-narration-rest";
     const HIGHLIGHT_SOFT = "mfw-narration-soft";
     const STYLES = {
         glow:        { bars: ["glow"] },
-        wisp:        { bars: ["haze"], wisp: "mfw-reading-wisp", trail: [35, ""] },
-        wispsoft:    { rest: HIGHLIGHT_SOFT, wisp: "mfw-reading-wisp mfw-reading-wisp-soft", trail: [80, "mfw-reading-spark-soft"] },
-        firefly:     { rest: HIGHLIGHT_SOFT, wisp: "mfw-reading-wisp mfw-reading-firefly" },
+        wisp:        { bars: ["haze"], light: "wisp" },
+        wispsoft:    { rest: HIGHLIGHT_SOFT, light: "wispsoft" },
+        wander:      { rest: HIGHLIGHT_SOFT, light: "wander" },
+        firefly:     { rest: HIGHLIGHT_SOFT, light: "firefly" },
         quill:       { rest: HIGHLIGHT_SOFT, quill: true },
-        emberglow:   { bars: ["glow", "ember-calm"], sparks: [520, "linger"] },
-        candlemotes: { bars: ["glow"], sparks: [380, "mote"] },
-        ember:       { bars: ["ember"] },
-        embersparks: { bars: ["ember"], sparks: [110, "rise"] },
-        sparks:      { bars: ["haze"], sparks: [55, "rise"] },
+        emberglow:   { bars: ["glow", "ember-ink"], sparks: [520, "linger"] },
+        candlemotes: { bars: ["glow"], sparks: [210, "mote"] },
         dim:         { rest: HIGHLIGHT_REST },
         off:         {}
     };
@@ -797,7 +795,7 @@
     let rowsKey = "";     // to leave everything alone while nothing moved
     let lines = [];       // the bars on the page
     let quills = [];      // the quill line, one per row
-    let wisp = null;      // the travelling light
+    let light = null;     // the travelling light
     let sparkAt = 0;      // time of the last spark
     let sparkGap = 0;     // milliseconds until the next one (random for the calm styles)
 
@@ -813,12 +811,11 @@
             }
         } catch (e) { /* ignore */ }
         for (const line of lines) line.remove();
-        if (wisp) wisp.remove();
+        releaseLight();
         lines = [];
         quills = [];
         rows = [];
         rowsKey = "";
-        wisp = null;
     }
 
     function markSentence(range) {
@@ -891,35 +888,28 @@
         if (style.quill) for (const box of boxes) quills.push(add("mfw-reading-quill", box, box[1] + box[3] - 1, 2));
     }
 
-    // Where the words being spoken are: progress 0-1 through the sentence along all its lines -> [x, row]
-    function alongRows(progress) {
-        // the sentence's time ends with its pause: the words are done a little earlier
-        return atLength(Math.min(1, progress * 1.1));
-    }
-
-    // A random place along all lines together (more on the longer lines) -> [x, row]
-    function randomOnRows() {
-        return atLength(Math.random());
-    }
-
-    // The place at a fraction (0-1) of the length of all lines together -> [x, row]
+    // The place at a fraction (0-1) of the length of all lines together -> [x, row index]
     function atLength(fraction) {
         let along = fraction * rows.reduce((sum, r) => sum + r[2], 0);
-        for (const r of rows) {
-            if (along <= r[2]) return [r[0] + along, r];
-            along -= r[2];
+        for (let i = 0; i < rows.length; i++) {
+            if (along <= rows[i][2]) return [rows[i][0] + along, i];
+            along -= rows[i][2];
         }
-        const last = rows[rows.length - 1];
-        return [last[0] + last[2], last];
+        const last = rows.length - 1;
+        return [rows[last][0] + rows[last][2], last];
     }
 
-    // The quill line, sparks, motes and the wisps (every animation frame while a sentence with rows is spoken)
-    function animateMarks(progress) {
+    const ease  = t => t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
+    const clamp = t => Math.min(1, Math.max(0, t));
+
+    // The quill line, sparks, motes and the travelling lights (every animation frame while a sentence with rows is
+    // spoken). words: 0-1 from the first word of the sentence to its last; since / after: seconds since the first word
+    // started and since the last one ended (negative before)
+    function animateMarks(words, since, after) {
         if (!rows.length) return;
         const style = STYLES[markStyle];
         if (style.quill && quills.length === rows.length) {
-            const [x, row] = alongRows(progress);
-            const at = rows.indexOf(row);
+            const [x, at] = atLength(words);
             quills.forEach((bar, i) => {
                 const width = i < at ? rows[i][2] : i > at ? 0 : Math.max(0, x - rows[i][0]);
                 bar.style.width = width.toFixed(1) + "px";
@@ -928,43 +918,76 @@
         if (document.documentElement.dataset.graphics === "low") return;
         const now = performance.now();
         if (style.sparks && now - sparkAt > sparkGap) {
-            sparkAt = now;
-            const [x, row] = randomOnRows();
-            const kind = style.sparks[1];
-            if (kind === "rise") {
-                sparkGap = style.sparks[0];
-                const up = Math.random() < 0.6;   // along the top of the line, or its bottom
-                spark(x, up ? row[1] + 2 : row[1] + row[3] - 1,
-                      (Math.random() - 0.5) * 20, (up ? -1 : 1) * (6 + Math.random() * 14), 10 + Math.random() * 8, 850, "");
-            } else if (kind === "linger") {
+            sparkAt  = now;
+            sparkGap = style.sparks[0] * (0.6 + Math.random() * 0.8);
+            const [x, at] = atLength(Math.random());   // more on the longer lines
+            const row = rows[at];
+            if (style.sparks[1] === "linger") {
                 // a few, from the top of the line, rising slowly and staying a while before they fade
-                sparkGap = style.sparks[0] * (0.6 + Math.random() * 0.8);
                 spark(x, row[1] + 3 + Math.random() * row[3] * 0.4,
                       (Math.random() - 0.5) * 14, -(8 + Math.random() * 14), 5 + Math.random() * 3, 3200 + Math.random() * 1400, "mfw-reading-linger");
             } else {
-                // motes: anywhere over the line, drifting a little in any direction
-                sparkGap = style.sparks[0] * (0.6 + Math.random() * 0.8);
-                spark(x, row[1] + Math.random() * row[3],
-                      (Math.random() - 0.5) * 22, (Math.random() - 0.6) * 14, 4 + Math.random() * 3, 4000 + Math.random() * 1500, "mfw-reading-mote");
+                // motes: around the line, rising and drifting slowly
+                spark(x, row[1] - 4 + Math.random() * (row[3] + 8),
+                      (Math.random() - 0.5) * 26, -(4 + Math.random() * 14), 6 + Math.random() * 4, 3200 + Math.random() * 1500, "mfw-reading-mote");
             }
         }
-        if (style.wisp) {
-            const [x, row] = alongRows(progress);
-            const bob = style.trail ? 0 : Math.sin(now / 520) * 1.6;   // the firefly floats
-            const y = row[1] + row[3] + 1 + bob;   // under the words, not over them
-            if (!wisp) {
-                wisp = document.createElement("div");
-                wisp.className = style.wisp;
-                document.body.appendChild(wisp);
-            }
-            wisp.style.transform = "translate(" + x.toFixed(1) + "px, " + y.toFixed(1) + "px)";
-            if (style.trail && now - sparkAt > style.trail[0]) {   // the tail: sparks that stay where the wisp was and fade
-                sparkAt = now;
-                const soft = !!style.trail[1];
-                spark(x, y + (Math.random() - 0.5) * 3, (Math.random() - 0.5) * 4, 1 + Math.random() * 5,
-                      soft ? 3 + Math.random() * 3 : 6 + Math.random() * 5, soft ? 900 : 1300, style.trail[1]);
-            }
+        if (style.light) moveLight(LIGHTS[style.light], words, since, after, now);
+    }
+
+    // Travelling lights: they come in from just before the first word and trail off past the last one (and past the end
+    // of a line where the sentence goes on below), instead of jumping.
+    //   below: pixels under the line; trail: [milliseconds between sparks, spark class, size, life]; wander: drifts
+    //   off its route like a will-o'-the-wisp; bob: floats up and down a little
+    const LIGHTS = {
+        wisp:     { className: "mfw-reading-wisp", below: 1, trail: [35, "", 6, 1300] },
+        wispsoft: { className: "mfw-reading-wisp mfw-reading-wisp-soft", below: 3, trail: [42, "mfw-reading-spark-soft", 4, 1300] },
+        wander:   { className: "mfw-reading-wisp mfw-reading-wisp-soft", below: 6, wander: true, trail: [48, "mfw-reading-spark-soft", 4, 1700] },
+        firefly:  { className: "mfw-reading-wisp mfw-reading-firefly", below: 2, bob: true }
+    };
+    const LIGHT_IN = 0.4, LIGHT_OUT = 0.7;   // seconds
+
+    function moveLight(kind, words, since, after, now) {
+        let [x, at] = atLength(words);
+        const row = rows[at];
+        let y = row[1] + row[3] + kind.below;
+        const fadeIn  = ease(clamp(since / LIGHT_IN));
+        const fadeOut = ease(clamp(after / LIGHT_OUT));
+        let opacity = since < 0 ? 0 : fadeIn * (1 - fadeOut);
+        x += -(1 - fadeIn) * 28 + fadeOut * 34;
+        y -= fadeOut * 5;
+        // where the sentence goes on on the next line: dim towards the end of this one and up again on the next
+        if (at < rows.length - 1) opacity *= clamp((row[0] + row[2] - x) / 36 + 0.1);
+        if (at > 0) opacity *= clamp((x - row[0]) / 36 + 0.1);
+        if (kind.wander) {
+            x += Math.sin(now / 610) * 5 + Math.sin(now / 237 + 1.3) * 2;
+            y += Math.sin(now / 430 + 0.4) * 3.5 + Math.sin(now / 1130) * 2;
         }
+        if (kind.bob) y += Math.sin(now / 520) * 1.6;
+        if (!light) {
+            light = document.createElement("div");
+            light.className = kind.className;
+            light.style.opacity = "0";
+            document.body.appendChild(light);
+        }
+        light.style.transform = "translate(" + x.toFixed(1) + "px, " + y.toFixed(1) + "px)";
+        light.style.opacity   = opacity.toFixed(3);
+        if (kind.trail && opacity > 0.2 && now - sparkAt > kind.trail[0]) {   // sparks that stay where it was and fade
+            sparkAt = now;
+            const size = kind.trail[2];
+            spark(x + (Math.random() - 0.5) * 2, y + (Math.random() - 0.5) * 3, (Math.random() - 0.5) * 5, 1 + Math.random() * 5,
+                  (size + Math.random() * size * 0.8) * (0.5 + opacity / 2), kind.trail[3] * (0.8 + Math.random() * 0.4), kind.trail[1]);
+        }
+    }
+
+    // The light of the sentence before fades where it is (it has usually trailed off already)
+    function releaseLight() {
+        if (!light) return;
+        const old = light;
+        light = null;
+        old.style.transition = "opacity 0.45s ease-out";
+        old.style.opacity = "0";
+        setTimeout(() => old.remove(), 500);
     }
 
     // One spark at a place on the page: it drifts by (dx, dy) and fades within `life` milliseconds

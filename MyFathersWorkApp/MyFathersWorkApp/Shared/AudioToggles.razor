@@ -1,27 +1,42 @@
 ﻿@inject AudioService Audio
 
-@* Sound effects, music and narration toggles (top right). Hovering or focusing one shows its volume as a vertical
-   slider below it (the same volumes as the pause menu, Shared/VolumeSliders.razor). *@
+@* Sound effects, music and narration (top right). A tap on a disc opens its volume as a vertical slider below it
+   (the same volumes as the pause menu, Shared/VolumeSliders.razor) with a Mute button under the slider; with a mouse,
+   hovering shows it too. A tap elsewhere closes it. Moving the slider of a muted channel switches it on again. The
+   disc shows a struck-through glyph while its channel is off. *@
+@if (_Open != null)
+{
+    <div class="audio-backdrop" @onclick="() => _Open = null"></div>
+}
 <div class="audio-toggles">
     @foreach (Channel channel in _Channels)
     {
-        bool on = IsOn(channel);
+        bool on   = IsOn(channel);
+        bool open = _Open == channel.Kind;
 
-        <div class="audio-control">
+        <div class="audio-control @(open ? "open" : "")">
             <button class="audio-toggle @(on ? "" : "off")"
-                    aria-pressed="@(on ? "true" : "false")"
-                    aria-label="@GlobalData.GetLocalizedUITag(channel.Tag)"
-                    title="@GlobalData.GetLocalizedUITag(channel.Tag)"
-                    @onclick="() => Toggle(channel)">
+                    aria-expanded="@(open ? "true" : "false")"
+                    aria-label="@GlobalData.GetLocalizedUITag(channel.VolumeTag)"
+                    title="@GlobalData.GetLocalizedUITag(channel.VolumeTag)"
+                    @onclick="() => _Open = open ? null : channel.Kind">
                 <span class="audio-glyph" aria-hidden="true">@channel.Glyph</span>
             </button>
             <div class="volume-pop">
                 <input type="range" min="0" max="100" step="5"
                        aria-label="@GlobalData.GetLocalizedUITag(channel.VolumeTag)"
                        value="@_Values[channel.Volume]"
-                       @oninput="e => OnVolume(channel.Volume, e)"
+                       @oninput="e => OnVolume(channel, e)"
                        @onchange="() => OnRelease(channel.Volume)"/>
                 <span>@_Values[channel.Volume]</span>
+                <button class="audio-mute @(on ? "" : "off")"
+                        aria-pressed="@(on ? "false" : "true")"
+                        aria-label="@GlobalData.GetLocalizedUITag(channel.Tag)"
+                        title="@GlobalData.GetLocalizedUITag(on ? GlobalTags.Audio_Mute : GlobalTags.Audio_Unmute)"
+                        @onclick="() => Toggle(channel)">
+                    <span aria-hidden="true">@(on ? "🔇" : channel.Glyph)</span>
+                    <span class="audio-mute-label">@GlobalData.GetLocalizedUITag(on ? GlobalTags.Audio_Mute : GlobalTags.Audio_Unmute)</span>
+                </button>
             </div>
         </div>
     }
@@ -42,8 +57,9 @@
         new(Kind.Narration, "🎙", GlobalTags.Audio_NarrationToggle, AudioVolume.Speech, GlobalTags.Audio_Speech)
     ];
 
-    private bool _EffectsOn = true;
-    private bool _MusicOn   = true;
+    private Kind? _Open;                // the channel whose volume pop-up is open
+    private bool  _EffectsOn = true;
+    private bool  _MusicOn   = true;
 
     private readonly Dictionary<AudioVolume, int> _Values = new();
 
@@ -83,11 +99,12 @@
         }
     }
 
-    private void OnVolume(AudioVolume kind, ChangeEventArgs e)
+    private void OnVolume(Channel channel, ChangeEventArgs e)
     {
         if (!int.TryParse(e.Value?.ToString(), out int value)) return;
-        _Values[kind] = value;
-        Audio.SetVolume(kind, value);
+        _Values[channel.Volume] = value;
+        Audio.SetVolume(channel.Volume, value);
+        if (value > 0 && !IsOn(channel)) Toggle(channel);   // turning a muted channel up switches it on
     }
 
     private void OnRelease(AudioVolume kind)
