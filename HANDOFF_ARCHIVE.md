@@ -2,6 +2,38 @@
 
 Finished work moved out of [`HANDOFF.md`](HANDOFF.md), newest first. Kept short: what was done and where it is documented.
 
+## Table play tests (November 2026)
+
+All three scenarios were played at the table by November 2026 (The Cost of Disease and Fear of the Unknown in
+October, A Time of War last). Below: the handoff notes as they stood before those games. The A Time of War owner
+questions are still open with defaults applied (see `HANDOFF.md`, Before v1.0).
+
+### A Time of War (open list before the table test)
+
+Fully ported and played through in the browser (details in the archive). Spec: [`docs/ATOW_PORT_MAP.md`](docs/ATOW_PORT_MAP.md).
+
+Next steps:
+- Table play test.
+- Owner questions (defaults applied, map section 7): B1 GunsAnnouncement text, B4 TowardsWar wording, B9 figure-token
+  holder may not exist, B10 duel death odds, B14 first-visit text, B16 2-player CoW text, B17 Church costs "X/X/X",
+  B19 random paradox only after a release (fixed), B21 University "pay $1" in Warning (fixed); endings 1/5 print
+  "The family IV" on a shared win (as the source), ending 8 "the The family name" / "Dr. The family" and ending 6 "I, The family" likewise; the Drifters decree popup starts with a dangling "Then,"
+  when the Crown does not move (source `{$crownL} Then, ...`).
+- Not play-tested from the menu: the Martial duel / bribe-success / tea-yay sub-chains, Peace gas release, Warning
+  stable timeline + Stasis, Paradox figure path with two Wooden Figures (covered by the per-branch crafted-save runs).
+
+### Fear of the Unknown (open list before the table test)
+
+Port and browser play test are done and live at https://vdepagter.github.io/myfathersworkapp/ (repository
+`vdepagter/myfathersworkapp`, renamed from `vdepagter/MyFathersWork-FanMadeCompanionApp` on 30 Oct 2026). A PR to the
+original repository (`Deusald/MyFathersWork-FanMadeCompanionApp`) can be opened from `main` at any time.
+
+Next steps:
+- Play a real game at the table (only crafted-save runs so far).
+- Random sub-events not yet seen in the browser (they share code paths with tested ones): Liberal salts / Arise My
+  Love / bribe / policy vote, Isolation smuggling trial outcomes, Foreigners Wall "Acceptance" + caravan visits,
+  Creature cure accepted path, Gen I fates other than Creature, 2- and 4-player games.
+
 ## A Time of War port (October 2026)
 
 Spec: [`docs/ATOW_PORT_MAP.md`](docs/ATOW_PORT_MAP.md) (one task per section 2.x). Status: **fully ported** - scaffold,
