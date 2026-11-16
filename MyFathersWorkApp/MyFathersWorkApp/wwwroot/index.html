@@ -84,6 +84,16 @@
                     const box = document.createElement("pre");
                     box.style.cssText = "position:fixed;left:8px;top:38%;z-index:99999;margin:0;padding:6px 8px;background:rgba(0,0,0,.8);color:#9f9;font:11px/1.35 monospace;pointer-events:none;white-space:pre";
                     document.addEventListener("DOMContentLoaded", () => document.body.appendChild(box));
+                    const probes = {};
+                    const probe = unit => {
+                        if (!document.body) return 0;
+                        if (!probes[unit]) {
+                            probes[unit] = document.createElement("div");
+                            probes[unit].style.cssText = "position:fixed;left:0;top:0;width:0;visibility:hidden;pointer-events:none;height:100" + unit;
+                            document.body.appendChild(probes[unit]);
+                        }
+                        return probes[unit].getBoundingClientRect().height;
+                    };
                     const top = selector => { const e = document.querySelector(selector); if (!e) return "-"; const r = e.getBoundingClientRect(); return Math.round(r.top) + " h" + Math.round(r.height); };
                     setInterval(() => {
                         const vv = window.visualViewport, d = document.documentElement;
@@ -91,6 +101,7 @@
                             "inner " + innerWidth + "x" + innerHeight + "  client h" + d.clientHeight,
                             "vv " + (vv ? Math.round(vv.width) + "x" + Math.round(vv.height) + " off " + vv.offsetTop.toFixed(1) + " page " + vv.pageTop.toFixed(1) + " scale " + vv.scale.toFixed(2) : "none"),
                             "scrollY " + scrollY.toFixed(1) + " max " + (d.scrollHeight - d.clientHeight) + "  --mfw-vh " + last,
+                            "lvh " + Math.round(probe("lvh")) + "  svh " + Math.round(probe("svh")) + "  max(lvh) " + Math.round(d.scrollHeight - Math.max(d.clientHeight, innerHeight, probe("lvh"))),
                             "frame " + top(".game-frame") + "  header " + top(".header-buttons") + "  scene " + top(".game-scene"),
                             "readout top " + Math.round(box.getBoundingClientRect().top) + "  " + new Date().toLocaleTimeString()
                         ].join(String.fromCharCode(10));

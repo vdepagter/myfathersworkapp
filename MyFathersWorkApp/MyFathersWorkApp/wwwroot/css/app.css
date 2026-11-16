@@ -112,14 +112,16 @@ code {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
-/* The sentence Oliver is speaking (js/audio.js syncHighlight; global, ::highlight cannot be scoped) */
-::highlight(mfw-narration) {
-    background-color: rgba(226, 158, 44, 0.6);
-}
+/* The sentence Oliver is speaking (js/audio.js STYLES; ::highlight is global, it cannot be scoped) */
 
 /* "Fade the rest": the narrated text around the spoken sentence */
 ::highlight(mfw-narration-rest) {
     color: rgba(23, 16, 10, 0.58);
+}
+
+/* The calm travelling lights and the quill line: the rest fades only slightly */
+::highlight(mfw-narration-soft) {
+    color: rgba(23, 16, 10, 0.74);
 }
 
 /* Drawn over the spoken sentence (js/audio.js placeLines / animateMarks; children of <body>, page coordinates; above
@@ -137,6 +139,13 @@ code {
     mix-blend-mode: lighten;
     background: linear-gradient(100deg, #8a1400 0, #d8560c 150px, #a31c00 290px, #e2700f 430px, #8a1400 600px) 0 0 / 600px 100%;
     animation: mfw-reading-drift 9s linear infinite, mfw-reading-flicker 2.3s ease-in-out infinite;
+}
+
+/* Calm ember (over candle glow): deeper colours, a slow drift and a barely visible flicker */
+.mfw-reading-ember-calm {
+    mix-blend-mode: lighten;
+    background: linear-gradient(100deg, #6e1600 0, #b4440c 180px, #7f1c02 360px, #c0540e 540px, #6e1600 720px) 0 0 / 720px 100%;
+    animation: mfw-reading-drift-calm 24s linear infinite, mfw-reading-flicker-calm 5s ease-in-out infinite;
 }
 
 /* Candle glow: the parchment around the sentence lights up, the ink stays dark */
@@ -158,8 +167,11 @@ code {
     filter: blur(7px);
 }
 
-.mfw-reading-underline {
-    border-bottom: 2px solid rgba(160, 82, 8, 0.85);
+/* Quill: a thin line of light under the words that have been spoken (width set every frame) */
+.mfw-reading-quill {
+    border-radius: 1px;
+    background: linear-gradient(90deg, rgba(196, 112, 22, 0.15), rgba(214, 128, 30, 0.85));
+    box-shadow: 0 0 5px 1px rgba(255, 170, 60, 0.45);
 }
 
 .mfw-reading-spark {
@@ -168,6 +180,29 @@ code {
     background: radial-gradient(circle, #fffbe8 0, #ffd15c 26%, #ff8a1e 50%, rgba(214, 70, 0, 0.55) 64%, transparent 74%);
     box-shadow: 0 0 6px rgba(255, 150, 40, 0.7);
     animation: mfw-reading-spark 0.85s ease-out forwards;
+}
+
+/* The tail of the soft travelling spark: small and faint */
+.mfw-reading-spark-soft {
+    background: radial-gradient(circle, #ffe9a8 0, #ffb64a 40%, rgba(230, 120, 20, 0.4) 62%, transparent 74%);
+    box-shadow: none;
+    animation-name: mfw-reading-spark-faint;
+}
+
+/* Lingering sparks: fade in slowly, rise a little, stay, then fade */
+.mfw-reading-linger {
+    background: radial-gradient(circle, #fff3c8 0, #ffc34e 32%, #f07a18 56%, rgba(200, 70, 0, 0.4) 68%, transparent 76%);
+    box-shadow: 0 0 5px rgba(255, 150, 40, 0.5);
+    animation-name: mfw-reading-linger;
+    animation-timing-function: ease-in-out;
+}
+
+/* Motes: soft specks of candlelight drifting over the lines */
+.mfw-reading-mote {
+    background: radial-gradient(circle, #fffcef 0, rgba(255, 206, 100, 0.85) 38%, rgba(240, 140, 30, 0.35) 60%, transparent 74%);
+    box-shadow: 0 0 4px rgba(255, 170, 50, 0.55);
+    animation-name: mfw-reading-mote;
+    animation-timing-function: ease-in-out;
 }
 
 .mfw-reading-wisp {
@@ -183,8 +218,33 @@ code {
     transition: transform 0.12s linear;
 }
 
+/* Soft travelling spark: smaller, warm rather than white-hot, a small halo */
+.mfw-reading-wisp-soft {
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    background: radial-gradient(circle, #fff4cf 0, #ffc85a 36%, rgba(240, 130, 30, 0.6) 60%, transparent 76%);
+    box-shadow: 0 0 7px 2px rgba(255, 160, 50, 0.4);
+    opacity: 0.95;
+}
+
+/* Firefly: a soft light without a bright core that breathes slowly */
+.mfw-reading-firefly {
+    width: 22px;
+    height: 22px;
+    margin: -11px 0 0 -11px;
+    background: radial-gradient(circle, rgba(255, 244, 196, 1) 0, rgba(255, 204, 100, 0.75) 30%, rgba(255, 168, 60, 0.25) 56%, transparent 72%);
+    box-shadow: none;
+    transition: transform 0.3s linear;
+    animation: mfw-reading-breathe 2.6s ease-in-out infinite;
+}
+
 @keyframes mfw-reading-drift {
     to { background-position: -600px 0; }
+}
+
+@keyframes mfw-reading-drift-calm {
+    to { background-position: -720px 0; }
 }
 
 @keyframes mfw-reading-flicker {
@@ -194,11 +254,21 @@ code {
     80%      { opacity: 0.9; }
 }
 
+@keyframes mfw-reading-flicker-calm {
+    0%, 100% { opacity: 0.85; }
+    50%      { opacity: 0.75; }
+}
+
 @keyframes mfw-reading-candle {
     0%, 100% { opacity: 0.95; }
     30%      { opacity: 0.78; }
     55%      { opacity: 1; }
     75%      { opacity: 0.86; }
+}
+
+@keyframes mfw-reading-breathe {
+    0%, 100% { opacity: 0.75; }
+    50%      { opacity: 1; }
 }
 
 @keyframes mfw-reading-spark {
@@ -207,10 +277,31 @@ code {
     to   { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2); opacity: 0; }
 }
 
+@keyframes mfw-reading-spark-faint {
+    from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+    20%  { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    to   { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.3); opacity: 0; }
+}
+
+@keyframes mfw-reading-linger {
+    from { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
+    25%  { transform: translate(calc(-50% + var(--dx) * 0.4), calc(-50% + var(--dy) * 0.5)) scale(1); opacity: 0.9; }
+    70%  { transform: translate(calc(-50% + var(--dx) * 0.8), calc(-50% + var(--dy) * 0.85)) scale(0.85); opacity: 0.7; }
+    to   { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.5); opacity: 0; }
+}
+
+@keyframes mfw-reading-mote {
+    from { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
+    35%  { transform: translate(calc(-50% + var(--dx) * 0.4), calc(-50% + var(--dy) * 0.4)) scale(1); opacity: 0.95; }
+    65%  { transform: translate(calc(-50% + var(--dx) * 0.65), calc(-50% + var(--dy) * 0.65)) scale(1); opacity: 0.8; }
+    to   { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.7); opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .mfw-reading-ember,
-    .mfw-reading-glow {
+    .mfw-reading-ember-calm,
+    .mfw-reading-glow,
+    .mfw-reading-firefly {
         animation: none;
     }
 }
-

@@ -281,12 +281,17 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
   seconds off in a long clip. How the page follows is the "Scrolling" setting in the pause menu (`audio.scroll`; owner's
   choice, 15 Nov 2026): `lead` (default) glides 0.8 s before a sentence ends so the next one is in place, `flow`
   moves continuously, `page` a screen at a time. Scroll targets are clamped to the page: Firefox on Android drew a
-  black bar over the header buttons when the app kept asking for a scroll past the bottom. How the sentence is marked
-  is a trial setting next to it (`audio.highlight`, 15-16 Nov 2026, the owner picks): `gold` backlight and `dim` (fade
-  the rest) are `::highlight` styles; the others are drawn over the page as children of `<body>` in page coordinates
-  (`.mfw-reading-*` in `css/app.css`), parchment only: bars over the sentence's lines for `glow` (candle light,
-  `mix-blend-mode: overlay`), `ember` (colours only the ink, `lighten`) and `underline`, sparks for `sparks` /
-  `embersparks`, and `wisp`, a spark that travels under the words by the time passed in the sentence; `off`. Sparks
+  black bar over the header buttons when the app kept asking for a scroll past the bottom; for the page itself the
+  end is measured against the large viewport (`100lvh`, toolbar hidden), so the app never scrolls into the last
+  toolbar height (Firefox keeps `clientHeight` at the small viewport; diag showed `visualViewport.offsetTop` -64 at
+  that end). How the sentence is marked is a trial setting next to it (`audio.highlight`, `STYLES` in `audio.js`,
+  15-16 Nov 2026, the owner picks; Gold backlight and Underline were dropped 16 Nov, Candle glow is the default):
+  `glow` (candle light bars, `mix-blend-mode: overlay`), `wisp` / `wispsoft` / `firefly` (a light that travels under
+  the words by the time passed in the sentence; the calm two fade the rest slightly, `::highlight(mfw-narration-soft)`),
+  `quill` (a line of light drawn under the spoken words), `emberglow` (candle glow + calm ember ink + slow lingering
+  sparks), `candlemotes` (candle glow + drifting motes), `ember` (bars that colour only the ink, `lighten`),
+  `embersparks`, `sparks`, `dim` (fade the rest, `::highlight`) and `off`. Bars and lights are children of `<body>`
+  in page coordinates (`.mfw-reading-*` in `css/app.css`), parchment only. Sparks, motes and lights
   are left out when Graphics is Low. The glide is animated in `audio.js` (the browser's smooth scroll jumps with
   reduced motion), except on Firefox for Android, where a scroll set frame by frame left the frame and the header
   buttons a toolbar height too low with a black bar above until the next tap (owner's phone, not reproducible on a

@@ -566,12 +566,10 @@
     // The clip's text is looked up in the story window (title and parchment) after the previous clip's text. A clip
     // can hold a whole page, so its text is split into sentences and the one being spoken is marked: js/narration-sync.js
     // works out when each sentence starts from the pauses of the clip (audio/vo/oliver/<Scenario>.pauses.json), or from
-    // the text length when the clip has no pause list. The mark uses the CSS Custom Highlight API
-    // (::highlight(mfw-narration), css/app.css), so the page DOM stays as Blazor rendered it. Browsers without the API
-    // only scroll. The page scrolls when the sentence nears the edge of the view, but not for a few seconds after the
-    // reader scrolled themself.
+    // the text length when the clip has no pause list. The marks are drawn over the page or use the CSS Custom
+    // Highlight API (see STYLES below), so the page DOM stays as Blazor rendered it. The page scrolls when the sentence
+    // nears the edge of the view, but not for a few seconds after the reader scrolled themself.
 
-    const HIGHLIGHT = "mfw-narration";
     // Where each clip's text ended in the window text (current request), and the first and last character found
     // ([node, offset]; all clips once `complete`)
     const places = { id: 0, root: null, ends: [], first: null, last: null, at: 0, to: 0, complete: false };
@@ -751,34 +749,57 @@
     }
 
     // ---- How the spoken sentence is marked (pause menu, stored per device) -----------------------------------------
-    //   gold        - a gold backlight behind the text (::highlight)
-    //   glow        - soft candlelight on the parchment around the sentence
+    //   glow        - soft candlelight on the parchment around the sentence (the default; replaced the gold backlight)
+    //   wisp        - plain ink, a spark that travels under the words as they are spoken and leaves a short trail
+    //   wispsoft    - a smaller, dimmer travelling spark with a faint trail; the rest of the text fades slightly
+    //   firefly     - a soft light without a bright core that floats under the words; the rest fades slightly
+    //   quill       - a thin line of light that draws itself under the words; the rest fades slightly
+    //   emberglow   - candle glow with calm ember-coloured ink and a few slow sparks that linger
+    //   candlemotes - candle glow with motes of light drifting slowly over the lines
     //   ember       - the text itself glows like embers
     //   embersparks - ember, with sparks rising from the lines
     //   sparks      - plain ink, sparks around the lines (the look of the page tap)
-    //   wisp        - plain ink, a spark that travels under the words as they are spoken and leaves a short trail
-    //   underline   - a line under the text
     //   dim         - the rest of the narrated text fades a little, the sentence keeps its ink (::highlight)
     //   off         - no mark (the page still follows the narration)
-    // Everything but gold and dim is drawn over the page (children of <body> in page coordinates, css/app.css
-    // .mfw-reading-*), so the page DOM stays as Blazor rendered it: bars over the lines of the sentence (BARS), sparks
-    // and the wisp. The ember bars only colour what is darker than they are (mix-blend-mode: lighten): the ink, not the
-    // parchment. All of them are parchment only (on the title they would show as blocks), except the underline.
-    // Sparks and the wisp are left out when Graphics is Low (Settings; reduced motion).
-    const KEY_MARK       = "audio.highlight";
-    const MARKS          = ["gold", "glow", "ember", "embersparks", "sparks", "wisp", "underline", "dim", "off"];
-    const BARS           = { glow: "glow", ember: "ember", embersparks: "ember", sparks: "haze", wisp: "haze", underline: "underline" };
+    // Bars, sparks and the wisp are drawn over the page (children of <body> in page coordinates, css/app.css
+    // .mfw-reading-*), so the page DOM stays as Blazor rendered it. Ember bars only colour what is darker than they are
+    // (mix-blend-mode: lighten): the ink, not the parchment. All marks are parchment only (on the title they would show
+    // as blocks). The fades use the CSS Custom Highlight API. Sparks, motes and the wisps are left out when Graphics is
+    // Low (Settings; reduced motion).
+    //   bars:   classes of the bars laid over each line (.mfw-reading-<class>), in drawing order
+    //   rest:   ::highlight name for the rest of the narrated text
+    //   wisp:   class of the travelling light; trail: [milliseconds between sparks, spark class] or none
+    //   sparks: [milliseconds between, kind] for sparks around the lines; quill: the line under the words
     const HIGHLIGHT_REST = "mfw-narration-rest";
+    const HIGHLIGHT_SOFT = "mfw-narration-soft";
+    const STYLES = {
+        glow:        { bars: ["glow"] },
+        wisp:        { bars: ["haze"], wisp: "mfw-reading-wisp", trail: [35, ""] },
+        wispsoft:    { rest: HIGHLIGHT_SOFT, wisp: "mfw-reading-wisp mfw-reading-wisp-soft", trail: [80, "mfw-reading-spark-soft"] },
+        firefly:     { rest: HIGHLIGHT_SOFT, wisp: "mfw-reading-wisp mfw-reading-firefly" },
+        quill:       { rest: HIGHLIGHT_SOFT, quill: true },
+        emberglow:   { bars: ["glow", "ember-calm"], sparks: [520, "linger"] },
+        candlemotes: { bars: ["glow"], sparks: [380, "mote"] },
+        ember:       { bars: ["ember"] },
+        embersparks: { bars: ["ember"], sparks: [110, "rise"] },
+        sparks:      { bars: ["haze"], sparks: [55, "rise"] },
+        dim:         { rest: HIGHLIGHT_REST },
+        off:         {}
+    };
+    const KEY_MARK = "audio.highlight";
+    const MARKS    = Object.keys(STYLES);
     let markStyle = MARKS[0];
     try {
-        const stored = localStorage.getItem(KEY_MARK);
+        const stored = localStorage.getItem(KEY_MARK);   // gold and underline were removed: back to the default
         if (MARKS.indexOf(stored) >= 0) markStyle = stored;
     } catch (e) { /* default */ }
     let rows = [];        // the lines of the sentence in page coordinates: [left, top, width, height]
     let rowsKey = "";     // to leave everything alone while nothing moved
     let lines = [];       // the bars on the page
-    let wisp = null;      // the travelling spark
+    let quills = [];      // the quill line, one per row
+    let wisp = null;      // the travelling light
     let sparkAt = 0;      // time of the last spark
+    let sparkGap = 0;     // milliseconds until the next one (random for the calm styles)
 
     function setHighlight(name, ranges) {
         try { if (ranges.length && window.CSS && CSS.highlights && window.Highlight) CSS.highlights.set(name, new Highlight(...ranges)); } catch (e) { /* ignore */ }
@@ -787,13 +808,14 @@
     function clearMarks() {
         try {
             if (window.CSS && CSS.highlights) {
-                CSS.highlights.delete(HIGHLIGHT);
                 CSS.highlights.delete(HIGHLIGHT_REST);
+                CSS.highlights.delete(HIGHLIGHT_SOFT);
             }
         } catch (e) { /* ignore */ }
         for (const line of lines) line.remove();
         if (wisp) wisp.remove();
         lines = [];
+        quills = [];
         rows = [];
         rowsKey = "";
         wisp = null;
@@ -801,10 +823,10 @@
 
     function markSentence(range) {
         clearMarks();
-        const box = range.startContainer.parentElement && range.startContainer.parentElement.closest(".parchment-box");
-        if (markStyle === "gold") setHighlight(HIGHLIGHT, [range]);
-        else if (markStyle === "dim") setHighlight(HIGHLIGHT_REST, restOf(range, box));
-        else if (markStyle === "underline" || (box && markStyle !== "off")) placeLines(range);
+        const box   = range.startContainer.parentElement && range.startContainer.parentElement.closest(".parchment-box");
+        const style = STYLES[markStyle];
+        if (style.rest) setHighlight(style.rest, restOf(range, box));
+        if (box && markStyle !== "off" && markStyle !== "dim") placeLines(range);
     }
 
     // The narrated text of the sentence's parchment before and after the sentence
@@ -828,7 +850,7 @@
         return result;
     }
 
-    // Where the lines of the sentence are, and one bar per line for the styles that have bars
+    // Where the lines of the sentence are, and the bars of the style over them
     function placeLines(range) {
         const found = [];
         for (const rect of range.getClientRects()) {
@@ -851,61 +873,104 @@
         for (const line of lines) line.remove();
         rowsKey = key;
         rows    = boxes;
-        lines   = !BARS[markStyle] ? [] : boxes.map(box => {
+        lines   = [];
+        quills  = [];
+        const style = STYLES[markStyle];
+        const add = (className, box, top, height) => {
             const bar = document.createElement("div");
-            bar.className    = "mfw-reading-line mfw-reading-" + BARS[markStyle];
+            bar.className    = "mfw-reading-line " + className;
             bar.style.left   = box[0] + "px";
-            bar.style.top    = box[1] + "px";
+            bar.style.top    = top + "px";
             bar.style.width  = box[2] + "px";
-            bar.style.height = box[3] + "px";
+            bar.style.height = height + "px";
             document.body.appendChild(bar);
+            lines.push(bar);
             return bar;
-        });
+        };
+        for (const name of style.bars || []) for (const box of boxes) add("mfw-reading-" + name, box, box[1], box[3]);
+        if (style.quill) for (const box of boxes) quills.push(add("mfw-reading-quill", box, box[1] + box[3] - 1, 2));
     }
 
-    // Sparks and the wisp (every animation frame while a sentence with rows is spoken). progress: 0-1 through the sentence
-    function animateMarks(progress) {
-        if (!rows.length || document.documentElement.dataset.graphics === "low") return;
-        const now = performance.now();
-        if ((markStyle === "sparks" || markStyle === "embersparks") && now - sparkAt > (markStyle === "sparks" ? 55 : 110)) {
-            sparkAt = now;
-            // more on the longer lines: a place along all lines together
-            let along = Math.random() * rows.reduce((sum, r) => sum + r[2], 0);
-            let row = rows[rows.length - 1];
-            for (const r of rows) {
-                if (along <= r[2]) { row = r; break; }
-                along -= r[2];
-            }
-            const up = Math.random() < 0.6;   // along the top of the line, or its bottom
-            spark(row[0] + Math.min(along, row[2]), up ? row[1] + 2 : row[1] + row[3] - 1,
-                  (Math.random() - 0.5) * 20, (up ? -1 : 1) * (6 + Math.random() * 14), 10 + Math.random() * 8, 850);
+    // Where the words being spoken are: progress 0-1 through the sentence along all its lines -> [x, row]
+    function alongRows(progress) {
+        // the sentence's time ends with its pause: the words are done a little earlier
+        return atLength(Math.min(1, progress * 1.1));
+    }
+
+    // A random place along all lines together (more on the longer lines) -> [x, row]
+    function randomOnRows() {
+        return atLength(Math.random());
+    }
+
+    // The place at a fraction (0-1) of the length of all lines together -> [x, row]
+    function atLength(fraction) {
+        let along = fraction * rows.reduce((sum, r) => sum + r[2], 0);
+        for (const r of rows) {
+            if (along <= r[2]) return [r[0] + along, r];
+            along -= r[2];
         }
-        if (markStyle === "wisp") {
-            // the sentence's time ends with its pause: the words are done a little earlier
-            let along = Math.min(1, progress * 1.1) * rows.reduce((sum, r) => sum + r[2], 0);
-            let row = rows[rows.length - 1], x = row[0] + row[2];
-            for (const r of rows) {
-                if (along <= r[2]) { row = r; x = r[0] + along; break; }
-                along -= r[2];
+        const last = rows[rows.length - 1];
+        return [last[0] + last[2], last];
+    }
+
+    // The quill line, sparks, motes and the wisps (every animation frame while a sentence with rows is spoken)
+    function animateMarks(progress) {
+        if (!rows.length) return;
+        const style = STYLES[markStyle];
+        if (style.quill && quills.length === rows.length) {
+            const [x, row] = alongRows(progress);
+            const at = rows.indexOf(row);
+            quills.forEach((bar, i) => {
+                const width = i < at ? rows[i][2] : i > at ? 0 : Math.max(0, x - rows[i][0]);
+                bar.style.width = width.toFixed(1) + "px";
+            });
+        }
+        if (document.documentElement.dataset.graphics === "low") return;
+        const now = performance.now();
+        if (style.sparks && now - sparkAt > sparkGap) {
+            sparkAt = now;
+            const [x, row] = randomOnRows();
+            const kind = style.sparks[1];
+            if (kind === "rise") {
+                sparkGap = style.sparks[0];
+                const up = Math.random() < 0.6;   // along the top of the line, or its bottom
+                spark(x, up ? row[1] + 2 : row[1] + row[3] - 1,
+                      (Math.random() - 0.5) * 20, (up ? -1 : 1) * (6 + Math.random() * 14), 10 + Math.random() * 8, 850, "");
+            } else if (kind === "linger") {
+                // a few, from the top of the line, rising slowly and staying a while before they fade
+                sparkGap = style.sparks[0] * (0.6 + Math.random() * 0.8);
+                spark(x, row[1] + 3 + Math.random() * row[3] * 0.4,
+                      (Math.random() - 0.5) * 14, -(8 + Math.random() * 14), 5 + Math.random() * 3, 3200 + Math.random() * 1400, "mfw-reading-linger");
+            } else {
+                // motes: anywhere over the line, drifting a little in any direction
+                sparkGap = style.sparks[0] * (0.6 + Math.random() * 0.8);
+                spark(x, row[1] + Math.random() * row[3],
+                      (Math.random() - 0.5) * 22, (Math.random() - 0.6) * 14, 4 + Math.random() * 3, 4000 + Math.random() * 1500, "mfw-reading-mote");
             }
-            const y = row[1] + row[3] + 1;   // under the words, not over them
+        }
+        if (style.wisp) {
+            const [x, row] = alongRows(progress);
+            const bob = style.trail ? 0 : Math.sin(now / 520) * 1.6;   // the firefly floats
+            const y = row[1] + row[3] + 1 + bob;   // under the words, not over them
             if (!wisp) {
                 wisp = document.createElement("div");
-                wisp.className = "mfw-reading-wisp";
+                wisp.className = style.wisp;
                 document.body.appendChild(wisp);
             }
             wisp.style.transform = "translate(" + x.toFixed(1) + "px, " + y.toFixed(1) + "px)";
-            if (now - sparkAt > 35) {   // the tail: sparks that stay where the wisp was and fade
+            if (style.trail && now - sparkAt > style.trail[0]) {   // the tail: sparks that stay where the wisp was and fade
                 sparkAt = now;
-                spark(x, y + (Math.random() - 0.5) * 3, (Math.random() - 0.5) * 4, 1 + Math.random() * 5, 6 + Math.random() * 5, 1300);
+                const soft = !!style.trail[1];
+                spark(x, y + (Math.random() - 0.5) * 3, (Math.random() - 0.5) * 4, 1 + Math.random() * 5,
+                      soft ? 3 + Math.random() * 3 : 6 + Math.random() * 5, soft ? 900 : 1300, style.trail[1]);
             }
         }
     }
 
     // One spark at a place on the page: it drifts by (dx, dy) and fades within `life` milliseconds
-    function spark(x, y, dx, dy, size, life) {
+    function spark(x, y, dx, dy, size, life, kind) {
         const dot = document.createElement("div");
-        dot.className = "mfw-reading-spark";
+        dot.className = "mfw-reading-spark" + (kind ? " " + kind : "");
         dot.style.left   = x.toFixed(1) + "px";
         dot.style.top    = y.toFixed(1) + "px";
         dot.style.width  = dot.style.height = size.toFixed(1) + "px";
@@ -930,10 +995,26 @@
     let flowAt = 0;   // time of the last flow step where the browser runs the scroll
 
     // Where a scroller is and how far it can go: scrolls are kept inside that range, and left out when they would
-    // not move the page
+    // not move the page.
+    // For the page itself the room is measured against the large viewport (100lvh, the view with the browser's
+    // toolbar hidden). Firefox on Android keeps clientHeight at the small viewport: a scroll to that end while the
+    // toolbar hides put the page a toolbar height past its real end (visualViewport.offsetTop -64), with the frame
+    // and header buttons that much too low and a black bar above them. So the app never scrolls into the last
+    // toolbar height of the page itself; the reader still can.
+    let largeProbe = null;
+    function largeViewport() {
+        if (!largeProbe) {
+            largeProbe = document.createElement("div");
+            largeProbe.style.cssText = "position:fixed;left:0;top:0;width:0;height:100vh;height:100lvh;visibility:hidden;pointer-events:none";
+            document.body.appendChild(largeProbe);
+        }
+        return largeProbe.getBoundingClientRect().height;
+    }
     function scrollRoom(scroller) {
-        const element = scroller === window ? (document.scrollingElement || document.documentElement) : scroller;
-        return { top: element.scrollTop, max: Math.max(0, element.scrollHeight - element.clientHeight) };
+        if (scroller !== window) return { top: scroller.scrollTop, max: Math.max(0, scroller.scrollHeight - scroller.clientHeight) };
+        const element = document.scrollingElement || document.documentElement;
+        const view    = Math.max(element.clientHeight, window.innerHeight, largeViewport());
+        return { top: element.scrollTop, max: Math.max(0, element.scrollHeight - view) };
     }
 
     // ---- How the page follows the narration (pause menu, stored per device) ---------------------------------------
@@ -1124,7 +1205,7 @@
                 // Storage unavailable: keep the setting for this session only
             }
         },
-        // How the spoken sentence is marked: one of MARKS ("gold", "glow", "ember", ..., "off")
+        // How the spoken sentence is marked: one of MARKS ("glow", "wisp", ..., "off")
         getHighlight: () => markStyle,
         setHighlight: mode => {
             if (MARKS.indexOf(mode) < 0) return;

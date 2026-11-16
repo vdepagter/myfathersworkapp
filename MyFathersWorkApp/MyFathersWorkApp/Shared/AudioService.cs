@@ -113,7 +113,7 @@ public sealed class AudioService(IJSRuntime js)
     public void   SetNarrationScroll(string mode) => InvokeVoid("mfwAudio.setScroll", mode);
 
     // How the sentence Oliver is speaking is marked (audio.js MARKS, stored per device)
-    public static readonly string[] HighlightStyles = ["gold", "glow", "ember", "embersparks", "sparks", "wisp", "underline", "dim", "off"];
+    public static readonly string[] HighlightStyles = ["glow", "wisp", "wispsoft", "firefly", "quill", "emberglow", "candlemotes", "ember", "embersparks", "sparks", "dim", "off"];
     public string NarrationHighlight                 => Invoke("mfwAudio.getHighlight", HighlightStyles[0]);
     public void   SetNarrationHighlight(string mode) => InvokeVoid("mfwAudio.setHighlight", mode);
 
