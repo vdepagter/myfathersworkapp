@@ -87,15 +87,13 @@
                     const top = selector => { const e = document.querySelector(selector); if (!e) return "-"; const r = e.getBoundingClientRect(); return Math.round(r.top) + " h" + Math.round(r.height); };
                     setInterval(() => {
                         const vv = window.visualViewport, d = document.documentElement;
-                        box.textContent = "inner " + innerWidth + "x" + innerHeight + "  client h" + d.clientHeight
-                            + "
-vv " + (vv ? Math.round(vv.width) + "x" + Math.round(vv.height) + " off " + vv.offsetTop.toFixed(1) + " page " + vv.pageTop.toFixed(1) + " scale " + vv.scale.toFixed(2) : "none")
-                            + "
-scrollY " + scrollY.toFixed(1) + " max " + (d.scrollHeight - d.clientHeight) + "  --mfw-vh " + last
-                            + "
-frame " + top(".game-frame") + "  header " + top(".header-buttons") + "  scene " + top(".game-scene")
-                            + "
-readout top " + Math.round(box.getBoundingClientRect().top) + "  " + new Date().toLocaleTimeString();
+                        box.textContent = [
+                            "inner " + innerWidth + "x" + innerHeight + "  client h" + d.clientHeight,
+                            "vv " + (vv ? Math.round(vv.width) + "x" + Math.round(vv.height) + " off " + vv.offsetTop.toFixed(1) + " page " + vv.pageTop.toFixed(1) + " scale " + vv.scale.toFixed(2) : "none"),
+                            "scrollY " + scrollY.toFixed(1) + " max " + (d.scrollHeight - d.clientHeight) + "  --mfw-vh " + last,
+                            "frame " + top(".game-frame") + "  header " + top(".header-buttons") + "  scene " + top(".game-scene"),
+                            "readout top " + Math.round(box.getBoundingClientRect().top) + "  " + new Date().toLocaleTimeString()
+                        ].join(String.fromCharCode(10));
                     }, 250);
                 }
             } catch (e) { /* storage blocked */ }

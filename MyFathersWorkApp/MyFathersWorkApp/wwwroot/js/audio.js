@@ -767,7 +767,7 @@
     // Sparks and the wisp are left out when Graphics is Low (Settings; reduced motion).
     const KEY_MARK       = "audio.highlight";
     const MARKS          = ["gold", "glow", "ember", "embersparks", "sparks", "wisp", "underline", "dim", "off"];
-    const BARS           = { glow: "glow", ember: "ember", embersparks: "ember", underline: "underline" };
+    const BARS           = { glow: "glow", ember: "ember", embersparks: "ember", sparks: "haze", wisp: "haze", underline: "underline" };
     const HIGHLIGHT_REST = "mfw-narration-rest";
     let markStyle = MARKS[0];
     try {
@@ -867,12 +867,18 @@
     function animateMarks(progress) {
         if (!rows.length || document.documentElement.dataset.graphics === "low") return;
         const now = performance.now();
-        if ((markStyle === "sparks" || markStyle === "embersparks") && now - sparkAt > 150) {
+        if ((markStyle === "sparks" || markStyle === "embersparks") && now - sparkAt > (markStyle === "sparks" ? 55 : 110)) {
             sparkAt = now;
-            const row = rows[Math.floor(Math.random() * rows.length)];
-            const up  = Math.random() < 0.6;   // along the top of the line, or its bottom
-            spark(row[0] + Math.random() * row[2], up ? row[1] + 3 : row[1] + row[3] - 3,
-                  (Math.random() - 0.5) * 18, (up ? -1 : 1) * (5 + Math.random() * 12), 9 + Math.random() * 7);
+            // more on the longer lines: a place along all lines together
+            let along = Math.random() * rows.reduce((sum, r) => sum + r[2], 0);
+            let row = rows[rows.length - 1];
+            for (const r of rows) {
+                if (along <= r[2]) { row = r; break; }
+                along -= r[2];
+            }
+            const up = Math.random() < 0.6;   // along the top of the line, or its bottom
+            spark(row[0] + Math.min(along, row[2]), up ? row[1] + 2 : row[1] + row[3] - 1,
+                  (Math.random() - 0.5) * 20, (up ? -1 : 1) * (6 + Math.random() * 14), 10 + Math.random() * 8, 850);
         }
         if (markStyle === "wisp") {
             // the sentence's time ends with its pause: the words are done a little earlier
@@ -882,36 +888,45 @@
                 if (along <= r[2]) { row = r; x = r[0] + along; break; }
                 along -= r[2];
             }
-            const y = row[1] + row[3] * 0.86;   // under the words, not over them
+            const y = row[1] + row[3] + 1;   // under the words, not over them
             if (!wisp) {
                 wisp = document.createElement("div");
                 wisp.className = "mfw-reading-wisp";
                 document.body.appendChild(wisp);
             }
             wisp.style.transform = "translate(" + x.toFixed(1) + "px, " + y.toFixed(1) + "px)";
-            if (now - sparkAt > 80) {
+            if (now - sparkAt > 35) {   // the tail: sparks that stay where the wisp was and fade
                 sparkAt = now;
-                spark(x, y, (Math.random() - 0.5) * 6, 2 + Math.random() * 7, 5 + Math.random() * 4);
+                spark(x, y + (Math.random() - 0.5) * 3, (Math.random() - 0.5) * 4, 1 + Math.random() * 5, 6 + Math.random() * 5, 1300);
             }
         }
     }
 
-    function spark(x, y, dx, dy, size) {
+    // One spark at a place on the page: it drifts by (dx, dy) and fades within `life` milliseconds
+    function spark(x, y, dx, dy, size, life) {
         const dot = document.createElement("div");
         dot.className = "mfw-reading-spark";
         dot.style.left   = x.toFixed(1) + "px";
         dot.style.top    = y.toFixed(1) + "px";
         dot.style.width  = dot.style.height = size.toFixed(1) + "px";
+        dot.style.animationDuration = life + "ms";
         dot.style.setProperty("--dx", dx.toFixed(1) + "px");
         dot.style.setProperty("--dy", dy.toFixed(1) + "px");
         document.body.appendChild(dot);
-        setTimeout(() => dot.remove(), 900);
+        setTimeout(() => dot.remove(), life + 50);
     }
 
     // Firefox on Android: a scroll the page sets itself, frame by frame, left the frame and the header buttons one
     // toolbar height too low, with the page background (a black bar) above them until the next tap. There the browser
     // runs the scroll (behavior: "smooth"), which takes the same path as a finger scroll.
-    const BROWSER_GLIDE = /Android/.test(navigator.userAgent) && /Firefox\//.test(navigator.userAgent);
+    // For a bug report, ?mfwglide=browser or ?mfwglide=page in the address picks the way for this tab.
+    let BROWSER_GLIDE = /Android/.test(navigator.userAgent) && /Firefox\//.test(navigator.userAgent);
+    try {
+        const asked = /[?&]mfwglide=(browser|page)/.exec(location.search);
+        if (asked) sessionStorage.setItem("mfwglide", asked[1]);
+        const forced = sessionStorage.getItem("mfwglide");
+        if (forced) BROWSER_GLIDE = forced === "browser";
+    } catch (e) { /* storage blocked */ }
     let flowAt = 0;   // time of the last flow step where the browser runs the scroll
 
     // Where a scroller is and how far it can go: scrolls are kept inside that range, and left out when they would

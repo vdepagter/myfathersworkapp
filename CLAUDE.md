@@ -279,11 +279,18 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
   choice, 15 Nov 2026): `lead` (default) glides 0.8 s before a sentence ends so the next one is in place, `flow`
   moves continuously, `page` a screen at a time. Scroll targets are clamped to the page: Firefox on Android drew a
   black bar over the header buttons when the app kept asking for a scroll past the bottom. How the sentence is marked
-  is a trial setting next to it (`audio.highlight`, 15 Nov 2026, the owner picks): `gold` backlight and `dim` (fade the
-  rest) are `::highlight` styles; `ember`, `shimmer` and `underline` are bars over the sentence's lines (children of
-  `<body>`, `.mfw-reading-line` in `css/app.css`; ember and shimmer colour only the ink with `mix-blend-mode:
-  lighten`, parchment only); `off`. The glide is animated in `audio.js` (the browser's smooth
-  scroll jumps with reduced motion). No word-level timing: that needs real timestamps (ElevenLabs with-timestamps at render
+  is a trial setting next to it (`audio.highlight`, 15-16 Nov 2026, the owner picks): `gold` backlight and `dim` (fade
+  the rest) are `::highlight` styles; the others are drawn over the page as children of `<body>` in page coordinates
+  (`.mfw-reading-*` in `css/app.css`), parchment only: bars over the sentence's lines for `glow` (candle light,
+  `mix-blend-mode: overlay`), `ember` (colours only the ink, `lighten`) and `underline`, sparks for `sparks` /
+  `embersparks`, and `wisp`, a spark that travels under the words by the time passed in the sentence; `off`. Sparks
+  are left out when Graphics is Low. The glide is animated in `audio.js` (the browser's smooth scroll jumps with
+  reduced motion), except on Firefox for Android, where a scroll set frame by frame left the frame and the header
+  buttons a toolbar height too low with a black bar above until the next tap (owner's phone, not reproducible on a
+  desktop): there the browser's smooth scroll is used. For a report from a phone, `?mfwdiag` in the address shows a
+  viewport readout and `?mfwglide=browser` / `page` picks the scroll path (both kept for the tab). Animations do not
+  run in a hidden Browser pane: play-test them with a headless browser (Python Playwright is on the owner's laptop).
+  No word-level timing: that needs real timestamps (ElevenLabs with-timestamps at render
   time, or a local aligner).
 
 ## Build, run, test
