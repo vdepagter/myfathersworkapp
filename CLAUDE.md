@@ -1,4 +1,6 @@
-# My Father's Work - Fan Made Companion App
+# My Father's Work App (Unofficial)
+
+The app's own name everywhere (page title, home-screen name, Windows launcher, releases): "My Father's Work App (Unofficial)" (owner, 16 Nov 2026).
 
 Blazor WebAssembly (.NET) re-implementation of the official *My Father's Work* companion app (a Unity app whose
 stories were written in Twine/Harlowe and compiled to C# by Cradle). Players make choices on a phone/tablet next to the

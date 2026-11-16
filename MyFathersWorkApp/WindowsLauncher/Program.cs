@@ -17,7 +17,7 @@ using Microsoft.Win32;
 const int Port = 51660;
 const string PingPath = "/__mfw-launcher";
 const string PingReply = "my-fathers-work";
-const string Title = "My Father's Work - Companion App";
+const string Title = "My Father's Work App (Unofficial)";
 
 var url = $"http://localhost:{Port}/";
 var baseDir = AppContext.BaseDirectory;
@@ -85,7 +85,7 @@ if (edge != null)
 
 // No Edge: default browser, and a console window to stop the server
 Native.ShowConsole(Title);
-Console.WriteLine("My Father's Work - Fan Made Companion App");
+Console.WriteLine("My Father's Work App (Unofficial)");
 Console.WriteLine();
 Console.WriteLine($"  Running at {url}");
 Console.WriteLine("  The app opens in your browser. If it does not, open the address above.");

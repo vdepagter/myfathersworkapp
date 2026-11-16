@@ -49,7 +49,7 @@ Copy-Item (Join-Path $work "app\wwwroot") $out -Recurse
 Get-ChildItem (Join-Path $out "wwwroot") -Recurse -Include *.br, *.gz | Remove-Item -Force
 
 @"
-My Father's Work - Fan Made Companion App ($Version), offline Windows version
+My Father's Work App (Unofficial) ($Version), offline Windows version
 
 1. Unzip this whole folder anywhere (keep MyFathersWork.exe next to the wwwroot folder).
 2. Double-click MyFathersWork.exe. The app opens in its own window (Microsoft Edge in app mode).
