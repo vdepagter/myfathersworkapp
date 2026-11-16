@@ -1010,6 +1010,24 @@
         }
         return largeProbe.getBoundingClientRect().height;
     }
+    // Should the page still end up there (seen on Firefox for Android: scrollY 375 while the visual viewport stayed at
+    // 311, offsetTop -63.9), the page is scrolled back to where the reader sees it, which puts the frame back in place.
+    // A negative offsetTop never happens otherwise (pinch zoom gives a positive one).
+    if (window.visualViewport) {
+        let realigning = false;
+        const realign = () => {
+            const vv = window.visualViewport;
+            if (realigning || vv.offsetTop > -1 || vv.scale > 1.01) return;
+            realigning = true;
+            requestAnimationFrame(() => {
+                realigning = false;
+                if (vv.offsetTop <= -1) window.scrollTo({ top: Math.max(0, Math.round(vv.pageTop)), behavior: "instant" });
+            });
+        };
+        window.visualViewport.addEventListener("scroll", realign);
+        window.visualViewport.addEventListener("resize", realign);
+        window.addEventListener("scroll", realign, { passive: true });
+    }
     function scrollRoom(scroller) {
         if (scroller !== window) return { top: scroller.scrollTop, max: Math.max(0, scroller.scrollHeight - scroller.clientHeight) };
         const element = document.scrollingElement || document.documentElement;
