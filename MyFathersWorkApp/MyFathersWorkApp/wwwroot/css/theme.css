@@ -1,5 +1,5 @@
 ﻿/* ---------------------------------------------------------------------------------------------------------------------
-   Look of the Unity app (HANDOFF.md "Visual overhaul"): its fonts, textured buttons, page background and the tap effect.
+   Look of the Unity app (HANDOFF_ARCHIVE.md "Visual overhaul"): its fonts, textured buttons, page background and the tap effect.
    Images in images/ui/ are resized WebP copies of UnityOriginalApp/Assets (New_UI_Assets, VFX, JanleyShader).
    html[data-graphics] is set by js/atmosphere.js: "low" stops every moving decoration.
    --------------------------------------------------------------------------------------------------------------------- */

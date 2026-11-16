@@ -1,4 +1,4 @@
-// Atmosphere effects from the Unity app (HANDOFF.md "Visual overhaul"): rain, fog, smoke and embers drawn on canvases with the
+// Atmosphere effects from the Unity app (HANDOFF_ARCHIVE.md "Visual overhaul"): rain, fog, smoke and embers drawn on canvases with the
 // original particle textures, a lightning flash, and the sparkle + expanding circle on every tap.
 //   start(id, layers)  - fill canvas #id with particles. layers: [{ kind, count }], kind = rainBack | rainFront | fog |
 //                        smoke | ember; count is for High quality (Medium draws ~40%, Low none).

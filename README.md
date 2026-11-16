@@ -42,9 +42,11 @@ address bar. It still needs an internet connection.
 Firefox on Windows and Mac cannot install websites as apps; use a bookmark instead. Menu names change a little between
 browser versions, so look for "Install" or "Add to Home screen".
 
-Saved games are kept per browser. An installed app can keep its own saves apart from the browser tab (on iPhone and iPad
-it always does), so a game started in the browser does not show up in the app. To move a game, press **Save code**
-next to it under **Saved Games** (Main Menu), then open that file in the app under **Saved Games > Load a save code**.
+Saved games and the Endings Gallery are kept per browser. An installed app can keep its own data apart from the
+browser tab (on iPhone and iPad it always does), so a game started in the browser does not show up in the app. To move
+a game, press **Save code** next to it under **Saved Games** (Main Menu), then open that file in the app under
+**Saved Games > Load a save code**. To move your endings, achievements and Hall of Fame, press **Export** on the
+Endings Gallery page, then **Import** that text or file in the app: the two galleries are merged.
 
 ## Why this exists
 
@@ -86,21 +88,31 @@ which ported the first two Generations of *The Cost of Disease*. Starting from t
   next sentence, continuously, or a screen at a time) and how the sentence is marked. Private pass-the-device pages only
   play when the reader presses play.
 - **Clear buttons** to move on: every story page ends in a green button (Continue, Reveal, Start Voting, Final Scoring,
-  ...), and every round screen ends with an **End of Round** button, with a shortcut arrow that jumps down to it.
+  ...), and every round screen ends with an **End of Round** button. While that button is further down a long page, a
+  shortcut chip (↓ Continue, ↓ End of Round) jumps down to it.
+- **Votes and bids** with the official app's 3-2-1 countdown: **Start Voting** (or **Start Bidding**) opens it, and
+  **Accept** after REVEAL! goes straight on to the result.
 - **Back (⬅) and Forward (➡)**: undo any step, all the way to the start of the game, and redo what you undid.
 - **Auto-save and Saved Games**: close the page and continue later on the exact same screen. Starting a new game keeps
   the old one, so every game on the device can be opened again and paged back through.
-- **Save codes**: download any game as a file from Saved Games and load it on another device to continue there.
+- **Save codes and gallery export**: download any game as a file from Saved Games and load it on another device to
+  continue there. The Endings Gallery and Hall of Fame are kept apart from saved games: **Export** and **Import** on
+  the Endings Gallery page copy them to another device or keep a backup (an import is merged with what is there).
 - **Endings Gallery**: a map of every scenario's branches and endings showing which you have reached, achievements (the
   official app's and new ones for Masterworks, high scores, family wins and win streaks), and a **Hall of Fame** with
-  wins, records and recent games you can correct, add or delete. Export and import move it to another device.
+  wins, records and recent games you can correct, add or delete.
 - **Rankings podium** at the end of a game, and score entry on one page where you tick who completed their Masterwork.
 - **Remembered names**: players and village names from earlier games can be picked with one tap.
 - **Village name secrets**: a few village names decide which way the story goes after Generation I (listed in Help).
-- **Play along with the official app**: if someone else runs the official app, this app asks for its random outcomes
-  so both stay in step.
+- **Guided mode (spoilers!)**, for hunting every ending: a route card on each round screen and notes on the choices
+  that steer the story show which votes, bids and links lead to which branch or ending, which endings you have already
+  found, and the odds of the hidden rolls (without revealing them). Switch it on in Settings or the pause menu.
+- **Play along with the official app**, a tester option in Settings: if someone else runs the official app, this app
+  asks for its random outcomes so both stay in step.
 - **Help** pages that explain setup, the round screens, secret pages, bids and votes.
-- **Settings** for graphics quality, story text size and separate volumes for music, effects and speech.
+- **Settings** (also in the pause menu during a game) for the narrator (Oliver, the original male or female
+  recordings, or off), how the page follows Oliver and how the spoken sentence is marked, graphics quality, story text
+  size and separate volumes for music, effects and speech.
 - **An offline Windows version** (see Play now).
 - Many fixes to the original stories: unreachable or always-true conditions, rules that contradicted each other,
   missing and duplicated text. Each deviation is written down in [`CLAUDE.md`](CLAUDE.md).
@@ -157,6 +169,18 @@ You only need this if you want to change the app. To play, use one of the option
 
 To get the latest version later, run `git pull` in the `myfathersworkapp` folder.
 
+**Test on a phone or tablet** on the same Wi-Fi network (needs the **.NET 10 SDK**):
+```
+dotnet build MyFathersWorkApp/MyFathersWorkApp.sln -p:DebugType=none -p:DebugSymbols=false
+dotnet run tools/lan-serve.cs
+```
+It prints the addresses to open on the phone (port 5199; pass another port as the last argument). Windows Firewall has
+to allow the port on the private network once; the command is at the top of `tools/lan-serve.cs`. Changes to JavaScript,
+CSS and the story `.csv` files show on a reload, C# changes need the build again.
+
+**Build the offline Windows version** with `pwsh tools/build-windows.ps1 -Version <version>`; the zip lands in `dist/`.
+Pushing a tag `v*` makes GitHub build it and attach it to a release.
+
 ## How the scenarios were ported
 
 1. **Source:** the official app was built in Unity, and its stories were written in Twine and compiled to C#. The
@@ -188,7 +212,7 @@ the same terms: free to use, share and adapt for non-commercial purposes, with c
 app changes the original: the stories were ported to a new web app, bugs were fixed, and features and narration were
 added.
 
-This version of the app was developed by Valentijn de Pagter (Inny) using Claude
+This version of the app was developed by Valentijn using Claude
 
 Oliver's narration is generated with [ElevenLabs](https://elevenlabs.io) text-to-speech (voice "Oliver Silk") on a paid
 plan.
