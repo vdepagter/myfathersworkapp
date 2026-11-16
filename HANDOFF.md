@@ -12,6 +12,18 @@ test sections moved to the archive. Left before version 1.0:
   warning about an unknown publisher. This is the step before v1.0.
 - Still open, defaults applied: the A Time of War owner questions in `docs/ATOW_PORT_MAP.md` section 7.
 
+## Guided mode and the play-along tester option (16 Nov 2026, branch claude/project-thread-c6ce4h)
+
+- "Play along with the official app" moved from the scenario language page to Settings (Main Menu only), marked
+  "Tester option"; stored in localStorage `mfwMirror` (`Shared/GameOptions.cs`), read when a new game starts.
+- Guided mode (`mfwGuided`, Settings and pause menu, `Shared/PlayOptions.razor`): route card at the top of every hub
+  (foldable, `mfwGuideFolded`) and notes under the choices that steer a branch or ending (`Shared/GuideBox.razor`, also in
+  InfoPopup / InputPopup). Engine `Shared/Guide/GuideService.cs` (keyed by `ResumeMethod` or the hub), rules per scenario
+  in `Shared/Guide/<Scenario>Guide.cs`, text in `wwwroot/localization/<Scenario>_Guide.csv` with `[[hub:Name]]` /
+  `[[end:n]]` tokens (Endings Gallery names, ✓ found / ☆ not yet). Guide code only reads state (never RandomArray), explains
+  odds instead of revealing rolls, and shows no tally of secret choices. Not narrated; js/audio.js skips `.guide-note`.
+- Done: The Cost of Disease. Waiting for the owner's OK on look and wording before Fear of the Unknown and A Time of War.
+
 ## Visual overhaul (October 2026)
 
 Bringing the Unity app's look into the web app. Plan (owner approved 30 Oct 2026, original fonts):
