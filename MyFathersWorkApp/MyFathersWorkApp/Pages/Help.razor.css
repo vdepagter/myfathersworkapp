@@ -21,3 +21,14 @@
 .help-page ::deep img {
     max-width: 100%;
 }
+
+.help-page ::deep h3 {
+    margin: 1.3rem 0 0.4rem;
+    font-size: 1.15rem;
+    color: #3a1408;
+}
+
+.help-page ::deep ul {
+    margin: 0 0 0.6rem;
+    padding-left: 1.3rem;
+}

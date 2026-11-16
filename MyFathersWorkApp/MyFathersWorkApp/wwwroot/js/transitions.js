@@ -143,15 +143,16 @@
     window.addEventListener("resize", queueHeaderCut);
     setInterval(() => { if (!document.hidden) queueHeaderCut(); }, 1000);
 
-    // End of Round chip (Pages/Gameplay.razor, .end-round-jump in the round bar dock): shown while the End of Round
-    // section's button (#mfw-end-of-round) is below the round bar, hidden once it is in view. Tapping it scrolls there.
+    // Jump-down chip (Pages/Gameplay.razor, .end-round-jump in the round bar dock): shown while the End of Round
+    // section's button (#mfw-end-of-round) on a round page, or the button that ends a story page (#mfw-page-end:
+    // Continue, Reveal, ...), is below the round bar, hidden once it is in view. Tapping it scrolls there.
     let endFrame = 0;
 
     function endOfRoundParts() {
-        const section = document.getElementById("mfw-end-of-round");
+        const section = document.getElementById("mfw-end-of-round") || document.getElementById("mfw-page-end");
         const tracker = document.querySelector(".round-tracker");
         if (!section || !tracker) return null;
-        const button = section.querySelector(".end-round-button") || section;
+        const button = section.querySelector(".end-round-button, .continue-button") || section;
         const bar    = tracker.getBoundingClientRect();
         return { section: section, button: button, barTop: bar.top + bar.height * 0.5 };
     }

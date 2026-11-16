@@ -83,6 +83,10 @@ public sealed class AudioService(IJSRuntime js)
         _                   => "voice"
     };
 
+    // False in the Windows download without audio files (js/edition.js): sound controls and narration are hidden
+    public bool Available => _Available ??= Invoke("mfwAudio.available", true);
+    private bool? _Available;
+
     // True after the first user gesture; before it the browser blocks playback
     public bool IsUnlocked => Invoke("mfwAudio.isUnlocked", false);
 

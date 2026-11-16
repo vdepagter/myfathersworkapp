@@ -71,8 +71,16 @@ def index_values(name, expr):
 for f in files:
     src = open(f, encoding='utf-8-sig').read()
     # split into methods
-    for m in re.finditer(r'\n    (?:public|private) static (?:void|string|bool|int|Faction|string\[\]|Years|Action<GlobalData>) (\w+)\(([^)]*)\)\s*(=>[^\n]*\n|\n    \{\n(.*?)\n    \})', src, re.S):
-        name, body = m.group(1), m.group(3)
+    methods = [(m.group(1), m.group(2), m.group(3)) for m in re.finditer(r'\n    (?:public|private) static (?:void|string|bool|int|Faction|string\[\]|Years|Action<GlobalData>) (\w+)\(([^)]*)\)\s*(=>[^\n]*\n|\n    \{\n(.*?)\n    \})', src, re.S)]
+    # A shared body with [CallerMemberName] string caller (e.g. Gen1Fate) uses the tags of the screens that call it
+    expanded = []
+    for name, params, body in methods:
+        if 'CallerMemberName' in params:
+            callers = [n for n, _, b in methods if n != name and re.search(r'\b' + name + r'\(globalData', b or '')]
+            expanded += [(caller, body) for caller in callers]
+        else:
+            expanded.append((name, body))
+    for name, body in expanded:
         where = f.split('/')[-1] + ':' + name
         # Hub methods, and helpers that add sections to the shown hub under another tag prefix (const string caller)
         caller = re.search(r'const string\s+caller\s*=\s*"(\w+)"', body or '')

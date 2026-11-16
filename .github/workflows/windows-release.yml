@@ -1,6 +1,7 @@
 name: Windows release
 
-# Builds the offline Windows version (tools/build-windows.ps1): MyFathersWork.exe + wwwroot in one zip.
+# Builds the offline Windows version (tools/build-windows.ps1): MyFathersWork.exe + wwwroot, as three zips: full,
+# light (smaller audio) and no-audio.
 # - Push a tag v* (e.g. v0.66.6.250): the zip is attached to a GitHub Release for that tag.
 # - Run manually (Actions > Windows release > Run workflow): the zip is only kept as a workflow artifact.
 on:
@@ -48,6 +49,10 @@ jobs:
         with:
           dotnet-version: 9.0.x
 
+      # The light edition re-encodes the audio
+      - name: Install ffmpeg
+        run: choco install ffmpeg -y --no-progress
+
       - name: Build the Windows release
         shell: pwsh
         run: ./tools/build-windows.ps1 -Version $env:VERSION
@@ -55,7 +60,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: MyFathersWork-Windows-${{ env.VERSION }}
-          path: dist/MyFathersWork-Windows-${{ env.VERSION }}.zip
+          path: dist/MyFathersWork-Windows-${{ env.VERSION }}*.zip
           compression-level: 0 # already a zip
 
       - name: Attach to the GitHub Release
@@ -64,10 +69,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          ZIP="dist/MyFathersWork-Windows-$VERSION.zip"
+          ZIPS=(dist/MyFathersWork-Windows-$VERSION.zip dist/MyFathersWork-Windows-$VERSION-light.zip dist/MyFathersWork-Windows-$VERSION-no-audio.zip)
           if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" "$ZIP" --clobber
+            gh release upload "$GITHUB_REF_NAME" "${ZIPS[@]}" --clobber
           else
-            gh release create "$GITHUB_REF_NAME" "$ZIP" --title "My Father's Work App (Unofficial) $VERSION (Windows)" \
-              --notes "Offline Windows version. Unzip the whole folder and double-click MyFathersWork.exe - no installation or internet needed. See README.txt in the zip."
+            gh release create "$GITHUB_REF_NAME" "${ZIPS[@]}" --title "My Father's Work App (Unofficial) $VERSION (Windows)" \
+              --notes "Offline Windows version. Unzip the whole folder and double-click MyFathersWork.exe - no installation or internet needed. See README.txt in the zip. Three downloads of the same app: the full version, -light (smaller audio files, narration at a lower quality) and -no-audio (no music, sound or narration)."
           fi

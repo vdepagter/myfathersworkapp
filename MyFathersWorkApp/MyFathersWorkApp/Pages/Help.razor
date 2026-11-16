@@ -2,6 +2,7 @@
 @using MyFathersWorkApp.Shared
 @inject NavigationManager Nav
 @inject AudioService      Audio
+@inject HttpClient        Http
 
 <MenuPage Title="@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_Help)" OnBack="GoBack">
     <div class="mp-tabs" role="tablist">
@@ -15,7 +16,14 @@
 
     <div class="mp-parchment help-page" role="tabpanel">
         <h2>@GlobalData.GetLocalizedUITag("Help_Tab_" + _Page)</h2>
-        @((MarkupString)GlobalData.GetLocalizedUITag("Help_" + _Page))
+        @if (_Page == ChangelogPage)
+        {
+            @((MarkupString)(_Changelog ?? ""))
+        }
+        else
+        {
+            @((MarkupString)GlobalData.GetLocalizedUITag("Help_" + _Page))
+        }
     </div>
 
     <p class="mp-note">@AppInfo.Version</p>
@@ -26,7 +34,11 @@
     [CascadingParameter] private GlobalData GlobalData { get; set; } = null!;
 
     // The first three and End of Round are the official app's Help tabs; the others cover screens it left out and this app's additions
-    private static readonly string[] _Pages = ["HowToUse", "StoryActions", "Setup", "EndOfRound", "EndOfGeneration", "Secret", "Bids", "ThisApp", "VillageNames"];
+    private static readonly string[] _Pages = ["HowToUse", "StoryActions", "Setup", "EndOfRound", "EndOfGeneration", "Secret", "Bids", "ThisApp", "VillageNames", ChangelogPage];
+
+    // What's new: wwwroot/CHANGELOG.md (also linked from the README), loaded when the tab is first opened
+    private const string ChangelogPage = "Changelog";
+    private string?      _Changelog;
 
     private string _Page = _Pages[0];
 
@@ -36,9 +48,67 @@
         Nav.NavigateTo("");
     }
 
-    private void SelectPage(string page)
+    private async Task SelectPage(string page)
     {
         Audio.PlayClick();
         _Page = page;
+        if (page != ChangelogPage || _Changelog != null) return;
+
+        try
+        {
+            _Changelog = RenderChangelog(await Http.GetStringAsync("CHANGELOG.md"));
+        }
+        catch (Exception)
+        {
+            _Changelog = "<p>" + GlobalData.GetLocalizedUITag("Help_ChangelogFailed") + "</p>";
+        }
+    }
+
+    // The small Markdown subset CHANGELOG.md uses: "## " headings, "- " list items (continued on indented lines) and
+    // paragraphs. The "# " title and the intro paragraph are left out (the tab has its own heading).
+    private static string RenderChangelog(string markdown)
+    {
+        var html   = new System.Text.StringBuilder();
+        bool inList = false, started = false;
+        string? item = null;
+
+        void FlushItem()
+        {
+            if (item == null) return;
+            html.Append("<li>").Append(System.Net.WebUtility.HtmlEncode(item)).Append("</li>");
+            item = null;
+        }
+
+        void CloseList()
+        {
+            FlushItem();
+            if (inList) html.Append("</ul>");
+            inList = false;
+        }
+
+        foreach (string raw in markdown.Replace("\r", "").Split('\n'))
+        {
+            string line = raw.TrimEnd();
+            if (line.StartsWith("## "))
+            {
+                CloseList();
+                started = true;
+                html.Append("<h3>").Append(System.Net.WebUtility.HtmlEncode(line[3..])).Append("</h3>");
+            }
+            else if (!started) { }
+            else if (line.StartsWith("- "))
+            {
+                FlushItem();
+                if (!inList) html.Append("<ul>");
+                inList = true;
+                item   = line[2..];
+            }
+            else if (line.StartsWith("  ") && item != null) item += " " + line.Trim();
+            else if (line.Length == 0) CloseList();
+            else html.Append("<p>").Append(System.Net.WebUtility.HtmlEncode(line)).Append("</p>");
+        }
+
+        CloseList();
+        return html.ToString();
     }
 }

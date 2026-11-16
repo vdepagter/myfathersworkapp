@@ -9,7 +9,7 @@
 @implements IDisposable
 
 @* Unity GanrationEnding (story) / GanrationHUb (round) views: the scenario illustration or dark metal background with
-   its lights, embers on the round pages, the frame and the round bar in the frame (images/ui, HANDOFF.md "Visual overhaul") *@
+   its lights, embers on the round pages, the frame and the round bar in the frame (images/ui, docs/DEVLOG.md "Visual overhaul") *@
 <div class="game-scene @SceneClass" aria-hidden="true">
     <div class="scene-bg"></div>
     <div class="scene-light"></div>
@@ -51,11 +51,12 @@
         }
         <div class="round-tray"></div>
     </div>
-    @if (ShownEndOfRound != null)
+    @if (JumpLabel is { } jumpLabel)
     {
-        // Jumps down to the End of Round section (js/transitions.js shows it while that section's button is out of view)
+        // Jumps down to the End of Round section of a round page, or to the button that ends a story page (Continue,
+        // Reveal, ...). js/transitions.js shows it while that button is out of view.
         <button type="button" class="end-round-jump" onclick="mfwTransitions.jumpToEndOfRound()">
-            <span class="end-round-jump-arrow" aria-hidden="true">↓</span>@EndOfRoundLabel
+            <span class="end-round-jump-arrow" aria-hidden="true">↓</span>@jumpLabel
         </button>
     }
 </div>
@@ -132,6 +133,7 @@
                 GameplayWindow shownWindow  = GlobalData.ActiveWindow;
                 bool?          revealKind   = RevealKind(shownWindow);
                 bool           revealButton = revealKind != null && !shownWindow.Elements.Any(element => IsRevealLink(element) || ResolvedRevealKind(shownWindow, element) != null);
+                GameplayElement? pageEnd    = ShownPageEnd;
             }
             @foreach (GameplayElement element in GlobalData.ActiveWindow.Elements)
             {
@@ -158,7 +160,7 @@
                         <br/>
                         @GlobalData.GetLocalizedUITag(GlobalTags.Gameplay_RevealLead)
                     }
-                    <div class="continue-row">
+                    <div class="continue-row" id="@(ReferenceEquals(element, pageEnd) ? "mfw-page-end" : null)">
                         <button class="mfw-button green continue-button" data-link="@element.Content" @onclick="() => OnWindowLinkClicked(element)">
                             @GlobalData.GetLocalizedUITag(buttonTag)
                         </button>
@@ -360,6 +362,20 @@
                         .SelectMany(section => section.Elements)
                         .FirstOrDefault(element => element.EndOfRound && element.Callback != null)
             : null;
+
+    // The last link of the shown story window that is drawn as a button (LinkButtonTag: Continue, Reveal, Final
+    // Scoring, ...), null on other screens and while the vote / bid countdown is open
+    private GameplayElement? ShownPageEnd =>
+        GlobalData.ActiveMirrorQuestion == null && GlobalData.ActivePopup == null && GlobalData.ActiveInputPopup == null &&
+        GlobalData.ActiveWindow is { Rankings: null } window && !_ShowReveal
+            ? window.Elements.LastOrDefault(element => LinkButtonTag(window, element) != null)
+            : null;
+
+    // Label of the jump-down chip above the round bar: End of Round / Generation on a round page, the page's button text
+    // on a story page
+    private string? JumpLabel => ShownEndOfRound != null ? EndOfRoundLabel
+                               : ShownPageEnd is { } pageEnd ? GlobalData.GetLocalizedUITag(LinkButtonTag(GlobalData.ActiveWindow!, pageEnd)!)
+                               : null;
 
     private string EndOfRoundLabel => GlobalData.GetLocalizedUITag(GlobalData.Years == Years.Late
                                                                        ? GlobalTags.Gameplay_EndGenerationButton
@@ -757,7 +773,7 @@
     private bool WillAutoplay(GameplayWindow window, bool suppressed) =>
         !suppressed && Audio.Narration != NarrationVoice.Off && Audio.IsUnlocked && !(OliverClips(window) != null && Narration.IsPrivate(GlobalData, window));
 
-    private bool HasNarration(GameplayWindow window) => window.VoiceOver != null || OliverClips(window) != null;
+    private bool HasNarration(GameplayWindow window) => Audio.Available && (window.VoiceOver != null || OliverClips(window) != null);
 
     private GameplayWindow? _OliverWindow; // the window _OliverClips was computed for
     private List<NarrationClip>? _OliverClips;

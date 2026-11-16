@@ -1,26 +1,32 @@
 ﻿/* ---------------------------------------------------------------------------------------------------------------------
-   Look of the Unity app (HANDOFF.md "Visual overhaul"): its fonts, textured buttons, page background and the tap effect.
+   Look of the Unity app (docs/DEVLOG.md "Visual overhaul"): its fonts, textured buttons, page background and the tap effect.
    Images in images/ui/ are resized WebP copies of UnityOriginalApp/Assets (New_UI_Assets, VFX, JanleyShader).
    html[data-graphics] is set by js/atmosphere.js: "low" stops every moving decoration.
    --------------------------------------------------------------------------------------------------------------------- */
 
-/* Unity: Evil Dead for screen headings, Absolute Empire for buttons, Averia (SIL OFL, fonts/averia-OFL.txt) for text */
+/* Fonts (all SIL Open Font License, licence texts next to them in fonts/): Frijole for screen headings and Bowlby One SC
+   for buttons (owner's pick, 16 Nov 2026; they replace the Unity app's Evil Dead and Absolute Empire, which are free for
+   personal use only), Averia for text */
 @font-face { font-family: "Averia"; src: url(../fonts/averia-regular.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: "Averia"; src: url(../fonts/averia-bold.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
 @font-face { font-family: "Averia"; src: url(../fonts/averia-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
 @font-face { font-family: "Averia"; src: url(../fonts/averia-bolditalic.woff2) format("woff2"); font-weight: 700; font-style: italic; font-display: swap; }
-/* Ascent / descent set so capitals sit exactly in the middle of the line box in every browser (the font's own metrics
-   put them 0.07 em high, more on some phones) */
-@font-face { font-family: "Absolute Empire"; src: url(../fonts/absolute-empire.woff2) format("woff2"); font-display: swap; ascent-override: 87.2%; descent-override: 12.8%; line-gap-override: 0%; }
-@font-face { font-family: "Evil Dead"; src: url(../fonts/evil-dead.woff2) format("woff2"); font-display: swap; }
+/* size-adjust: both fonts run wider than the originals (Bowlby One SC 5-8 %, Frijole about 20 % in mixed case), so they
+   are drawn smaller to fit the same headings and buttons. Ascent / descent of Bowlby One SC are set so its capitals
+   (0.742 em) sit exactly in the middle of the line box in every browser */
+@font-face { font-family: "Bowlby One SC"; src: url(../fonts/bowlby-one-sc.woff2) format("woff2"); font-display: swap; ascent-override: 87.1%; descent-override: 12.9%; line-gap-override: 0%; size-adjust: 94%;
+             unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Bowlby One SC"; src: url(../fonts/bowlby-one-sc-ext.woff2) format("woff2"); font-display: swap; ascent-override: 87.1%; descent-override: 12.9%; line-gap-override: 0%; size-adjust: 94%;
+             unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Frijole"; src: url(../fonts/frijole.woff2) format("woff2"); font-display: swap; size-adjust: 85%; }
 
 :root {
     /* One pixel of the Unity canvas (1920 x 1081), fitted inside the window: game page frame, buttons, round bar.
        Phones in portrait use a bigger unit so the round bar stays readable. */
     --u: min(calc(100vw / 1920), calc(100vh / 1081));
     --u: min(calc(100vw / 1920), calc(100svh / 1081));
-    --mfw-font-heading: "Evil Dead", Georgia, serif;
-    --mfw-font-button:  "Absolute Empire", Georgia, serif;
+    --mfw-font-heading: "Frijole", Georgia, serif;
+    --mfw-font-button:  "Bowlby One SC", Georgia, serif;
     --mfw-font-text:    "Averia", Georgia, serif;
     --mfw-cream:        #f1e4c4;
 }
@@ -175,7 +181,7 @@ body {
     to   { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
 }
 
-/* Screen headings (Unity: Evil Dead) */
+/* Screen headings (Unity TitleGE / TitleGH) */
 .mfw-heading {
     margin: 0;
     font-family: var(--mfw-font-heading);

@@ -1,6 +1,6 @@
 /* ---------------------------------------------------------------------------------------------------------------------
    Content of the menu pages inside Shared/MenuPage.razor (setup before a game, Saved Games, Help, Endings Gallery), in
-   the Unity look (HANDOFF.md "Visual overhaul"). Global, because the content belongs to each page's own CSS scope.
+   the Unity look (docs/DEVLOG.md "Visual overhaul"). Global, because the content belongs to each page's own CSS scope.
    --------------------------------------------------------------------------------------------------------------------- */
 
 /* Subtitle / short explanation under the title */

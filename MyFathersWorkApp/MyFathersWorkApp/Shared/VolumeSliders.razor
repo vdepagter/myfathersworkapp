@@ -2,21 +2,25 @@
 
 @* Music, effects and speech volume (pause menu). Moving a slider changes the sound at once; releasing the effects
    slider plays a click as a sample. *@
-<div class="mfw-settings-group">
-    <div class="mfw-setting-group-title">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_Volume)</div>
-    @foreach ((AudioVolume kind, string tag) in _Channels)
-    {
-        <div class="mfw-setting-row">
-            <span class="mfw-setting-label">@GlobalData.GetLocalizedUITag(tag)</span>
-            <input type="range" min="0" max="100" step="5"
-                   aria-label="@GlobalData.GetLocalizedUITag(tag)"
-                   value="@_Values[kind]"
-                   @oninput="e => OnInput(kind, e)"
-                   @onchange="() => OnRelease(kind)"/>
-            <span class="mfw-setting-value">@_Values[kind]%</span>
-        </div>
-    }
-</div>
+@* Nothing in the Windows download without audio files (AudioService.Available) *@
+@if (Audio.Available)
+{
+    <div class="mfw-settings-group">
+        <div class="mfw-setting-group-title">@GlobalData.GetLocalizedUITag(GlobalTags.Audio_Volume)</div>
+        @foreach ((AudioVolume kind, string tag) in _Channels)
+        {
+            <div class="mfw-setting-row">
+                <span class="mfw-setting-label">@GlobalData.GetLocalizedUITag(tag)</span>
+                <input type="range" min="0" max="100" step="5"
+                       aria-label="@GlobalData.GetLocalizedUITag(tag)"
+                       value="@_Values[kind]"
+                       @oninput="e => OnInput(kind, e)"
+                       @onchange="() => OnRelease(kind)"/>
+                <span class="mfw-setting-value">@_Values[kind]%</span>
+            </div>
+        }
+    </div>
+}
 
 @code
 {
