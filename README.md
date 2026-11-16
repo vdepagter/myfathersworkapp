@@ -12,14 +12,39 @@ browser on a phone, tablet or computer, with nothing to install.
 There are two ways to play:
 
 1. **In your browser: https://vdepagter.github.io/myfathersworkapp/**
-   Open the link on a phone, tablet or computer. Nothing to install, and it always runs the latest version. On a phone
-   you can add it to your home screen from the browser menu.
+   Open the link on a phone, tablet or computer. Nothing to install, and it always runs the latest version. You can
+   also add it to your home screen, where it opens full screen like an app (see
+   [Add it to your home screen](#add-it-to-your-home-screen) below).
 2. **Offline on Windows:** download `MyFathersWork-Windows-<version>.zip` from the
    [latest release](https://github.com/vdepagter/myfathersworkapp/releases/latest), unzip the whole folder anywhere and
    double-click `MyFathersWork.exe`. The app opens in its own window and needs no internet connection and no
    installation. Saved games are kept on that PC and stay when you unzip a newer version over the old one. The exe is
    not code-signed yet, so Windows SmartScreen may warn about an unknown publisher the first time: choose
    **More info > Run anyway**.
+
+### Add it to your home screen
+
+The website can be installed as an app (a PWA): it gets its own icon and opens full screen, without the browser's
+address bar. It still needs an internet connection.
+
+| Device and browser | How |
+|---|---|
+| **iPhone / iPad, Safari** | Tap the **Share** button (the square with an arrow), scroll down, tap **Add to Home Screen**, then **Add**. |
+| **iPhone / iPad, Chrome, Edge or Firefox** | Tap the **Share** button (in the address bar or the menu), then **Add to Home Screen** and **Add**. Needs iOS 16.4 or later. |
+| **Android, Chrome** | Tap the **⋮** menu, then **Add to Home screen** (or **Install app**), then **Install** or **Add**. |
+| **Android, Edge** | Tap the **…** menu, then **Add to phone** (or **Install app**). |
+| **Android, Firefox** | Tap the **⋮** menu, then **Add to Home screen** (or **Install**), then **Add**. |
+| **Android, Samsung Internet** | Tap the **≡** menu, then **Add page to** > **Home screen**. |
+| **Windows / Mac, Chrome** | Click the install icon at the right of the address bar, or **⋮** > **Cast, save and share** > **Install page as app**. |
+| **Windows / Mac, Edge** | Click the install icon at the right of the address bar, or **…** > **Apps** > **Install this site as an app**. |
+| **Mac, Safari** (macOS 14 or later) | **File** > **Add to Dock**. |
+
+Firefox on Windows and Mac cannot install websites as apps; use a bookmark instead. Menu names change a little between
+browser versions, so look for "Install" or "Add to Home screen".
+
+Saved games are kept per browser. An installed app can keep its own saves apart from the browser tab (on iPhone and iPad
+it always does), so a game started in the browser does not show up in the app. To move a game, press **Save code**
+next to it under **Saved Games** (Main Menu), then open that file in the app under **Saved Games > Load a save code**.
 
 ## Why this exists
 
@@ -65,7 +90,7 @@ which ported the first two Generations of *The Cost of Disease*. Starting from t
 - **Back (⬅) and Forward (➡)**: undo any step, all the way to the start of the game, and redo what you undid.
 - **Auto-save and Saved Games**: close the page and continue later on the exact same screen. Starting a new game keeps
   the old one, so every game on the device can be opened again and paged back through.
-- **Save and load** a game as text or a file, to continue on another device.
+- **Save codes**: download any game as a file from Saved Games and load it on another device to continue there.
 - **Endings Gallery**: a map of every scenario's branches and endings showing which you have reached, achievements (the
   official app's and new ones for Masterworks, high scores, family wins and win streaks), and a **Hall of Fame** with
   wins, records and recent games you can correct, add or delete. Export and import move it to another device.
@@ -102,8 +127,8 @@ Found a bug, a typo in a story, or have an idea? Please let us know on GitHub:
    - a screenshot, if you can. You can paste or drag it straight into the issue.
 4. Press **Create** (or **Submit new issue**).
 
-If your report is about a game in progress, a saved game helps us see exactly where you were: open the pause menu, press
-**Local Save Game**, then **Download File** and drag that file into the issue.
+If your report is about a game in progress, a saved game helps us see exactly where you were: go to **Saved Games** on
+the Main Menu, press **Save code** next to the game and drag the downloaded file into the issue.
 
 No GitHub account? You can also ask in the **My Father's Work Fanmade App** Discord (link below).
 
