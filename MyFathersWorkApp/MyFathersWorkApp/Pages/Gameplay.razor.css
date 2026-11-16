@@ -301,6 +301,10 @@ html.mfw-end-away .end-round-jump {
 .end-round-jump:focus-visible { outline: 2px solid #c9a35a; outline-offset: 2px; }
 .end-round-jump-arrow         { color: #ffd27a; font-size: 1.1rem; line-height: 1; }
 
+/* A story page's button after the chip's jump: a short golden glow that follows the button's texture */
+.continue-row .continue-button { transition: transform 0.12s, filter 0.4s; }
+.continue-row.mfw-flash .continue-button { filter: brightness(1.15) drop-shadow(0 0 10px rgba(255, 196, 92, 0.85)); }
+
 .main-panel.mfw-flash,
 .section-panel.mfw-flash {
     border-color: #ffd27a;
