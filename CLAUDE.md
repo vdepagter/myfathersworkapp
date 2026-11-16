@@ -1,4 +1,6 @@
-# My Father's Work - Fan Made Companion App
+# My Father's Work App (Unofficial)
+
+The app's own name everywhere (page title, home-screen name, Windows launcher, releases): "My Father's Work App (Unofficial)" (owner, 16 Nov 2026).
 
 Blazor WebAssembly (.NET) re-implementation of the official *My Father's Work* companion app (a Unity app whose
 stories were written in Twine/Harlowe and compiled to C# by Cradle). Players make choices on a phone/tablet next to the
@@ -281,12 +283,20 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
   seconds off in a long clip. How the page follows is the "Scrolling" setting in the pause menu (`audio.scroll`; owner's
   choice, 15 Nov 2026): `lead` (default) glides 0.8 s before a sentence ends so the next one is in place, `flow`
   moves continuously, `page` a screen at a time. Scroll targets are clamped to the page: Firefox on Android drew a
-  black bar over the header buttons when the app kept asking for a scroll past the bottom. How the sentence is marked
-  is a trial setting next to it (`audio.highlight`, 15-16 Nov 2026, the owner picks): `gold` backlight and `dim` (fade
-  the rest) are `::highlight` styles; the others are drawn over the page as children of `<body>` in page coordinates
-  (`.mfw-reading-*` in `css/app.css`), parchment only: bars over the sentence's lines for `glow` (candle light,
-  `mix-blend-mode: overlay`), `ember` (colours only the ink, `lighten`) and `underline`, sparks for `sparks` /
-  `embersparks`, and `wisp`, a spark that travels under the words by the time passed in the sentence; `off`. Sparks
+  black bar over the header buttons when the app kept asking for a scroll past the bottom; for the page itself the
+  end is measured against the large viewport (`100lvh`, toolbar hidden), so the app never scrolls into the last
+  toolbar height (Firefox keeps `clientHeight` at the small viewport; diag showed `visualViewport.offsetTop` -64 at
+  that end). The scroll style `off` leaves the page alone. How the sentence is marked is a trial setting next to it
+  (`audio.highlight`, `STYLES` in `audio.js`, menu order None, Fade the rest, Quill line, Candle glow, Ember by
+  candlelight, Travelling spark - owner, 16 Nov 2026; dropped: Gold backlight, Underline, Ember text (with sparks),
+  Sparks, Wandering wisp, soft travelling spark, Firefly, Candle glow with motes): `off`, `dim` (fade the rest,
+  `::highlight`), `quill` (a line of light under the spoken words; the rest fades slightly,
+  `::highlight(mfw-narration-soft)`), `glow` (candle light bars, `mix-blend-mode: overlay`), `emberglow` (candle glow
+  + flat ember-brown ink + embers born around the words being spoken, moved every frame on their own loop with a
+  wandering heading, overlay so they drift behind the words) and `wisp` (the default for now: a spark that moves from
+  the sentence's first word to its last, by `narration-sync.js` `starts().spoken`, fades in a moment ahead of it,
+  trails off past the end and at line wraps, wanders off its route, on a faint haze). Bars and lights are children
+  of `<body>` in page coordinates (`.mfw-reading-*` in `css/app.css`), parchment only. Embers and the spark
   are left out when Graphics is Low. The glide is animated in `audio.js` (the browser's smooth scroll jumps with
   reduced motion), except on Firefox for Android, where a scroll set frame by frame left the frame and the header
   buttons a toolbar height too low with a black bar above until the next tap (owner's phone, not reproducible on a
@@ -299,6 +309,10 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
 ## Build, run, test
 
 - **Claude sessions:** the cloud container cannot download .NET. Build, run and browser-test in a Remote Control session on the owner's laptop (pre-approved), after pushing the branch.
+- **Phone test over the LAN:** `dotnet build MyFathersWorkApp/MyFathersWorkApp.sln -p:DebugType=none -p:DebugSymbols=false`,
+  then `dotnet run tools/lan-serve.cs` (.NET 10 SDK) and open `http://<laptop Wi-Fi IP>:5199`. Not `dotnet run --urls
+  http://0.0.0.0:...`: the Blazor dev server (DevServer 9.0.5) sends the whole file for a byte-range request, so audio
+  jumps back to its start mid-clip (the highlight keeps going). JS/CSS/CSV changes show on a reload, C# needs the build.
 - `dotnet build MyFathersWorkApp/MyFathersWorkApp.sln`
 - `dotnet run --project MyFathersWorkApp/MyFathersWorkApp/MyFathersWorkApp.csproj` (http://localhost:5166; use `--no-launch-profile --urls http://localhost:5199` if 5166 is taken).
 - Offline Windows release: `pwsh tools/build-windows.ps1 [-Version x]` -> `dist/MyFathersWork-Windows-<version>.zip`

@@ -57,7 +57,14 @@
     transform: rotate(-45deg);
 }
 
-/* Volume, shown below the toggle while it is hovered or focused */
+/* Catches the tap outside an open volume pop-up (closes it) */
+.audio-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+}
+
+/* Volume, shown below the disc while it is open (tapped), or hovered with a mouse */
 .volume-pop {
     position: absolute;
     top: 100%;
@@ -91,11 +98,54 @@
     height: 0.5rem;
 }
 
-.audio-control:hover .volume-pop,
-.audio-control:focus-within .volume-pop {
+.audio-control.open .volume-pop {
     opacity: 1;
     visibility: visible;
     transform: translate(-50%, 0);
+}
+
+@media (hover: hover) {
+    .audio-control:hover .volume-pop {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, 0);
+    }
+}
+
+.audio-control.open .audio-toggle {
+    filter: brightness(1.25);
+}
+
+/* Mute / Unmute under the slider */
+.audio-mute {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+    margin-top: 0.15rem;
+    padding: 0.3rem 0.35rem 0.2rem;
+    min-width: 3.4rem;
+    border: 1px solid #b0843f;
+    border-radius: 6px;
+    background: radial-gradient(circle at 35% 30%, #4a3a2a, #1b140e 80%);
+    color: #f1e4c4;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.audio-mute:hover {
+    filter: brightness(1.25);
+}
+
+.audio-mute.off {
+    border-color: #e0b25e;
+    box-shadow: 0 0 6px rgba(224, 178, 94, 0.5);
+}
+
+.audio-mute-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
 }
 
 .volume-pop input[type="range"] {

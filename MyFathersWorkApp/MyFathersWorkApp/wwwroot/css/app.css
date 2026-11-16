@@ -112,31 +112,34 @@ code {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
-/* The sentence Oliver is speaking (js/audio.js syncHighlight; global, ::highlight cannot be scoped) */
-::highlight(mfw-narration) {
-    background-color: rgba(226, 158, 44, 0.6);
-}
+/* The sentence Oliver is speaking (js/audio.js STYLES; ::highlight is global, it cannot be scoped) */
 
 /* "Fade the rest": the narrated text around the spoken sentence */
 ::highlight(mfw-narration-rest) {
-    color: rgba(23, 16, 10, 0.58);
+    color: rgba(23, 16, 10, 0.68);
+}
+
+/* Quill line: the rest fades only slightly */
+::highlight(mfw-narration-soft) {
+    color: rgba(23, 16, 10, 0.74);
 }
 
 /* Drawn over the spoken sentence (js/audio.js placeLines / animateMarks; children of <body>, page coordinates; above
    the page, below the frame): bars over its lines, sparks, the wisp. */
 .mfw-reading-line,
 .mfw-reading-spark,
+.mfw-reading-ember,
 .mfw-reading-wisp {
     position: absolute;
     z-index: 2;
     pointer-events: none;
 }
 
-/* Ember: only colours what is darker than the bar - the ink, not the parchment */
-.mfw-reading-ember {
+/* Ember by candlelight: the ink turns one warm ember brown (only what is darker than the bar - the ink, not the
+   parchment); one flat colour, so it reads as easily as black */
+.mfw-reading-ember-ink {
     mix-blend-mode: lighten;
-    background: linear-gradient(100deg, #8a1400 0, #d8560c 150px, #a31c00 290px, #e2700f 430px, #8a1400 600px) 0 0 / 600px 100%;
-    animation: mfw-reading-drift 9s linear infinite, mfw-reading-flicker 2.3s ease-in-out infinite;
+    background: #6a1f04;
 }
 
 /* Candle glow: the parchment around the sentence lights up, the ink stays dark */
@@ -158,8 +161,11 @@ code {
     filter: blur(7px);
 }
 
-.mfw-reading-underline {
-    border-bottom: 2px solid rgba(160, 82, 8, 0.85);
+/* Quill: a thin line of light under the words that have been spoken (width set every frame) */
+.mfw-reading-quill {
+    border-radius: 1px;
+    background: linear-gradient(90deg, rgba(196, 112, 22, 0.15), rgba(214, 128, 30, 0.85));
+    box-shadow: 0 0 5px 1px rgba(255, 170, 60, 0.45);
 }
 
 .mfw-reading-spark {
@@ -168,6 +174,18 @@ code {
     background: radial-gradient(circle, #fffbe8 0, #ffd15c 26%, #ff8a1e 50%, rgba(214, 70, 0, 0.55) 64%, transparent 74%);
     box-shadow: 0 0 6px rgba(255, 150, 40, 0.7);
     animation: mfw-reading-spark 0.85s ease-out forwards;
+}
+
+/* Embers: moved every frame (js/audio.js stepEmbers); overlay keeps the ink on top, so they drift behind the words */
+.mfw-reading-ember {
+    left: 0;
+    top: 0;
+    margin: -3px 0 0 -3px;
+    border-radius: 50%;
+    mix-blend-mode: overlay;
+    background: radial-gradient(circle, #ffe9a0 0, #ff7a10 34%, rgba(214, 50, 0, 0.95) 56%, transparent 74%);
+    box-shadow: 0 0 8px 3px rgba(230, 70, 0, 0.75);
+    will-change: transform, opacity;
 }
 
 .mfw-reading-wisp {
@@ -180,18 +198,6 @@ code {
     border-radius: 50%;
     background: radial-gradient(circle, #fffdf0 0, #ffd860 34%, #ff8a1e 58%, rgba(214, 70, 0, 0.5) 70%, transparent 78%);
     box-shadow: 0 0 12px 4px rgba(255, 150, 40, 0.7);
-    transition: transform 0.12s linear;
-}
-
-@keyframes mfw-reading-drift {
-    to { background-position: -600px 0; }
-}
-
-@keyframes mfw-reading-flicker {
-    0%, 100% { opacity: 1; }
-    35%      { opacity: 0.86; }
-    60%      { opacity: 0.96; }
-    80%      { opacity: 0.9; }
 }
 
 @keyframes mfw-reading-candle {
@@ -208,9 +214,7 @@ code {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .mfw-reading-ember,
     .mfw-reading-glow {
         animation: none;
     }
 }
-
