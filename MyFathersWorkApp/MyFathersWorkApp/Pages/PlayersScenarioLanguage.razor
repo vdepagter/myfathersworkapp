@@ -3,19 +3,14 @@
 @inject NavigationManager Nav
 @inject AudioService      Audio
 @inject HttpClient        Http
+@inject GameOptions       Options
 
+@if (!SKIP_PAGE)
+{
 <MenuPage Title="@GlobalData.GetLocalizedUITag(GlobalTags.ScenarioLanguage_Title)" OnBack="GoBack" Class="centered">
     <p class="mp-lead">@GlobalData.GetLocalizedUITag(GlobalTags.ScenarioLanguage_Subtitle)</p>
 
     <div class="mfw-dark-panel mp-panel options">
-        <label class="mirror-option">
-            <input type="checkbox" @bind="_MirrorMode"/>
-            <span>
-                <b>@GlobalData.GetLocalizedUITag(GlobalTags.ScenarioLanguage_Mirror)</b><br/>
-                @GlobalData.GetLocalizedUITag(GlobalTags.ScenarioLanguage_MirrorDesc)
-            </span>
-        </label>
-
         <label class="narration-option">
             <b>@GlobalData.GetLocalizedUITag(GlobalTags.Audio_Narration)</b>
             <select value="@Audio.Narration" @onchange="OnNarrationChanged">
@@ -36,6 +31,7 @@
         }
     </div>
 </MenuPage>
+}
 
 @code
 {
@@ -46,7 +42,9 @@
 
     private readonly Dictionary<string, string> _LocalizationOptions = new();
 
-    private bool _MirrorMode;
+    // The page is skipped (owner, 16 Nov 2026): the game starts in the first scenario language straight from the scenario
+    // picker. Narration is chosen in Settings and the pause menu, play-along in Settings. Set to false to show it again.
+    private static readonly bool SKIP_PAGE = true;
 
     private void GoBack()
     {
@@ -69,11 +67,15 @@
         {
             _LocalizationOptions[localizationId] = GlobalData.GetLocalizedUITag("ScenarioLang_" + localizationId);
         }
+
+        if (SKIP_PAGE && _LocalizationOptions.Count > 0) SelectLanguage(_LocalizationOptions.Keys.First(), false);
     }
 
-    private void SelectLanguage(string key)
+    private void SelectLanguage(string key) => SelectLanguage(key, true);
+
+    private void SelectLanguage(string key, bool click)
     {
-        Audio.PlayClick();
+        if (click) Audio.PlayClick();
         GlobalData.ScenarioLanguage               = key;
         GlobalData.Years                          = Years.Early;
         GlobalData.Generation                     = Generation.First;
@@ -84,7 +86,7 @@
         GlobalData.ActiveHub        = null;
         GlobalData.ActivePopup      = null;
         GlobalData.ActiveInputPopup = null;
-        GlobalData.MirrorMode       = _MirrorMode;
+        GlobalData.MirrorMode       = Options.MirrorMode; // tester option in Settings (Shared/PlayOptions.razor)
         
         GlobalData.ResetScenarioVars();
 
@@ -94,6 +96,6 @@
             return;
         }
 
-        Nav.NavigateTo("Gameplay");
+        Nav.NavigateTo("Gameplay", replace: !click); // skipped page: Back must not land here and start a game again
     }
 }

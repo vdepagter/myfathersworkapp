@@ -113,8 +113,8 @@ public sealed class AudioService(IJSRuntime js)
     public void   SetNarrationScroll(string mode) => InvokeVoid("mfwAudio.setScroll", mode);
 
     // How the sentence Oliver is speaking is marked (audio.js MARKS, stored per device)
-    public static readonly string[] HighlightStyles = ["off", "dim", "quill", "glow", "emberglow", "wisp"];
-    public string NarrationHighlight                 => Invoke("mfwAudio.getHighlight", "wisp");
+    public static readonly string[] HighlightStyles = ["off", "dim", "glow", "quill", "emberglow", "wisp"];
+    public string NarrationHighlight                 => Invoke("mfwAudio.getHighlight", "emberglow");
     public void   SetNarrationHighlight(string mode) => InvokeVoid("mfwAudio.setHighlight", mode);
 
     // Raised by SetNarration, so a page showing the narration state (Pages/Gameplay.razor) can redraw

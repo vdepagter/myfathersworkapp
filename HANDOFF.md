@@ -12,6 +12,13 @@ test sections moved to the archive. Left before version 1.0:
   warning about an unknown publisher. This is the step before v1.0.
 - Still open, defaults applied: the A Time of War owner questions in `docs/ATOW_PORT_MAP.md` section 7.
 
+## Guided mode, play-along in Settings, Scenario Language skipped (16 Nov 2026, branch claude/project-thread-c6ce4h)
+
+Done for all three scenarios (see CLAUDE.md "Guided mode (spoilers!)"); waiting for the owner's phone test and OK to
+merge. Also on this branch: default volumes 25 / 25 / 75, Ember by candlelight as the default highlight (black ink),
+embers and spark no longer hidden by the reduced-motion default (owner's Android devices showed only the glow - to be
+confirmed on the devices).
+
 ## Visual overhaul (October 2026)
 
 Bringing the Unity app's look into the web app. Plan (owner approved 30 Oct 2026, original fonts):

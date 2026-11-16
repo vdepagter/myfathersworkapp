@@ -1,0 +1,43 @@
+@inject GameOptions  Options
+@inject AudioService Audio
+
+@* Play options (Shared/GameOptions.cs): Guided mode, shown in Settings and the pause menu; the tester option "Play along
+   with the official app" only in Settings from the Main Menu, as it applies to the next new game. *@
+<div class="mfw-settings-group play-options">
+    <label class="play-option">
+        <input type="checkbox" checked="@Options.GuidedMode" @onchange="OnGuidedChanged"/>
+        <span>
+            <b>@GlobalData.GetLocalizedUITag(GlobalTags.Settings_Guided)</b>
+            <small>@GlobalData.GetLocalizedUITag(GlobalTags.Settings_GuidedDesc)</small>
+        </span>
+    </label>
+
+    @if (ShowMirror)
+    {
+        <label class="play-option">
+            <input type="checkbox" checked="@Options.MirrorMode" @onchange="OnMirrorChanged"/>
+            <span>
+                <b>@GlobalData.GetLocalizedUITag(GlobalTags.Settings_Mirror) <em class="tester-tag">@GlobalData.GetLocalizedUITag(GlobalTags.Settings_TesterTag)</em></b>
+                <small>@GlobalData.GetLocalizedUITag(GlobalTags.Settings_MirrorDesc)</small>
+            </span>
+        </label>
+    }
+</div>
+
+@code
+{
+    [Parameter] public GlobalData GlobalData { get; set; } = null!;
+    [Parameter] public bool       ShowMirror { get; set; }
+
+    private void OnGuidedChanged(ChangeEventArgs e)
+    {
+        Audio.PlayClick();
+        Options.SetGuidedMode(e.Value is true);
+    }
+
+    private void OnMirrorChanged(ChangeEventArgs e)
+    {
+        Audio.PlayClick();
+        Options.SetMirrorMode(e.Value is true);
+    }
+}

@@ -59,8 +59,6 @@ public static class GlobalTags
     // Scenario Language Screen
     public const string ScenarioLanguage_Title    = "ScenarioLanguage_Title";
     public const string ScenarioLanguage_Subtitle = "ScenarioLanguage_Subtitle";
-    public const string ScenarioLanguage_Mirror     = "ScenarioLanguage_Mirror";
-    public const string ScenarioLanguage_MirrorDesc = "ScenarioLanguage_MirrorDesc";
 
     // Mirror Mode Popup
     public const string Mirror_Title       = "Mirror_Title";
@@ -311,6 +309,14 @@ public static class GlobalTags
     public const string Settings_TextSize       = "Settings_TextSize";
     public const string Settings_TextSizeSample = "Settings_TextSizeSample";
     public const string Settings_Close          = "Settings_Close";
+    public const string Settings_Guided         = "Settings_Guided";
+    public const string Settings_GuidedDesc     = "Settings_GuidedDesc";
+    public const string Settings_Mirror         = "Settings_Mirror";
+    public const string Settings_MirrorDesc     = "Settings_MirrorDesc";
+    public const string Settings_TesterTag      = "Settings_TesterTag";
+
+    public const string Guide_Found    = "Guide_Found";
+    public const string Guide_NotFound = "Guide_NotFound";
     public const string MainMenu_Settings       = "MainMenu_Settings";
     public const string MainMenu_Endings        = "MainMenu_Endings"; // main menu button (Unity: "Endings"); the page is MainMenu_Gallery
 

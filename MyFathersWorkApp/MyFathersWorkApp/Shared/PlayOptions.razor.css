@@ -1,0 +1,36 @@
+.play-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    line-height: 1.4;
+    cursor: pointer;
+}
+
+.play-option input {
+    flex-shrink: 0;
+    width: 1.35rem;
+    height: 1.35rem;
+    margin-top: 0.1rem;
+    accent-color: #c9a35a;
+}
+
+.play-option small {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.tester-tag {
+    margin-left: 0.35rem;
+    padding: 0.05rem 0.4rem;
+    border: 1px solid #8a7445;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    white-space: nowrap;
+}
