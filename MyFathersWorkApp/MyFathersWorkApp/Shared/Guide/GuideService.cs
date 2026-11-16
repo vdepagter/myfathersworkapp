@@ -53,6 +53,8 @@ public sealed class GuideService(HttpClient http)
             return globalData.ScenarioId switch
             {
                 ScenarioId.CostOfDisease => key == null ? CostOfDiseaseGuide.Hub(context) : CostOfDiseaseGuide.Screen(context, key),
+                ScenarioId.FearOfUnknown => key == null ? FearOfTheUnknownGuide.Hub(context) : FearOfTheUnknownGuide.Screen(context, key),
+                ScenarioId.TimeOfWar     => key == null ? ATimeOfWarGuide.Hub(context) : ATimeOfWarGuide.Screen(context, key),
                 _                        => null
             };
         }

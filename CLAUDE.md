@@ -66,7 +66,7 @@ private static void Changes_0(GlobalData globalData)       // setup popup
 - **`ShowEndOfRoundPopUp` advances `Years` (and `Generation` after Late) *before* calling the next event** - events after the Early round run with `Years == Middle`. At the generation change `ActiveHub` becomes null, so a callback of `_ => { }` then renders a **blank page** (this was the old "blank after Gen II" bug).
 - **Randomness** must use the pre-rolled `ScenarioVars.RandomArray` (`RandomElement`, `RandomBool`, `RandomInRange`) with a fixed index per decision so undo/load replay identically. Never read `RandomArray` directly. Indices in use for Cost of Disease: 0-58 (Gen I/II) and 59-203 (`_RND_*` constants in the Gen III files). Fear of the Unknown: `_RND_*` constants in `00_FearOfTheUnknown_Setup.cs` (0-164, battle 400-899). For events that can repeat, use `base + min(counter, 9)`. Shuffles are drawn one position at a time from the remaining items (`HunterAt`, `HuntRewardAt`).
 - **Flavor randomness** (who writes a letter, dates, alternative sentences that change nothing in the game) uses `vars.Flavor(key, count)` / `FlavorElement` - a hash of `FlavorSeed` and a unique key. Deterministic for undo/load and never asked in mirror mode. Anything players act on (setup, VP, money, branches) must use `RandomArray`.
-- **Mirror mode** ("Play along with the official app" on the scenario language screen, `GlobalData.MirrorMode`, `Shared/GlobalData.Mirror.cs`, `Shared/MirrorPopup.razor`): `RandomArray` starts at -1 (not drawn). The first draw of an unanswered slot throws `MirrorQuestionException`; `GlobalData.RunScenarioAction` restores the state, replays the action in a sandbox once per value, shows the players the text that differs, and reruns the action with their answer. Rules for scenario code:
+- **Mirror mode** ("Play along with the official app", a tester option in Settings on the Main Menu (`Shared/PlayOptions.razor`, localStorage `mfwMirror`, read at New Game), `GlobalData.MirrorMode`, `Shared/GlobalData.Mirror.cs`, `Shared/MirrorPopup.razor`): `RandomArray` starts at -1 (not drawn). The first draw of an unanswered slot throws `MirrorQuestionException`; `GlobalData.RunScenarioAction` restores the state, replays the action in a sandbox once per value, shows the players the text that differs, and reruns the action with their answer. Rules for scenario code:
   - Every entry into scenario code (links, popup buttons, undo, load, start) goes through `RunScenarioAction`.
   - **Draw a random value on the screen where it becomes visible**, not earlier. Otherwise mirror mode asks before the official app shows it ("not visible on the current screen" in the console, shown as a guess-or-roll question). Examples: `Gen2Building`, `HuntVp`, `DrawFeverReward`, `MasterworkCost`, `DrawAffiliations` (which faction is evil is drawn on first use), the Symposium target.
   - A random next screen is chosen inside the callback: `data => vars.RandomElement([A, B], i).Invoke(data)`, not `AddClickHereToContinue(RandomBool(i) ? A : B)`.
@@ -212,6 +212,20 @@ players by their own name (no "III"), the scenario and the Generation III branch
 "Generation III", gold/silver/bronze/iron plinths, original crown (`images/ui/crown.webp`, Unity Ranking/MFW_CrownIcon).
 A family win puts everyone on an equal gold plinth without place numbers. Rain is `mfwAtmosphere` on the scene canvas.
 
+## Guided mode (spoilers!)
+
+Settings / pause menu toggle (`mfwGuided`, `Shared/GameOptions.cs`, `Shared/PlayOptions.razor`). A route card on every hub
+(foldable, `mfwGuideFolded`) and notes on the screens whose choices steer a branch or ending (`Shared/GuideBox.razor`, in
+Gameplay windows, InfoPopup and InputPopup). Engine `Shared/Guide/GuideService.cs`, rules per scenario in
+`Shared/Guide/<Scenario>Guide.cs` keyed by screen method (`ResumeMethod`) or hub id, text in
+`wwwroot/localization/<Scenario>_Guide.csv` (`[[hub:<HubId>]]` / `[[end:n]]` become Endings Gallery names with ✓ found /
+☆ not yet). Rules: guide code only reads state (never `RandomArray`), explains odds instead of revealing a roll, and shows
+no tally of secret choices (investigations, Panacea, schematics, money given in secret). Not narrated (no story tag);
+`js/audio.js` skips `.guide-note`. **When a branch condition or a screen method changes, update the guide too.**
+
+The Scenario Language page is skipped since 16 Nov 2026 (`SKIP_PAGE` in `Pages/PlayersScenarioLanguage.razor`, it starts
+the first scenario language and replaces itself in the history); narration is chosen in Settings and the pause menu.
+
 ## Log Book
 
 Ported from the official app (`ViewLogBook.cs`, data `UnityOriginalApp/Assets/CSV/Updated Features MFW - Log Book Data (1).csv`),
@@ -287,17 +301,18 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
   end is measured against the large viewport (`100lvh`, toolbar hidden), so the app never scrolls into the last
   toolbar height (Firefox keeps `clientHeight` at the small viewport; diag showed `visualViewport.offsetTop` -64 at
   that end). The scroll style `off` leaves the page alone. How the sentence is marked is a trial setting next to it
-  (`audio.highlight`, `STYLES` in `audio.js`, menu order None, Fade the rest, Quill line, Candle glow, Ember by
+  (`audio.highlight`, `STYLES` in `audio.js`, menu order None, Fade the rest, Candle glow, Quill line, Ember by
   candlelight, Travelling spark - owner, 16 Nov 2026; dropped: Gold backlight, Underline, Ember text (with sparks),
   Sparks, Wandering wisp, soft travelling spark, Firefly, Candle glow with motes): `off`, `dim` (fade the rest,
   `::highlight`), `quill` (a line of light under the spoken words; the rest fades slightly,
-  `::highlight(mfw-narration-soft)`), `glow` (candle light bars, `mix-blend-mode: overlay`), `emberglow` (candle glow
-  + flat ember-brown ink + embers born around the words being spoken, moved every frame on their own loop with a
-  wandering heading, overlay so they drift behind the words) and `wisp` (the default for now: a spark that moves from
+  `::highlight(mfw-narration-soft)`), `glow` (candle light bars, `mix-blend-mode: overlay`), `emberglow` (the default since 16 Nov 2026: candle glow
+  + embers born around the words being spoken, moved every frame on their own loop with a
+  wandering heading, overlay so they drift behind the words; the ink stays black, the ember-brown ink was dropped) and `wisp` (a spark that moves from
   the sentence's first word to its last, by `narration-sync.js` `starts().spoken`, fades in a moment ahead of it,
   trails off past the end and at line wraps, wanders off its route, on a faint haze). Bars and lights are children
   of `<body>` in page coordinates (`.mfw-reading-*` in `css/app.css`), parchment only. Embers and the spark
-  are left out when Graphics is Low. The glide is animated in `audio.js` (the browser's smooth scroll jumps with
+  are left out only when Graphics Low was chosen in Settings (not for the reduced-motion default: Android power
+  saving turned that on and hid them on the owner's phone and tablet). The glide is animated in `audio.js` (the browser's smooth scroll jumps with
   reduced motion), except on Firefox for Android, where a scroll set frame by frame left the frame and the header
   buttons a toolbar height too low with a black bar above until the next tap (owner's phone, not reproducible on a
   desktop): there the browser's smooth scroll is used. For a report from a phone, `?mfwdiag` in the address shows a

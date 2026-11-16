@@ -1,0 +1,39 @@
+Tag;English
+// Guided mode hints (Shared/Guide/FearOfTheUnknownGuide.cs). Not narrated. [[hub:<FearOfTheUnknownHubId>]] and [[end:<n>]]
+// become the Endings Gallery names with a found mark. No semicolons in the text (CSV separator), no | or } inside {{n=...}}.
+//====== Headings ======;
+Guide_Title;Guide
+Guide_Route1;Where Generation I leads
+Guide_Route2;Where Generation II leads
+Guide_Route3;Where this branch ends
+//====== Witch Hunt ======;
+Guide_WitchHunt;Generation II is [[hub:Foreigners]] or [[hub:Creature]]. At the end of this Generation the Fates use one of two tests, 50/50:<ul><li><b>The execution</b> at the end of the Middle Years: the Butcher hanged → [[hub:Foreigners]], the Blacksmith → [[hub:Creature]].</li><li><b>The mob</b>: nobody claimed a Family Plot → [[hub:Foreigners]], anyone did → [[hub:Creature]].</li></ul>
+Guide_WitchHunt_Now;<b>Now:</b> {{0=|nobody has been executed yet|the Blacksmith was executed|the Butcher was executed}} - {{1=?|a Family Plot was claimed|no Family Plot claimed yet}}.
+Guide_WitchHunt_NowForced;<b>Now:</b> your village name decides it: {{0=?|[[hub:Foreigners]]|[[hub:Creature]]}}, whatever the Fates test.
+Guide_FamilyPlot;If the Fates test the mob at the end of this Generation (50/50 with the execution), any claimed Family Plot leads to [[hub:Creature]]. Nobody claiming one leads to [[hub:Foreigners]].
+Guide_Execution;If the Fates test the execution at the end of this Generation (50/50 with the mob): the Butcher → [[hub:Foreigners]], the Blacksmith → [[hub:Creature]]. In [[hub:Tension]] a hanged Butcher also counts against you.
+//====== Blame it on the Foreigners ======;
+Guide_Foreigners;Generation III is [[hub:Isolation]] or [[hub:Tension]]. At the end of this Generation the Fates use one of two tests, 50/50:<ul><li><b>The bricks</b> all players collected: enough → the Memorial Wall → [[hub:Isolation]], too few → [[hub:Tension]]. The number needed is drawn: {{0=|2 to 5|4 to 8|6 to 9}}.</li><li><b>The witch</b> at the Accusations (end of the Middle Years): unmasked → [[hub:Tension]], not unmasked → [[hub:Isolation]].</li></ul>
+Guide_Foreigners_Now;<b>Now:</b> {{0=|the witch is accused at the end of the Middle Years|the witch was unmasked|the wrong person was accused}}.
+Guide_WallVote;Bricks bought here count for one of the two tests at the end of this Generation: enough bricks → [[hub:Isolation]]. If Generation III is [[hub:Tension]], choosing Strength counts against you there.
+Guide_Accusation;If the Fates test the witch at the end of this Generation (50/50 with the bricks): unmasking the witch → [[hub:Tension]], accusing the wrong person → [[hub:Isolation]]. In [[hub:Tension]] a wrong accusation counts against you.
+Guide_Bricks;Enough bricks → [[hub:Isolation]]. Too few → [[hub:Tension]].
+//====== The Creature Re-emerges ======;
+Guide_Creature;Generation III is [[hub:Liberal]] or [[hub:Privatized]]. At the end of this Generation the Fates use one of two tests, 50/50:<ul><li><b>The Creature:</b> you created the Creature your grandfather asks for → [[hub:Liberal]], otherwise [[hub:Privatized]].</li><li><b>The money:</b> the Asylum received at least as much as the Count → [[hub:Liberal]], the Count more → [[hub:Privatized]].</li></ul>Money given in secret is not tallied here.
+Guide_Money;If the Fates test the money at the end of this Generation (50/50 with the Creature): the Asylum receiving at least as much as the Count → [[hub:Liberal]], the Count more → [[hub:Privatized]].
+Guide_CreatureMade;If the Fates test the Creature (50/50 with the money): created → [[hub:Liberal]], not created → [[hub:Privatized]].
+//====== Walled City ======;
+Guide_Isolation;This branch ends in [[end:1]] or [[end:2]], decided at the end of the Middle Years by the Collaboration tokens: {{0=|all of them collected (2 players)|2 players with one|2 or 3 players with one (drawn at random)}} → [[end:1]], otherwise [[end:2]].
+Guide_Isolation_Now;<b>Now:</b> decided → {{0=|[[end:1]]|[[end:2]]}}.
+Guide_Collaboration;Yes → [[end:1]]. No → [[end:2]].
+//====== Tensions Increase ======;
+Guide_Tension;This branch ends in [[end:3]] or [[end:4]], decided at the end of the Early Years by three choices of your family: hanging the Butcher (Generation I), accusing the wrong person of witchcraft and choosing Strength in the Wall vote (Generation II). Two or more of them → [[end:4]], fewer → [[end:3]].
+Guide_Tension_Now;<b>Now:</b> {{0=0}} of 3 count against you → {{1=?|[[end:4]]|[[end:3]]}}.
+//====== Private Investors ======;
+Guide_Privatized;This branch ends in [[end:5]] or [[end:6]]: {{0=2}} or more players rewarded by the Warden for reaching the end of the Creepy track by the end of the Generation → [[end:5]], fewer → [[end:6]].
+Guide_Privatized_Now;<b>Now:</b> players rewarded so far: {{0=0}}.
+Guide_WardenReward;Each rewarded player counts: {{0=2}} or more by the end of the Generation → [[end:5]], fewer → [[end:6]].
+//====== Acceptance ======;
+Guide_Liberal;This branch ends in [[end:7]] or [[end:8]]: {{0=2}} or more admissions to the Asylum (A Focus on Rehabilitation) by the end of the Generation → [[end:7]], fewer → [[end:8]].
+Guide_Liberal_Now;<b>Now:</b> admissions so far: {{0=0}}.
+Guide_Admission;Each admission counts: {{0=2}} or more by the end of the Generation → [[end:7]], fewer → [[end:8]].
