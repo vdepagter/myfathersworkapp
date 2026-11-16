@@ -346,8 +346,8 @@ Settings_GraphicsHigh;High
 Settings_TextSize;Story text size
 Settings_TextSizeSample;It is said that springtime under the watchful eye of the snow-tipped Carpathian mountains is a wondrous sight to behold.
 Settings_Close;Close
-Settings_Guided;Guided mode
-Settings_GuidedDesc;Shows where your choices lead: which votes, bids and story links change the branch or the ending, and what hidden rolls decide. For hunting every ending - it spoils the surprises.
+Settings_Guided;Guided mode (spoilers!)
+Settings_GuidedDesc;Shows where your choices lead: which votes, bids and story links change the branch or the ending, and what hidden rolls decide. For hunting every ending - it spoils most surprises.
 Settings_Mirror;Play along with the official app
 Settings_MirrorDesc;Nothing is rolled at random. Whenever the story depends on chance, you pick what the official app shows. Applies to new games.
 Settings_TesterTag;Tester option

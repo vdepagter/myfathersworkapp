@@ -5,6 +5,8 @@
 @inject HttpClient        Http
 @inject GameOptions       Options
 
+@if (!SKIP_PAGE)
+{
 <MenuPage Title="@GlobalData.GetLocalizedUITag(GlobalTags.ScenarioLanguage_Title)" OnBack="GoBack" Class="centered">
     <p class="mp-lead">@GlobalData.GetLocalizedUITag(GlobalTags.ScenarioLanguage_Subtitle)</p>
 
@@ -29,6 +31,7 @@
         }
     </div>
 </MenuPage>
+}
 
 @code
 {
@@ -38,6 +41,10 @@
     private readonly Dictionary<string, Dictionary<string, string>> _ScenarioGameplayLocalizations = new();
 
     private readonly Dictionary<string, string> _LocalizationOptions = new();
+
+    // The page is skipped (owner, 16 Nov 2026): the game starts in the first scenario language straight from the scenario
+    // picker. Narration is chosen in Settings and the pause menu, play-along in Settings. Set to false to show it again.
+    private const bool SKIP_PAGE = true;
 
     private void GoBack()
     {
@@ -60,11 +67,15 @@
         {
             _LocalizationOptions[localizationId] = GlobalData.GetLocalizedUITag("ScenarioLang_" + localizationId);
         }
+
+        if (SKIP_PAGE && _LocalizationOptions.Count > 0) SelectLanguage(_LocalizationOptions.Keys.First(), false);
     }
 
-    private void SelectLanguage(string key)
+    private void SelectLanguage(string key) => SelectLanguage(key, true);
+
+    private void SelectLanguage(string key, bool click)
     {
-        Audio.PlayClick();
+        if (click) Audio.PlayClick();
         GlobalData.ScenarioLanguage               = key;
         GlobalData.Years                          = Years.Early;
         GlobalData.Generation                     = Generation.First;
@@ -85,6 +96,6 @@
             return;
         }
 
-        Nav.NavigateTo("Gameplay");
+        Nav.NavigateTo("Gameplay", replace: !click); // skipped page: Back must not land here and start a game again
     }
 }
