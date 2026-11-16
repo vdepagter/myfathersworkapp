@@ -127,9 +127,11 @@
 
         <div class="parchment-box">
             @{
-                // A vote or bid special event without its own "start the vote" link gets a Start button above its links
-                bool? revealKind   = RevealKind(GlobalData.ActiveWindow);
-                bool  revealButton = revealKind != null && !GlobalData.ActiveWindow.Elements.Any(IsRevealLink);
+                // A vote or bid special event without its own "start the vote" or "after resolving the vote" link gets a
+                // Start button above its links
+                GameplayWindow shownWindow  = GlobalData.ActiveWindow;
+                bool?          revealKind   = RevealKind(shownWindow);
+                bool           revealButton = revealKind != null && !shownWindow.Elements.Any(element => IsRevealLink(element) || ResolvedRevealKind(shownWindow, element) != null);
             }
             @foreach (GameplayElement element in GlobalData.ActiveWindow.Elements)
             {
@@ -914,6 +916,21 @@
 
     private static bool IsRevealLink(GameplayElement element) => element.Callback != null && _StartRevealLink.IsMatch(element.Content);
 
+    // "Click here after resolving the vote / bid..." on a vote or bid special event: shown as Start Voting / Bidding, and
+    // Accept after the countdown follows it to the page where the result is entered (like "Click here to start the
+    // vote..." in The Ultimate Disease). Without this, Accept led back to the page for a second "Vote Resolved" button.
+    // true = bid, false = vote, null = not such a link.
+    private static bool? ResolvedRevealKind(GameplayWindow window, GameplayElement element)
+    {
+        if (element.Callback == null || window.Cue != SoundCue.SpecialEvent) return null;
+        return element.ButtonTag switch
+        {
+            GlobalTags.Gameplay_BidResolvedButton  => true,
+            GlobalTags.Gameplay_VoteResolvedButton => false,
+            _                                      => null,
+        };
+    }
+
     // Special event windows (SoundCue.SpecialEvent) are votes or bids: true = bid, false = vote, null = neither
     private static bool? RevealKind(GameplayWindow window)
     {
@@ -936,6 +953,8 @@
     private static string? LinkButtonTag(GameplayWindow window, GameplayElement element)
     {
         if (element.Callback == null) return null;
+        bool? resolved = ResolvedRevealKind(window, element);
+        if (resolved != null) return resolved == true ? GlobalTags.Reveal_StartBid : GlobalTags.Reveal_StartVote;
         if (element.ButtonTag != null) return element.ButtonTag;
 
         string text  = element.Content.Trim();
@@ -954,6 +973,13 @@
         if (IsRevealLink(element) && GlobalData.ActiveWindow != null)
         {
             OpenReveal(_StartRevealLink.Match(element.Content).Groups[1].Value.Equals("bid", StringComparison.OrdinalIgnoreCase), element.Callback);
+            return;
+        }
+
+        bool? resolved = GlobalData.ActiveWindow == null ? null : ResolvedRevealKind(GlobalData.ActiveWindow, element);
+        if (resolved != null)
+        {
+            OpenReveal(resolved == true, element.Callback);
             return;
         }
 
