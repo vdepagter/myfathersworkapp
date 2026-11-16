@@ -1,6 +1,6 @@
-# Handoff - active work
+# Roadmap
 
-Only work in progress lives here. When a section is finished, move it to [`HANDOFF_ARCHIVE.md`](HANDOFF_ARCHIVE.md)
+Only open work lives here. When a section is finished, move it to [`docs/DEVLOG.md`](docs/DEVLOG.md)
 (newest first) and delete it from this file. Conventions are in [`CLAUDE.md`](CLAUDE.md).
 
 ## Before v1.0 (November 2026)
@@ -11,14 +11,16 @@ version 1.0:
   home-screen app.
 - Code-sign the Windows exe (`MyFathersWorkApp/WindowsLauncher/`, `tools/build-windows.ps1`), so SmartScreen stops
   warning about an unknown publisher. This is the step before v1.0.
-- Still open, defaults applied: the A Time of War owner questions in `docs/ATOW_PORT_MAP.md` section 7.
+- Not blocking: the A Time of War owner questions in `docs/ATOW_PORT_MAP.md` section 7 keep their defaults and may
+  stay open past v1.0 (owner, 16 Nov 2026).
 - To confirm on the owner's Android phone and tablet: the embers and the travelling spark of the reading highlight now
   show with the reduced-motion default (before 16 Nov only the glow showed there).
 
 ## Ideas, not planned
 
 - Scenario picker: "5 of 8 endings" and locked silhouettes for endings not found yet.
-- If GitHub Pages / LFS limits bite: the narration clips are ~340 MB; 64 kbps mono would cut that by a third.
+- If GitHub Pages / LFS limits bite: the narration clips are ~390 MB; the website could use the light zip's 48 kbps
+  mono encoding (about half the size).
 
 ## Reference
 
@@ -32,4 +34,4 @@ version 1.0:
 - Narration masters (192 kbps) are in the git-ignored `tools/narration/out/master/oliver/` of the main checkout - keep
   them.
 - The visual overhaul (Unity look), audio and narration history, with design notes still referred to from code
-  comments, are in the archive.
+  comments, are in the dev log.

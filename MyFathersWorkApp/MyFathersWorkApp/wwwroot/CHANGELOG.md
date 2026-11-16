@@ -7,6 +7,8 @@ bottom of Help, Settings and the pause menu. Shown in the app under Help > What'
 
 - Long story pages get a "↓ Continue" shortcut (or "↓ Reveal", "↓ Final Scoring", ...) that jumps down to the page's
   button, like "↓ End of Round" on the round screens.
+- New heading and button fonts (Frijole and Bowlby One SC). The original app's fonts were licensed for personal use
+  only; these are free to share.
 - Help: a What's new page (this list) and credits under This app.
 - Release downloads: besides the full Windows version, a smaller one with lighter audio and one without any audio.
 

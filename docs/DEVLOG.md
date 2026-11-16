@@ -1,6 +1,6 @@
-# Handoff archive
+# Dev log
 
-Finished work moved out of [`HANDOFF.md`](HANDOFF.md), newest first. Kept short: what was done and where it is documented.
+Finished work moved out of [`ROADMAP.md`](../ROADMAP.md), newest first. Kept short: what was done and where it is documented.
 
 ## Guided mode, play-along in Settings, Scenario Language skipped (16 Nov 2026, branch claude/project-thread-c6ce4h)
 
@@ -211,11 +211,11 @@ sparkle, lightning, Graphics quality in localStorage `mfwGraphics`, `html[data-g
 
 All three scenarios were played at the table by November 2026 (The Cost of Disease and Fear of the Unknown in
 October, A Time of War last). Below: the handoff notes as they stood before those games. The A Time of War owner
-questions are still open with defaults applied (see `HANDOFF.md`, Before v1.0).
+questions are still open with defaults applied (see `ROADMAP.md`, Before v1.0).
 
 ### A Time of War (open list before the table test)
 
-Fully ported and played through in the browser (details in the archive). Spec: [`docs/ATOW_PORT_MAP.md`](docs/ATOW_PORT_MAP.md).
+Fully ported and played through in the browser (details in this log). Spec: [`docs/ATOW_PORT_MAP.md`](ATOW_PORT_MAP.md).
 
 Next steps:
 - Table play test.
@@ -241,7 +241,7 @@ Next steps:
 
 ## A Time of War port (October 2026)
 
-Spec: [`docs/ATOW_PORT_MAP.md`](docs/ATOW_PORT_MAP.md) (one task per section 2.x). Status: **fully ported** - scaffold,
+Spec: [`docs/ATOW_PORT_MAP.md`](ATOW_PORT_MAP.md) (one task per section 2.x). Status: **fully ported** - scaffold,
 Gen I "Taking Sides", Gen II "Martial" and "Time Travel", Gen III "Heavy is the Crown", "Peace Through War", "Future
 Consequences" and "You Cant Stop Progress", Scoring and all 8 endings (map 2.1-2.9), branch
 `claude/port-a-time-of-war-132617`. No `// TODO ATOW` / `NotYetPorted` left; `GetHubMethod` maps all seven ATOW hubs. The status prefix was
@@ -286,7 +286,7 @@ section in `CLAUDE.md`.
 
 ## Cost of Disease playtest findings (October 2026)
 
-- Findings, causes and a recurrence checklist in [`PLAYTEST_FINDINGS.md`](PLAYTEST_FINDINGS.md); new `tools/sourcecheck.py`.
+- Findings, causes and a recurrence checklist in [`PLAYTEST_FINDINGS.md`](../PLAYTEST_FINDINGS.md); new `tools/sourcecheck.py`.
 - Fixed: hub text formatted with stale state (shared hub refresh in `RunScenarioAction`), Gen II end-of-generation
   text now in separate popups, truncated "South" hunt choice, mirror-mode questions show the screen heading.
 - Same checks run against Fear of the Unknown: nothing to fix.

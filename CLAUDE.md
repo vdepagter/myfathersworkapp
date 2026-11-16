@@ -8,8 +8,9 @@ board game; the app tells them what to set up and narrates the story over 3 Gene
 
 ## Status (November 2026)
 
-**Active work, open tasks and next steps are in [`HANDOFF.md`](HANDOFF.md) - read it first and keep it current.**
-When a piece of work is finished, move its section to [`HANDOFF_ARCHIVE.md`](HANDOFF_ARCHIVE.md) so the handoff stays short.
+**Open work and next steps are in [`ROADMAP.md`](ROADMAP.md) - read it first and keep it current.**
+When a piece of work is finished, move its section to [`docs/DEVLOG.md`](docs/DEVLOG.md) (newest first) so the roadmap stays short.
+Player-facing changes per version go in `wwwroot/CHANGELOG.md` (see Build, run, test).
 
 All three scenarios are complete, played at the table (November 2026) and fully narrated by Oliver. Left before v1.0:
 a test on iPhone / iPad (Safari) and code-signing the Windows exe.

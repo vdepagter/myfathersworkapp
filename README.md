@@ -200,7 +200,7 @@ GitHub build all three and attach them to a release.
 
 Developer details (conventions and pitfalls) are in [`CLAUDE.md`](CLAUDE.md), deliberate deviations from the
 original in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md).
-Current work is tracked in [`HANDOFF.md`](HANDOFF.md).
+Open work is listed in [`ROADMAP.md`](ROADMAP.md), finished work in [`docs/DEVLOG.md`](docs/DEVLOG.md).
 
 ## Other community projects
 
@@ -219,6 +219,10 @@ app changes the original: the stories were ported to a new web app, bugs were fi
 added.
 
 This version of the app was developed by Valentijn using Claude
+
+The fonts are [Frijole](https://fonts.google.com/specimen/Frijole), [Bowlby One SC](https://fonts.google.com/specimen/Bowlby+One+SC)
+and [Averia](https://iotic.com/averia/), all under the SIL Open Font License (licence texts in
+`MyFathersWorkApp/MyFathersWorkApp/wwwroot/fonts/`).
 
 Oliver's narration is generated with [ElevenLabs](https://elevenlabs.io) text-to-speech (voice "Oliver Silk") on a paid
 plan.

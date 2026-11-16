@@ -105,7 +105,7 @@
     font-family: var(--mfw-font-text);
 }
 
-/* Unity TitleGE / TitleGH: Evil Dead, white */
+/* Unity TitleGE / TitleGH: the heading font, white */
 .gameplay-container h1 {
     margin-bottom: 0.6rem;
     font-family: var(--mfw-font-heading);
