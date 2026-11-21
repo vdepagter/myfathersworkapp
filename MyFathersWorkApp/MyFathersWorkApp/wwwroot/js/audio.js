@@ -301,6 +301,55 @@
     voiceElement.preload = "none";
     voiceElement.volume  = volumes.voice / 100;
 
+    // The Android app (js/edition.js native + remote) has no narration clips in it and no service worker: a clip the
+    // player downloaded (js/audio-cache.js) plays from a blob: url of the stored copy, any other clip streams from the
+    // published site. voice.clip / voice.list keep the app's own urls (pause lists, highlight); only the elements'
+    // src is looked up, so the website and the Windows download set it directly as before.
+    const REMOTE    = window.mfwEdition && window.mfwEdition.native && window.mfwEdition.remote;
+    const VO_PATH   = /^audio\/vo\//;
+    const stored    = new Map(); // app url -> blob: url of a downloaded clip, oldest first (revoked beyond 80)
+    let sourceToken = 0;         // the voice element's latest source request; older lookups are dropped
+
+    function resolveClip(url) {
+        if (!REMOTE || !VO_PATH.test(url || "")) return Promise.resolve(url);
+        if (stored.has(url)) return Promise.resolve(stored.get(url));
+        const remote = new URL(url, REMOTE).href;
+        const cache  = window.mfwAudioCache;
+        if (!cache) return Promise.resolve(remote);
+        return cache.match(url)
+            .then(response => response && response.ok ? response.blob() : null)
+            .then(blob => {
+                if (!blob) return remote;
+                if (!stored.has(url)) {
+                    stored.set(url, URL.createObjectURL(blob));
+                    for (const [key, objectUrl] of stored) {
+                        if (stored.size <= 80) break;
+                        if (key === url || voice.list.indexOf(key) >= 0) continue;
+                        URL.revokeObjectURL(objectUrl);
+                        stored.delete(key);
+                    }
+                }
+                return stored.get(url);
+            })
+            .catch(() => remote);
+    }
+
+    // use(src) with the url an element should play (at once, except in the Android app)
+    function withSource(url, use) {
+        if (!REMOTE) use(url);
+        else resolveClip(url).then(use);
+    }
+
+    // Sets the voice element's source, then calls then() unless another source was asked for meanwhile
+    function setVoiceSource(url, then) {
+        const token = ++sourceToken;
+        withSource(url, src => {
+            if (token !== sourceToken) return;
+            voiceElement.src = src;
+            if (then) then();
+        });
+    }
+
     const voice = {
         setting:  readVoice(),
         id:       0,        // current request (0 = none); reported with every state change
@@ -330,18 +379,20 @@
     function startVoiceSource(url) {
         const id    = voice.id;
         const phase = voice.phase;
-        voiceElement.src = url;
-        try {
-            const promise = voiceElement.play();
-            if (promise && promise.catch) {
-                promise.catch(() => {
-                    // Blocked or failed (an interrupted play() rejects too: ignore when the request moved on)
-                    if (voice.id === id && voice.phase === phase && !voice.paused) endVoice();
-                });
+        setVoiceSource(url, () => {
+            if (voice.id !== id || voice.phase !== phase) return; // moved on while the Android app looked up the clip
+            try {
+                const promise = voiceElement.play();
+                if (promise && promise.catch) {
+                    promise.catch(() => {
+                        // Blocked or failed (an interrupted play() rejects too: ignore when the request moved on)
+                        if (voice.id === id && voice.phase === phase && !voice.paused) endVoice();
+                    });
+                }
+            } catch (e) {
+                endVoice();
             }
-        } catch (e) {
-            endVoice();
-        }
+        });
     }
 
     function startClip() {
@@ -365,6 +416,7 @@
         voice.lengths = [];
         voice.texts  = [];
         voice.paused = false;
+        sourceToken++;
         clearHighlight();
         try {
             voiceElement.pause();
@@ -431,7 +483,7 @@
             probe.addEventListener("loadedmetadata", () => {
                 if (voice.id === id && isFinite(probe.duration)) voice.lengths[i] = probe.duration;
             }, { once: true });
-            probe.src = url;
+            withSource(url, src => { probe.src = src; });
         });
     }
 
@@ -484,7 +536,7 @@
             try { voiceElement.currentTime = offset; } catch (e) { /* ignore */ }
         }, { once: true });
         if (voice.paused) {
-            voiceElement.src = voice.clip; // stays paused at the new place until the pause menu closes
+            setVoiceSource(voice.clip); // stays paused at the new place until the pause menu closes
             return;
         }
         startVoiceSource(voice.clip);
@@ -550,7 +602,8 @@
         if (voice.queue.length) {
             preload         = new Audio();
             preload.preload = "auto";
-            preload.src     = voice.queue[0];
+            const next      = preload;
+            withSource(voice.queue[0], src => { next.src = src; });
         }
         notifyVoice(voice.id, "speaking");
     });

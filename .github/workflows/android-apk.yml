@@ -1,0 +1,124 @@
+name: Android APK
+
+# Builds the sideloadable Android app (android-app/, Capacitor): the published web app without the narration clips,
+# which players download in the app (Offline play) from the website. Signed with the one release keystore from the
+# repository secrets ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD
+# (android-app/set-secrets.ps1). Without them the build fails: a build signed with another key cannot update an
+# installed app.
+# - Run manually (Actions > Android APK > Run workflow): the APK is kept as a workflow artifact.
+# - Push a tag v* (e.g. v0.66.6.250): the APK is also attached to the GitHub Release for that tag.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history, needed to count commits for the version number
+          lfs: false
+
+      # Same LFS cache as deploy-pages.yml: only the web app's files, keyed by their object ids
+      - name: List LFS objects of the web app
+        run: git lfs ls-files --long --include "MyFathersWorkApp/**" > lfs-objects.txt
+
+      - name: Restore LFS cache
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('lfs-objects.txt') }}
+          restore-keys: lfs-
+
+      - name: Pull LFS files of the web app
+        run: git lfs pull --include "MyFathersWorkApp/**"
+
+      # Version as in deploy-pages.yml: 0.66.6.<commits on main (first parent) since 3d78856, minus 1>.
+      # versionCode = the revision, so every build installs over the previous one.
+      - name: Compute version
+        run: |
+          REVISION=$(( $(git rev-list --count --first-parent 3d78856..HEAD) - 1 ))
+          if [ "$REVISION" -lt 1 ]; then REVISION=1; fi
+          echo "REVISION=$REVISION" >> "$GITHUB_ENV"
+          echo "VERSION=0.66.6.$REVISION" >> "$GITHUB_ENV"
+          echo "Version 0.66.6.$REVISION"
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: android-app/package-lock.json
+
+      - name: Publish the web app
+        run: dotnet publish MyFathersWorkApp/MyFathersWorkApp/MyFathersWorkApp.csproj -c Release -p:Version=$VERSION -o publish
+
+      # android-app/www: the published files without the narration clips, js/edition.js native (see the script)
+      - name: Stage the web files
+        run: |
+          npm ci --prefix android-app
+          python3 tools/android-stage.py publish/wwwroot
+
+      - name: Copy them into the Android project
+        working-directory: android-app
+        run: npx cap sync android
+
+      - name: Release keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$ANDROID_KEYSTORE_BASE64" ]; then
+            echo "::error::Repository secret ANDROID_KEYSTORE_BASE64 is missing (android-app/set-secrets.ps1)"
+            exit 1
+          fi
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+          echo "ANDROID_KEYSTORE_FILE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+
+      - name: Build the signed APK
+        working-directory: android-app/android
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease -PmfwRevision=$REVISION --no-daemon
+          mkdir -p "$GITHUB_WORKSPACE/dist"
+          cp app/build/outputs/apk/release/app-release.apk "$GITHUB_WORKSPACE/dist/MyFathersWork-Unofficial-$VERSION.apk"
+          "$ANDROID_HOME"/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner verify --print-certs "$GITHUB_WORKSPACE/dist/MyFathersWork-Unofficial-$VERSION.apk" | grep -i "SHA-256"
+          ls -l "$GITHUB_WORKSPACE/dist"
+
+      - name: Remove the keystore
+        if: always()
+        run: rm -f "$RUNNER_TEMP/release.jks"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MyFathersWork-Unofficial-${{ env.VERSION }}-android
+          path: dist/MyFathersWork-Unofficial-${{ env.VERSION }}.apk
+          compression-level: 0 # already a zip
+
+      # windows-release.yml may create the same release at the same time: create it, else upload to it
+      - name: Attach to the GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          APK="dist/MyFathersWork-Unofficial-$VERSION.apk"
+          gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1 || \
+            gh release create "$GITHUB_REF_NAME" --title "My Father's Work App (Unofficial) $VERSION" \
+              --notes "Downloads of My Father's Work App (Unofficial) $VERSION." || true
+          gh release upload "$GITHUB_REF_NAME" "$APK" --clobber

@@ -1,6 +1,6 @@
 // Narration audio for offline play: opt-in downloads per pack, in a cache of their own ("mfw-audio") that app updates
 // never wipe. Shared by the page (js/offline.js, Settings) and the service worker (service-worker.published.js), and
-// meant to be reused as is by a Capacitor build (call match() / objectUrl() from the page when there is no worker).
+// reused by the Android app (android-app/, no worker: js/audio.js plays stored clips through match()).
 //
 // Packs: audio/vo/packs.json, written at deploy by tools/audio-packs.py. One pack per folder of clips under audio/vo
 // (oliver-TheCostOfDisease, oliver-FearOfTheUnknown, oliver-ATimeOfWar, male, female), each file with a content hash
@@ -23,6 +23,11 @@
     // The app's base: the worker's scope, or the page's <base href> (GitHub Pages serves the app from /<repo>/)
     const base = () => (scope.registration && scope.registration.scope) || document.baseURI;
     const abs  = path => new URL(path, base()).href;
+
+    // Where a clip is downloaded from: the app's own base, or for the Android app (js/edition.js remote, its files have
+    // no clips) the published site. The clip is still stored under the app's own url, so match() and status() agree.
+    const edition = scope.mfwEdition || {};
+    const source  = path => edition.remote ? new URL(path, edition.remote).href : abs(path);
 
     // Path relative to the base, without query ("audio/vo/oliver/X/abc.mp3"), or null for another origin / outside it
     function relPath(url) {
@@ -144,8 +149,8 @@
                     if (controller.signal.aborted) return;
                     try {
                         // A clip played before can sit in the HTTP cache as a partial (206) entry: fetch it whole then
-                        let response = await fetch(abs(path), { signal: controller.signal, cache: "no-cache" });
-                        if (response.status === 206) response = await fetch(abs(path), { signal: controller.signal, cache: "reload" });
+                        let response = await fetch(source(path), { signal: controller.signal, cache: "no-cache" });
+                        if (response.status === 206) response = await fetch(source(path), { signal: controller.signal, cache: "reload" });
                         if (response.status !== 200) throw new Error(response.status + " " + path);
                         // An older copy of this path (other hash) goes first
                         for (const old of await cache.keys(abs(path), { ignoreSearch: true })) await cache.delete(old);
