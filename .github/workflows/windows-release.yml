@@ -1,7 +1,7 @@
 name: Windows release
 
-# Builds the offline Windows version (tools/build-windows.ps1): MyFathersWork.exe + wwwroot, as three zips: full,
-# light (smaller audio) and no-audio, kept as a workflow artifact (Actions > Windows release > Run workflow).
+# Builds the offline Windows version (tools/build-windows.ps1): MyFathersWork.exe + wwwroot, as two zips: full and
+# no-audio, kept as a workflow artifact (Actions > Windows release > Run workflow).
 # These builds are NOT code-signed: the signing key lives in Certum's cloud and only works on the owner's laptop.
 # Published releases are built and signed there: pwsh tools/build-windows.ps1 -Sign -Publish
 on:

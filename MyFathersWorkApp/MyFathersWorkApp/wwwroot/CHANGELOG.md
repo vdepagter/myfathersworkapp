@@ -14,6 +14,13 @@ bottom of Help, Settings and the pause menu. Shown in the app under Help > What'
   the app under Offline play (asked on the first start) and otherwise plays from the internet. The phone's Back button
   closes panels, opens the pause menu in a game and puts the app away on the Main Menu.
 
+## v0.66.6.103 - 21 November 2026
+
+- Oliver's narration is half the size: about 55-70 MB per scenario to download for offline play, instead of 110-140 MB.
+  It is encoded again from the original recordings. Narration you downloaded before is fetched once more.
+- The Windows download is code-signed, and is now about 270 MB. The separate light download is gone, because the full
+  one is now about that size.
+
 ## v0.66.6.100 - 21 November 2026
 
 - One Offline play menu, opened from Settings, the pause menu and the "Offline play" button on the Main Menu (was

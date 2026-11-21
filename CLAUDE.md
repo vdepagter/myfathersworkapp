@@ -221,6 +221,10 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
 - A hand-written override (`scripts/<Scenario>/<Tag>.txt`) rewrites text by hand, which drifts: a narrator clause was
   once dropped unnoticed, and listeners reading along got lost. **Always run `python tools/narration/elevenlabs.py
   check`** after editing an override or the CSV text (word-level diff per chunk; render refuses on drift).
+- Shipped clips are MP3 mono 48 kbps (since 21 Nov 2026, owner's pick after listening tests; 96 kbps before), made by
+  `chunks.py` / `elevenlabs.py` from the 192 kbps masters in the git-ignored `tools/narration/out/master/oliver/` of the
+  main checkout (all 2,230 clips; keep them). To re-encode everything again, encode each shipped clip from the master of
+  the same name and check that its length stays the same, then run `pauses.py`.
 - A CSV text change makes new hashes: render the scenario again (only the changed chunks are sent) and commit the clips
   and `wwwroot/audio/vo/oliver/<Scenario>.json`.
 - **After every render run `python tools/narration/pauses.py <Scenario>`** (ffmpeg, no credits) and commit
@@ -337,9 +341,9 @@ players would have to export their saves and gallery, reinstall and import them,
 - `dotnet build MyFathersWorkApp/MyFathersWorkApp.sln`
 - `dotnet run --project MyFathersWorkApp/MyFathersWorkApp/MyFathersWorkApp.csproj` (http://localhost:5166; use `--no-launch-profile --urls http://localhost:5199` if 5166 is taken).
 - Offline Windows release: `pwsh tools/build-windows.ps1 [-Version x] [-Edition All|Full|Light|NoAudio]` ->
-  `dist/MyFathersWork-Windows-<version>.zip` (`MyFathersWork.exe` + `wwwroot`, ~450 MB zipped, mostly audio; needs the LFS
-  files), `-light.zip` (~270 MB: ffmpeg re-encodes speech to 48 kbps mono, music to 96 kbps; same durations, so the pauses
-  lists still fit) and `-no-audio.zip` (~60 MB, no `wwwroot/audio`; `js/edition.js` says `audio: false`, so `audio.js` loads
+  `dist/MyFathersWork-Windows-<version>.zip` (`MyFathersWork.exe` + `wwwroot`, ~270 MB zipped, mostly audio; needs the LFS
+  files) and `-no-audio.zip` (`-Edition Light` still makes a `-light.zip` with music at 96 kbps, but since the narration
+  is 48 kbps everywhere it saves only a few MB and is no longer released) (~60 MB, no `wwwroot/audio`; `js/edition.js` says `audio: false`, so `audio.js` loads
   nothing and `AudioService.Available` hides the sound toggles, narration settings, volumes and the narration pill). The exe (`MyFathersWorkApp/WindowsLauncher/`,
   self-contained, no .NET needed) serves `wwwroot` on the fixed port `http://localhost:51660` (fixed because saves live in
   localStorage per origin) and opens an Edge app window with its own profile (`%LOCALAPPDATA%\MyFathersWork\Browser`,

@@ -1,7 +1,9 @@
 # Builds the offline Windows release (MyFathersWork.exe + wwwroot). The target PC needs no .NET; it serves the app on
 # http://localhost:51660. Three downloads, the same app in each:
-#   dist\MyFathersWork-Windows-<version>.zip           full: audio as on the website (~450 MB)
-#   dist\MyFathersWork-Windows-<version>-light.zip     lighter audio (~270 MB): speech 48 kbps mono, music 96 kbps (needs ffmpeg)
+#   dist\MyFathersWork-Windows-<version>.zip           full: audio as on the website (~270 MB)
+#   dist\MyFathersWork-Windows-<version>-light.zip     only with -Edition Light: music at 96 kbps (needs ffmpeg). Since the
+#                                                      website's narration is 48 kbps mono too (21 Nov 2026) it saves only
+#                                                      a few MB, so -Edition All no longer builds it
 #   dist\MyFathersWork-Windows-<version>-no-audio.zip  no audio files (~60 MB); js/edition.js tells the app to hide sound controls
 #
 #   pwsh tools/build-windows.ps1 [-Version 0.66.6.123] [-Edition All|Full|Light|NoAudio] [-Sign] [-Publish]
@@ -13,7 +15,7 @@
 #   code-signing certificate with a private key in CurrentUser\My. signtool: -SignTool, else PATH, the Windows Kits, or
 #   the NuGet package Microsoft.Windows.SDK.BuildTools (~\.nuget\packages). Signing only works on the owner's laptop,
 #   so signed releases are built there, not in GitHub Actions.
-# -Publish (with -Sign): creates the GitHub Release v<version> with the three zips (gh CLI, logged in).
+# -Publish (with -Sign): creates the GitHub Release v<version> with the zips (gh CLI, logged in).
 #
 # Needs the Git LFS files (git lfs pull --include "MyFathersWorkApp/**"), otherwise images and audio are pointers.
 param(
@@ -107,7 +109,7 @@ function Compress-Audio([string]$audioDir) {
     if ($failed) { throw "ffmpeg failed on: $($failed -join ', ')" }
 }
 
-$editions = if ($Edition -eq "All") { @("Full", "Light", "NoAudio") } else { @($Edition) }
+$editions = if ($Edition -eq "All") { @("Full", "NoAudio") } else { @($Edition) }
 $zips     = @()
 
 foreach ($ed in $editions) {
@@ -170,7 +172,7 @@ foreach ($zip in $zips) { Write-Host "Done: $zip ($([math]::Round((Get-Item $zip
 
 if ($Publish) {
     $tag = "v$Version"
-    $notes = "Windows: offline version, code-signed by Open Source Developer Valentijn de Pagter. Unzip the whole folder and double-click MyFathersWork.exe - no installation or internet needed. See README.txt in the zip. Three downloads of the same app: the full version, -light (smaller audio files, narration at a lower quality) and -no-audio (no music, sound or narration). Android: the APK is attached by the Android build of this tag."
+    $notes = "Windows: offline version, code-signed by Open Source Developer Valentijn de Pagter. Unzip the whole folder and double-click MyFathersWork.exe - no installation or internet needed. See README.txt in the zip. Two downloads of the same app: the full version and -no-audio (no music, sound or narration, ~60 MB). Android: the APK is attached by the Android build of this tag."
     Write-Host "Publishing GitHub Release $tag..."
     gh release create $tag @zips --repo vdepagter/myfathersworkapp --target (git -C $repo rev-parse HEAD) --title "My Father's Work (Unofficial) $Version" --notes $notes
     if ($LASTEXITCODE) { throw "gh release create failed" }
