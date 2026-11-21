@@ -331,7 +331,12 @@ The published site (GitHub Pages) is an installable offline app (21 Nov 2026).
   self-contained, no .NET needed) serves `wwwroot` on the fixed port `http://localhost:51660` (fixed because saves live in
   localStorage per origin) and opens an Edge app window with its own profile (`%LOCALAPPDATA%\MyFathersWork\Browser`,
   holds the saves); the server stops when the profile's `lockfile` is released (last window closed). A second start
-  just opens another window; without Edge it falls back to the default browser plus a console window. Push a tag `v*`
-  to have `.github/workflows/windows-release.yml` attach the zip to a GitHub Release (manual runs: workflow artifact).
-  The exe is not code-signed yet (SmartScreen warning).
+  just opens another window; without Edge it falls back to the default browser plus a console window.
+  **Code signing** (21 Nov 2026): `-Sign` signs `MyFathersWork.exe` with signtool (SHA-256 + Certum RFC 3161 timestamp)
+  using the owner's Certum "Open Source Developer Valentijn de Pagter" certificate (CurrentUser\My, valid to 18 Nov
+  2027). Its key is in Certum's cloud: SimplySign Desktop must be running and logged in, so signing only works on the
+  owner's laptop. signtool comes from the NuGet package `Microsoft.Windows.SDK.BuildTools` (restored into
+  `~\.nuget\packages`) when the Windows SDK is not installed. Releases: `pwsh tools/build-windows.ps1 -Sign -Publish`
+  (creates GitHub Release `v<version>` with the three zips; its tag push also lets the Android workflow attach the APK).
+  `.github/workflows/windows-release.yml` only makes unsigned test builds (manual run, workflow artifact).
 - There are no automated tests. Play-test with `tools/test-save-helpers.js`: craft a save at a late-round hub, reload `/Gameplay`, and drive the flow with `run([...])`. Check the browser console for exceptions and run `python tools/tagcheck.py` (and `--scenario=FearOfTheUnknown`). Fear of the Unknown saves: `mkSaveFotU(hubId, {...})`; `auto([...])` / `autoFirst()` click through screens. Static files are served from a build-time snapshot, so inject the helpers with the JS console (or keep them in `localStorage.helpers` and `eval` after reloads) instead of copying them into `wwwroot`. To test mirror mode, pass `mirror: true` to `mkSave`; random click-throughs that report `Mirror:` console lines find draws made too early. Also play through round transitions, not only crafted saves: load and undo rebuild the hub, which hides hub text that was formatted with stale state (`PLAYTEST_FINDINGS.md` #1).

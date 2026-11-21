@@ -1,16 +1,14 @@
 name: Windows release
 
 # Builds the offline Windows version (tools/build-windows.ps1): MyFathersWork.exe + wwwroot, as three zips: full,
-# light (smaller audio) and no-audio.
-# - Push a tag v* (e.g. v0.66.6.250): the zip is attached to a GitHub Release for that tag.
-# - Run manually (Actions > Windows release > Run workflow): the zip is only kept as a workflow artifact.
+# light (smaller audio) and no-audio, kept as a workflow artifact (Actions > Windows release > Run workflow).
+# These builds are NOT code-signed: the signing key lives in Certum's cloud and only works on the owner's laptop.
+# Published releases are built and signed there: pwsh tools/build-windows.ps1 -Sign -Publish
 on:
-  push:
-    tags: ['v*']
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
@@ -62,17 +60,3 @@ jobs:
           name: MyFathersWork-Windows-${{ env.VERSION }}
           path: dist/MyFathersWork-Windows-${{ env.VERSION }}*.zip
           compression-level: 0 # already a zip
-
-      - name: Attach to the GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          ZIPS=(dist/MyFathersWork-Windows-$VERSION.zip dist/MyFathersWork-Windows-$VERSION-light.zip dist/MyFathersWork-Windows-$VERSION-no-audio.zip)
-          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" "${ZIPS[@]}" --clobber
-          else
-            gh release create "$GITHUB_REF_NAME" "${ZIPS[@]}" --title "My Father's Work App (Unofficial) $VERSION (Windows)" \
-              --notes "Offline Windows version. Unzip the whole folder and double-click MyFathersWork.exe - no installation or internet needed. See README.txt in the zip. Three downloads of the same app: the full version, -light (smaller audio files, narration at a lower quality) and -no-audio (no music, sound or narration)."
-          fi
