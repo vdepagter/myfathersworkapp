@@ -1,16 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
-    <!-- Offline Windows launcher: serves the published web app (wwwroot next to the exe) on localhost and opens it.
-         Build the release with tools/build-windows.ps1. -->
+    <!-- Offline Windows app: a window with WebView2 (the Edge engine built into Windows) showing the published web app
+         (wwwroot next to the exe), served inside the process on localhost. Build the release with tools/build-windows.ps1. -->
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net9.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <OutputType>WinExe</OutputType>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <UseWindowsForms>true</UseWindowsForms>
         <AssemblyName>MyFathersWork</AssemblyName>
         <RootNamespace>WindowsLauncher</RootNamespace>
         <ApplicationIcon>..\MyFathersWorkApp\wwwroot\favicon.ico</ApplicationIcon>
+        <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
         <Version>0.66.6.0</Version>
         <Product>My Father's Work (Unofficial)</Product>
         <InvariantGlobalization>true</InvariantGlobalization>
@@ -20,8 +21,13 @@
         <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
         <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
         <GenerateDocumentationFile>false</GenerateDocumentationFile>
-        <!-- No appsettings / web.config / launch profiles needed -->
-        <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
+        <!-- WebView2Loader linked into the exe: nothing native to unpack next to it -->
+        <WebView2LoaderPreference>Static</WebView2LoaderPreference>
     </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
+    </ItemGroup>
 
 </Project>

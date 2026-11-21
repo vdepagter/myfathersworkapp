@@ -151,12 +151,12 @@ My Father's Work (Unofficial) ($Version), offline Windows version
 $about
 
 1. Unzip this whole folder anywhere (keep MyFathersWork.exe next to the wwwroot folder).
-2. Double-click MyFathersWork.exe. The app opens in its own window (Microsoft Edge in app mode).
-   Closing the window stops the app. Double-clicking again while it runs opens another window.
+2. Double-click MyFathersWork.exe. The app opens in its own window. Closing the window stops the app;
+   double-clicking again while it runs brings the window to the front.
 
 No internet connection and no installation are needed. Saved games are kept on this PC
 (%LOCALAPPDATA%\MyFathersWork) and stay when you unzip a newer version over this one.
-Without Microsoft Edge the app opens in your default browser, with a console window you close to stop it.
+It needs the Microsoft Edge WebView2 Runtime, which is part of Windows 11 and of an up-to-date Windows 10.
 $smartScreen
 "@ | Set-Content (Join-Path $out "README.txt") -Encoding utf8
 

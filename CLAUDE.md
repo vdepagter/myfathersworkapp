@@ -345,10 +345,16 @@ players would have to export their saves and gallery, reinstall and import them,
   files) and `-no-audio.zip` (`-Edition Light` still makes a `-light.zip` with music at 96 kbps, but since the narration
   is 48 kbps everywhere it saves only a few MB and is no longer released) (~60 MB, no `wwwroot/audio`; `js/edition.js` says `audio: false`, so `audio.js` loads
   nothing and `AudioService.Available` hides the sound toggles, narration settings, volumes and the narration pill). The exe (`MyFathersWorkApp/WindowsLauncher/`,
-  self-contained, no .NET needed) serves `wwwroot` on the fixed port `http://localhost:51660` (fixed because saves live in
-  localStorage per origin) and opens an Edge app window with its own profile (`%LOCALAPPDATA%\MyFathersWork\Browser`,
-  holds the saves); the server stops when the profile's `lockfile` is released (last window closed). A second start
-  just opens another window; without Edge it falls back to the default browser plus a console window.
+  self-contained WinForms + Kestrel, no .NET needed; owner's choice 21 Nov 2026) serves `wwwroot` inside the process on
+  the fixed port `http://localhost:51660` (fixed because saves live in localStorage per origin) and shows it in its own
+  window with WebView2 (`MainForm.cs`; profile `%LOCALAPPDATA%\MyFathersWork\WebView2`, window size in `window.json`,
+  F11 / the page's fullscreen, other sites open in the default browser). Closing the window stops the app; a second
+  start brings the window to the front (`/__mfw-launcher/show`). Until 21 Nov 2026 it opened an Edge app window with the
+  profile `...\Browser`: the first start copies that profile's `Local Storage` into the WebView2 profile (same origin),
+  so saves, history and gallery carry over (`SaveMigration.cs`). Needs the WebView2 Runtime (Windows 11 and updated
+  Windows 10 have it; otherwise a message links the download). Headless test: `MFW_DATA_DIR=<test folder>` and
+  `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS="--remote-debugging-port=9333 --mute-audio"`, then Playwright
+  `connect_over_cdp`. WinForms and WebView2 run on their own STA thread (the async top-level code is MTA).
   **Code signing** (21 Nov 2026): `-Sign` signs `MyFathersWork.exe` with signtool (SHA-256 + Certum RFC 3161 timestamp)
   using the owner's Certum "Open Source Developer Valentijn de Pagter" certificate (CurrentUser\My, valid to 18 Nov
   2027). Its key is in Certum's cloud: SimplySign Desktop must be running and logged in, so signing only works on the
@@ -361,7 +367,9 @@ players would have to export their saves and gallery, reinstall and import them,
   `dist/MyFathersWork-<v>.msix` (full-trust desktop app, `runFullTrust`; tile images from `icon-512.png` by
   `tools/msix-assets.py`; MSIX version `0.66.<revision>.0`, the Store keeps the fourth part 0). The identity values come
   from Partner Center > Product identity; the Store signs the package. `-Sign` instead signs with the Certum certificate
-  (Publisher = its subject) for a local install test (`Add-AppxPackage`). Tested 21 Nov 2026: the packaged launcher
-  serves on 51660 and opens Edge with the same real profile `%LOCALAPPDATA%\MyFathersWork\Browser` (no file system
-  virtualization), so the Store app and the zip version share saves.
+  (Publisher = its subject) for a local install test (`Add-AppxPackage`). Store identity (Partner Center, 21 Nov 2026): Name
+  `Valentijn.MyFathersWorkUnofficial`, Publisher `CN=E5ADDAFC-8C88-4DA5-8B3B-26E2D87AA01A`, PublisherDisplayName
+  `Valentijn`, Store ID 9MTC2WXVPLK8 (the script's defaults). Tested 21 Nov 2026: the packaged app writes its WebView2
+  profile to the real `%LOCALAPPDATA%\MyFathersWork\WebView2` (no file system virtualization), so the Store app and
+  the zip version share saves.
 - There are no automated tests. Play-test with `tools/test-save-helpers.js`: craft a save at a late-round hub, reload `/Gameplay`, and drive the flow with `run([...])`. Check the browser console for exceptions and run `python tools/tagcheck.py` (and `--scenario=FearOfTheUnknown`). Fear of the Unknown saves: `mkSaveFotU(hubId, {...})`; `auto([...])` / `autoFirst()` click through screens. Static files are served from a build-time snapshot, so inject the helpers with the JS console (or keep them in `localStorage.helpers` and `eval` after reloads) instead of copying them into `wwwroot`. To test mirror mode, pass `mirror: true` to `mkSave`; random click-throughs that report `Mirror:` console lines find draws made too early. Also play through round transitions, not only crafted saves: load and undo rebuild the hub, which hides hub text that was formatted with stale state (`PLAYTEST_FINDINGS.md` #1).

@@ -2,18 +2,18 @@
 # package for the Microsoft Store. The Store signs packages itself; -Sign signs with the owner's Certum certificate
 # only to install and test the package locally.
 #
-#   pwsh tools/build-msix.ps1 -Version 0.66.6.103 -IdentityName <Package/Identity/Name> -Publisher "CN=..." `
-#        -PublisherDisplayName "<Publisher display name>"       # values from Partner Center > Product identity
-#   pwsh tools/build-msix.ps1 -Version 0.66.6.103 -Sign          # local test: Publisher = the certificate's subject
+#   pwsh tools/build-msix.ps1 -Version 0.66.6.104         # for the Store: identity from Partner Center > Product identity
+#   pwsh tools/build-msix.ps1 -Version 0.66.6.104 -Sign   # local test: Publisher = the certificate's subject
 #
 # Input: dist\MyFathersWork-Windows-<version>.zip (build it first). Output: dist\MyFathersWork-<version>.msix.
 # MSIX versions are Major.Minor.Build.Revision with Revision 0 (reserved by the Store): 0.66.6.<rev> -> 0.66.<rev>.0.
 # makeappx / signtool come from the NuGet package Microsoft.Windows.SDK.BuildTools (see build-windows.ps1).
 param(
     [Parameter(Mandatory)] [string]$Version,
-    [string]$IdentityName = "MyFathersWorkUnofficial",
-    [string]$Publisher = "",
-    [string]$PublisherDisplayName = "Valentijn de Pagter",
+    # Partner Center > Product identity (Store ID 9MTC2WXVPLK8)
+    [string]$IdentityName = "Valentijn.MyFathersWorkUnofficial",
+    [string]$Publisher = "CN=E5ADDAFC-8C88-4DA5-8B3B-26E2D87AA01A",
+    [string]$PublisherDisplayName = "Valentijn",
     [switch]$Sign,
     [string]$CertThumbprint = ""
 )
@@ -45,7 +45,7 @@ if ($Sign) {
     # The manifest's Publisher must be the signing certificate's subject, exactly
     $Publisher = $cert.Subject
 }
-if (-not $Publisher) { throw "Pass -Publisher (Partner Center > Product identity > Package/Identity/Publisher), or -Sign for a local test" }
+if (-not $Publisher) { throw "Pass -Publisher (Partner Center > Product identity > Package/Identity/Publisher)" }
 
 $stage = Join-Path $dist "msix"
 if ((Test-Path -LiteralPath $stage) -and $stage.StartsWith($dist)) { Remove-Item -LiteralPath $stage -Recurse -Force }
@@ -99,7 +99,7 @@ $name = "My Father's Work (Unofficial)"
 </Package>
 "@ | Set-Content (Join-Path $app "AppxManifest.xml") -Encoding utf8
 
-$msix = Join-Path $dist "MyFathersWork-$Version.msix"
+$msix = Join-Path $dist ($(if ($Sign) { "MyFathersWork-$Version-localtest.msix" } else { "MyFathersWork-$Version.msix" }))
 if (Test-Path -LiteralPath $msix) { Remove-Item -LiteralPath $msix -Force }
 Write-Host "Packing $msix (version $msixVersion)..."
 & $makeappx pack /d $app /p $msix /o
