@@ -4,8 +4,8 @@ apply plugin: 'com.android.application'
 // .github/workflows/android-apk.yml as -PmfwRevision=<n>. Every build then installs over the previous one.
 def mfwRevision = (project.findProperty('mfwRevision') ?: '1').toString().toInteger()
 
-// Release signing: the one release keystore (never in the repository; losing or changing it forces players to
-// uninstall, which deletes their saves and downloaded narration). From environment variables (the workflow fills
+// Release signing: the one release keystore (never in the repository; a build signed with another key cannot update
+// the app: players would have to export their saves, reinstall and import them). From environment variables (the workflow fills
 // them from repository secrets) or the same names as Gradle properties.
 def mfwSecret = { String name -> System.getenv(name) ?: project.findProperty(name) }
 def mfwKeystore = mfwSecret('ANDROID_KEYSTORE_FILE')

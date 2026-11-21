@@ -321,7 +321,9 @@ copies the published wwwroot to `android-app/www` without the narration clips (`
 button). Players download narration in Offline play: `audio-cache.js` fetches from `remote` but stores under the app's
 own url, `audio.js` plays stored clips as `blob:` urls and streams the rest from `remote`. Never change the appId,
 `androidScheme` https or `hostname` localhost, and sign every build with the one release keystore (outside the repo,
-repository secrets `ANDROID_*`): a changed origin or key loses the players' saves and downloads.
+repository secrets `ANDROID_*`; copies in the owner's Dropbox `Documents\Administratie\Certificaten`). A changed
+origin hides the saves, gallery and downloads from the app; a build signed with another key cannot update it, so
+players would have to export their saves and gallery, reinstall and import them, and download the narration again.
 `.github/workflows/android-apk.yml` builds it (versionCode = the revision of deploy-pages.yml).
 
 ## Build, run, test

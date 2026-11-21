@@ -1,6 +1,6 @@
 # Android app (Capacitor)
 
-A sideloadable APK of My Father's Work App (Unofficial): the published Blazor app inside a Capacitor 8 WebView.
+A sideloadable APK, named "My Father's Work (Unofficial)" on the phone: the published Blazor app inside a Capacitor 8 WebView.
 The narration clips (~400 MB) are **not** in the APK; players download them in the app (Offline play) from the
 website, and a clip that is not downloaded streams from there.
 
@@ -32,8 +32,10 @@ website, and a clip that is not downloaded streams from there.
 ## Signing
 
 One release keystore, kept outside the repository (owner's laptop: `%USERPROFILE%\keys\myfathersworkapp-release.jks`,
-password file next to it). **Back both up.** An APK signed with another key cannot update an installed app: players
-would have to uninstall it, which deletes their saves and downloads. Never hand out a debug-signed build.
+password file next to it; copies in the owner's Dropbox `Documents\Administratie\Certificaten`). An APK signed with
+another key cannot update an installed app: players would have to export their saves (Saved Games) and Endings Gallery,
+uninstall, install the new build, import them again and download the narration again. Never hand out a debug-signed
+build.
 `android-app/set-secrets.ps1` stores it as the repository secrets `ANDROID_KEYSTORE_BASE64`,
 `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`.
 
