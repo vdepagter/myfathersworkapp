@@ -170,8 +170,8 @@ foreach ($zip in $zips) { Write-Host "Done: $zip ($([math]::Round((Get-Item $zip
 
 if ($Publish) {
     $tag = "v$Version"
-    $notes = "Offline Windows version, code-signed by Open Source Developer Valentijn de Pagter. Unzip the whole folder and double-click MyFathersWork.exe - no installation or internet needed. See README.txt in the zip. Three downloads of the same app: the full version, -light (smaller audio files, narration at a lower quality) and -no-audio (no music, sound or narration)."
+    $notes = "Windows: offline version, code-signed by Open Source Developer Valentijn de Pagter. Unzip the whole folder and double-click MyFathersWork.exe - no installation or internet needed. See README.txt in the zip. Three downloads of the same app: the full version, -light (smaller audio files, narration at a lower quality) and -no-audio (no music, sound or narration). Android: the APK is attached by the Android build of this tag."
     Write-Host "Publishing GitHub Release $tag..."
-    gh release create $tag @zips --repo vdepagter/myfathersworkapp --target (git -C $repo rev-parse HEAD) --title "My Father's Work (Unofficial) $Version (Windows)" --notes $notes
+    gh release create $tag @zips --repo vdepagter/myfathersworkapp --target (git -C $repo rev-parse HEAD) --title "My Father's Work (Unofficial) $Version" --notes $notes
     if ($LASTEXITCODE) { throw "gh release create failed" }
 }
