@@ -1,0 +1,75 @@
+.offline-setup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2100;
+    display: flex;
+    overflow-y: auto;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.offline-setup {
+    display: grid;
+    gap: 0.9rem;
+    width: min(520px, 100%);
+    margin: auto;
+}
+
+.offline-setup h2 {
+    margin: 0;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.offline-setup p {
+    margin: 0;
+    line-height: 1.45;
+}
+
+.offline-setup-packs {
+    display: grid;
+    gap: 0.55rem;
+}
+
+.offline-setup-packs small {
+    margin-left: 0.4rem;
+    opacity: 0.75;
+}
+
+.offline-setup-total small,
+.offline-setup-note {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.offline-setup-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+}
+
+.offline-setup-buttons .mfw-button {
+    min-width: 9rem;
+    padding: 0.4rem 1.2rem;
+    font-size: 1.1rem;
+}
+
+.offline-setup-buttons .mfw-button:disabled {
+    opacity: 0.45;
+    filter: grayscale(0.4);
+}
+
+.setup-option {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    cursor: pointer;
+}
+
+.setup-option input {
+    flex-shrink: 0;
+    width: 1.3rem;
+    height: 1.3rem;
+    accent-color: #c9a35a;
+}

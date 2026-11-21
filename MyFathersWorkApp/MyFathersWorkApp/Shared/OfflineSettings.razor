@@ -3,15 +3,20 @@
 @inject AudioService   Audio
 
 @* "Play offline" in Settings (Main Menu): whether the app is cached, Install as an app, and the narration downloads per
-   pack (Oliver per scenario, the original male / female recordings). Shared/OfflineService.cs, js/offline.js. Hidden
-   where there is no service worker (development build, the Windows download, an old browser). *@
+   pack (Oliver per scenario, the original male / female recordings), with Download all / Remove all downloads.
+   Shared/OfflineService.cs, js/offline.js. Hidden where there is no service worker (development build, the Windows
+   download, an old browser). *@
 @if (State.Supported)
 {
     <div class="mfw-settings-group offline-settings">
         <div class="mfw-setting-group-title">@T(GlobalTags.Offline_Title)</div>
 
         <p class="offline-status">
-            @if (State.ShellProgress is int percent)
+            @if (State.Blocked)
+            {
+                @T(GlobalTags.Offline_Blocked)
+            }
+            else if (State.ShellProgress is int percent)
             {
                 @T(GlobalTags.Offline_Preparing).FormatWithReplacement(0, percent.ToString())
             }
@@ -32,9 +37,9 @@
                 <small>@T(GlobalTags.Offline_InstallDesc)</small>
             </div>
         }
-        else if (State.IosHint && !State.Standalone)
+        else if (!State.Standalone && (State.IosHint || State.FirefoxHint))
         {
-            <small class="offline-hint">@T(GlobalTags.Offline_IosHint)</small>
+            <small class="offline-hint">@T(State.IosHint ? GlobalTags.Offline_IosHint : GlobalTags.Offline_FirefoxHint)</small>
         }
 
         @if (State.Available && Audio.Available)
@@ -47,15 +52,20 @@
                 <small class="offline-hint">@T(GlobalTags.Offline_NoPacks)</small>
             }
 
-            @foreach (OfflinePack pack in State.Packs.OrderBy(PackOrder))
+            @foreach (OfflinePack pack in State.Packs.OrderBy(p => p.Order))
             {
                 <div class="offline-pack @(pack.Complete ? "done" : null)">
                     <div class="offline-pack-name">
-                        <span>@PackName(pack)</span>
+                        <span>@pack.Name(GlobalData)</span>
                         <small>@PackSize(pack)</small>
                     </div>
                     <div class="offline-pack-actions">
-                        @if (pack.Downloading)
+                        @if (pack.Queued)
+                        {
+                            <span class="offline-muted">@T(GlobalTags.Offline_Waiting)</span>
+                            <button class="mfw-button offline-button small" @onclick="() => Offline.CancelAsync(pack.Id)">@T(GlobalTags.Offline_Cancel)</button>
+                        }
+                        else if (pack.Downloading)
                         {
                             <span class="offline-progress" style="--p:@Percent(pack)%">@Percent(pack)%</span>
                             <button class="mfw-button offline-button small" @onclick="() => Offline.CancelAsync(pack.Id)">@T(GlobalTags.Offline_Cancel)</button>
@@ -94,9 +104,34 @@
                 </p>
             }
 
+            @if (State.Packs.Count > 0)
+            {
+                <div class="offline-all">
+                    @if (State.Online && State.Packs.Any(p => !p.Complete && !p.Downloading && !p.Queued))
+                    {
+                        <button class="mfw-button green offline-button" @onclick="DownloadAll">@T(GlobalTags.Offline_DownloadAll)</button>
+                    }
+                    @if (StoredTotal > 0 || State.Packs.Any(p => p.Downloading))
+                    {
+                        <button class="mfw-button offline-button" @onclick="AskRemoveAll">@T(GlobalTags.Offline_RemoveAll)</button>
+                    }
+                </div>
+            }
+
+            @if (_ConfirmRemoveAll)
+            {
+                <div class="offline-confirm">
+                    <span>@T(GlobalTags.Offline_RemoveAllConfirm).FormatWithReplacement(0, OfflinePack.Size(StoredTotal))</span>
+                    <div class="offline-pack-actions">
+                        <button class="mfw-button offline-button small" @onclick="RemoveAll">@T(GlobalTags.Offline_Remove)</button>
+                        <button class="mfw-button green offline-button small" @onclick="() => _ConfirmRemoveAll = false">@T(GlobalTags.Offline_Cancel)</button>
+                    </div>
+                </div>
+            }
+
             @if (StoredTotal > 0)
             {
-                <small class="offline-hint">@T(GlobalTags.Offline_Storage).FormatWithReplacement(0, Megabytes(StoredTotal))</small>
+                <small class="offline-hint">@T(GlobalTags.Offline_Storage).FormatWithReplacement(0, OfflinePack.Size(StoredTotal))</small>
             }
         }
     </div>
@@ -105,6 +140,8 @@
 @code
 {
     [Parameter] public GlobalData GlobalData { get; set; } = null!;
+
+    private bool _ConfirmRemoveAll;
 
     private OfflineState State => Offline.State;
 
@@ -120,27 +157,8 @@
 
     private void OnChanged() => InvokeAsync(StateHasChanged);
 
-    // Oliver first, by scenario order of the menu, then the original recordings
-    private static int PackOrder(OfflinePack pack) => pack.Scenario switch
-    {
-        "TheCostOfDisease" => 0,
-        "FearOfTheUnknown" => 1,
-        "ATimeOfWar"       => 2,
-        _                  => pack.Voice == "male" ? 10 : 11
-    };
-
-    private string PackName(OfflinePack pack) => pack.Voice switch
-    {
-        "oliver" => T(GlobalTags.Offline_PackOliver).FormatWithReplacement(0, T("Scenario_" + pack.Scenario)),
-        "male"   => T(GlobalTags.Offline_PackMale),
-        "female" => T(GlobalTags.Offline_PackFemale),
-        _        => pack.Id
-    };
-
     private static string PackSize(OfflinePack pack) =>
-        pack.StoredFiles > 0 && !pack.Complete ? $"{Megabytes(pack.StoredBytes)} / {Megabytes(pack.Bytes)}" : Megabytes(pack.Bytes);
-
-    private static string Megabytes(long bytes) => $"{Math.Max(1, (int)Math.Round(bytes / 1_000_000.0))} MB";
+        pack.StoredFiles > 0 && !pack.Complete ? $"{OfflinePack.Size(pack.StoredBytes)} / {OfflinePack.Size(pack.Bytes)}" : OfflinePack.Size(pack.Bytes);
 
     private static int Percent(OfflinePack pack) => pack.Bytes == 0 ? 0 : (int)Math.Min(100, 100 * pack.StoredBytes / pack.Bytes);
 
@@ -156,10 +174,29 @@
         return Offline.DownloadAsync(pack.Id).AsTask();
     }
 
+    private Task DownloadAll()
+    {
+        Audio.PlayClick();
+        return Offline.DownloadManyAsync(State.Packs.Where(p => !p.Complete && !p.Downloading && !p.Queued).OrderBy(p => p.Order).Select(p => p.Id)).AsTask();
+    }
+
     private Task Remove(OfflinePack pack)
     {
         Audio.PlayClick();
         return Offline.RemoveAsync(pack.Id).AsTask();
+    }
+
+    private void AskRemoveAll()
+    {
+        Audio.PlayClick();
+        _ConfirmRemoveAll = true;
+    }
+
+    private Task RemoveAll()
+    {
+        Audio.PlayClick();
+        _ConfirmRemoveAll = false;
+        return Offline.RemoveAllAsync().AsTask();
     }
 
     public void Dispose() => Offline.Changed -= OnChanged;

@@ -64,8 +64,11 @@ async function onInstall() {
             const response = await p.cache.match(url);
             if (response) { await cache.put(url, response); return; }
         }
-        const response = await fetch(new Request(url, { integrity: asset.hash, cache: "no-cache" }));
-        if (!response.ok) throw new Error(`${response.status} ${asset.url}`);
+        // Revalidate against the browser's HTTP cache; Firefox can answer an audio file from a partial (206) cache
+        // entry left by an audio element, which the Cache API refuses: then fetch it whole from the network
+        let response = await fetch(new Request(url, { integrity: asset.hash, cache: "no-cache" }));
+        if (response.status === 206) response = await fetch(new Request(url, { integrity: asset.hash, cache: "reload" }));
+        if (response.status !== 200) throw new Error(`${response.status} ${asset.url}`);
         await cache.put(url, response);
     }
 

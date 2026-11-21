@@ -40,14 +40,15 @@
 
     @if (ShowInstall)
     {
-        @* Install as an app: the browser's offer (Chrome, Edge, Android) or, on iPhone / iPad, how to do it by hand *@
+        @* Install as an app: the browser's offer (Chrome, Edge, Android) or, on iPhone / iPad and Firefox for Android, how
+           to do it from the browser's menu. Firefox on a computer cannot install websites: nothing shown there. *@
         <div class="install-chip">
             <button class="install-open" @onclick="OnInstall">⤓ @GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_Install)</button>
             <button class="install-hide" @onclick="HideInstall" aria-label="@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_InstallHide)"
                     title="@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_InstallHide)">×</button>
             @if (_ShowIosHint)
             {
-                <p class="install-hint">@GlobalData.GetLocalizedUITag(GlobalTags.Offline_IosHint)</p>
+                <p class="install-hint">@GlobalData.GetLocalizedUITag(Offline.State.IosHint ? GlobalTags.Offline_IosHint : GlobalTags.Offline_FirefoxHint)</p>
             }
         </div>
     }
@@ -65,6 +66,8 @@
     <p class="disclaimer">@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_FanMade)</p>
 </div>
 
+<OfflineSetup GlobalData="@GlobalData"/>
+
 <SettingsPopup Visible="@_ShowSettings" OnClose="HideSettings" OnLanguageChange="OnLanguageChanges" GlobalData="@GlobalData"/>
 
 @code
@@ -81,7 +84,7 @@
     private bool _ShowIosHint;
 
     private bool ShowInstall => !_InstallHidden && Offline.State.Supported && !Offline.State.Standalone &&
-                                (Offline.State.Installable || Offline.State.IosHint);
+                                (Offline.State.Installable || Offline.State.IosHint || Offline.State.FirefoxHint);
 
     private void OnOfflineChanged() => InvokeAsync(StateHasChanged);
 

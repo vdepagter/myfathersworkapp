@@ -16,6 +16,10 @@
         update:        false,  // a new version is waiting
         installable:   false,  // the browser offers installing (beforeinstallprompt)
         iosHint:       /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1),
+        // Firefox for Android installs from its own menu and never offers it to the page (Firefox on a computer cannot)
+        firefoxHint:   /Android/.test(navigator.userAgent) && /Firefox\//.test(navigator.userAgent),
+        blocked:       false,  // the browser refused the worker (private window, site data cleared on close)
+        askNarration:  false,  // just installed / first start as an app: offer the narration downloads
         standalone:    matchMedia("(display-mode: standalone)").matches || navigator.standalone === true,
         online:        navigator.onLine,
         packs:         [],     // js/audio-cache.js status() + downloading
@@ -25,6 +29,7 @@
         error:         ""
     };
 
+    const queue      = [];    // pack ids to download one after the other (the narration choice, Download all)
     let listener     = null;
     let registration = null;
     let index        = null;
@@ -32,8 +37,18 @@
     let reloading    = false;
     const progress   = {};    // pack id -> { storedBytes, bytes } while downloading
     const cancelled  = new Set();
+    let justInstalled = false;
+    const ASKED_KEY  = "mfwOfflineAsked";
+
+    function askedBefore() {
+        try { return localStorage.getItem(ASKED_KEY) === "1"; } catch (e) { return true; }
+    }
 
     function emit() {
+        for (const row of state.packs) {
+            row.downloading = audio.isDownloading(row.id);
+            row.queued      = !row.downloading && queue.includes(row.id);
+        }
         if (!listener) return;
         try { listener.invokeMethodAsync("OnOfflineState", JSON.stringify(state)); } catch (e) { /* app gone */ }
     }
@@ -68,6 +83,8 @@
             registration = await navigator.serviceWorker.register("service-worker.js", { updateViaCache: "none" });
         } catch (e) {
             console.warn("Offline: service worker not registered: " + e.message);
+            state.blocked = true;
+            emit();
             return;
         }
         if (registration.waiting && navigator.serviceWorker.controller) state.update = true;
@@ -115,9 +132,11 @@
                 state.indexMissing = !index;
                 state.packs = (await audio.status(index)).map(p => {
                     const live = progress[p.id];
-                    return Object.assign(p, { downloading: audio.isDownloading(p.id),
-                                              storedBytes: live ? live.storedBytes : p.storedBytes });
+                    return Object.assign(p, { storedBytes: live ? live.storedBytes : p.storedBytes });
                 });
+                // Right after installing, or on the first start as an installed app: ask which narration to keep
+                state.askNarration = state.packs.length > 0 && !askedBefore() && (justInstalled || state.standalone) &&
+                                     !state.packs.some(p => p.wanted || p.storedFiles > 0);
             }
             if (navigator.storage && navigator.storage.estimate) {
                 const estimate = await navigator.storage.estimate();
@@ -160,12 +179,12 @@
             const run = audio.download(index, id, p => {
                 progress[id] = p;
                 const row = state.packs.find(r => r.id === id);
-                if (row) { row.storedBytes = p.storedBytes; row.storedFiles = p.storedFiles; row.downloading = true; }
+                if (row) { row.storedBytes = p.storedBytes; row.storedFiles = p.storedFiles; }
                 const now = Date.now();
                 if (now - lastEmit > 300) { lastEmit = now; emit(); }
             }, 4);
             const row = state.packs.find(r => r.id === id);
-            if (row) { row.downloading = true; row.wanted = true; }
+            if (row) row.wanted = true;
             emit();
             const complete = await run;
             // Cancelled: keep what came in, but no longer top it up by itself (Settings shows Resume)
@@ -181,7 +200,46 @@
         }
     }
 
+    // Several packs one after the other (the narration choice, Download all)
+    let draining = false;
+
+    async function downloadMany(ids) {
+        for (const id of ids) if (!queue.includes(id) && !audio.isDownloading(id)) queue.push(id);
+        emit();
+        if (draining) return;
+        draining = true;
+        try {
+            while (queue.length) {
+                const id = queue[0];
+                await download(id, false);
+                queue.shift();
+                if (state.error === "space") { queue.length = 0; break; }
+            }
+        } finally {
+            draining = false;
+            refresh();
+        }
+    }
+
+    function answerNarration(ids) {
+        try { localStorage.setItem(ASKED_KEY, "1"); } catch (e) { /* storage blocked */ }
+        state.askNarration = false;
+        emit();
+        if (ids && ids.length) downloadMany(ids);
+    }
+
+    async function removeAll() {
+        queue.length = 0;
+        for (const p of state.packs) if (p.wanted || p.storedFiles > 0 || p.downloading) {
+            cancel(p.id);
+            try { await audio.remove(index, p.id); } catch (e) { console.warn("Offline audio: " + e.message); }
+        }
+        await refresh();
+    }
+
     function cancel(id) {
+        const queued = queue.indexOf(id);
+        if (queued > 0) { queue.splice(queued, 1); emit(); }
         if (audio.isDownloading(id)) cancelled.add(id);
         audio.cancel(id);
     }
@@ -203,8 +261,8 @@
     window.addEventListener("appinstalled", () => {
         installEvent = null;
         state.installable = false;
-        state.standalone = true;
-        emit();
+        justInstalled = true;
+        refresh();
     });
     window.addEventListener("online",  () => { state.online = true;  refresh(); topUp(); });
     window.addEventListener("offline", () => { state.online = false; emit(); });
@@ -240,7 +298,10 @@
         subscribe: ref => { listener = ref; emit(); refresh(); },
         unsubscribe: () => { listener = null; },
         refresh,
-        download: id => { download(id, false); },
+        download: id => { downloadMany([id]); },
+        downloadMany: ids => { downloadMany(ids); },
+        answerNarration: ids => { answerNarration(ids); },
+        removeAll: () => { removeAll(); },
         cancel,
         remove: id => { remove(id); },
         install: () => { install(); },

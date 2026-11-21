@@ -58,6 +58,9 @@ public sealed class OfflineService(IJSRuntime js) : IDisposable
     }
 
     public ValueTask DownloadAsync(string id) => js.InvokeVoidAsync("mfwOffline.download", id);
+    public ValueTask DownloadManyAsync(IEnumerable<string> ids) => js.InvokeVoidAsync("mfwOffline.downloadMany", (object)ids.ToArray()); // one argument, not spread as params
+    public ValueTask AnswerNarrationAsync(IEnumerable<string> ids) => js.InvokeVoidAsync("mfwOffline.answerNarration", (object)ids.ToArray());
+    public ValueTask RemoveAllAsync()         => js.InvokeVoidAsync("mfwOffline.removeAll");
     public ValueTask CancelAsync(string id)   => js.InvokeVoidAsync("mfwOffline.cancel", id);
     public ValueTask RemoveAsync(string id)   => js.InvokeVoidAsync("mfwOffline.remove", id);
     public ValueTask InstallAsync()           => js.InvokeVoidAsync("mfwOffline.install");
@@ -75,6 +78,9 @@ public sealed class OfflineState
     public bool              Update        { get; set; }
     public bool              Installable   { get; set; }
     public bool              IosHint       { get; set; }
+    public bool              FirefoxHint   { get; set; }
+    public bool              Blocked       { get; set; }
+    public bool              AskNarration  { get; set; }
     public bool              Standalone    { get; set; }
     public bool              Online        { get; set; } = true;
     public bool              IndexMissing  { get; set; }
@@ -95,6 +101,28 @@ public sealed class OfflinePack
     public long   StoredBytes { get; set; }
     public bool   Wanted      { get; set; }
     public bool   Downloading { get; set; }
+    public bool   Queued      { get; set; } // waiting for the download before it (Download all, the narration choice)
 
     public bool Complete => Files > 0 && StoredFiles >= Files;
+
+    // Oliver first, by the scenario order of the menu, then the original recordings
+    public int Order => Scenario switch
+    {
+        "TheCostOfDisease" => 0,
+        "FearOfTheUnknown" => 1,
+        "ATimeOfWar"       => 2,
+        _                  => Voice == "male" ? 10 : 11
+    };
+
+    public string Name(GlobalData globalData) => Voice switch
+    {
+        "oliver" => globalData.GetLocalizedUITag(GlobalTags.Offline_PackOliver).FormatWithReplacement(0, globalData.GetLocalizedUITag("Scenario_" + Scenario)),
+        "male"   => globalData.GetLocalizedUITag(GlobalTags.Offline_PackMale),
+        "female" => globalData.GetLocalizedUITag(GlobalTags.Offline_PackFemale),
+        _        => Id
+    };
+
+    public static string Size(long bytes) => bytes >= 1_000_000_000
+        ? (bytes / 1_000_000_000.0).ToString("0.0", System.Globalization.CultureInfo.InvariantCulture) + " GB"
+        : $"{Math.Max(1, (int)Math.Round(bytes / 1_000_000.0))} MB";
 }
