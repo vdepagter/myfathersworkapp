@@ -13,7 +13,7 @@ When a piece of work is finished, move its section to [`docs/DEVLOG.md`](docs/DE
 Player-facing changes per version go in `wwwroot/CHANGELOG.md` (see Build, run, test).
 
 All three scenarios are complete, played at the table (November 2026) and fully narrated by Oliver. Left before v1.0:
-a test on iPhone / iPad (Safari) and code-signing the Windows exe.
+a test on iPhone / iPad (Safari) and the Microsoft Store submission (the Windows exe is code-signed since v0.66.6.103).
 
 | Scenario | Web app | Notes |
 |---|---|---|
