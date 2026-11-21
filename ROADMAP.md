@@ -19,8 +19,6 @@ version 1.0:
 ## Ideas, not planned
 
 - Scenario picker: "5 of 8 endings" and locked silhouettes for endings not found yet.
-- If GitHub Pages / LFS limits bite: the narration clips are ~390 MB; the website could use the light zip's 48 kbps
-  mono encoding (about half the size).
 
 ## Reference
 

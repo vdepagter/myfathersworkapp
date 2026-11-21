@@ -237,7 +237,7 @@ def render(voice, names, plain=False, web=False, model=None, stored=False, overr
         if web:
             ship = os.path.normpath(os.path.join(WEB, name + ".mp3"))
             os.makedirs(os.path.dirname(ship), exist_ok=True)
-            subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", path, "-ac", "1", "-ar", "44100", "-b:a", "96k",
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", path, "-ac", "1", "-ar", "44100", "-b:a", "48k",
                             "-map_metadata", "-1", ship], check=True)
             print(f"  -> {ship}")
 

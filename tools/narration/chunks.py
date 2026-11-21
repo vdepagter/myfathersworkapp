@@ -999,7 +999,7 @@ def render(scenario, reserve=6000, limit=None, include_private=True, only=None, 
             path = os.path.join(master, h + ".mp3")
             with open(path, "wb") as f:
                 f.write(audio)
-            subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", path, "-ac", "1", "-ar", "44100", "-b:a", "96k",
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", path, "-ac", "1", "-ar", "44100", "-b:a", "48k",
                             "-map_metadata", "-1", os.path.join(ship, h + ".mp3")], check=True)
             warn = "  WARNING: ends mid-sound" if elevenlabs.tail_db(path) > -50 else ""
             manifest["clips"][h] = script_hash(spoken)

@@ -1,17 +1,32 @@
 # Builds the offline Windows release (MyFathersWork.exe + wwwroot). The target PC needs no .NET; it serves the app on
 # http://localhost:51660. Three downloads, the same app in each:
-#   dist\MyFathersWork-Windows-<version>.zip           full: audio as on the website (~450 MB)
-#   dist\MyFathersWork-Windows-<version>-light.zip     lighter audio (~270 MB): speech 48 kbps mono, music 96 kbps (needs ffmpeg)
+#   dist\MyFathersWork-Windows-<version>.zip           full: audio as on the website (~270 MB)
+#   dist\MyFathersWork-Windows-<version>-light.zip     only with -Edition Light: music at 96 kbps (needs ffmpeg). Since the
+#                                                      website's narration is 48 kbps mono too (21 Nov 2026) it saves only
+#                                                      a few MB, so -Edition All no longer builds it
 #   dist\MyFathersWork-Windows-<version>-no-audio.zip  no audio files (~60 MB); js/edition.js tells the app to hide sound controls
 #
-#   pwsh tools/build-windows.ps1 [-Version 0.66.6.123] [-Edition All|Full|Light|NoAudio]
+#   pwsh tools/build-windows.ps1 [-Version 0.66.6.123] [-Edition All|Full|Light|NoAudio] [-Sign] [-Publish]
 #   (version default: computed from git like the Pages deploy; edition default: All)
+#
+# -Sign: code-signs MyFathersWork.exe with signtool (SHA-256, RFC 3161 timestamp, so the signature stays valid after the
+#   certificate expires). The certificate is the owner's Certum "Open Source Developer" certificate; its key lives in
+#   Certum's cloud (SimplySign Desktop must be running and logged in). Found by -CertThumbprint, else the first
+#   code-signing certificate with a private key in CurrentUser\My. signtool: -SignTool, else PATH, the Windows Kits, or
+#   the NuGet package Microsoft.Windows.SDK.BuildTools (~\.nuget\packages). Signing only works on the owner's laptop,
+#   so signed releases are built there, not in GitHub Actions.
+# -Publish (with -Sign): creates the GitHub Release v<version> with the zips (gh CLI, logged in).
 #
 # Needs the Git LFS files (git lfs pull --include "MyFathersWorkApp/**"), otherwise images and audio are pointers.
 param(
     [string]$Version = "",
     [ValidateSet("All", "Full", "Light", "NoAudio")]
-    [string]$Edition = "All"
+    [string]$Edition = "All",
+    [switch]$Sign,
+    [string]$CertThumbprint = "",
+    [string]$SignTool = "",
+    [string]$TimestampUrl = "http://time.certum.pl",
+    [switch]$Publish
 )
 $ErrorActionPreference = "Stop"
 
@@ -48,6 +63,34 @@ Write-Host "Publishing the launcher..."
 dotnet publish $launcher -c Release -r win-x64 $versionArg -o (Join-Path $work "launcher")
 if ($LASTEXITCODE) { throw "launcher publish failed" }
 
+if ($Publish -and -not $Sign) { throw "-Publish needs -Sign: releases are signed" }
+if ($Sign) {
+    if (-not $SignTool) {
+        $SignTool = (Get-Command signtool.exe -ErrorAction SilentlyContinue).Source
+    }
+    if (-not $SignTool) {
+        $SignTool = @(
+            Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" -ErrorAction SilentlyContinue
+            Get-ChildItem "$env:USERPROFILE\.nuget\packages\microsoft.windows.sdk.buildtools\*\bin\*\x64\signtool.exe" -ErrorAction SilentlyContinue
+        ) | Sort-Object FullName -Descending | Select-Object -First 1 -ExpandProperty FullName
+    }
+    if (-not $SignTool) { throw "signtool.exe not found: install the Windows SDK signing tools or the NuGet package Microsoft.Windows.SDK.BuildTools, or pass -SignTool" }
+
+    if (-not $CertThumbprint) {
+        $CertThumbprint = Get-ChildItem Cert:\CurrentUser\My -CodeSigningCert |
+            Where-Object { $_.HasPrivateKey -and $_.NotAfter -gt (Get-Date) } |
+            Sort-Object NotAfter -Descending | Select-Object -First 1 -ExpandProperty Thumbprint
+    }
+    if (-not $CertThumbprint) { throw "no code-signing certificate with a private key in CurrentUser\My" }
+
+    $exe = Join-Path $work "launcher\MyFathersWork.exe"
+    Write-Host "Signing $exe (certificate $CertThumbprint)..."
+    & $SignTool sign /sha1 $CertThumbprint /fd sha256 /tr $TimestampUrl /td sha256 /d "My Father's Work (Unofficial)" $exe
+    if ($LASTEXITCODE) { throw "signing failed (is SimplySign Desktop running and logged in?)" }
+    & $SignTool verify /pa /q $exe
+    if ($LASTEXITCODE) { throw "the signature does not verify" }
+}
+
 # The light edition: speech (wwwroot/audio/vo) as 48 kbps mono, music and effects at 96 kbps. A file that would not get
 # smaller stays as it is. Durations do not change, so Oliver's sentence timings (*.pauses.json) still fit.
 function Compress-Audio([string]$audioDir) {
@@ -66,7 +109,7 @@ function Compress-Audio([string]$audioDir) {
     if ($failed) { throw "ffmpeg failed on: $($failed -join ', ')" }
 }
 
-$editions = if ($Edition -eq "All") { @("Full", "Light", "NoAudio") } else { @($Edition) }
+$editions = if ($Edition -eq "All") { @("Full", "NoAudio") } else { @($Edition) }
 $zips     = @()
 
 foreach ($ed in $editions) {
@@ -100,6 +143,9 @@ foreach ($ed in $editions) {
     $hasAudio = if ($ed -eq "NoAudio") { "false" } else { "true" }
     Set-Content (Join-Path $out "wwwroot\js\edition.js") "window.mfwEdition = { audio: $hasAudio, offline: false };" -Encoding utf8
 
+    $smartScreen = if ($Sign) { "MyFathersWork.exe is signed by ""Open Source Developer Valentijn de Pagter"" (Certum). Windows SmartScreen`r`nmay still ask the first time while the certificate is new: More info > Run anyway." }
+                   else { "Windows SmartScreen may warn about an unknown publisher the first time: More info > Run anyway." }
+
     @"
 My Father's Work (Unofficial) ($Version), offline Windows version
 $about
@@ -111,7 +157,7 @@ $about
 No internet connection and no installation are needed. Saved games are kept on this PC
 (%LOCALAPPDATA%\MyFathersWork) and stay when you unzip a newer version over this one.
 Without Microsoft Edge the app opens in your default browser, with a console window you close to stop it.
-Windows SmartScreen may warn about an unknown publisher the first time: More info > Run anyway.
+$smartScreen
 "@ | Set-Content (Join-Path $out "README.txt") -Encoding utf8
 
     $zip = Join-Path $dist "MyFathersWork-Windows-$Version$suffix.zip"
@@ -123,3 +169,11 @@ Windows SmartScreen may warn about an unknown publisher the first time: More inf
 
 Remove-Item -LiteralPath $work -Recurse -Force
 foreach ($zip in $zips) { Write-Host "Done: $zip ($([math]::Round((Get-Item $zip).Length / 1MB)) MB)" }
+
+if ($Publish) {
+    $tag = "v$Version"
+    $notes = "Windows: offline version, code-signed by Open Source Developer Valentijn de Pagter. Unzip the whole folder and double-click MyFathersWork.exe - no installation or internet needed. See README.txt in the zip. Two downloads of the same app: the full version and -no-audio (no music, sound or narration, ~60 MB). Android: the APK is attached by the Android build of this tag."
+    Write-Host "Publishing GitHub Release $tag..."
+    gh release create $tag @zips --repo vdepagter/myfathersworkapp --target (git -C $repo rev-parse HEAD) --title "My Father's Work (Unofficial) $Version" --notes $notes
+    if ($LASTEXITCODE) { throw "gh release create failed" }
+}

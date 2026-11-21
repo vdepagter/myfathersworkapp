@@ -17,11 +17,11 @@ There are two ways to play:
    [Add it to your home screen](#add-it-to-your-home-screen) below).
 2. **Offline on Windows:** download `MyFathersWork-Windows-<version>.zip` from the
    [latest release](https://github.com/vdepagter/myfathersworkapp/releases/latest), unzip the whole folder anywhere and
-   double-click `MyFathersWork.exe`. Short on space or bandwidth? The `-light.zip` has smaller audio files (narration
-   at a lower quality) and the `-no-audio.zip` leaves out music, sound and narration altogether. The app opens in its own window and needs no internet connection and no
-   installation. Saved games are kept on that PC and stay when you unzip a newer version over the old one. The exe is
-   not code-signed yet, so Windows SmartScreen may warn about an unknown publisher the first time: choose
-   **More info > Run anyway**.
+   double-click `MyFathersWork.exe`. Short on space or bandwidth? The `-no-audio.zip` leaves out music, sound and
+   narration altogether. The app opens in its own window and needs no internet connection and no installation. Saved
+   games are kept on that PC and stay when you unzip a newer version over the old one. The exe is code-signed by
+   "Open Source Developer Valentijn de Pagter"; while the certificate is new, Windows SmartScreen may still ask the
+   first time: choose **More info > Run anyway**.
 
 ### Add it to your home screen
 
@@ -29,7 +29,7 @@ The website can be installed as an app (a PWA): it gets its own icon and opens f
 address bar. The **Offline play** button on the Main Menu (also in Settings and the pause menu) has an
 **Install as an app** button where the browser offers it, and explains how on iPhone, iPad and Firefox for Android. After the first visit it also works **without an internet connection**: the app itself is kept on the
 device automatically. Narration is large, so it plays from the internet unless you download it: in **Offline play**, tick
-Oliver per scenario (about 110-140 MB each) or the original voices (about 20 MB each) and press **Download**;
+Oliver per scenario (about 55-70 MB each) or the original voices (about 20 MB each) and press **Download**;
 unticking removes a download again.
 Downloads stay through app updates, and only changed clips are fetched again. When a new version is out, the app
 shows **A new version of the app is ready** with an **Update** button (a game in progress reopens on its screen).
@@ -188,9 +188,9 @@ It prints the addresses to open on the phone (port 5199; pass another port as th
 to allow the port on the private network once; the command is at the top of `tools/lan-serve.cs`. Changes to JavaScript,
 CSS and the story `.csv` files show on a reload, C# changes need the build again.
 
-**Build the offline Windows version** with `pwsh tools/build-windows.ps1 -Version <version>`: the full, light and
-no-audio zips land in `dist/` (the light one needs `ffmpeg`; `-Edition Full` builds only one). Pushing a tag `v*` makes
-GitHub build all three and attach them to a release.
+**Build the offline Windows version** with `pwsh tools/build-windows.ps1 -Version <version>`: the full and no-audio
+zips land in `dist/` (`-Edition Full` builds only one). Releases are code-signed on the owner's laptop:
+`pwsh tools/build-windows.ps1 -Sign -Publish` (see CLAUDE.md, Build, run, test).
 
 ## How the scenarios were ported
 
