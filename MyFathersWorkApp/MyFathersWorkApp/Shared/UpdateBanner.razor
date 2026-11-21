@@ -1,0 +1,67 @@
+@implements IDisposable
+@inject OfflineService Offline
+@inject AudioService   Audio
+
+@* "A new version of the app is ready" (the service worker installed it in the background, js/offline.js). Update
+   reloads: a game reopens on its screen (it is saved after every screen). Later hides it until the next start; the
+   browser also switches over by itself once every tab of the app is closed. After an update: "Updated to <version>". *@
+@if (Offline.State.Update && !_Later)
+{
+    <div class="update-banner mfw-dark-panel" role="status">
+        <span>@T(GlobalTags.Update_Ready)</span>
+        <div class="update-actions">
+            <button class="mfw-button green update-button" @onclick="Update">@T(GlobalTags.Update_Now)</button>
+            <button class="mfw-button update-button" @onclick="Later">@T(GlobalTags.Update_Later)</button>
+        </div>
+    </div>
+}
+else if (Offline.UpdatedFrom != null)
+{
+    <div class="update-banner mfw-dark-panel done" role="status" @onclick="Offline.ClearUpdatedFrom">
+        <span>@T(GlobalTags.Update_Done).FormatWithReplacement(0, AppInfo.Version)</span>
+    </div>
+}
+
+@code
+{
+    [Parameter] public GlobalData GlobalData { get; set; } = null!;
+
+    private bool _Later;
+    private bool _Updating;
+
+    private string T(string tag) => GlobalData.GetLocalizedUITag(tag);
+
+    protected override void OnInitialized() => Offline.Changed += OnChanged;
+
+    private void OnChanged()
+    {
+        InvokeAsync(StateHasChanged);
+        if (Offline.UpdatedFrom != null) _ = HideDoneLater();
+    }
+
+    private bool _HideScheduled;
+
+    private async Task HideDoneLater()
+    {
+        if (_HideScheduled) return;
+        _HideScheduled = true;
+        await Task.Delay(6000);
+        Offline.ClearUpdatedFrom();
+    }
+
+    private async Task Update()
+    {
+        if (_Updating) return;
+        _Updating = true;
+        Audio.PlayClick();
+        await Offline.ApplyUpdateAsync();
+    }
+
+    private void Later()
+    {
+        Audio.PlayClick();
+        _Later = true;
+    }
+
+    public void Dispose() => Offline.Changed -= OnChanged;
+}

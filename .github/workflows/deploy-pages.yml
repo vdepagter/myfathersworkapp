@@ -57,15 +57,10 @@ jobs:
       - name: Publish
         run: dotnet publish MyFathersWorkApp/MyFathersWorkApp/MyFathersWorkApp.csproj -c Release -p:Version=0.66.6.$REVISION -o publish
 
+      # Base path /<repo>/, index.html hash for the offline service worker, 404.html for deep links, .nojekyll and the
+      # narration download list (audio/vo/packs.json). See the script.
       - name: Prepare for GitHub Pages
-        run: |
-          cd publish/wwwroot
-          # The site is served from /<repo>/, not from the domain root
-          sed -i 's|<base href="/" />|<base href="/${{ github.event.repository.name }}/" />|' index.html
-          # Deep links (e.g. /Gameplay) fall back to the Blazor router
-          cp index.html 404.html
-          # Serve _framework and other underscore folders as-is
-          touch .nojekyll
+        run: python3 tools/pages-prepare.py publish/wwwroot ${{ github.event.repository.name }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

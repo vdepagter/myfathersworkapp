@@ -13,5 +13,6 @@ builder.Services.AddScoped<LogBookService>();
 builder.Services.AddScoped<SavedGamesService>();
 builder.Services.AddScoped<GameOptions>();
 builder.Services.AddScoped<GuideService>();
+builder.Services.AddScoped<OfflineService>();
 
 await builder.Build().RunAsync();

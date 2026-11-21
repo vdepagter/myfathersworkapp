@@ -6,6 +6,7 @@
 @inject HttpClient        Http
 @inject AudioService      Audio
 @inject SavedGamesService SavedGames
+@inject OfflineService    Offline
 
 <PageTitle>My Father's Work App (Unofficial)</PageTitle>
 
@@ -37,6 +38,20 @@
     <button class="help-button" @onclick="OpenHelp" aria-label="@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_Help)"
             title="@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_Help)"></button>
 
+    @if (ShowInstall)
+    {
+        @* Install as an app: the browser's offer (Chrome, Edge, Android) or, on iPhone / iPad, how to do it by hand *@
+        <div class="install-chip">
+            <button class="install-open" @onclick="OnInstall">⤓ @GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_Install)</button>
+            <button class="install-hide" @onclick="HideInstall" aria-label="@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_InstallHide)"
+                    title="@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_InstallHide)">×</button>
+            @if (_ShowIosHint)
+            {
+                <p class="install-hint">@GlobalData.GetLocalizedUITag(GlobalTags.Offline_IosHint)</p>
+            }
+        </div>
+    }
+
     <img class="menu-logo" src="images/ui/logo.webp" alt="My Father's Work">
 
     <div class="menu-buttons">
@@ -60,10 +75,36 @@
     
     private bool _ShowSettings;
 
+    // ---- Install as an app (Shared/OfflineService.cs) ----
+    private const string InstallHiddenKey = "mfwInstallHidden";
+    private bool _InstallHidden;
+    private bool _ShowIosHint;
+
+    private bool ShowInstall => !_InstallHidden && Offline.State.Supported && !Offline.State.Standalone &&
+                                (Offline.State.Installable || Offline.State.IosHint);
+
+    private void OnOfflineChanged() => InvokeAsync(StateHasChanged);
+
+    private async Task OnInstall()
+    {
+        Audio.PlayClick();
+        if (Offline.State.Installable) await Offline.InstallAsync();
+        else _ShowIosHint = !_ShowIosHint;
+    }
+
+    private async Task HideInstall()
+    {
+        Audio.PlayClick();
+        _InstallHidden = true;
+        try { await Js.InvokeVoidAsync("localStorage.setItem", InstallHiddenKey, "1"); } catch (JSException) { /* storage blocked */ }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         IsContinueAvailable = await GlobalData.IsContinueAvailableAsync(Js);
+        Offline.Changed += OnOfflineChanged;
+        try { _InstallHidden = await Js.InvokeAsync<string?>("localStorage.getItem", InstallHiddenKey) == "1"; } catch (JSException) { /* storage blocked */ }
     }
 
     // A picture placed like a Unity RectTransform on the 1920 x 1082 canvas: left and top edge, width, height (canvas units)
@@ -120,6 +161,7 @@
 
     public async ValueTask DisposeAsync()
     {
+        Offline.Changed -= OnOfflineChanged;
         try
         {
             foreach (string id in _FxIds) await Js.InvokeVoidAsync("mfwAtmosphere.stop", id);

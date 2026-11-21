@@ -315,6 +315,36 @@ public static class GlobalTags
     public const string Settings_MirrorDesc     = "Settings_MirrorDesc";
     public const string Settings_TesterTag      = "Settings_TesterTag";
 
+    // Offline app (Shared/OfflineSettings.razor, Shared/UpdateBanner.razor)
+    public const string Offline_Title         = "Offline_Title";
+    public const string Offline_Ready         = "Offline_Ready";
+    public const string Offline_Preparing     = "Offline_Preparing";
+    public const string Offline_NotYet        = "Offline_NotYet";
+    public const string Offline_Install       = "Offline_Install";
+    public const string Offline_InstallDesc   = "Offline_InstallDesc";
+    public const string Offline_IosHint       = "Offline_IosHint";
+    public const string Offline_Narration     = "Offline_Narration";
+    public const string Offline_NarrationDesc = "Offline_NarrationDesc";
+    public const string Offline_PackOliver    = "Offline_PackOliver";
+    public const string Offline_PackMale      = "Offline_PackMale";
+    public const string Offline_PackFemale    = "Offline_PackFemale";
+    public const string Offline_Download      = "Offline_Download";
+    public const string Offline_Resume        = "Offline_Resume";
+    public const string Offline_Cancel        = "Offline_Cancel";
+    public const string Offline_Remove        = "Offline_Remove";
+    public const string Offline_Downloaded    = "Offline_Downloaded";
+    public const string Offline_NeedsInternet = "Offline_NeedsInternet";
+    public const string Offline_ErrorSpace    = "Offline_ErrorSpace";
+    public const string Offline_ErrorFailed   = "Offline_ErrorFailed";
+    public const string Offline_NoPacks       = "Offline_NoPacks";
+    public const string Offline_Storage       = "Offline_Storage";
+    public const string Update_Ready          = "Update_Ready";
+    public const string Update_Now            = "Update_Now";
+    public const string Update_Later          = "Update_Later";
+    public const string MainMenu_Install         = "MainMenu_Install";
+    public const string MainMenu_InstallHide     = "MainMenu_InstallHide";
+    public const string Update_Done           = "Update_Done";
+
     public const string Guide_Found    = "Guide_Found";
     public const string Guide_NotFound = "Guide_NotFound";
     public const string MainMenu_Settings       = "MainMenu_Settings";
