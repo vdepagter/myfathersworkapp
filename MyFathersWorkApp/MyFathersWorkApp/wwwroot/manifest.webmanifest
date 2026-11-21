@@ -1,6 +1,6 @@
 {
   "id": "./",
-  "name": "My Father's Work App (Unofficial)",
+  "name": "My Father's Work (Unofficial)",
   "short_name": "MFW (Unofficial)",
   "description": "Fan-made companion app for the board game My Father's Work: all three scenarios, narrated, playable offline.",
   "start_url": "./",

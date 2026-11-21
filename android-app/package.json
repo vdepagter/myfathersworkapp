@@ -2,7 +2,7 @@
   "name": "myfathersworkapp-android",
   "private": true,
   "version": "0.0.0",
-  "description": "Android (Capacitor) wrapper of My Father's Work App (Unofficial). See README.md.",
+  "description": "Android (Capacitor) wrapper of My Father's Work (Unofficial). See README.md.",
   "scripts": {
     "stage": "python ../tools/android-stage.py",
     "sync": "cap sync android"
