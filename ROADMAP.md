@@ -8,9 +8,10 @@ Only open work lives here. When a section is finished, move it to [`docs/DEVLOG.
 All three scenarios have been played at the table (November 2026) and are fully narrated by Oliver. Left before
 version 1.0:
 - Test on a real iPhone / iPad (Safari): autoplay unlock, MP3 playback, Oliver's sentence highlight and scrolling, the
-  home-screen app, offline start and a narration download (Settings > Play offline) played offline.
-- Code-sign the Windows exe (`MyFathersWorkApp/WindowsLauncher/`, `tools/build-windows.ps1`), so SmartScreen stops
-  warning about an unknown publisher. This is the step before v1.0.
+  home-screen app, offline start and a narration download (Offline play) played offline.
+- Microsoft Store: submit the MSIX (`tools/build-msix.ps1`, Store ID 9MTC2WXVPLK8) in Partner Center: listing,
+  screenshots, privacy policy URL, age rating, `runFullTrust` justification. Certification may ask about the
+  "My Father's Work" name (Renegade's title).
 - Not blocking: the A Time of War owner questions in `docs/ATOW_PORT_MAP.md` section 7 keep their defaults and may
   stay open past v1.0 (owner, 16 Nov 2026).
 - To confirm on the owner's Android phone and tablet: the embers and the travelling spark of the reading highlight now
