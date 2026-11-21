@@ -12,7 +12,7 @@
         <RootNamespace>WindowsLauncher</RootNamespace>
         <ApplicationIcon>..\MyFathersWorkApp\wwwroot\favicon.ico</ApplicationIcon>
         <Version>0.66.6.0</Version>
-        <Product>My Father's Work App (Unofficial)</Product>
+        <Product>My Father's Work (Unofficial)</Product>
         <InvariantGlobalization>true</InvariantGlobalization>
         <!-- Only used by dotnet publish -r win-x64 -->
         <SelfContained>true</SelfContained>

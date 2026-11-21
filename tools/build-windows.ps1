@@ -145,7 +145,7 @@ foreach ($ed in $editions) {
                    else { "Windows SmartScreen may warn about an unknown publisher the first time: More info > Run anyway." }
 
     @"
-My Father's Work App (Unofficial) ($Version), offline Windows version
+My Father's Work (Unofficial) ($Version), offline Windows version
 $about
 
 1. Unzip this whole folder anywhere (keep MyFathersWork.exe next to the wwwroot folder).

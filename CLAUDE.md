@@ -1,6 +1,6 @@
-# My Father's Work App (Unofficial)
+# My Father's Work (Unofficial)
 
-The app's own name everywhere (page title, home-screen name, Windows launcher, releases): "My Father's Work App (Unofficial)" (owner, 16 Nov 2026).
+The app's own name everywhere (page title, home-screen name, Android app, Windows launcher, releases): "My Father's Work (Unofficial)" (owner, 21 Nov 2026; "App" dropped). Repository, folder and project names (`myfathersworkapp`, `MyFathersWorkApp`) stay as they are.
 
 Blazor WebAssembly (.NET) re-implementation of the official *My Father's Work* companion app (a Unity app whose
 stories were written in Twine/Harlowe and compiled to C# by Cradle). Players make choices on a phone/tablet next to the
@@ -311,6 +311,19 @@ The published site (GitHub Pages) is an installable offline app (21 Nov 2026).
   `<dir>/wwwroot` at `/myfathersworkapp/` with byte ranges (a small Kestrel app) and drive it with Playwright
   (`channel="msedge"`, `--mute-audio`, `set_offline(True)`). A publish into an existing folder does not copy an
   unchanged `index.html` again: start from an empty folder or copy it over before `pages-prepare.py`.
+
+## Android app (android-app/, Capacitor)
+
+Sideloadable APK (Nov 2026), details in [`android-app/README.md`](android-app/README.md). `tools/android-stage.py`
+copies the published wwwroot to `android-app/www` without the narration clips (`js/edition.js` `native: true`,
+`remote` = the GitHub Pages site, no service worker, `js/capacitor.js` + `android-app/web/native.js` for the Back
+button). Players download narration in Offline play: `audio-cache.js` fetches from `remote` but stores under the app's
+own url, `audio.js` plays stored clips as `blob:` urls and streams the rest from `remote`. Never change the appId,
+`androidScheme` https or `hostname` localhost, and sign every build with the one release keystore (outside the repo,
+repository secrets `ANDROID_*`; copies in the owner's Dropbox `Documents\Administratie\Certificaten`). A changed
+origin hides the saves, gallery and downloads from the app; a build signed with another key cannot update it, so
+players would have to export their saves and gallery, reinstall and import them, and download the narration again.
+`.github/workflows/android-apk.yml` builds it (versionCode = the revision of deploy-pages.yml).
 
 ## Build, run, test
 
