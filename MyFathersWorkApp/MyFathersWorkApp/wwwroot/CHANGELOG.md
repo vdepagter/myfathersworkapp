@@ -3,6 +3,11 @@
 What changed in each version of My Father's Work (Unofficial), newest first. The version number is shown at the
 bottom of Help, Settings and the pause menu. Shown in the app under Help > What's new.
 
+## v0.66.6.102 - 21 November 2026
+
+- The app is now called "My Father's Work (Unofficial)" (without "App"), on the website, as an installed app, on
+  Android and in the Windows download.
+
 ## v0.66.6.101 - 21 November 2026
 
 - Android app (APK to install yourself): the whole app with music and sound, about 35 MB. Narration is downloaded in
