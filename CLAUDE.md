@@ -1,6 +1,6 @@
-# My Father's Work App (Unofficial)
+# My Father's Work (Unofficial)
 
-The app's own name everywhere (page title, home-screen name, Windows launcher, releases): "My Father's Work App (Unofficial)" (owner, 16 Nov 2026).
+The app's own name everywhere (page title, home-screen name, Android app, Windows launcher, releases): "My Father's Work (Unofficial)" (owner, 21 Nov 2026; "App" dropped). Repository, folder and project names (`myfathersworkapp`, `MyFathersWorkApp`) stay as they are.
 
 Blazor WebAssembly (.NET) re-implementation of the official *My Father's Work* companion app (a Unity app whose
 stories were written in Twine/Harlowe and compiled to C# by Cradle). Players make choices on a phone/tablet next to the
@@ -314,8 +314,7 @@ The published site (GitHub Pages) is an installable offline app (21 Nov 2026).
 
 ## Android app (android-app/, Capacitor)
 
-Sideloadable APK (Nov 2026), launcher name "My Father's Work (Unofficial)" (owner, 21 Nov 2026; the web pages keep
-the full app name), details in [`android-app/README.md`](android-app/README.md). `tools/android-stage.py`
+Sideloadable APK (Nov 2026), details in [`android-app/README.md`](android-app/README.md). `tools/android-stage.py`
 copies the published wwwroot to `android-app/www` without the narration clips (`js/edition.js` `native: true`,
 `remote` = the GitHub Pages site, no service worker, `js/capacitor.js` + `android-app/web/native.js` for the Back
 button). Players download narration in Offline play: `audio-cache.js` fetches from `remote` but stores under the app's

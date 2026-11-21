@@ -101,7 +101,7 @@ foreach ($ed in $editions) {
     Set-Content (Join-Path $out "wwwroot\js\edition.js") "window.mfwEdition = { audio: $hasAudio, offline: false };" -Encoding utf8
 
     @"
-My Father's Work App (Unofficial) ($Version), offline Windows version
+My Father's Work (Unofficial) ($Version), offline Windows version
 $about
 
 1. Unzip this whole folder anywhere (keep MyFathersWork.exe next to the wwwroot folder).

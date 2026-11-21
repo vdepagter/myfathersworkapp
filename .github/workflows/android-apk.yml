@@ -135,6 +135,6 @@ jobs:
         run: |
           APK="dist/MyFathersWork-Unofficial-$VERSION.apk"
           gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1 || \
-            gh release create "$GITHUB_REF_NAME" --title "My Father's Work App (Unofficial) $VERSION" \
-              --notes "Downloads of My Father's Work App (Unofficial) $VERSION." || true
+            gh release create "$GITHUB_REF_NAME" --title "My Father's Work (Unofficial) $VERSION" \
+              --notes "Downloads of My Father's Work (Unofficial) $VERSION." || true
           gh release upload "$GITHUB_REF_NAME" "$APK" --clobber

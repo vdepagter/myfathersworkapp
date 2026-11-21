@@ -1,6 +1,6 @@
 # Changelog
 
-What changed in each version of My Father's Work App (Unofficial), newest first. The version number is shown at the
+What changed in each version of My Father's Work (Unofficial), newest first. The version number is shown at the
 bottom of Help, Settings and the pause menu. Shown in the app under Help > What's new.
 
 ## v0.66.6.100 - 21 November 2026

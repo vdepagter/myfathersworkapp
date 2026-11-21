@@ -2,7 +2,7 @@
   <img src="MyFathersWorkApp/MyFathersWorkApp/wwwroot/images/logo.png" alt="My Father's Work" width="300" />
 </p>
 
-# My Father's Work App (Unofficial)
+# My Father's Work (Unofficial)
 
 A free, fan-made companion app for the board game *My Father's Work* by Renegade Game Studios. It runs in any modern
 browser on a phone, tablet or computer, with nothing to install.
