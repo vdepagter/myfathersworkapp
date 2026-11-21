@@ -341,6 +341,8 @@ public static class GlobalTags
     public const string Update_Ready          = "Update_Ready";
     public const string Update_Now            = "Update_Now";
     public const string Update_Later          = "Update_Later";
+    public const string MainMenu_Install         = "MainMenu_Install";
+    public const string MainMenu_InstallHide     = "MainMenu_InstallHide";
     public const string Update_Done           = "Update_Done";
 
     public const string Guide_Found    = "Guide_Found";

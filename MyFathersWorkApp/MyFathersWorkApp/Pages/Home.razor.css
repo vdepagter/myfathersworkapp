@@ -252,6 +252,68 @@
     }
 }
 
+/* Install as an app (Pages/Home.razor): a small chip under the help button, only while the browser offers it (or on
+   iPhone / iPad, where it explains Share > Add to Home Screen). × hides it on this device. */
+.install-chip {
+    left: 4.5%;
+    top: 19%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    max-width: 22%;
+    font-family: var(--mfw-font-text);
+    font-size: max(12px, 1.05cqw);
+    color: #efe4cc;
+}
+
+.install-chip button {
+    border: 1px solid #8a7445;
+    background: rgba(13, 15, 20, 0.82);
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
+}
+
+.install-open {
+    padding: 0.35em 0.9em;
+    border-radius: 999px 0 0 999px;
+    font-weight: bold;
+}
+
+.install-hide {
+    padding: 0.35em 0.6em;
+    border-left: 0 !important;
+    border-radius: 0 999px 999px 0;
+    opacity: 0.8;
+}
+
+.install-chip button:hover { background: rgba(40, 34, 22, 0.92); }
+
+.install-hint {
+    flex-basis: 100%;
+    margin: 0.5em 0 0;
+    padding: 0.5em 0.8em;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.75);
+    line-height: 1.35;
+}
+
+/* Phone in portrait: between the buttons and the fan-made note, centred */
+@media (orientation: portrait) {
+    .install-chip {
+        order: 1;
+        justify-content: center;
+        max-width: 100%;
+        margin-top: 2.2svh;
+        font-size: max(12px, min(3.4vw, 1.8svh));
+    }
+
+    .install-hint { text-align: center; }
+
+    .disclaimer { order: 2; }
+}
+
 /* Graphics: Low (js/atmosphere.js) or the device asking for less motion: a still picture */
 html[data-graphics="low"] .village-light,
 html[data-graphics="low"] .menu-logo {

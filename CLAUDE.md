@@ -289,7 +289,9 @@ The published site (GitHub Pages) is an installable offline app (21 Nov 2026).
   start) drops changed ones and the page tops up the packs the player chose (`__mfw/pack/<id>`).
 - **Page side:** `wwwroot/js/offline.js` (`mfwOffline`: registration with `updateViaCache: "none"`, update checks on
   return to the front and every 30 min, install prompt, downloads), `Shared/OfflineService.cs`,
-  `Shared/OfflineSettings.razor` (Settings > Play offline, Main Menu only) and `Shared/UpdateBanner.razor` ("A new
+  `Shared/OfflineSettings.razor` (Settings > Play offline, Main Menu only), the "Install app" chip on the Main Menu
+  (`Pages/Home.razor`; while the browser offers installing, or on iPhone / iPad with the Share > Add to Home Screen
+  hint; × hides it per device, localStorage `mfwInstallHidden`) and `Shared/UpdateBanner.razor` ("A new
   version of the app is ready" -> Update posts `mfw-skip-waiting` and reloads; "Updated to <version>" after). A new
   version never takes over by itself while the app is open.
 - **Deploy:** `tools/pages-prepare.py` (base href, then index.html's hash in `service-worker-assets.js` again - without

@@ -379,6 +379,8 @@ Offline_Storage;On this device: {{0=...|137 MB}}
 Update_Ready;A new version of the app is ready.
 Update_Now;Update
 Update_Later;Later
+MainMenu_Install;Install app
+MainMenu_InstallHide;Hide
 Update_Done;Updated to {{0=...|v0.66.6.80}}.
 Guide_Found;Already found
 Guide_NotFound;Not found yet

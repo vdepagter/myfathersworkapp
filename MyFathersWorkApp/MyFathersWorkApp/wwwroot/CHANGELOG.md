@@ -6,7 +6,8 @@ bottom of Help, Settings and the pause menu. Shown in the app under Help > What'
 ## v0.66.6.98 - 21 November 2026
 
 - The website works offline: after the first visit the app is kept on your device, and it can be installed as an app
-  (Settings > Play offline > Install as an app, or the browser's own install button).
+  with the "Install app" button on the Main Menu (on iPhone and iPad it shows how), in Settings > Play offline, or
+  with the browser's own install button.
 - Narration for offline play: Settings > Play offline downloads Oliver per scenario or the original voices. Downloads
   stay through app updates; only changed clips are fetched again.
 - A new version shows "A new version of the app is ready" with an Update button, and "Updated to ..." afterwards.
