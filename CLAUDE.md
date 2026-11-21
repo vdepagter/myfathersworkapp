@@ -356,4 +356,12 @@ players would have to export their saves and gallery, reinstall and import them,
   `~\.nuget\packages`) when the Windows SDK is not installed. Releases: `pwsh tools/build-windows.ps1 -Sign -Publish`
   (creates GitHub Release `v<version>` with the three zips; its tag push also lets the Android workflow attach the APK).
   `.github/workflows/windows-release.yml` only makes unsigned test builds (manual run, workflow artifact).
+  **Microsoft Store (MSIX):** `pwsh tools/build-msix.ps1 -Version <v> -IdentityName <..> -Publisher "CN=<..>"
+  -PublisherDisplayName <..>` wraps the full zip (`dist/MyFathersWork-Windows-<v>.zip`, all audio) as
+  `dist/MyFathersWork-<v>.msix` (full-trust desktop app, `runFullTrust`; tile images from `icon-512.png` by
+  `tools/msix-assets.py`; MSIX version `0.66.<revision>.0`, the Store keeps the fourth part 0). The identity values come
+  from Partner Center > Product identity; the Store signs the package. `-Sign` instead signs with the Certum certificate
+  (Publisher = its subject) for a local install test (`Add-AppxPackage`). Tested 21 Nov 2026: the packaged launcher
+  serves on 51660 and opens Edge with the same real profile `%LOCALAPPDATA%\MyFathersWork\Browser` (no file system
+  virtualization), so the Store app and the zip version share saves.
 - There are no automated tests. Play-test with `tools/test-save-helpers.js`: craft a save at a late-round hub, reload `/Gameplay`, and drive the flow with `run([...])`. Check the browser console for exceptions and run `python tools/tagcheck.py` (and `--scenario=FearOfTheUnknown`). Fear of the Unknown saves: `mkSaveFotU(hubId, {...})`; `auto([...])` / `autoFirst()` click through screens. Static files are served from a build-time snapshot, so inject the helpers with the JS console (or keep them in `localStorage.helpers` and `eval` after reloads) instead of copying them into `wwwroot`. To test mirror mode, pass `mirror: true` to `mkSave`; random click-throughs that report `Mirror:` console lines find draws made too early. Also play through round transitions, not only crafted saves: load and undo rebuild the hub, which hides hub text that was formatted with stale state (`PLAYTEST_FINDINGS.md` #1).
