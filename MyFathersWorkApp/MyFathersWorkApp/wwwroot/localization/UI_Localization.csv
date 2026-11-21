@@ -376,6 +376,19 @@ Offline_ErrorSpace;There is not enough free space on this device for this downlo
 Offline_ErrorFailed;Some files could not be downloaded. Press Resume to try again.
 Offline_NoPacks;Narration downloads are not available here yet. Open the app once while online.
 Offline_Storage;On this device: {{0=...|137 MB}}
+Offline_Blocked;This browser does not allow offline use here, for example in a private window or when site data is deleted on closing.
+Offline_FirefoxHint;In Firefox: open the ⋮ menu and choose Install (or Add to Home screen).
+Offline_Waiting;Waiting
+Offline_DownloadAll;Download all
+Offline_RemoveAll;Remove all downloads
+Offline_RemoveAllConfirm;Remove all downloaded narration ({{0=...|403 MB}})? You can download it again later.
+OfflineSetup_Title;Play offline
+OfflineSetup_Text;The app now works without internet. Narration plays from the internet unless you download it. Choose what to keep on this device:
+OfflineSetup_Total;Selected: {{0=...|403 MB}}
+OfflineSetup_Space;Space the browser allows this app: about {{0=...|2 GB}}
+OfflineSetup_Download;Download
+OfflineSetup_Later;Not now
+OfflineSetup_Note;You can change this any time in Settings > Play offline, and remove downloads there to free up space.
 Update_Ready;A new version of the app is ready.
 Update_Now;Update
 Update_Later;Later

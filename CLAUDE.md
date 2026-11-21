@@ -293,7 +293,14 @@ The published site (GitHub Pages) is an installable offline app (21 Nov 2026).
   (`Pages/Home.razor`; while the browser offers installing, or on iPhone / iPad with the Share > Add to Home Screen
   hint; × hides it per device, localStorage `mfwInstallHidden`) and `Shared/UpdateBanner.razor` ("A new
   version of the app is ready" -> Update posts `mfw-skip-waiting` and reloads; "Updated to <version>" after). A new
-  version never takes over by itself while the app is open.
+  version never takes over by itself while the app is open. `Shared/OfflineSetup.razor` (on the Main Menu) asks once
+  per device which packs to download (all ticked), right after `appinstalled` or on the first start in standalone mode
+  (`askNarration`, localStorage `mfwOfflineAsked`); packs download one after the other (`downloadMany`). Settings has
+  Download all / Remove all downloads.
+- **Firefox:** an audio file the page played earlier can sit in its HTTP cache as a partial (206) entry, and a
+  `cache: "no-cache"` fetch then returns that 206, which `Cache.put` refuses (the whole install failed, so Firefox
+  never went offline). The worker and `audio-cache.js` fetch such a file again with `cache: "reload"`.
+- JS interop: pass a `string[]` to `InvokeVoidAsync` as `(object)array`, or it is spread as the params array.
 - **Deploy:** `tools/pages-prepare.py` (base href, then index.html's hash in `service-worker-assets.js` again - without
   it the worker's install fails its integrity check -, 404.html, .nojekyll, packs.json).
 - The Windows downloads write `offline: false` into `js/edition.js` (`tools/build-windows.ps1`): no worker there.

@@ -83,3 +83,28 @@
     color: #e0a080;
     cursor: pointer;
 }
+
+.offline-all {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(201, 163, 90, 0.25);
+}
+
+.offline-confirm {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #8a7445;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+/* Buttons with a long label: no fixed aspect ratio (the button art stretches), so they stay one line high */
+.offline-install .offline-button,
+.offline-all .offline-button {
+    aspect-ratio: auto;
+    min-height: 2.5rem;
+    padding: 0.35rem 1.4rem 0.45rem;
+}

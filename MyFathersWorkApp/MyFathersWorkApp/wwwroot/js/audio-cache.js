@@ -143,8 +143,10 @@
                 for (let attempt = 0; attempt < 3; attempt++) {
                     if (controller.signal.aborted) return;
                     try {
-                        const response = await fetch(abs(path), { signal: controller.signal, cache: "no-cache" });
-                        if (!response.ok) throw new Error(response.status + " " + path);
+                        // A clip played before can sit in the HTTP cache as a partial (206) entry: fetch it whole then
+                        let response = await fetch(abs(path), { signal: controller.signal, cache: "no-cache" });
+                        if (response.status === 206) response = await fetch(abs(path), { signal: controller.signal, cache: "reload" });
+                        if (response.status !== 200) throw new Error(response.status + " " + path);
                         // An older copy of this path (other hash) goes first
                         for (const old of await cache.keys(abs(path), { ignoreSearch: true })) await cache.delete(old);
                         await cache.put(keyOf(path, hash), response);
