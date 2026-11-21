@@ -5,7 +5,16 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <Version>0.66.6.0</Version>
+        <!-- Offline PWA: the publish writes service-worker-assets.js (every file with its hash) for
+             wwwroot/service-worker.published.js. Narration clips are left out of the app cache there (js/audio-cache.js). -->
+        <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+        <!-- The service worker caches the framework files already; Blazor's own copy would double them -->
+        <BlazorCacheBootResources>false</BlazorCacheBootResources>
     </PropertyGroup>
+
+    <ItemGroup>
+        <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.5"/>

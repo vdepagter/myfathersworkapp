@@ -1,0 +1,37 @@
+.update-banner {
+    position: fixed;
+    left: 50%;
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 3000;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem 1rem;
+    width: max-content;
+    max-width: calc(100% - 2rem);
+    padding: 0.7rem 1rem;
+    transform: translateX(-50%);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    animation: update-in 0.4s ease-out;
+}
+
+.update-banner.done {
+    cursor: pointer;
+}
+
+.update-actions {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.update-button {
+    padding: 0.3rem 1rem;
+    font-size: 0.95rem;
+}
+
+@keyframes update-in {
+    from { opacity: 0; transform: translate(-50%, 1rem); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+}

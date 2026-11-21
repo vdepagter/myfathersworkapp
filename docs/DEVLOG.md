@@ -2,6 +2,13 @@
 
 Finished work moved out of [`ROADMAP.md`](../ROADMAP.md), newest first. Kept short: what was done and where it is documented.
 
+## Offline app (PWA) and narration downloads (21 Nov 2026, branch claude/project-thread-g6ak6q)
+
+See CLAUDE.md "Offline app (PWA)". Tested on a local stand-in for GitHub Pages (`/myfathersworkapp/` base, byte
+ranges, 404.html fallback) with headless Edge: offline start and deep links, a pack download, ranged playback of a
+downloaded clip and of the cached music offline, the update banner, old shell cache removed, an update with one changed
+clip (only that clip fetched again) and "Updated to ...". Not yet tried on a real phone (iOS Safari in particular).
+
 ## Guided mode, play-along in Settings, Scenario Language skipped (16 Nov 2026, branch claude/project-thread-c6ce4h)
 
 Done for all three scenarios (see CLAUDE.md "Guided mode (spoilers!)"); merged to main on 16 Nov 2026 (v0.66.6.96). Also on this branch: default volumes 25 / 25 / 75, Ember by candlelight as the default highlight (black ink),

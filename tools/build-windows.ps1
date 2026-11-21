@@ -92,10 +92,13 @@ foreach ($ed in $editions) {
         if ($audioDir.StartsWith($out)) { Remove-Item -LiteralPath $audioDir -Recurse -Force }
         $listDir = New-Item -ItemType Directory -Force (Join-Path $audioDir "vo\oliver")
         foreach ($list in $lists) { Set-Content (Join-Path $listDir $list) "{}" -Encoding utf8 }
-        Set-Content (Join-Path $out "wwwroot\js\edition.js") "window.mfwEdition = { audio: false };" -Encoding utf8
         $suffix = "-no-audio"
         $about  = "Version without audio: no music, sound effects or narration, and no sound controls."
     }
+
+    # The launcher serves the files: no offline service worker (js/offline.js); no sound controls without audio files
+    $hasAudio = if ($ed -eq "NoAudio") { "false" } else { "true" }
+    Set-Content (Join-Path $out "wwwroot\js\edition.js") "window.mfwEdition = { audio: $hasAudio, offline: false };" -Encoding utf8
 
     @"
 My Father's Work App (Unofficial) ($Version), offline Windows version

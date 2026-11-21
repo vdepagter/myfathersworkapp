@@ -6,6 +6,7 @@
 @inject NavigationManager Nav
 @inject AudioService      Audio
 @inject IJSRuntime        Js
+@inject OfflineService    Offline
 
 <CascadingValue Value="@_GlobalData">
     <div class="page-root">
@@ -14,6 +15,8 @@
 </CascadingValue>
 
 <AudioToggles GlobalData="@_GlobalData" />
+
+<UpdateBanner GlobalData="@_GlobalData" />
 
 @code
 {
@@ -46,6 +49,8 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (firstRender) await Offline.StartAsync(); // offline app: update banner, Settings > Play offline
+
         string path = CurrentPath;
 
         // Language changes navigate, so the layout re-renders and <html lang> follows the menu / story language

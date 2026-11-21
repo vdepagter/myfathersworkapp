@@ -271,6 +271,35 @@ In user-facing text (Help, settings, labels) the narrator is just "Oliver", neve
   No word-level timing: that needs real timestamps (ElevenLabs with-timestamps at render
   time, or a local aligner).
 
+## Offline app (PWA)
+
+The published site (GitHub Pages) is an installable offline app (21 Nov 2026).
+
+- **App shell:** `wwwroot/service-worker.published.js` (the Blazor offline worker, `ServiceWorkerAssetsManifest` in the
+  csproj; `service-worker.js` is the do-nothing development worker). It caches every published file (~40 MB) except
+  the narration clips (`audio/vo/**/*.mp3`), source maps, unused Bootstrap files and `.br`/`.gz`, in
+  `offline-cache-<manifest version>`. On an update unchanged files are copied from the previous version's cache by
+  hash (`__mfw/asset-hashes.json`), so only changed files are downloaded. Cached `.mp3` responses are cut to the
+  request's Range (206), which audio elements and Safari need. Deep-link navigations get `index.html`.
+- **Narration downloads:** `wwwroot/js/audio-cache.js` (`mfwAudioCache`), shared by the page and the worker and meant
+  to be reused by a Capacitor build (`match()` / `objectUrl()` without a worker). Its own cache `mfw-audio`, never
+  touched by version bumps. Packs come from `audio/vo/packs.json` (one per clip folder: `oliver-<Scenario>`, `male`,
+  `female`; path, SHA-256 prefix and size per file), written at deploy by `tools/audio-packs.py`. A clip is stored as
+  `<path>?h=<hash>` and served for any `?v=`: unchanged clips survive updates, `reconcile()` (worker activate and page
+  start) drops changed ones and the page tops up the packs the player chose (`__mfw/pack/<id>`).
+- **Page side:** `wwwroot/js/offline.js` (`mfwOffline`: registration with `updateViaCache: "none"`, update checks on
+  return to the front and every 30 min, install prompt, downloads), `Shared/OfflineService.cs`,
+  `Shared/OfflineSettings.razor` (Settings > Play offline, Main Menu only) and `Shared/UpdateBanner.razor` ("A new
+  version of the app is ready" -> Update posts `mfw-skip-waiting` and reloads; "Updated to <version>" after). A new
+  version never takes over by itself while the app is open.
+- **Deploy:** `tools/pages-prepare.py` (base href, then index.html's hash in `service-worker-assets.js` again - without
+  it the worker's install fails its integrity check -, 404.html, .nojekyll, packs.json).
+- The Windows downloads write `offline: false` into `js/edition.js` (`tools/build-windows.ps1`): no worker there.
+- Test locally: `dotnet publish ... -o <dir>`, `python tools/pages-prepare.py <dir>/wwwroot myfathersworkapp`, serve
+  `<dir>/wwwroot` at `/myfathersworkapp/` with byte ranges (a small Kestrel app) and drive it with Playwright
+  (`channel="msedge"`, `--mute-audio`, `set_offline(True)`). A publish into an existing folder does not copy an
+  unchanged `index.html` again: start from an empty folder or copy it over before `pages-prepare.py`.
+
 ## Build, run, test
 
 - **Changelog:** `wwwroot/CHANGELOG.md` (shown in Help > What's new, linked from the README). Add a player-facing entry
