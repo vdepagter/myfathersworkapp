@@ -1,0 +1,50 @@
+@implements IDisposable
+@inject OfflineService Offline
+@inject AudioService   Audio
+
+@* The "Offline play" button in Settings (Main Menu) and the pause menu, with a one-line status; opens
+   Shared/OfflinePanel.razor. Hidden where there is no offline worker (development build, the Windows download). *@
+@if (Offline.State.Supported)
+{
+    <div class="mfw-settings-group offline-entry">
+        <button class="mfw-button offline-entry-button" @onclick="Open">@T(GlobalTags.Offline_Open)</button>
+        <small>@Status</small>
+    </div>
+
+    <OfflinePanel Visible="_Open" OnClose="() => _Open = false" GlobalData="GlobalData"/>
+}
+
+@code
+{
+    [Parameter] public GlobalData GlobalData { get; set; } = null!;
+
+    private bool _Open;
+
+    private string T(string tag) => GlobalData.GetLocalizedUITag(tag);
+
+    private string Status
+    {
+        get
+        {
+            OfflineState state = Offline.State;
+            if (state.Blocked) return T(GlobalTags.Offline_Blocked);
+            if (state.ShellProgress is int percent) return T(GlobalTags.Offline_Preparing).FormatWithReplacement(0, percent.ToString());
+            if (!state.Available) return T(GlobalTags.Offline_NotYet);
+            long stored = state.Packs.Sum(p => p.StoredBytes);
+            string ready = "✓ " + T(GlobalTags.Offline_Ready);
+            return stored > 0 ? ready + " " + T(GlobalTags.Offline_EntryStored).FormatWithReplacement(0, OfflinePack.Size(stored)) : ready;
+        }
+    }
+
+    protected override void OnInitialized() => Offline.Changed += OnChanged;
+
+    private void OnChanged() => InvokeAsync(StateHasChanged);
+
+    private void Open()
+    {
+        Audio.PlayClick();
+        _Open = true;
+    }
+
+    public void Dispose() => Offline.Changed -= OnChanged;
+}

@@ -5,7 +5,8 @@ namespace MyFathersWorkApp;
 
 // The installable offline app (PWA), wrapping wwwroot/js/offline.js (window.mfwOffline): whether the app is cached,
 // "a new version is ready", "Install as an app" and the narration downloads (wwwroot/js/audio-cache.js). UI code only.
-// Layout/MainLayout.razor starts it; Shared/OfflineSettings.razor and Shared/UpdateBanner.razor show it.
+// Layout/MainLayout.razor starts it; Shared/OfflinePanel.razor (Offline play), Shared/OfflineEntry.razor and
+// Shared/UpdateBanner.razor show it.
 public sealed class OfflineService(IJSRuntime js) : IDisposable
 {
     private const string UpdatedFromKey = "mfwUpdatedFrom";
@@ -60,6 +61,8 @@ public sealed class OfflineService(IJSRuntime js) : IDisposable
     public ValueTask DownloadAsync(string id) => js.InvokeVoidAsync("mfwOffline.download", id);
     public ValueTask DownloadManyAsync(IEnumerable<string> ids) => js.InvokeVoidAsync("mfwOffline.downloadMany", (object)ids.ToArray()); // one argument, not spread as params
     public ValueTask AnswerNarrationAsync(IEnumerable<string> ids) => js.InvokeVoidAsync("mfwOffline.answerNarration", (object)ids.ToArray());
+    public ValueTask ApplyAsync(IEnumerable<string> adds, IEnumerable<string> removes) =>
+        js.InvokeVoidAsync("mfwOffline.apply", adds.ToArray(), removes.ToArray());
     public ValueTask RemoveAllAsync()         => js.InvokeVoidAsync("mfwOffline.removeAll");
     public ValueTask CancelAsync(string id)   => js.InvokeVoidAsync("mfwOffline.cancel", id);
     public ValueTask RemoveAsync(string id)   => js.InvokeVoidAsync("mfwOffline.remove", id);
@@ -81,6 +84,7 @@ public sealed class OfflineState
     public bool              FirefoxHint   { get; set; }
     public bool              Blocked       { get; set; }
     public bool              AskNarration  { get; set; }
+    public bool              Asked         { get; set; }
     public bool              Standalone    { get; set; }
     public bool              Online        { get; set; } = true;
     public bool              IndexMissing  { get; set; }
@@ -124,5 +128,5 @@ public sealed class OfflinePack
 
     public static string Size(long bytes) => bytes >= 1_000_000_000
         ? (bytes / 1_000_000_000.0).ToString("0.0", System.Globalization.CultureInfo.InvariantCulture) + " GB"
-        : $"{Math.Max(1, (int)Math.Round(bytes / 1_000_000.0))} MB";
+        : bytes <= 0 ? "0 MB" : $"{Math.Max(1, (int)Math.Round(bytes / 1_000_000.0))} MB";
 }

@@ -288,15 +288,18 @@ The published site (GitHub Pages) is an installable offline app (21 Nov 2026).
   `<path>?h=<hash>` and served for any `?v=`: unchanged clips survive updates, `reconcile()` (worker activate and page
   start) drops changed ones and the page tops up the packs the player chose (`__mfw/pack/<id>`).
 - **Page side:** `wwwroot/js/offline.js` (`mfwOffline`: registration with `updateViaCache: "none"`, update checks on
-  return to the front and every 30 min, install prompt, downloads), `Shared/OfflineService.cs`,
-  `Shared/OfflineSettings.razor` (Settings > Play offline, Main Menu only), the "Install app" chip on the Main Menu
-  (`Pages/Home.razor`; while the browser offers installing, or on iPhone / iPad with the Share > Add to Home Screen
-  hint; × hides it per device, localStorage `mfwInstallHidden`) and `Shared/UpdateBanner.razor` ("A new
-  version of the app is ready" -> Update posts `mfw-skip-waiting` and reloads; "Updated to <version>" after). A new
-  version never takes over by itself while the app is open. `Shared/OfflineSetup.razor` (on the Main Menu) asks once
-  per device which packs to download (all ticked), right after `appinstalled` or on the first start in standalone mode
-  (`askNarration`, localStorage `mfwOfflineAsked`); packs download one after the other (`downloadMany`). Settings has
-  Download all / Remove all downloads.
+  return to the front and every 30 min, install prompt, downloads one pack after the other, `apply(adds, removes)`),
+  `Shared/OfflineService.cs`, `Shared/UpdateBanner.razor` ("A new version of the app is ready" -> Update posts
+  `mfw-skip-waiting` and reloads; "Updated to <version>" after; a new version never takes over by itself while the app
+  is open) and **Offline play** (mockup A, owner's pick 21 Nov 2026): `Shared/OfflinePanel.razor`, opened by the
+  "Offline play" button in Settings and the pause menu (`Shared/OfflineEntry.razor`, with a status line) and the
+  "⤓ Offline play" chip on the Main Menu (`Pages/Home.razor`; shown while the app is not opened as an installed app;
+  × hides it per device, localStorage `mfwInstallHidden`). It shows whether the app works offline, Install as an app
+  (or the iPhone / Firefox for Android menu hint), and one tickbox per pack with what Download will do (Downloaded,
+  Download, Will be removed, Not downloaded): Download downloads the ticked packs and removes the unticked ones that
+  are stored. Until the player has chosen once (localStorage `mfwOfflineAsked`) Oliver's three scenarios are ticked
+  and the original voices are not. Right after `appinstalled`, or on the first start in standalone mode, it opens by
+  itself on the Main Menu (`askNarration`); closing it counts as an answer.
 - **Firefox:** an audio file the page played earlier can sit in its HTTP cache as a partial (206) entry, and a
   `cache: "no-cache"` fetch then returns that 206, which `Cache.put` refuses (the whole install failed, so Firefox
   never went offline). The worker and `audio-cache.js` fetch such a file again with `cache: "reload"`.

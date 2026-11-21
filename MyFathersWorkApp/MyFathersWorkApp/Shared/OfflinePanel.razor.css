@@ -1,0 +1,174 @@
+.offline-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2200; /* above Settings and the pause menu, which open it */
+    display: flex;
+    overflow-y: auto;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.offline-panel {
+    display: grid;
+    gap: 0.9rem;
+    width: min(520px, 100%);
+    margin: auto;
+    text-align: left;
+}
+
+.offline-title {
+    position: relative;
+}
+
+.offline-title h2 {
+    margin: 0;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.offline-back {
+    position: absolute;
+    left: -0.4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 0.5rem;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-size: 2rem;
+    line-height: 1;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.offline-back:hover { opacity: 1; }
+
+.offline-status {
+    margin: 0;
+    line-height: 1.4;
+}
+
+.offline-tick {
+    color: #9bc46a;
+}
+
+.offline-hint,
+.offline-install small {
+    display: block;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    opacity: 0.8;
+}
+
+.offline-install {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.9rem;
+}
+
+.offline-list {
+    display: grid;
+}
+
+.offline-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.55rem 0.1rem;
+    border-top: 1px solid rgba(201, 163, 90, 0.25);
+    cursor: pointer;
+}
+
+.offline-item input {
+    flex-shrink: 0;
+    width: 1.3rem;
+    height: 1.3rem;
+    margin: 0;
+    accent-color: #c9a35a;
+}
+
+.offline-name {
+    flex: 1;
+    display: grid;
+    min-width: 0;
+}
+
+.offline-name small {
+    font-size: 0.82rem;
+    opacity: 0.75;
+}
+
+.offline-chip {
+    flex-shrink: 0;
+    padding: 0.1rem 0.6rem;
+    border: 1px solid #8a7445;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.offline-chip.done { border-color: #6f8f45; color: #9bc46a; }
+.offline-chip.get  { border-color: #c9a35a; color: #e8c47a; }
+.offline-chip.del  { border-color: #a35a4a; color: #e0a080; }
+
+.offline-chip.busy {
+    min-width: 3.4rem;
+    border-color: #6f8f45;
+    background: linear-gradient(90deg, rgba(155, 196, 106, 0.45) var(--p), transparent var(--p));
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.offline-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem 1rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid rgba(201, 163, 90, 0.25);
+}
+
+.offline-footer small {
+    line-height: 1.45;
+    opacity: 0.85;
+}
+
+.offline-actions {
+    display: flex;
+    gap: 0.6rem;
+    margin-left: auto;
+}
+
+/* The button art stretches: no fixed aspect ratio, so long labels stay one line high */
+.offline-button {
+    aspect-ratio: auto;
+    min-height: 2.4rem;
+    padding: 0.3rem 1.2rem 0.4rem;
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+.offline-button.big {
+    min-height: 2.8rem;
+    padding: 0.35rem 1.8rem 0.45rem;
+    font-size: 1.15rem;
+}
+
+.offline-button:disabled {
+    opacity: 0.45;
+    filter: grayscale(0.4);
+    transform: none;
+    cursor: default;
+}
+
+.offline-muted {
+    opacity: 0.75;
+}
+
+.offline-error {
+    margin: 0;
+    color: #e0a080;
+    cursor: pointer;
+}
