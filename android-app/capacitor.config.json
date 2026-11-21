@@ -1,6 +1,6 @@
 {
   "appId": "io.github.vdepagter.myfathersworkapp",
-  "appName": "My Father's Work App (Unofficial)",
+  "appName": "My Father's Work (Unofficial)",
   "webDir": "www",
   "server": {
     "androidScheme": "https",

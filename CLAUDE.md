@@ -314,7 +314,8 @@ The published site (GitHub Pages) is an installable offline app (21 Nov 2026).
 
 ## Android app (android-app/, Capacitor)
 
-Sideloadable APK (Nov 2026), details in [`android-app/README.md`](android-app/README.md). `tools/android-stage.py`
+Sideloadable APK (Nov 2026), launcher name "My Father's Work (Unofficial)" (owner, 21 Nov 2026; the web pages keep
+the full app name), details in [`android-app/README.md`](android-app/README.md). `tools/android-stage.py`
 copies the published wwwroot to `android-app/www` without the narration clips (`js/edition.js` `native: true`,
 `remote` = the GitHub Pages site, no service worker, `js/capacitor.js` + `android-app/web/native.js` for the Back
 button). Players download narration in Offline play: `audio-cache.js` fetches from `remote` but stores under the app's

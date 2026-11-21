@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">My Father\'s Work App (Unofficial)</string>
-    <string name="title_activity_main">My Father\'s Work App (Unofficial)</string>
+    <string name="app_name">My Father\'s Work (Unofficial)</string>
+    <string name="title_activity_main">My Father\'s Work (Unofficial)</string>
     <string name="package_name">io.github.vdepagter.myfathersworkapp</string>
     <string name="custom_url_scheme">io.github.vdepagter.myfathersworkapp</string>
 </resources>
