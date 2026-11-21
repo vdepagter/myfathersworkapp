@@ -6,7 +6,10 @@
     "use strict";
 
     const edition   = window.mfwEdition || {};
-    const supported = "serviceWorker" in navigator && "caches" in window && window.isSecureContext && edition.offline !== false;
+    // The Android app (js/edition.js native, android-app/) has every file but the narration in it: no worker, it is
+    // always available offline and an installed app; only the narration downloads apply there.
+    const native    = edition.native === true && "caches" in window;
+    const supported = native || ("serviceWorker" in navigator && "caches" in window && window.isSecureContext && edition.offline !== false);
     const audio     = window.mfwAudioCache;
 
     const state = {
@@ -21,7 +24,7 @@
         blocked:       false,  // the browser refused the worker (private window, site data cleared on close)
         askNarration:  false,  // just installed / first start as an app: offer the narration downloads
         asked:         false,  // the player chose narration packs before (Offline play applied or closed)
-        standalone:    matchMedia("(display-mode: standalone)").matches || navigator.standalone === true,
+        standalone:    native || matchMedia("(display-mode: standalone)").matches || navigator.standalone === true,
         online:        navigator.onLine,
         packs:         [],     // js/audio-cache.js status() + downloading
         indexMissing:  false,  // no packs list (development build, or never online)
@@ -75,6 +78,11 @@
     }
 
     async function register() {
+        if (native) {
+            await refresh();
+            topUp();
+            return;
+        }
         if (!supported) {
             // A worker left from before (e.g. this folder opened as a website once) must not serve old files
             if ("serviceWorker" in navigator && edition.offline === false)
@@ -124,10 +132,13 @@
     async function refresh() {
         if (!supported) { emit(); return; }
         try {
-            const active = registration && registration.active;
-            const info   = active ? await ask(active) : null;
-            state.available = !!(info && info.offline);
-            if (info && info.offline === false) state.supported = false; // development build: no offline worker
+            if (native) state.available = true;
+            else {
+                const active = registration && registration.active;
+                const info   = active ? await ask(active) : null;
+                state.available = !!(info && info.offline);
+                if (info && info.offline === false) state.supported = false; // development build: no offline worker
+            }
             state.online    = navigator.onLine;
             if (state.available) {
                 if (!index) index = await audio.loadIndex(navigator.onLine);
