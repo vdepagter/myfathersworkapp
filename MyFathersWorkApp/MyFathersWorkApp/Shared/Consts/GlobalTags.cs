@@ -315,7 +315,7 @@ public static class GlobalTags
     public const string Settings_MirrorDesc     = "Settings_MirrorDesc";
     public const string Settings_TesterTag      = "Settings_TesterTag";
 
-    // Offline app (Shared/OfflineSettings.razor, Shared/UpdateBanner.razor)
+    // Offline app (Shared/OfflinePanel.razor, Shared/OfflineEntry.razor, Pages/Home.razor, Shared/UpdateBanner.razor)
     public const string Offline_Title         = "Offline_Title";
     public const string Offline_Ready         = "Offline_Ready";
     public const string Offline_Preparing     = "Offline_Preparing";
@@ -323,7 +323,6 @@ public static class GlobalTags
     public const string Offline_Install       = "Offline_Install";
     public const string Offline_InstallDesc   = "Offline_InstallDesc";
     public const string Offline_IosHint       = "Offline_IosHint";
-    public const string Offline_Narration     = "Offline_Narration";
     public const string Offline_NarrationDesc = "Offline_NarrationDesc";
     public const string Offline_PackOliver    = "Offline_PackOliver";
     public const string Offline_PackMale      = "Offline_PackMale";
@@ -338,19 +337,16 @@ public static class GlobalTags
     public const string Offline_ErrorFailed   = "Offline_ErrorFailed";
     public const string Offline_NoPacks       = "Offline_NoPacks";
     public const string Offline_Storage       = "Offline_Storage";
+    public const string Offline_Open             = "Offline_Open";
+    public const string Offline_Keep             = "Offline_Keep";
+    public const string Offline_WillRemove       = "Offline_WillRemove";
+    public const string Offline_NotDownloaded    = "Offline_NotDownloaded";
+    public const string Offline_After            = "Offline_After";
+    public const string Offline_EntryStored      = "Offline_EntryStored";
+    public const string Offline_JustInstalled    = "Offline_JustInstalled";
     public const string Offline_Blocked          = "Offline_Blocked";
     public const string Offline_FirefoxHint      = "Offline_FirefoxHint";
     public const string Offline_Waiting          = "Offline_Waiting";
-    public const string Offline_DownloadAll      = "Offline_DownloadAll";
-    public const string Offline_RemoveAll        = "Offline_RemoveAll";
-    public const string Offline_RemoveAllConfirm = "Offline_RemoveAllConfirm";
-    public const string OfflineSetup_Title       = "OfflineSetup_Title";
-    public const string OfflineSetup_Text        = "OfflineSetup_Text";
-    public const string OfflineSetup_Total       = "OfflineSetup_Total";
-    public const string OfflineSetup_Space       = "OfflineSetup_Space";
-    public const string OfflineSetup_Download    = "OfflineSetup_Download";
-    public const string OfflineSetup_Later       = "OfflineSetup_Later";
-    public const string OfflineSetup_Note        = "OfflineSetup_Note";
     public const string Update_Ready          = "Update_Ready";
     public const string Update_Now            = "Update_Now";
     public const string Update_Later          = "Update_Later";

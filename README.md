@@ -26,10 +26,11 @@ There are two ways to play:
 ### Add it to your home screen
 
 The website can be installed as an app (a PWA): it gets its own icon and opens full screen, without the browser's
-address bar. Where the browser offers it, the Main Menu shows an **Install app** button (on iPhone and iPad it explains
-how). After the first visit it also works **without an internet connection**: the app itself is kept on the
-device automatically. Narration is large, so it plays from the internet unless you download it: **Settings > Play
-offline** (Main Menu) downloads Oliver per scenario (about 110-140 MB each) or the original voices (about 20 MB each).
+address bar. The **Offline play** button on the Main Menu (also in Settings and the pause menu) has an
+**Install as an app** button where the browser offers it, and explains how on iPhone, iPad and Firefox for Android. After the first visit it also works **without an internet connection**: the app itself is kept on the
+device automatically. Narration is large, so it plays from the internet unless you download it: in **Offline play**, tick
+Oliver per scenario (about 110-140 MB each) or the original voices (about 20 MB each) and press **Download**;
+unticking removes a download again.
 Downloads stay through app updates, and only changed clips are fetched again. When a new version is out, the app
 shows **A new version of the app is ready** with an **Update** button (a game in progress reopens on its screen).
 

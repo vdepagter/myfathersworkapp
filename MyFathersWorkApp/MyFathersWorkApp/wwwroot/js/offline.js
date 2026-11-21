@@ -20,6 +20,7 @@
         firefoxHint:   /Android/.test(navigator.userAgent) && /Firefox\//.test(navigator.userAgent),
         blocked:       false,  // the browser refused the worker (private window, site data cleared on close)
         askNarration:  false,  // just installed / first start as an app: offer the narration downloads
+        asked:         false,  // the player chose narration packs before (Offline play applied or closed)
         standalone:    matchMedia("(display-mode: standalone)").matches || navigator.standalone === true,
         online:        navigator.onLine,
         packs:         [],     // js/audio-cache.js status() + downloading
@@ -45,6 +46,7 @@
     }
 
     function emit() {
+        state.asked = askedBefore();
         for (const row of state.packs) {
             row.downloading = audio.isDownloading(row.id);
             row.queued      = !row.downloading && queue.includes(row.id);
@@ -228,6 +230,20 @@
         if (ids && ids.length) downloadMany(ids);
     }
 
+    // Offline play > Download: download the ticked packs, remove the unticked ones that are (partly) stored
+    async function apply(adds, removes) {
+        try { localStorage.setItem(ASKED_KEY, "1"); } catch (e) { /* storage blocked */ }
+        state.askNarration = false;
+        for (const id of removes || []) {
+            const queued = queue.indexOf(id);
+            if (queued >= 0 && !audio.isDownloading(id)) queue.splice(queued, 1);
+            cancel(id);
+            try { await audio.remove(index, id); } catch (e) { console.warn("Offline audio: " + e.message); }
+        }
+        await refresh();
+        if (adds && adds.length) downloadMany(adds);
+    }
+
     async function removeAll() {
         queue.length = 0;
         for (const p of state.packs) if (p.wanted || p.storedFiles > 0 || p.downloading) {
@@ -301,6 +317,7 @@
         download: id => { downloadMany([id]); },
         downloadMany: ids => { downloadMany(ids); },
         answerNarration: ids => { answerNarration(ids); },
+        apply: (adds, removes) => { apply(adds, removes); },
         removeAll: () => { removeAll(); },
         cancel,
         remove: id => { remove(id); },

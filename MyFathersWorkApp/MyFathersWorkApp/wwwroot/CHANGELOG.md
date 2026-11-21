@@ -3,6 +3,12 @@
 What changed in each version of My Father's Work App (Unofficial), newest first. The version number is shown at the
 bottom of Help, Settings and the pause menu. Shown in the app under Help > What's new.
 
+## v0.66.6.100 - 21 November 2026
+
+- One Offline play menu, opened from Settings, the pause menu and the "Offline play" button on the Main Menu (was
+  "Install app"). Tick the narration you want on this device and press Download: unticked narration that was
+  downloaded is removed. Oliver's three scenarios are ticked to start with, the original voices are not.
+
 ## v0.66.6.99 - 21 November 2026
 
 - Firefox: the app now gets ready for offline use there too (it stopped at the music files before).

@@ -1,0 +1,19 @@
+.offline-entry {
+    justify-items: center;
+    gap: 0.4rem;
+    text-align: center;
+}
+
+.offline-entry-button {
+    aspect-ratio: auto;
+    min-height: 2.6rem;
+    padding: 0.35rem 1.8rem 0.45rem;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.offline-entry small {
+    font-size: 0.88rem;
+    line-height: 1.4;
+    opacity: 0.8;
+}

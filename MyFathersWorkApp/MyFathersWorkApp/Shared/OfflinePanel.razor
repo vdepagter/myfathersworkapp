@@ -1,0 +1,222 @@
+@implements IDisposable
+@inject OfflineService Offline
+@inject AudioService   Audio
+
+@* Offline play (mockup A, owner's pick, 21 Nov 2026): opened from Settings, the pause menu (Shared/OfflineEntry.razor)
+   and the Main Menu chip (Pages/Home.razor), and by itself on the Main Menu right after installing the app. Whether the
+   app works offline, Install as an app, and one tickbox per narration pack (js/audio-cache.js) with what Download will
+   do: ticked packs are downloaded, unticked ones that are stored are removed. Until the player has chosen once, Oliver's
+   three scenarios are ticked and the original voices are not. *@
+@if (Visible)
+{
+    <div class="offline-overlay" @onclick="Close">
+        <div class="offline-panel mfw-dark-panel mfw-appear" role="dialog" aria-labelledby="offline-title" @onclick:stopPropagation="true">
+            <div class="offline-title">
+                <button class="offline-back" @onclick="Close" aria-label="@T(GlobalTags.Settings_Close)" title="@T(GlobalTags.Settings_Close)">‹</button>
+                <h2 id="offline-title" class="mfw-heading">@T(GlobalTags.Offline_Title)</h2>
+            </div>
+
+            @if (!(State.AskNarration && State.Available))
+            {
+            <p class="offline-status">
+                @if (State.Blocked)
+                {
+                    @T(GlobalTags.Offline_Blocked)
+                }
+                else if (State.ShellProgress is int percent)
+                {
+                    @T(GlobalTags.Offline_Preparing).FormatWithReplacement(0, percent.ToString())
+                }
+                else if (State.Available)
+                {
+                    <span class="offline-tick">✓</span> <span>@T(GlobalTags.Offline_Ready)</span>
+                }
+                else
+                {
+                    @T(GlobalTags.Offline_NotYet)
+                }
+            </p>
+            }
+
+            @if (State.Installable)
+            {
+                <div class="offline-install">
+                    <button class="mfw-button offline-button" @onclick="Install">@T(GlobalTags.Offline_Install)</button>
+                    <small>@T(GlobalTags.Offline_InstallDesc)</small>
+                </div>
+            }
+            else if (!State.Standalone && (State.IosHint || State.FirefoxHint))
+            {
+                <small class="offline-hint">@T(State.IosHint ? GlobalTags.Offline_IosHint : GlobalTags.Offline_FirefoxHint)</small>
+            }
+
+            @if (State.Available && Audio.Available)
+            {
+                @if (State.AskNarration)
+                {
+                    <p class="offline-status">@T(GlobalTags.Offline_JustInstalled)</p>
+                }
+                <div class="mfw-setting-group-title">@T(GlobalTags.Offline_Keep)</div>
+
+                @if (State.Packs.Count == 0)
+                {
+                    <small class="offline-hint">@T(GlobalTags.Offline_NoPacks)</small>
+                }
+                else
+                {
+                    <div class="offline-list">
+                        @foreach (OfflinePack pack in State.Packs.OrderBy(p => p.Order))
+                        {
+                            <label class="offline-item">
+                                <input type="checkbox" checked="@Ticked(pack)" @onchange="e => Toggle(pack, e.Value is true)"/>
+                                <span class="offline-name">@pack.Name(GlobalData)<small>@PackSize(pack)</small></span>
+                                @{ (string css, string text) = Chip(pack); }
+                                <span class="offline-chip @css" style="@(pack.Downloading ? $"--p:{Percent(pack)}%" : null)">@text</span>
+                            </label>
+                        }
+                    </div>
+                }
+
+                @if (State.Error != "")
+                {
+                    <p class="offline-error" @onclick="() => Offline.DismissErrorAsync()">
+                        @T(State.Error == "space" ? GlobalTags.Offline_ErrorSpace : GlobalTags.Offline_ErrorFailed)
+                    </p>
+                }
+
+                <div class="offline-footer">
+                    <small>
+                        @T(GlobalTags.Offline_Storage).FormatWithReplacement(0, OfflinePack.Size(StoredTotal))
+                        @if (AddBytes > 0 || RemoveBytes > 0)
+                        {
+                            <br/>@T(GlobalTags.Offline_After).FormatWithReplacement(0, OfflinePack.Size(Math.Max(0, StoredTotal + AddBytes - RemoveBytes))).FormatWithReplacement(1, Change)
+                        }
+                        @if (AddBytes > 0 && !State.Online)
+                        {
+                            <br/><span class="offline-muted">@T(GlobalTags.Offline_NeedsInternet)</span>
+                        }
+                    </small>
+                    <div class="offline-actions">
+                        @if (State.Packs.Any(p => p.Downloading || p.Queued))
+                        {
+                            <button class="mfw-button offline-button" @onclick="CancelAll">@T(GlobalTags.Offline_Cancel)</button>
+                        }
+                        <button class="mfw-button green offline-button big" disabled="@(!CanApply)" @onclick="Apply">
+                            @T(Adds.Any() || !Removes.Any() ? GlobalTags.Offline_Download : GlobalTags.Offline_Remove)
+                        </button>
+                    </div>
+                </div>
+                <small class="offline-hint">@T(GlobalTags.Offline_NarrationDesc)</small>
+            }
+        </div>
+    </div>
+}
+
+@code
+{
+    [Parameter] public bool          Visible    { get; set; }
+    [Parameter] public EventCallback OnClose    { get; set; }
+    [Parameter] public GlobalData    GlobalData { get; set; } = null!;
+
+    private readonly Dictionary<string, bool> _Ticks = new();
+    private bool _WasVisible;
+
+    private OfflineState State => Offline.State;
+
+    private string T(string tag) => GlobalData.GetLocalizedUITag(tag);
+
+    protected override void OnInitialized()
+    {
+        Offline.Changed += OnChanged;
+    }
+
+    protected override void OnParametersSet()
+    {
+        // Every opening starts from what is on the device
+        if (Visible && !_WasVisible)
+        {
+            _Ticks.Clear();
+            _ = Offline.RefreshAsync();
+        }
+        _WasVisible = Visible;
+    }
+
+    private void OnChanged() => InvokeAsync(StateHasChanged);
+
+    // Until the player has chosen once: Oliver ticked, the original voices not; after that: what is stored or chosen
+    private bool Ticked(OfflinePack pack) => _Ticks.TryGetValue(pack.Id, out bool on) ? on :
+        State.Asked || State.Packs.Any(p => p.Wanted || p.StoredFiles > 0)
+            ? pack.Wanted || pack.StoredFiles > 0 || pack.Downloading || pack.Queued
+            : pack.Voice == "oliver";
+
+    private void Toggle(OfflinePack pack, bool on)
+    {
+        Audio.PlayClick();
+        _Ticks[pack.Id] = on;
+    }
+
+    private IEnumerable<OfflinePack> Adds    => State.Packs.Where(p => Ticked(p) && !p.Complete && !p.Downloading && !p.Queued);
+    private IEnumerable<OfflinePack> Removes => State.Packs.Where(p => !Ticked(p) && (p.StoredFiles > 0 || p.Wanted || p.Downloading || p.Queued));
+
+    private long AddBytes    => Adds.Sum(p => p.Bytes - p.StoredBytes);
+    private long RemoveBytes => Removes.Sum(p => p.StoredBytes);
+    private long StoredTotal => State.Packs.Sum(p => p.StoredBytes);
+
+    private string Change => string.Join(", ", new[]
+    {
+        AddBytes    > 0 ? "+" + OfflinePack.Size(AddBytes)    : null,
+        RemoveBytes > 0 ? "−" + OfflinePack.Size(RemoveBytes) : null
+    }.Where(s => s != null));
+
+    private bool CanApply => (Adds.Any() && State.Online) || Removes.Any();
+
+    private (string Css, string Text) Chip(OfflinePack pack)
+    {
+        bool ticked = Ticked(pack);
+        if (pack.Downloading)                     return ("busy", $"{Percent(pack)}%");
+        if (pack.Queued && ticked)                return ("", T(GlobalTags.Offline_Waiting));
+        if (!ticked && (pack.StoredFiles > 0 || pack.Queued)) return ("del", T(GlobalTags.Offline_WillRemove));
+        if (pack.Complete)                        return ("done", "✓ " + T(GlobalTags.Offline_Downloaded));
+        if (ticked)                               return ("get", T(pack.StoredFiles > 0 ? GlobalTags.Offline_Resume : GlobalTags.Offline_Download));
+        return ("", T(GlobalTags.Offline_NotDownloaded));
+    }
+
+    private static string PackSize(OfflinePack pack) =>
+        pack.StoredFiles > 0 && !pack.Complete ? $"{OfflinePack.Size(pack.StoredBytes)} / {OfflinePack.Size(pack.Bytes)}" : OfflinePack.Size(pack.Bytes);
+
+    private static int Percent(OfflinePack pack) => pack.Bytes == 0 ? 0 : (int)Math.Min(100, 100 * pack.StoredBytes / pack.Bytes);
+
+    private Task Install()
+    {
+        Audio.PlayClick();
+        return Offline.InstallAsync().AsTask();
+    }
+
+    private async Task Apply()
+    {
+        Audio.PlayClick();
+        List<string> adds    = Adds.OrderBy(p => p.Order).Select(p => p.Id).ToList();
+        List<string> removes = Removes.Select(p => p.Id).ToList();
+        foreach (OfflinePack pack in State.Packs) _Ticks[pack.Id] = Ticked(pack); // keep the choice on screen while it runs
+        await Offline.ApplyAsync(adds, removes);
+    }
+
+    private async Task CancelAll()
+    {
+        Audio.PlayClick();
+        foreach (OfflinePack pack in State.Packs.Where(p => p.Downloading || p.Queued).ToList())
+        {
+            await Offline.CancelAsync(pack.Id);
+        }
+    }
+
+    // Closing the panel that opened by itself after installing counts as an answer, so it does not come back
+    private async Task Close()
+    {
+        Audio.PlayClick();
+        if (State.AskNarration) await Offline.AnswerNarrationAsync([]);
+        await OnClose.InvokeAsync();
+    }
+
+    public void Dispose() => Offline.Changed -= OnChanged;
+}

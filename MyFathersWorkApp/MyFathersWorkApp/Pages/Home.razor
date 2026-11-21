@@ -40,16 +40,12 @@
 
     @if (ShowInstall)
     {
-        @* Install as an app: the browser's offer (Chrome, Edge, Android) or, on iPhone / iPad and Firefox for Android, how
-           to do it from the browser's menu. Firefox on a computer cannot install websites: nothing shown there. *@
+        @* Offline play (Shared/OfflinePanel.razor): installing, narration downloads. Shown where the app can work offline
+           and is not opened as an installed app yet; × hides it on this device (Settings keeps the button). *@
         <div class="install-chip">
             <button class="install-open" @onclick="OnInstall">⤓ @GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_Install)</button>
             <button class="install-hide" @onclick="HideInstall" aria-label="@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_InstallHide)"
                     title="@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_InstallHide)">×</button>
-            @if (_ShowIosHint)
-            {
-                <p class="install-hint">@GlobalData.GetLocalizedUITag(Offline.State.IosHint ? GlobalTags.Offline_IosHint : GlobalTags.Offline_FirefoxHint)</p>
-            }
         </div>
     }
 
@@ -66,7 +62,7 @@
     <p class="disclaimer">@GlobalData.GetLocalizedUITag(GlobalTags.MainMenu_FanMade)</p>
 </div>
 
-<OfflineSetup GlobalData="@GlobalData"/>
+<OfflinePanel Visible="@(_ShowOffline || Offline.State.AskNarration)" OnClose="() => _ShowOffline = false" GlobalData="@GlobalData"/>
 
 <SettingsPopup Visible="@_ShowSettings" OnClose="HideSettings" OnLanguageChange="OnLanguageChanges" GlobalData="@GlobalData"/>
 
@@ -81,18 +77,16 @@
     // ---- Install as an app (Shared/OfflineService.cs) ----
     private const string InstallHiddenKey = "mfwInstallHidden";
     private bool _InstallHidden;
-    private bool _ShowIosHint;
+    private bool _ShowOffline;
 
-    private bool ShowInstall => !_InstallHidden && Offline.State.Supported && !Offline.State.Standalone &&
-                                (Offline.State.Installable || Offline.State.IosHint || Offline.State.FirefoxHint);
+    private bool ShowInstall => !_InstallHidden && Offline.State.Supported && !Offline.State.Blocked && !Offline.State.Standalone;
 
     private void OnOfflineChanged() => InvokeAsync(StateHasChanged);
 
-    private async Task OnInstall()
+    private void OnInstall()
     {
         Audio.PlayClick();
-        if (Offline.State.Installable) await Offline.InstallAsync();
-        else _ShowIosHint = !_ShowIosHint;
+        _ShowOffline = true;
     }
 
     private async Task HideInstall()
