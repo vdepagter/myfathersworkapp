@@ -7,9 +7,18 @@ name: Android APK
 # installed app.
 # - Run manually (Actions > Android APK > Run workflow): the APK is kept as a workflow artifact.
 # - Push a tag v* (e.g. v0.66.6.250): the APK is also attached to the GitHub Release for that tag.
+# - Pull requests that touch the Android app: built (and kept as an artifact) too; without the secrets an unsigned
+#   build only checks that it compiles.
 on:
   push:
     tags: ['v*']
+  pull_request:
+    paths:
+      - 'android-app/**'
+      - 'tools/android-stage.py'
+      - 'tools/audio-packs.py'
+      - 'MyFathersWorkApp/MyFathersWorkApp/wwwroot/js/**'
+      - '.github/workflows/android-apk.yml'
   workflow_dispatch:
 
 permissions:
@@ -81,6 +90,11 @@ jobs:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: |
           if [ -z "$ANDROID_KEYSTORE_BASE64" ]; then
+            if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+              echo "::warning::No release keystore secrets: unsigned build, only to check that it compiles"
+              echo "UNSIGNED=1" >> "$GITHUB_ENV"
+              exit 0
+            fi
             echo "::error::Repository secret ANDROID_KEYSTORE_BASE64 is missing (android-app/set-secrets.ps1)"
             exit 1
           fi
@@ -96,6 +110,7 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew assembleRelease -PmfwRevision=$REVISION --no-daemon
+          if [ "$UNSIGNED" = "1" ]; then ls -l app/build/outputs/apk/release; exit 0; fi
           mkdir -p "$GITHUB_WORKSPACE/dist"
           cp app/build/outputs/apk/release/app-release.apk "$GITHUB_WORKSPACE/dist/MyFathersWork-Unofficial-$VERSION.apk"
           "$ANDROID_HOME"/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner verify --print-certs "$GITHUB_WORKSPACE/dist/MyFathersWork-Unofficial-$VERSION.apk" | grep -i "SHA-256"
@@ -106,6 +121,7 @@ jobs:
         run: rm -f "$RUNNER_TEMP/release.jks"
 
       - uses: actions/upload-artifact@v4
+        if: env.UNSIGNED != '1'
         with:
           name: MyFathersWork-Unofficial-${{ env.VERSION }}-android
           path: dist/MyFathersWork-Unofficial-${{ env.VERSION }}.apk
