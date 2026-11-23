@@ -3,17 +3,6 @@
 What changed in each version of My Father's Work (Unofficial), newest first. The version number is shown at the
 bottom of Help, Settings and the pause menu. Shown in the app under Help > What's new.
 
-## v0.66.6.102 - 21 November 2026
-
-- The app is now called "My Father's Work (Unofficial)" (without "App"), on the website, as an installed app, on
-  Android and in the Windows download.
-
-## v0.66.6.101 - 21 November 2026
-
-- Android app (APK to install yourself): the whole app with music and sound, about 35 MB. Narration is downloaded in
-  the app under Offline play (asked on the first start) and otherwise plays from the internet. The phone's Back button
-  closes panels, opens the pause menu in a game and puts the app away on the Main Menu.
-
 ## v0.66.6.105 - 23 November 2026
 
 - A privacy page (linked from Help > This app): the app collects nothing, and your games stay on your device.
@@ -29,6 +18,17 @@ bottom of Help, Settings and the pause menu. Shown in the app under Help > What'
   It is encoded again from the original recordings. Narration you downloaded before is fetched once more.
 - The Windows download is code-signed, and is now about 270 MB. The separate light download is gone, because the full
   one is now about that size.
+
+## v0.66.6.102 - 21 November 2026
+
+- The app is now called "My Father's Work (Unofficial)" (without "App"), on the website, as an installed app, on
+  Android and in the Windows download.
+
+## v0.66.6.101 - 21 November 2026
+
+- Android app (APK to install yourself): the whole app with music and sound, about 35 MB. Narration is downloaded in
+  the app under Offline play (asked on the first start) and otherwise plays from the internet. The phone's Back button
+  closes panels, opens the pause menu in a game and puts the app away on the Main Menu.
 
 ## v0.66.6.100 - 21 November 2026
 
