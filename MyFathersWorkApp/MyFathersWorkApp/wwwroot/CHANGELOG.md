@@ -14,6 +14,10 @@ bottom of Help, Settings and the pause menu. Shown in the app under Help > What'
   the app under Offline play (asked on the first start) and otherwise plays from the internet. The phone's Back button
   closes panels, opens the pause menu in a game and puts the app away on the Main Menu.
 
+## v0.66.6.105 - 23 November 2026
+
+- A privacy page (linked from Help > This app): the app collects nothing, and your games stay on your device.
+
 ## v0.66.6.104 - 21 November 2026
 
 - Windows: the app now runs in its own window instead of opening Microsoft Edge alongside it. Saved games, the Endings
