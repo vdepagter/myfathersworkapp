@@ -15,9 +15,12 @@ English files: `MyFathersWorkApp\MyFathersWorkApp\wwwroot\localization\`.
    plural tokens, placeholders and markup kept exactly). The owner has accepted every recommendation in its section 5
    (open questions), including: Czech terms everywhere with the English component name in brackets at the first
    mention in a setup/rule popup (Q1, e.g. "karty Pochybných obchodů (*Dubious Bartering*)" - use `<i>` for the English
-   name only where the English text already allows markup there; otherwise plain brackets), *veledílo*, *osobní
-   figurka*, *děsivost*, *Uhry*, *-ová* for Nurse Varga, Czech-ised monster names, *klepnout*. The gender chips read
-   "pán / dáma" ("Vaše postava je:").
+   name only where the English text already allows markup there; otherwise plain brackets), *osobní figurka*,
+   *děsivost*, *Uhry*, *-ová* for Nurse Varga, Czech-ised monster names. The gender chips read "pán / dáma" ("Vaše
+   postava je:"). The component and game terms in section 3 come from the team translating the official Czech rulebook
+   and must match it: *mistrovské dílo* (Masterwork), *mistrovský experiment*, *technika*, *sídlo* and *vylepšení
+   sídla*, *partner* (the Spouse piece; *choť* only in story prose), *flakonek* (Vial). Never write *klepnout* or
+   *kliknout*: the app also runs on Windows with a mouse, so use neutral wording (*Pokračujte…, Zvolte své jméno*).
 2. Look at `docs\i18n\comparison\opus.csv` and `fable.csv`: two sample translations of the same passages (both
    acceptable; borrow their best solutions). Where your rows include those tags, you may start from either.
 3. Read the English around your rows for context (the rows before and after, and the matching screens in the other CSV:

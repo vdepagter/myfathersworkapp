@@ -62,7 +62,7 @@ and all three become *žeton začínajícího hráče*.
 ### 1.3 UI text (`UI_Localization.csv`)
 
 Buttons and menu items use the infinitive or a noun, following Czech UI convention: *Pokračovat, Uložit, Zrušit,
-Nová hra, Nastavení*. Descriptions and hints use the 2nd person plural (*Klepněte…, Vyberte…*). The app's ironic
+Nová hra, Nastavení*. Descriptions and hints use the 2nd person plural (*Vyberte…, Zvolte…*). The app's ironic
 butler voice on the setup screens (Players, Village, Welcome) belongs to the story register (1.1).
 
 ### 1.4 Typography and numbers
@@ -152,8 +152,9 @@ How to keep the number of tokens down (each token is a review risk):
 
 - **Present tense, infinitives, nouns and reflexives have no gender:** *svůj, se, si*. Write "{{0}} vítězí!", not
   "{{0}} zvítězil/a"; "Vítěz: {{0}}"; "{{0}} se rozhodl/a" → "{{0}} se musí rozhodnout" where the meaning allows.
-- **Spouse:** *choť* works for husband and wife. Only the possessive changes: `[[g0:jeho choť/její choť]]`, or
-  gender-free *svůj choť / svá choť*. Prefer `[[g0:jeho/její]] choť`.
+- **Spouse:** the game piece is *partner* (3.2). In story prose about a character's husband or wife, *choť* works for
+  both. Only the possessive changes: `[[g0:jeho choť/její choť]]`, or gender-free *svůj choť / svá choť*. Prefer
+  `[[g0:jeho/její]] choť`.
 - **Groups are plural.** Siblings, cousins, the family members and "the scientists" take the **masculine animate
   plural**, which covers mixed groups: *sourozenci přijeli, bratranci se dohodli, vědci se smáli*. Gen I says
   *sourozenci* (gender-neutral in effect). Gen II and III "cousins" may be *bratranci a sestřenice* once, then
@@ -224,20 +225,30 @@ Czech wording is free. For consistency, use these:
 
 | English | Czech |
 |---|---|
-| Click here to continue… / Click to continue… | Klepnutím pokračujte… |
-| Click here to start the vote… / Click to start the vote… | Klepnutím zahajte hlasování… |
-| Click to start the bid… | Klepnutím zahajte dražbu… |
-| Click to tabulate scores for posterity… | Klepnutím sečtěte body pro potomstvo… |
-| Click to continue to Final Scoring… / Continue to Scoring… | Klepnutím přejděte k závěrečnému bodování… |
-| Click here after resolving the bid / vote… | Po vyhodnocení dražby / hlasování klepněte sem… |
-| click here (inside a sentence) | klepněte sem |
+| Click here to continue… / Click to continue… | Pokračujte… |
+| Click here to start the vote… / Click to start the vote… | Zahajte hlasování… |
+| Click to start the bid… | Zahajte dražbu… |
+| Click to tabulate scores for posterity… | Sečtěte body pro potomstvo… |
+| Click to continue to Final Scoring… / Continue to Scoring… | Přejděte k závěrečnému bodování… |
+| Click here after resolving the bid / vote… | Po vyhodnocení dražby / hlasování pokračujte… |
+| click here (inside a sentence) | pokračujte zde (or a verb that completes the sentence: *přečtěte si zde…*, *zvolte tuto možnost…*) |
 
-Use *klepnout* (tap), the Czech touch-UI verb, rather than *kliknout*, because the app runs mostly on phones and
-tablets (Q10).
+The app runs on touchscreens and on Windows with a mouse, so never write *klepnout* (tap) or *kliknout* (click):
+name the action instead (*Pokračujte…, Zvolte své jméno, Zahajte hlasování, Vyberte…*), or use *stisknout* for a
+named button (Q10).
 
 ---
 
 ## 3. Term table
+
+**Binding terminology (November 2026):** the component and game terms below (Masterwork, Engineering, Estate and its
+upgrades, Spouse, Caretaker, Laborer's Union, Chemical, Bottle, Vial, Creepy track and the rest of this table) come from
+the team translating the official Czech rulebook of *My Father's Work*. The app must match the rulebook: do not
+replace them with synonyms, and change them only when that team changes them.
+
+English names in brackets: only at the **first** mention of a component in a setup/rule popup, and only for named
+cards, tiles, tokens and Chronicle locations players must find. Never repeat a bracket already given in the same
+text, and never put one on a generic term.
 
 "On component" means the term is printed in English on something the players hold. For those terms, the recommended
 policy (Q1) is: **Czech everywhere, plus the English name in parentheses at its first mention in each setup/rule
@@ -279,30 +290,32 @@ icons, or in story text.
 
 | English | Czech | Gram. | Notes |
 |---|---|---|---|
-| Estate (board) | panství; deska panství | n. | Story also uses *sídlo, statek*. "Estate action" → *akce panství*. |
+| Estate (board) | **sídlo**; deska sídla | n. | The game term everywhere in rules, setup, hubs and UI (*ve svém sídle, vedle svého sídla, do svých sídel*). "Estate action" → *akce sídla*. Plainly narrative story prose may vary with *panství, statek*, never for the game term. |
 | estate plot / new plot | parcela / nová parcela | f. | "cost to open a new plot" → *cena za otevření nové parcely*. |
-| Estate Upgrade (tile) | vylepšení panství (dílek) | n. | On component. |
-| Vanity Estate Upgrade | prestižní vylepšení panství | n. | On component. Alt.: *okázalé*. |
+| Estate Upgrade (tile) | **vylepšení sídla** (dílek) | n. | On component. |
+| Vanity Estate Upgrade | **okrasné vylepšení sídla** | n. | On component. |
 | Quarters | komnaty | f. pl. | Where pieces and cubes rest: *do svých komnat*. Alt.: *pokoje*, *ubikace* (too military). |
 | Self (piece) | osobní figurka; "visit with your Self" → *navštívit osobně* | f. | Gender-free. Alt.: *figurka vědce*. On component (Q3). |
-| Spouse | choť | m./f. | Works for both genders (see 2.2). |
-| Servant | sluha (pl. sluhové), služebnictvo | m. | "Servant/Spouse piece" → *figurka sluhy nebo chotě*. |
-| Caretaker (scenario piece) | opatrovník | m. | Distinct from the Order's lodge "caretaker" in story (*správce*). |
+| Spouse (piece) | **partner** (pl. partneři) | m. | The game piece in rules and UI. Story prose about a husband or wife may keep *choť, manžel/manželka* (2.2). |
+| Servant | sluha (pl. sluhové), služebnictvo | m. | "Servant/Spouse piece" → *figurka sluhy nebo partnera*. |
+| Caretaker (scenario piece) | **opatrovník** | m. | Distinct from the Order's lodge "caretaker" in story (*správce*). |
 | Lost (the LOST area) | Ztracení | m. pl. | "gain a Servant from Lost" → *získejte sluhu ze Ztracených*; "return to Lost" → *vraťte mezi Ztracené*; "become Lost" → *přejde mezi Ztracené*. English (*LOST*) at first mention. |
 | Journal (player board) | Deník | m. | Capitalised for the board; *deník* in story. |
 | Journal Track / research track / research level | výzkumná stupnice (v Deníku) / úroveň výzkumu | f. | "third level of research" → *třetí úroveň výzkumu*. Journaled Knowledge → *znalost zapsaná v Deníku*. |
 | Knowledge (cube) | znalost (kostička znalosti) | f. | "a Knowledge of your choice" → *libovolná znalost*. |
-| Chemistry / Engineering / Biology / Occult | chemie / inženýrství / biologie / okultismus | | Knowledge: *znalost chemie…*; Occult knowledge → *okultní znalost*. Experiment adjectives: *chemický, inženýrský, biologický, okultní*. Cost lists: `5× biologie`, `2× zvíře` (multiplication-sign style, no case problems). |
+| Chemistry / Engineering / Biology / Occult | chemie / **technika** / biologie / okultismus | | Knowledge: *znalost chemie, znalost techniky…*; Occult knowledge → *okultní znalost*. Experiment adjectives: *chemický, technický, biologický, okultní*. Engineers (people) stay *inženýři*. Cost lists: `5× biologie`, `2× zvíře` (multiplication-sign style, no case problems). |
 | ingredient | přísada | f. | Alt.: *ingredience*. |
-| Body / Animal / Chemical, Bottle / Gear | tělo / zvíře / chemikálie, lahvička / ozubené kolo | | Ingredient tokens. |
+| Body / Animal / Chemical, Bottle / Gear | tělo / zvíře / **chemikálie**, **lahvička** / ozubené kolo | | Ingredient tokens. The Bottle is not the Vial (*flakonek*, 3.3). |
 | Experiment (card), A/B/C-Level | experiment (karta experimentu), experiment úrovně A/B/C | m. | Short form *experiment B*. Story may vary with *pokus*. Experiment deck → *balíček experimentů*. |
 | Stored Experiments | uschované experimenty | m. pl. | Avoids clashing with *Uložené hry*. |
-| Masterwork (Experiment) | **veledílo** (karta veledíla) | n. | Alt.: *mistrovské dílo* (Q2). Player-typed name follows *dílo jménem…*. |
-| Masterwork Update / Upgrade card | karta Úpravy veledíla | f. | Unify the source variants. |
-| Masterwork Recipe | recept veledíla | m. | |
+| Masterwork | **mistrovské dílo** | n. | The completed work (*dokončit své mistrovské dílo, mistrovská díla, 5 mistrovských děl*). Player-typed name follows *dílo jménem…*. |
+| Masterwork Experiment (the card being worked on) | **mistrovský experiment** | m. | Distinct from the completed Masterwork: "return your Masterwork Experiments" → *vraťte své mistrovské experimenty*. |
+| Giant Masterwork | **velmistrovské dílo** | n. | |
+| Masterwork Update / Upgrade card | karta Úpravy mistrovského díla | f. | Unify the source variants. |
+| Masterwork Recipe | **recept na mistrovské dílo** | m. | |
 | Compulsion (card) | Nutkání (karta Nutkání) | n. | On component. |
 | Maladjustment (card) | Porucha (karta Poruchy) | f. | On component. |
-| Creepy track / creepy location | stupnice **děsivosti** / děsivé místo | f. | Mostly an icon. Alt.: *podivínství, zlověstnost* (Q4). |
+| Creepy track / creepy location | **stupnice děsivosti** / děsivé místo | f. | Mostly an icon. |
 | Insanity track | stupnice šílenství | f. | "calm their sanity" → *uklidnit mysl*. |
 | Angry Mob (track, token) | rozzuřený dav (stupnice, žeton rozzuřeného davu) | m. | "overtaken by the Angry Mob" → *dostižen rozzuřeným davem*. |
 | Suspicion marker | ukazatel podezření | m. | |
@@ -326,7 +339,7 @@ icons, or in story text.
 | Suspicious Building tiles | dílky podezřelých budov | m. pl. | Exposed / Concealed → *odhalená / utajená*. Investigate → *prošetřit*. |
 | Hardware Store / Wire Service / Book Store / Warehouse / Pet Store | Železářství / Telegrafní úřad / Knihkupectví / Skladiště / Obchod se zvířaty | n./m. | Option lists keep 6 entries including the leading blank. |
 | Fraternity of Hunters / Order of St. Hubertus tokens | žetony Bratrstva lovců / Řádu sv. Huberta | m. pl. | "Hunter token" → *žeton lovců*. |
-| Vial token | žeton lahvičky | m. | |
+| Vial token | **žeton flakonku** | m. | Wherever the English says vial, use *flakonek* (story too: *flakonek se svěcenou vodou*). Not the Bottle (*lahvička*). |
 | Voting token | hlasovací žeton | m. | |
 | Lycanthropic Strength (Masterwork, Update card) | Lykantropická síla | f. | |
 | Creepy tokens | žetony děsivosti | m. pl. | |
@@ -345,7 +358,7 @@ icons, or in story text.
 | General Store | obchod se smíšeným zbožím | Short: *smíšené zboží*. |
 | Blacksmith | kovárna (the person: kovář) | |
 | Fortune Teller | věštkyně | |
-| Laborer's Union | dělnický spolek | |
+| Laborer's Union | **Dělnický svaz** | |
 | Cemetery | hřbitov | |
 | Pub / Bar / tavern / public house | hostinec / výčep / krčma / hospoda | Hub title PUB → *HOSTINEC*. |
 | University | univerzita | |
@@ -361,7 +374,7 @@ icons, or in story text.
 | Reading Room | Čítárna | Stasis Chamber | Stázová komora |
 | Shrine | Svatyně | Curious Supply Room | Podivuhodná zásobárna |
 | Storage Shed | Kůlna | Personal Library | Soukromá knihovna |
-| Master's Study (Chemistry / Engineering / Biology / Occult) | Pracovna mistra (chemie / inženýrství / biologie / okultismu) | Charity Memorial | Pomník dobročinnosti |
+| Master's Study (Chemistry / Engineering / Biology / Occult) | Pracovna mistra (chemie / techniky / biologie / okultismu) | Charity Memorial | Pomník dobročinnosti |
 | Spawning Pods | Líhňové tobolky | Catacombs | Katakomby |
 
 ### 3.6 Story world: disease, factions, monsters
@@ -387,7 +400,7 @@ icons, or in story text.
 | The Frenzy | Běsnění | night of "The Frenzy" → *noc „Běsnění“*. |
 | The Grand Contest | Velké klání | |
 | the Hunt / Night of the Hunt | hon / Noc honu | *lov* where it means the act of hunting. |
-| holy water, vial | svěcená voda, lahvička | |
+| holy water, vial | svěcená voda, flakonek | |
 | expose / conceal | odhalit / zatajit | |
 
 ### 3.7 UI and menus
@@ -479,7 +492,7 @@ Démonický tvor*. Superpower / Weapon / Drug / Ritual → *Nadlidská schopnost
 | # | Question | Recommendation |
 |---|---|---|
 | Q1 | How should Czech terms relate to the English components? | Czech everywhere. English in parentheses at the first mention in each setup/rule popup, only for card, tile and token names and Chronicle locations players must find or place. Scenario names shown once in English on the scenario screen. (Rejected: English component names in Czech text, which is jarring; Czech only, which is hard to match at the table.) |
-| Q2 | Masterwork: *veledílo* or *mistrovské dílo*? | *veledílo*: one word, literary, easy to decline. |
+| Q2 | Masterwork: *veledílo* or *mistrovské dílo*? | **Settled:** *mistrovské dílo* (binding term of the rulebook translation, 3). |
 | Q3 | Self: *osobní figurka* or *figurka vědce*? | *osobní figurka* / *osobně* (gender-free). |
 | Q4 | Creepy: *děsivost*, *podivínství* or *zlověstnost*? | *děsivost / děsivý*. |
 | Q5 | Hungary: historical *Uhry* or modern *Maďarsko*? | *Uhry / uherský* (period setting). The chronicler writes in 1923, so either works. |
@@ -487,7 +500,7 @@ Démonický tvor*. Superpower / Weapon / Drug / Ritual → *Nadlidská schopnost
 | Q7 | Add *-ová* to fixed female surnames (Vargová, Benwallisová Cartwrightová)? | Yes for Nurse Varga and the Vargas (literary norm). Keep Celia Benwallis Cartwright unchanged as a full foreign name. |
 | Q8 | Monster names: Czech-ise (*pricolič*) or keep the Romanian form? | Czech-ise where a Czech form exists (*strigoj, pricolič*), keep the rest. |
 | Q9 | The app name in Czech? | *My Father's Work (neoficiální)*. Repository names unchanged. |
-| Q10 | *klepnout* (touch) or *kliknout* (mouse)? | *klepnout*. The Windows version is the minority. |
+| Q10 | *klepnout* (touch) or *kliknout* (mouse)? | **Neither.** The app runs on touchscreens and on Windows with a mouse: use neutral wording that names the action (*Pokračujte…, Zvolte své jméno, Zahajte hlasování, …, pokračujte zde*), see 2.6. |
 | Q11 | Should the app insert non-breaking spaces (after v, s, z, k, o, u, a, i, between a number and its unit, before VB) centrally? | **Done:** the app inserts them after v, s, z, k, o, u, a, i in Czech. Translators type plain spaces. |
 | Q12 | Village name secret codes (Rage, Kraven, Plague, Mercy) are compared in code. | Keep the English codes, explain them in Czech in Help. |
 | Q13 | Oliver narration is English audio, and sentence highlighting matches the English text. | **Done:** a Czech story is silent (owner: Czech starts without narration). |
@@ -517,8 +530,8 @@ rules screens). The settled answers to the open questions (section 5) are not re
 | Hearts (the charity count) | srdce | Token: *žeton srdce*. |
 | Investigation (window titles) / investigate (rules) | Pátrání / prošetřit, prošetření | Titles: *Pátrání*, *Pátrání pokračuje*, *Nejvíce pátrání*. |
 | Sciences (the Gen I choice) | vědní obor | "Zvolte, kterému vědnímu oboru se naše rodina bude věnovat". |
-| Masterwork Experiments (the cards) | karty veledíla | |
-| Masterwork Experiment (a named one) | veledílo + name | "Má některý hráč veledílo <b>Lykantropická síla</b>?" |
+| Masterwork Experiments (the cards) | mistrovské experimenty | |
+| Masterwork Experiment (a named one) | mistrovský experiment + name | "Má některý hráč mistrovský experiment <b>Lykantropická síla</b>?" |
 | Nasty Rumor (35 VP choice) | ošklivé pomluvy | Window title „Ošklivé pomluvy“. |
 | Unfortunate Accident (35 VP choice) | nešťastná náhoda | Window title „Nešťastná náhoda“, choice "Stane se mu nešťastná náhoda." |
 | seedy dealings | nekalé obchody | |
@@ -526,10 +539,10 @@ rules screens). The settled answers to the open questions (section 5) are not re
 | Biology award | ocenění za biologii | |
 | research marker | ukazatel výzkumu | |
 | mainstream merit | punc uznávané vědy | |
-| Ties are broken by the last player in turn order. | Při shodě rozhoduje poslední hráč v pořadí tahů. | Vote screens: "Sečtěte všechny hlasy. Vítězí strana s více hlasy." / "Klepněte na výsledek svého hlasování:". |
+| Ties are broken by the last player in turn order. | Při shodě rozhoduje poslední hráč v pořadí tahů. | Vote screens: "Sečtěte všechny hlasy. Vítězí strana s více hlasy." / "Zvolte výsledek svého hlasování:". |
 | Then, since this is a 3-player game, pass the starting player marker clockwise 1 additional time. | Protože hrajete ve třech, předejte poté žeton začínajícího hráče ještě o jedno místo dál po směru hodinových ručiček. | One sentence in every setup. "Pass the Starting Player token as normal." → *Předejte žeton začínajícího hráče jako obvykle.* |
 | spot A/B/C on the Village Chronicle | místo budovy A/B/C v Kronice vesnice | |
-| Click Here (UI link inside a hub sentence) | klepněte sem | Lower case: it always completes a sentence ("Pokud hráč…, klepněte sem"). Also *klepnutím získáte zvláštní odměnu*. |
+| Click Here (UI link inside a hub sentence) | pokračujte zde | Lower case: it always completes a sentence ("Pokud hráč…, pokračujte zde"). Also *vyzvedněte si zde zvláštní odměnu*. Hub `_ClickHere` rows use a verb that completes their sentence ("…, přečtěte si zde zprávu z Knihy příběhů"). |
 
 ### 6.2 Story terms
 
@@ -560,11 +573,11 @@ rules screens). The settled answers to the open questions (section 5) are not re
 | Death Becomes Us | Smrt nám sluší |
 | A Gift of Spawning / The Hunter's Tax | Dar líhně / Daň pro lovce |
 | Taxation / Final Taxation | Zdanění / Poslední zdanění |
-| Masterwork Completion | Dokončení veledíla |
+| Masterwork Completion | Dokončení mistrovského díla |
 | The Hunt is On / The Hunt Begins / Endless Hunt | Hon je v plném proudu / Hon začíná / Nekonečný hon |
 | Safe and Protected | V bezpečí a pod ochranou |
 | The Monster Without | Netvor zvenčí |
-| Engineering Achievement / Scientific Achievement | Inženýrský počin / Vědecký počin |
+| Engineering Achievement / Scientific Achievement | Technický počin / Vědecký počin |
 | Experiments are Feared | Strach z experimentů |
 | Overrun By Demons / Monsters | Napospas démonům / netvorům |
 | A Call for Assistance | Žádost o pomoc |

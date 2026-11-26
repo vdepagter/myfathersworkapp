@@ -26,11 +26,11 @@ Guide_Panacea;Zveřejnění → zkouška panacey pro větev [[hub:University]] j
 //====== A Taste of Evil ======;
 Guide_GloomyHunters;Konce této větve: [[end:1]] a [[end:2]]. Na konci Raných let hlasujete, zda se lovcům postavit, nebo jim uvěřit (při hře 2 hráčů se jim postavíte vždy).<ul><li>Postavit se jim a poté dosáhnout cíle součtem VB karet experimentů darovaných na konci Zralých let → [[end:1]]</li><li>Uvěřit jim, nebo cíle nedosáhnout → [[end:2]]</li></ul>
 Guide_GloomyHunters_Now;<b>Nyní:</b> {{0=?|postavili jste se lovcům|uvěřili jste lovcům → [[end:2]]}}{{1=|.| a dosáhli jste cíle → [[end:1]].|, ale cíle jste nedosáhli → [[end:2]].|.}}
-Guide_GloomyWolves;Konce této větve: [[end:3]] a [[end:4]]. Na konci Zralých let hlasujete o vypuštění očistného odvaru (hráči s kartou choroby mezi uschovanými experimenty musí hlasovat PROTI):<ul><li>Zvítězí očista → [[end:3]]</li><li>Jinak volí {{0=Oliver}}: očista → [[end:3]], prodej lahvičky → [[end:4]]</li></ul>
-Guide_GloomyWolves_Now;<b>Nyní:</b> lahvička byla {{0=?|použita k očistě kraje → [[end:3]]|prodána → [[end:4]]}}.
+Guide_GloomyWolves;Konce této větve: [[end:3]] a [[end:4]]. Na konci Zralých let hlasujete o vypuštění očistného odvaru (hráči s kartou choroby mezi uschovanými experimenty musí hlasovat PROTI):<ul><li>Zvítězí očista → [[end:3]]</li><li>Jinak volí {{0=Oliver}}: očista → [[end:3]], prodej flakonku → [[end:4]]</li></ul>
+Guide_GloomyWolves_Now;<b>Nyní:</b> flakonek byl {{0=?|použit k očistě kraje → [[end:3]]|prodán → [[end:4]]}}.
 Guide_Confront;Postavit se → [[end:1]] je stále na dosah (dosáhněte cíle součtem VB darovaných karet experimentů). Uvěřit → [[end:2]].
 Guide_HuntTarget;Cíl splněn → [[end:1]]. Cíl nesplněn → [[end:2]].
-Guide_CleanseVote;Očista → [[end:3]]. PROTI → {{0=Oliver}} volí mezi očistou ([[end:3]]) a prodejem lahvičky ([[end:4]]).
+Guide_CleanseVote;Očista → [[end:3]]. PROTI → {{0=Oliver}} volí mezi očistou ([[end:3]]) a prodejem flakonku ([[end:4]]).
 Guide_Vial;Očista → [[end:3]]. Prodej → [[end:4]].
 //====== The Good Fight ======;
 Guide_ProsperityOrder;Konce této větve: [[end:6]] a [[end:4]]. Na konci Zralých let hlasujete (při 2 hráčích dražíte) o tom, zda podpořit Běsnění:<ul><li>Podpořit → zlo se vrací → [[end:4]]</li><li>Nepodpořit → [[end:6]]</li></ul>
