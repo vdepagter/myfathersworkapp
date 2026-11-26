@@ -1,0 +1,42 @@
+﻿Tag;Czech
+// Guided mode hints (Shared/Guide/ATimeOfWarGuide.cs). Not narrated. [[hub:<ATimeOfWarHubId>]] and [[end:<n>]] become the
+// Endings Gallery names with a found mark. No semicolons in the text (CSV separator), no | or } inside {{n=...}} options.
+// {{0=?|Unified Monarchists|Separatists}} is the faction the town supported in Generation I, {{1=?|...}} the other one.
+//====== Headings ======;
+Guide_Title;Průvodce
+Guide_Route1;Kam vede generace I
+Guide_Route2;Kam vede generace II
+Guide_Route3;Kde tato větev končí
+//====== Taking Sides ======;
+Guide_TakingSides;V generaci II následuje [[hub:Martial]], nebo [[hub:TimeTravel]]. Sudičky o tom rozhodly losem (50 : 50) už na začátku hry a nic, co uděláte, to nezmění. Některé zvěsti na radnici (Town Hall) napovídají, která větev to bude.
+Guide_TakingSides_NowForced;<b>Nyní:</b> rozhoduje jméno vaší vesnice: {{0=?|[[hub:TimeTravel]]|[[hub:Martial]]}}.
+//====== Martial Law ======;
+Guide_Martial;Generace III se řídí tím, kdo vyhraje válku: sjednocení monarchisté → [[hub:MonarchReign]], separatisté → [[hub:Peace]]. Město stojí na straně {{0=?|sjednocených monarchistů|separatistů}} a {{1=?|sjednocení monarchisté|separatisté}} kladou odpor. Na konci této generace se náhodně vylosuje jedna ze tří zkoušek (každá se stejnou pravděpodobností):<ul><li><b>Sabotáž:</b> zničené budovy: 1 nebo 2 (náhodně vylosováno) → vítězí {{1=?|sjednocení monarchisté|separatisté}}.</li><li><b>Vlajky:</b> vítězí strana s více žetony vlajky lícem nahoru (při shodě vítězí {{0=?|sjednocení monarchisté|separatisté}}).</li><li><b>Zbraně:</b> dost dokončených experimentů Pokročilé výzbroje (potřebný počet se losuje) → vítězí {{1=?|sjednocení monarchisté|separatisté}}.</li></ul>
+Guide_Martial_Now;<b>Nyní:</b> zničené budovy: {{2=0}}.
+Guide_ResistSides;Otočení vašeho žetonu vlajky se počítá, budou-li sudičky zkoušet vlajky. Vítězství sjednocených monarchistů ve válce → [[hub:MonarchReign]], vítězství separatistů → [[hub:Peace]].
+Guide_ResistBuildings;Zvítězí-li {{1=?|sjednocení monarchisté|separatisté}} → {{1=?|[[hub:MonarchReign]]|[[hub:Peace]]}}. Udrží-li město {{0=?|sjednocení monarchisté|separatisté}} → {{0=?|[[hub:MonarchReign]]|[[hub:Peace]]}}.
+Guide_ResistFlags;Sjednocení monarchisté → [[hub:MonarchReign]]. Separatisté → [[hub:Peace]].
+Guide_ResistWeapons;Uspějí-li {{1=?|sjednocení monarchisté|separatisté}} → {{1=?|[[hub:MonarchReign]]|[[hub:Peace]]}}. Ubrání-li město {{0=?|sjednocení monarchisté|separatisté}} → {{0=?|[[hub:MonarchReign]]|[[hub:Peace]]}}.
+//====== Time Travel ======;
+Guide_TimeTravel;V generaci III následuje [[hub:Paradox]], nebo [[hub:Warning]]. Na konci této generace rozhodnou sudičky jednou ze dvou zkoušek, 50 : 50:<ul><li><b>Žetony paradoxu</b>, které zůstaly na experimentech všech hráčů: alespoň tolik, kolik určí los mezi {{0=1}} a {{1=3}} → [[hub:Warning]] (časová linie je pozměněna), méně → [[hub:Paradox]].</li><li><b>Stroj času:</b> dokončeny všechny tři opravy → [[hub:Paradox]], jinak → [[hub:Warning]].</li></ul>
+Guide_TimeTravel_Now;<b>Nyní:</b> stroj času {{0=?|je opraven|zatím opraven není}}.
+Guide_Repaired;Opravený stroj času vede k větvi [[hub:Paradox]], budou-li sudičky na konci této generace zkoušet stroj času (50 : 50 se žetony paradoxu).
+Guide_ParadoxTokens;Dost žetonů → [[hub:Warning]]. Méně → [[hub:Paradox]].
+Guide_TimeMachine;Opraven → [[hub:Paradox]]. Neopraven → [[hub:Warning]].
+//====== Monarchy Reigns ======;
+Guide_Reign;Konce této větve: [[end:5]] a [[end:6]]. Nejvýše {{0=1}} [[pl:postih/postihy/postihů]] koruny do konce generace → [[end:5]], více → [[end:6]].
+Guide_Reign_Now;<b>Nyní:</b> dosavadní postihy koruny: {{0=0}}.
+Guide_Crown;Každý postih koruny se počítá: nejvýše {{0=1}} do konce generace → [[end:5]], více → [[end:6]].
+//====== World Conquest ======;
+Guide_Peace;Konce této větve: [[end:7]] a [[end:8]]. Konec [[end:7]] vyžaduje obojí:<ul><li>přijetí nového masa při hlasování o hladomoru (na konci Raných let)</li><li>vypuštění plynu (na konci Zralých let)</li></ul>Cokoli jiného → [[end:8]].
+Guide_Peace_Now;<b>Nyní:</b> {{0=?|nové maso bylo přijato|nové maso zatím přijato nebylo}} – {{1=|o plynu se teprve bude hlasovat|plyn nebyl vypuštěn|plyn byl vypuštěn|plyn byl vypuštěn}}.
+Guide_Famine;Přijetí nového masa → [[end:7]] je stále na dosah (je ale nutné vypustit i plyn). Odmítnutí → [[end:8]].
+Guide_Gas;Vypustit plyn → [[end:7]], pokud bylo přijato nové maso. Nevypustit → [[end:8]].
+//====== Peaceful Return ======;
+Guide_Warning;Konce této větve: [[end:3]] a [[end:4]]. Časová linie se ustálí po dostatečném počtu časových posunů (jejich počet je tajný). Dokončení pradědova mistrovského díla v ustálené časové linii → [[end:3]], jinak → [[end:4]].
+Guide_Warning_Now;<b>Nyní:</b> časová linie {{0=?|je ustálená|zatím ustálená není}} – mistrovské dílo {{1=?|dokončeno → [[end:3]]|nedokončeno}}.
+Guide_Stasis;Mistrovské dílo dokončené v ustálené časové linii → [[end:3]].
+//====== Forward to Progress ======;
+Guide_Paradox;Konce této větve: [[end:1]] a [[end:2]]. Na konci generace rozhoduje počet hráčů s dokončeným velmistrovským dílem: alespoň {{0=1}} → [[end:1]], méně → [[end:2]]. Zveřejnil-li někdo nákresy stroje času (tajná volba), počítá se o jedno velmistrovské dílo méně.
+Guide_Schematics;Zveřejnění nákresů stojí na konci generace jedno velmistrovské dílo. Dokončená velmistrovská díla: alespoň {{0=1}} (po zveřejnění o jedno méně) → [[end:1]], méně → [[end:2]].
+Guide_Giants;Alespoň {{0=1}} (o jedno méně, byly-li nákresy zveřejněny) → [[end:1]]. Méně → [[end:2]].

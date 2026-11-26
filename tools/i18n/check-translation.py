@@ -106,7 +106,10 @@ def main():
                 errors.append(f'{tag}: plural token needs three forms: [[pl:{m.group(1)}]]')
         if (e[:1] == ' ') != (t[:1] == ' ') or (e[-1:] == ' ') != (t[-1:] == ' '):
             errors.append(f'{tag}: leading/trailing space differs from the English')
-        if '|' in re.sub(r'\{\{[^{}]*\}\}', '', re.sub(r'\{\{[^{}]*\}\}', '', t)):
+        stripped = t
+        while re.search(r'\{\{[^{}]*\}\}', stripped):
+            stripped = re.sub(r'\{\{[^{}]*\}\}', '', stripped)
+        if '|' in stripped:
             errors.append(f'{tag}: "|" outside a placeholder')
 
     for line in errors:

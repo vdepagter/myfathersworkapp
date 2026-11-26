@@ -1,0 +1,39 @@
+﻿Tag;Czech
+// Guided mode hints (Shared/Guide/FearOfTheUnknownGuide.cs). Not narrated. [[hub:<FearOfTheUnknownHubId>]] and [[end:<n>]]
+// become the Endings Gallery names with a found mark. No semicolons in the text (CSV separator), no | or } inside {{n=...}}.
+//====== Headings ======;
+Guide_Title;Průvodce
+Guide_Route1;Kam vede generace I
+Guide_Route2;Kam vede generace II
+Guide_Route3;Kde tato větev končí
+//====== Witch Hunt ======;
+Guide_WitchHunt;V generaci II následuje [[hub:Foreigners]], nebo [[hub:Creature]]. Na konci této generace rozhodnou sudičky jednou ze dvou zkoušek, 50 : 50:<ul><li><b>Poprava</b> na konci Zralých let: oběšen řezník → [[hub:Foreigners]], kovář → [[hub:Creature]].</li><li><b>Dav</b>: Rodinný hrob nezískal nikdo → [[hub:Foreigners]], získal ho kdokoli → [[hub:Creature]].</li></ul>
+Guide_WitchHunt_Now;<b>Nyní:</b> {{0=|zatím nebyl nikdo popraven|byl popraven kovář|byl popraven řezník}} – {{1=?|Rodinný hrob už někdo získal|Rodinný hrob zatím nikdo nezískal}}.
+Guide_WitchHunt_NowForced;<b>Nyní:</b> rozhoduje jméno vaší vesnice: {{0=?|[[hub:Foreigners]]|[[hub:Creature]]}}, ať sudičky zkoušejí cokoli.
+Guide_FamilyPlot;Budou-li sudičky na konci této generace zkoušet dav (50 : 50 s popravou), vede každý získaný Rodinný hrob k větvi [[hub:Creature]]. Nezíská-li ho nikdo, následuje [[hub:Foreigners]].
+Guide_Execution;Budou-li sudičky na konci této generace zkoušet popravu (50 : 50 s davem): řezník → [[hub:Foreigners]], kovář → [[hub:Creature]]. Ve větvi [[hub:Tension]] se oběšený řezník navíc počítá proti vám.
+//====== Blame it on the Foreigners ======;
+Guide_Foreigners;V generaci III následuje [[hub:Isolation]], nebo [[hub:Tension]]. Na konci této generace rozhodnou sudičky jednou ze dvou zkoušek, 50 : 50:<ul><li><b>Cihly</b>, které nasbírali všichni hráči: dost → Pamětní hradba → [[hub:Isolation]], příliš málo → [[hub:Tension]]. Potřebný počet se losuje: {{0=|2–5|4–8|6–9}}.</li><li><b>Čarodějnice</b> při obviňování (na konci Zralých let): odhalena → [[hub:Tension]], neodhalena → [[hub:Isolation]].</li></ul>
+Guide_Foreigners_Now;<b>Nyní:</b> {{0=|čarodějnici obviníte na konci Zralých let|čarodějnice byla odhalena|byl obviněn nevinný}}.
+Guide_WallVote;Cihly koupené zde se počítají do jedné ze dvou zkoušek na konci této generace: dost cihel → [[hub:Isolation]]. Bude-li v generaci III následovat [[hub:Tension]], bude se tam volba Síly počítat proti vám.
+Guide_Accusation;Budou-li sudičky na konci této generace zkoušet čarodějnici (50 : 50 s cihlami): odhalení čarodějnice → [[hub:Tension]], obvinění nevinného → [[hub:Isolation]]. Ve větvi [[hub:Tension]] se obvinění nevinného počítá proti vám.
+Guide_Bricks;Dost cihel → [[hub:Isolation]]. Příliš málo → [[hub:Tension]].
+//====== The Creature Re-emerges ======;
+Guide_Creature;V generaci III následuje [[hub:Liberal]], nebo [[hub:Privatized]]. Na konci této generace rozhodnou sudičky jednou ze dvou zkoušek, 50 : 50:<ul><li><b>Stvůra:</b> vytvořili jste tvora, o kterého dědova Stvůra žádá → [[hub:Liberal]], jinak → [[hub:Privatized]].</li><li><b>Peníze:</b> ústav (Asylum) dostal alespoň tolik co hrabě → [[hub:Liberal]], hrabě víc → [[hub:Privatized]].</li></ul>Peníze předané tajně průvodce nesčítá.
+Guide_Money;Budou-li sudičky na konci této generace zkoušet peníze (50 : 50 se Stvůrou): dostane-li ústav (Asylum) alespoň tolik co hrabě → [[hub:Liberal]], dostane-li hrabě víc → [[hub:Privatized]].
+Guide_CreatureMade;Budou-li sudičky zkoušet Stvůru (50 : 50 s penězi): tvor vytvořen → [[hub:Liberal]], nevytvořen → [[hub:Privatized]].
+//====== Walled City ======;
+Guide_Isolation;Konce této větve: [[end:1]] a [[end:2]]. Rozhodnou o nich na konci Zralých let žetony spolupráce: {{0=|nasbírány jsou všechny (při hře 2 hráčů)|žeton mají 2 hráči|žeton mají 2 nebo 3 hráči (náhodně vylosováno)}} → [[end:1]], jinak → [[end:2]].
+Guide_Isolation_Now;<b>Nyní:</b> rozhodnuto → {{0=|[[end:1]]|[[end:2]]}}.
+Guide_Collaboration;Ano → [[end:1]]. Ne → [[end:2]].
+//====== Tensions Increase ======;
+Guide_Tension;Konce této větve: [[end:3]] a [[end:4]]. Rozhodnou o nich na konci Raných let tři volby vaší rodiny: oběšení řezníka (generace I), obvinění nevinného z čarodějnictví a volba Síly při hlasování o hradbě (generace II). Dvě nebo více z nich → [[end:4]], méně → [[end:3]].
+Guide_Tension_Now;<b>Nyní:</b> volby, které se počítají proti vám: {{0=0}} ze 3 → {{1=?|[[end:4]]|[[end:3]]}}.
+//====== Private Investors ======;
+Guide_Privatized;Konce této větve: [[end:5]] a [[end:6]]. Alespoň {{0=2}} hráči, které Strážce do konce generace odměnil za dosažení konce stupnice děsivosti → [[end:5]], méně → [[end:6]].
+Guide_Privatized_Now;<b>Nyní:</b> dosud odměnění hráči: {{0=0}}.
+Guide_WardenReward;Každý odměněný hráč se počítá: alespoň {{0=2}} do konce generace → [[end:5]], méně → [[end:6]].
+//====== Acceptance ======;
+Guide_Liberal;Konce této větve: [[end:7]] a [[end:8]]. Alespoň {{0=2}} přijetí do ústavu (Asylum) – „Důraz na rehabilitaci“ – do konce generace → [[end:7]], méně → [[end:8]].
+Guide_Liberal_Now;<b>Nyní:</b> přijetí do ústavu (Asylum) zatím: {{0=0}}.
+Guide_Admission;Každé přijetí se počítá: alespoň {{0=2}} do konce generace → [[end:7]], méně → [[end:8]].
