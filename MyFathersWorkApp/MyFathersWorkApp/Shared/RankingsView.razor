@@ -1,4 +1,4 @@
-@using System.Globalization
+﻿@using System.Globalization
 @using System.Text
 
 @* The final ranking as a podium (mockup "H3 Relic with rain", Nov 2026): the winner's name, the scenario and the branch
@@ -116,7 +116,7 @@
     private static MarkupString PlaceMarkup(string place)
     {
         int digits = place.TakeWhile(char.IsDigit).Count();
-        if (digits == 0 || digits == place.Length) return new MarkupString(System.Net.WebUtility.HtmlEncode(place));
+        if (digits == 0 || !place[digits..].Any(char.IsLetter)) return new MarkupString(System.Net.WebUtility.HtmlEncode(place)); // Czech "1."
         return new MarkupString($"{System.Net.WebUtility.HtmlEncode(place[..digits])}<sup>{System.Net.WebUtility.HtmlEncode(place[digits..])}</sup>");
     }
 

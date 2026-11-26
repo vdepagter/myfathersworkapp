@@ -1,0 +1,158 @@
+<title>Czech translation: A/B samples</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a proofreader's sheet. One passage per band, English on the left, the two blind Czech versions beside it. */
+:root {
+  --paper: #f6f5f1; --sheet: #ffffff; --ink: #1f1d1a; --muted: #6b665e; --rule: #dedad1;
+  --accent: #7a2e2a; --accent-soft: #f3e6e3; --chip: #ece9e1; --chip-ink: #3d3a34;
+  --name: #e5ecf3; --name-ink: #234a6b; --cond: #fbf3dc; --cond-ink: #6b5313; --pick: #2f5d3a; --pick-soft: #e3efe5;
+  --serif: "Literata", Georgia, "Times New Roman", serif;
+  --sans: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #1a1918; --sheet: #232120; --ink: #ece8e1; --muted: #a39d93; --rule: #3a3734;
+  --accent: #e3988f; --accent-soft: #3b2725; --chip: #34312e; --chip-ink: #ddd8cf;
+  --name: #22313f; --name-ink: #a9c8e6; --cond: #3a321c; --cond-ink: #e9cf86; --pick: #9fd0aa; --pick-soft: #22352a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #1a1918; --sheet: #232120; --ink: #ece8e1; --muted: #a39d93; --rule: #3a3734;
+  --accent: #e3988f; --accent-soft: #3b2725; --chip: #34312e; --chip-ink: #ddd8cf;
+  --name: #22313f; --name-ink: #a9c8e6; --cond: #3a321c; --cond-ink: #e9cf86; --pick: #9fd0aa; --pick-soft: #22352a; color-scheme: dark }
+
+body { background: var(--paper); color: var(--ink); font: 15px/1.5 var(--sans); }
+.wrap { max-width: 1320px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 22px; }
+header { display: grid; gap: 10px; }
+h1 { font: 600 1.9rem/1.15 var(--serif); margin: 0; text-wrap: balance; }
+.lead { color: var(--muted); max-width: 70ch; margin: 0; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 12px 14px; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; }
+.controls .group { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.controls .label { font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+button { font: 500 0.9rem var(--sans); color: var(--ink); background: var(--sheet); border: 1px solid var(--rule); border-radius: 4px; padding: 5px 11px; cursor: pointer; }
+button:hover { border-color: var(--muted); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.tally { margin-left: auto; font: 0.9rem var(--sans); color: var(--muted); font-variant-numeric: tabular-nums; }
+.tally b { color: var(--ink); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 0.82rem; color: var(--muted); align-items: center; }
+
+article { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; }
+.phead { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; padding: 12px 16px; border-bottom: 1px solid var(--rule); }
+.phead h2 { font: 600 1.15rem var(--serif); margin: 0; }
+.phead .kind { color: var(--muted); font-size: 0.85rem; }
+.phead code { margin-left: auto; font: 0.75rem var(--mono); color: var(--muted); }
+.cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.col { padding: 14px 16px 16px; min-width: 0; display: grid; align-content: start; gap: 8px; }
+.col + .col { border-left: 1px solid var(--rule); }
+.col h3 { margin: 0; display: flex; gap: 8px; align-items: center; font: 600 0.78rem var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.col h3 .model { text-transform: none; letter-spacing: 0; font-weight: 500; color: var(--accent); }
+.text { font: 1rem/1.62 var(--serif); overflow-wrap: anywhere; }
+.col.en .text { color: var(--muted); }
+.pick { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.pick button[aria-pressed="true"] { background: var(--pick-soft); border-color: var(--pick); color: var(--pick); }
+
+.ph { font: 500 0.82em var(--sans); border-radius: 3px; padding: 0 5px; white-space: nowrap; }
+.ph.name { background: var(--name); color: var(--name-ink); }
+.ph.opt, .ph.icon, .ph.pl { background: var(--chip); color: var(--chip-ink); white-space: normal; }
+.ph.icon::before { content: "◆ "; font-size: 0.8em; }
+.link { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.cond { background: var(--cond); color: var(--cond-ink); border-radius: 3px; padding: 0 3px; }
+.cond .else::before { content: " ⟂ otherwise: "; font: 600 0.75em var(--sans); }
+.cond .if::before { content: "if: "; font: 600 0.75em var(--sans); }
+.cond.one .if::before { content: "sometimes: "; }
+.g { border-bottom: 2px dotted var(--name-ink); }
+body[data-gender="m"] .gf, body[data-gender="f"] .gm { display: none; }
+
+@media (max-width: 900px) {
+  .cols { grid-template-columns: minmax(0, 1fr); }
+  .col + .col { border-left: 0; border-top: 1px solid var(--rule); }
+  .tally { margin-left: 0; }
+}
+@media (prefers-reduced-motion: no-preference) { button { transition: border-color .15s, background-color .15s; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Czech translation: two versions, side by side</h1>
+    <p class="lead">Seven passages from <i>The Cost of Disease</i>, translated by two models from the same brief and the same draft glossary. The versions are labelled A and B so you can judge them blind. Mark the better one per passage, then reveal which model wrote which.</p>
+  </header>
+
+  <div class="controls">
+    <div class="group"><span class="label">Player is</span>
+      <button id="g-m" type="button" aria-pressed="true">a gentleman</button>
+      <button id="g-f" type="button" aria-pressed="false">a lady</button>
+    </div>
+    <div class="group"><span class="label">Models</span>
+      <button id="reveal" type="button" aria-pressed="false">Reveal who wrote A and B</button>
+    </div>
+    <div class="tally" id="tally"></div>
+  </div>
+
+  <div class="legend">
+    <span><span class="ph name">Oliver</span> name typed in by the players (stays undeclined)</span>
+    <span><span class="g">mávl</span> word that follows the player's gender</span>
+    <span><span class="cond"><span class="if">…</span></span> text shown only in some games</span>
+    <span><span class="ph icon">Creepy</span> game icon</span>
+    <span><span class="link">link</span> choice the players tap</span>
+  </div>
+
+  <main id="passages" style="display:grid;gap:18px"></main>
+</div>
+
+<script>
+const PASSAGES = [{"tag": "IntroImmortalitySetup_Content", "title": "A Foreword", "kind": "Story · the chronicler opens the book", "en": "Herein contains a historical account of a peculiar lineage. One that spans multiple generations and by all accounts will continue to fascinate historians for many years to come.<br /><br />I have endeavored to provide as complete a scholarly history as one could provide given the conflicting accounts and whims of hearsay. While many of the details, haunting to the imagination as they may be, stretch the very limits of our human understanding, it is my hope that this text and the accompanying research materials procured will provide evidence as to their truth. The harrowing and potentially supernatural series of events has the capacity to shake the very foundations of the scientific world as we perceive it.<br /><br />With deference to the fellowship that commissioned this explicit work, though I have never met with these generous benefactors, I humbly submit this biographical account in its entirety and swear by the veracity of the contents within.<br /><br />In good health,<br />Dr. Ensign Benwallis", "a": "Na těchto stránkách je sepsána historie jednoho prapodivného rodu. Rodu, jehož příběh se klene přes několik generací a který podle všeho bude dějepisce fascinovat ještě po mnohá léta.<br /><br />Vynasnažil jsem se podat dějiny tak úplné a učené, jak jen to rozporná svědectví a vrtochy zvěstí z doslechu dovolují. Mnohé podrobnosti, jakkoli nedají obrazotvornosti spát, jdou až na samu mez našeho lidského chápání, chovám však naději, že tento spis a k němu přiložené badatelské prameny, které se mi podařilo opatřit, doloží jejich pravdivost. Onen hrůzný a snad i nadpřirozený sled událostí je s to otřást samými základy vědeckého světa, jak jej chápeme.<br /><br />S náležitou úctou ke společenství, jež si právě toto dílo objednalo, třebaže jsem se s oněmi štědrými dobrodinci nikdy nesetkal, pokorně předkládám tento životopisný spis v úplnosti a přísahám na pravdivost všeho, co obsahuje.<br /><br />Při dobrém zdraví,<br />Dr. Ensign Benwallis", "b": "Následující stránky obsahují historické pojednání o jistém podivuhodném rodu. O rodu, jehož dějiny se klenou přes několik pokolení a jenž bude, jak se všeobecně soudí, historiky uchvacovat ještě po mnoho let.<br /><br />Vynasnažil jsem se sepsat dějiny tak úplné a učené, jak jen to rozporuplná svědectví a rozmary klepů dovolují. Mnohé podrobnosti, byť mohou obrazotvornost pronásledovat jako přízraky, sahají až na samé hranice lidského chápání. Přesto doufám, že tento text spolu s přiloženými badatelskými materiály, jež se mi podařilo opatřit, jejich pravdivost doloží. Tento hrůzyplný a snad i nadpřirozený sled událostí je s to otřást samými základy vědeckého světa, jak jej vnímáme.<br /><br />S náležitou úctou ke společenství, které si toto dílo výslovně objednalo, ač jsem se s oněmi štědrými dobrodinci nikdy nesetkal, pokorně předkládám tento životopisný spis v plném znění a přísahám na pravdivost všeho, co obsahuje.<br /><br />V dobrém zdraví<br />Dr. Ensign Benwallis"}, {"tag": "Gen1CreepyTrackRes_Title", "title": "A Seedy Arrangement", "kind": "Window title", "en": "A Seedy Arrangement", "a": "Pokoutní ujednání", "b": "Nekalá úmluva"}, {"tag": "Gen1CreepyTrackRes_1_Content", "title": "A Seedy Arrangement", "kind": "Story · dialogue, a player name, gender", "en": "It was unorthodox for <span class=\"ph name\" title=\"typed in by the players\">Oliver</span>, or anyone of that reclusive lineage, to entertain unknown visitors, but something must have piqued their curiosity. A conversation from an evening dinner is noted in a journal entry:<br /><br />\"Your estate is simply exquisite,\" the representative was noted as saying with an unsettling grin. \"I am impressed to find a rarefied jewel nestled in such a remote place. But, as you will no doubt agree, it can always use improvement and I would like to offer you support in this.\" In fact, it was noted that the individual's mannerisms were especially secretive and plotting.<br /><br />The representative from the Fraternity of Hunters offered their support with substantial funds. With the hope\" that this kindness would be repaid in the future.", "a": "<span class=\"ph name\" title=\"typed in by the players\">Oliver</span>, podobně jako všichni z toho samotářského rodu, neznámé návštěvy zpravidla <span class=\"g\"><span class=\"gm\">nehostil</span><span class=\"gf\">nehostila</span></span>, tentokrát však cosi muselo vzbudit zvědavost. Rozhovor od večerní tabule zachycuje jeden ze zápisů v deníku:<br /><br />„Vaše panství je vpravdě skvostné,“ pravil podle zápisu zástupce se znepokojivě širokým úsměvem. „Žasnu, že v tak odlehlém koutě nalézám takto vzácný klenot. Jistě mi však dáte za pravdu, že vždy je co zlepšovat, a v tom bych vám rád nabídl svou podporu.“ Zápis ostatně podotýká, že způsoby onoho individua byly obzvlášť tajnůstkářské a pletichářské.<br /><br />Zástupce Bratrstva lovců nabídl podporu v podobě nemalého obnosu. S „nadějí“, že tato laskavost bude v budoucnu oplacena.", "b": "Hostit neznámé návštěvníky nepatřilo ke zvyklostem <span class=\"g\"><span class=\"gm\">vědce</span><span class=\"gf\">vědkyně</span></span> <span class=\"ph name\" title=\"typed in by the players\">Oliver</span>, ba nikoho z onoho samotářského rodu, cosi však zřejmě vzbudilo <span class=\"g\"><span class=\"gm\">jeho</span><span class=\"gf\">její</span></span> zvědavost. Zápis v deníku zachycuje rozhovor, který se odehrál jednoho večera u stolu:<br /><br />„Vaše panství je zkrátka skvostné,“ pronesl dle zápisu zástupce se znepokojivým úsměvem. „Jsem okouzlen, že v tak odlehlém koutě nacházím tak vzácný klenot. Jistě však uznáte, že i to nejlepší lze vždy ještě zdokonalit, a v tom bych vám rád nabídl svou podporu.“ Pisatel si navíc poznamenal, že vystupování onoho individua bylo nadmíru tajnůstkářské a pletichářské.<br /><br />Zástupce Bratrstva lovců nabídl podporu v podobě nemalých peněz – v naději, že mu tato laskavost bude jednou oplacena."}, {"tag": "FinalEnding_Content4", "title": "The Crawl (ending)", "kind": "Story · first-person journal", "en": "I write these final words under candle-light, from a shelter I have fashioned in the crawl-space beneath the manor. For a desk, a dusty plank of cedar. I try to keep my utensils above the floor which can become musty and dank during my frequent overnight stays: a dull quill, ink, several lengths of charcoal, a ream of parchment. It is no longer safe to sleep in my bed when night falls. The creatures emerge from the shadows to feed on the few souls that still remain, or to irreversibly change them into shambling horrors most unimaginable.<br /><br />To think that my work to uncover the genealogy of a mildly successful scientific family would cause me to become consumed by a maelstrom of spreading evil! It is my hope that when I complete this writing (if I complete this writing), that these words will offer a history to condemn these fools and their complicity with demons. The world must know who is responsible. It must condemn the group who coddled darkness and made a mockery of science!<br /><br />O God, I hear the creatures again! Their malformed claw-tips scratching at the floorboards! Damn them for what they have done! Damn this infernal work. For it has unleashed a plague upon the land of which there can be no end in sight.", "a": "Tato poslední slova píši při svíčce, v úkrytu, který jsem si zřídil v těsné prostoře pod podlahou panského sídla. Místo psacího stolu zaprášené cedrové prkno. Své náčiní se snažím uchovávat nad podlahou, jež za mých častých nocování zatuchá a vlhne: otupený brk, inkoust, několik kusů uhlu, rys pergamenu. Po setmění již není bezpečné spát ve vlastní posteli. Ze stínů vylézají stvůry, aby hodovaly na hrstce duší, které tu ještě zbývají, anebo aby je nezvratně proměnily v potácivé hrůzy, jaké si nelze ani představit.<br /><br />Pomyslit jen, že mě pátrání po rodokmenu jedné vcelku průměrně úspěšné vědecké rodiny uvrhne do víru šířícího se zla! Doufám, že až tento spis dokončím (dokončím-li jej vůbec), poslouží má slova jako dějiny, které ty pošetilce i jejich spolčení s démony odsoudí. Svět se musí dozvědět, kdo to má na svědomí. Musí odsoudit ty, kdo hýčkali temnotu a z vědy učinili frašku!<br /><br />Ó Bože, už zase slyším ty stvůry! Hroty jejich znetvořených drápů škrábou o prkna podlahy! Ať jsou prokleti za to, co spáchali! Budiž prokleto toto pekelné dílo. Neboť rozpoutalo v zemi morovou ránu, jejíž konec je v nedohlednu.", "b": "Tato poslední slova píši při svíčce v úkrytu, který jsem si zřídil v těsném prostoru pod podlahou panského sídla. Za psací stůl mi slouží zaprášené cedrové prkno. Své náčiní se snažím držet nad podlahou, která za mých častých nocí zde vlhne a páchne zatuchlinou: tupý brk, inkoust, několik tyčinek uhlu, svazek pergamenu. Jakmile padne noc, není už bezpečné spát ve vlastní posteli. Stvůry tehdy vylézají ze stínů, aby se nasytily těch několika duší, jež tu ještě zbyly, anebo je nenávratně proměnily v potácivé hrůzy, jaké si lidská mysl nedokáže ani představit.<br /><br />Pomyslet, že mé pátrání po rodokmenu jedné jen mírně úspěšné vědecké rodiny skončí tím, že mě pohltí vír rozpínajícího se zla! Doufám, že až tento spis dokončím (dokončím-li jej vůbec), poskytnou tato slova dějiny, jež ty pošetilce i jejich spolčení s démony odsoudí. Svět se musí dozvědět, kdo za to nese vinu. Musí zatratit ty, kdo hýčkali temnotu a z vědy učinili frašku!<br /><br />Ó Bože, zas slyším ty stvůry! Hroty jejich znetvořených drápů škrábou o prkna podlahy! Buďtež prokleti za to, co způsobili! Prokleté budiž toto pekelné dílo. Neboť seslalo na tuto zemi mor, jehož konec není v dohledu."}, {"tag": "FinalEnding_Content8", "title": "An Uplifting Tale (ending)", "kind": "Story · the editor's letter, many conditions", "en": "Hello Ensign,<br />I've looked over the manuscript you submitted and I have to admit that it is not what I would have expected. The foreword promises a harrowing and potentially supernatural series of events that test the limits of imagination. However, the story tells a cohesive and somewhat uplifting tale of a family of reformed scientists making the world a better place. I admit that in some cases the means to which this is accomplished is morosely detailed and quite unorthodox, but overall the story seems incomplete.<br /><br />If I may paraphrase: A scientific family enters into the political theater and then assists the Church with charitable donations towards building a hospital. This decision results in prosperity in the region <span class=\"cond one\"><span class=\"if\">\"which is further improved by the generous creation of an unprecedented cure for Yellow Fever.\" </span></span><span class=\"cond one\"><span class=\"if\">After which, they put on an excellent Symposium that attracts a University to the area. </span></span><span class=\"cond one\"><span class=\"if\">They even create an unintentional vaccine that essentially eliminates all disease from the region. </span></span>Ultimately, their work is instrumental in catapulting Hungary and <span class=\"ph name\" title=\"typed in by the players\">Town</span> into the international spotlight. It is very uplifting and has a good potential to sell well to the burgeoning educational market in London.<br /><br />Recommendation - alter descriptions in early chapters to reflect a more uplifting tale. Omit horror and supernatural elements. Offer happy ending.<br /><br />I look forward to seeing your revisions.", "a": "Milý Ensigne,<br />prošel jsem rukopis, který jste zaslal, a musím přiznat, že jsem čekal něco jiného. Předmluva slibuje hrůzný a snad i nadpřirozený sled událostí, které pokoušejí meze představivosti. Vyprávění samo je však soudržným a vcelku povznášejícím příběhem o rodině napravených vědců, kteří činí svět lepším místem. Připouštím, že prostředky, jimiž toho dosahují, jsou místy vylíčeny s ponurou důkladností a jsou značně nezvyklé, celkově však příběh působí neúplně.<br /><br />Smím-li to shrnout: Rodina vědců vstoupí na politické jeviště a poté pomůže církvi dobročinnými dary na stavbu nemocnice. Toto rozhodnutí přinese kraji blahobyt<span class=\"cond one\"><span class=\"if\">, „jejž dále umocní velkorysé vytvoření nevídaného léku na žlutou zimnici“</span></span>. <span class=\"cond one\"><span class=\"if\">Rodina nato uspořádá znamenité sympozium, které do kraje přiláká univerzitu. </span></span><span class=\"cond one\"><span class=\"if\">Mimoděk dokonce vznikne vakcína, která z kraje v podstatě vymýtí veškeré nemoci. </span></span>Nakonec je to právě jejich dílo, co vynese Uhry i vesnici <span class=\"ph name\" title=\"typed in by the players\">Town</span> na výsluní mezinárodní pozornosti. Je to velmi povznášející a má to dobré vyhlídky na odbyt na vzmáhajícím se londýnském trhu se vzdělávací literaturou.<br /><br />Doporučení – upravit popisy v úvodních kapitolách tak, aby lépe odpovídaly povznášejícímu příběhu. Vypustit hrůzu a nadpřirozené prvky. Nabídnout šťastný konec.<br /><br />Těším se na Vaše úpravy.", "b": "Milý Ensigne,<br />prošel jsem rukopis, který jste mi zaslal, a musím přiznat, že jsem čekal něco zcela jiného. Předmluva slibuje hrůzyplný a snad i nadpřirozený sled událostí, jenž zkouší meze obrazotvornosti. Vyprávění samo však nabízí ucelený a vcelku povznášející příběh o rodině polepšených vědců, kteří mění svět k lepšímu. Připouštím, že způsoby, jimiž toho dosahují, jsou místy líčeny až zasmušile podrobně a jsou značně neortodoxní, celkově však příběh působí nedokončeně.<br /><br />Smím-li to shrnout: Vědecká rodina vstoupí na politické jeviště a poté dobročinnými dary pomůže církvi postavit nemocnici. Toto rozhodnutí přinese kraji blahobyt<span class=\"cond one\"><span class=\"if\">, jejž ještě umocní velkorysé vytvoření dosud nevídaného léku na žlutou zimnici</span></span>. <span class=\"cond one\"><span class=\"if\">Rodina poté uspořádá znamenité sympozium, jež do kraje přiláká univerzitu. </span></span><span class=\"cond one\"><span class=\"if\">Dokonce se jí nechtěně podaří vytvořit vakcínu, která z kraje vymýtí prakticky veškeré nemoci. </span></span>Dílo této rodiny nakonec rozhodující měrou vynese Uhry i vesnici <span class=\"ph name\" title=\"typed in by the players\">Town</span> do středu mezinárodní pozornosti. Příběh je to vskutku povznášející a má dobrou naději na slušný odbyt na rozvíjejícím se londýnském trhu vzdělávací literatury.<br /><br />Doporučení – upravit popisy v prvních kapitolách, aby příběh vyzněl povznášejněji. Vypustit hrůzné a nadpřirozené prvky. Nabídnout šťastný konec.<br /><br />Těším se na Vaše úpravy."}, {"tag": "Gen1CreepyTrackRes_1_Content1", "title": "A Seedy Arrangement", "kind": "Choice links", "en": "<span class=\"link\">Accept the offer.</span> (To gain $2.)<br /><br /><span class=\"link\">Refuse the offer.</span> (To avoid a debt in the future.)", "a": "<span class=\"link\">Přijmout nabídku.</span> (Získáte $2.)<br /><br /><span class=\"link\">Odmítnout nabídku.</span> (Vyhnete se dluhu v budoucnu.)", "b": "<span class=\"link\">Přijmout nabídku.</span> (Získáte $2.)<br /><br /><span class=\"link\">Odmítnout nabídku.</span> (Vyhnete se tak budoucímu dluhu.)"}, {"tag": "S5Special1A_Content", "title": "A Bid for Mayor", "kind": "Rules · special event", "en": "<b>SPECIAL EVENT</b><br />All players take all their money into their hands. They then secretly choose any amount to place into their right hand to bid on becoming Mayor.<br /><br />Once all players are ready, reveal the amount of money bid simultaneously. The player that bid the most wins the election. <i>(If there is a tie, the player who went last in turn order the previous round wins the bid.)</i><br /><br />Only the player that wins the election must pay their bid to supply. All others return their money to their Estates.", "a": "<b>ZVLÁŠTNÍ UDÁLOST</b><br />Všichni hráči si vezmou všechny své peníze do rukou. Poté každý tajně zvolí libovolnou částku a vloží ji do pravé ruky jako svou nabídku v dražbě o úřad starosty.<br /><br />Jakmile jsou všichni hráči připraveni, odhalte nabídnuté částky všichni současně. Volby vyhrává hráč s nejvyšší nabídkou. <i>(Při shodě vyhrává dražbu ten z hráčů s nejvyšší nabídkou, který byl v předchozím kole v pořadí tahů poslední.)</i><br /><br />Svou nabídku zaplatí do zásoby pouze vítěz voleb. Všichni ostatní vrátí své peníze na svá panství.", "b": "<b>ZVLÁŠTNÍ UDÁLOST</b><br />Vezměte si všichni do rukou všechny své peníze. Poté tajně přesuňte libovolnou částku do pravé ruky – to bude vaše nabídka v dražbě o úřad starosty.<br /><br />Jakmile jsou všichni připraveni, ukažte nabídnuté částky současně. Hráč s nejvyšší nabídkou vyhrává volby. <i>(Při shodě vyhrává dražbu ten z nich, kdo byl v předchozím kole na tahu nejpozději.)</i><br /><br />Svou nabídku zaplatí do zásoby pouze vítěz voleb. Všichni ostatní vrátí své peníze na své desky panství."}];
+const MODELS = {"A": "Fable 5.2 (high effort)", "B": "Opus 5.5 (high effort)"};
+const KEY = "mfw-cs-ab";
+let picks = {};
+try { picks = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { picks = {}; }
+
+function save() { try { localStorage.setItem(KEY, JSON.stringify(picks)); } catch (e) {} }
+
+function render() {
+  const main = document.getElementById("passages");
+  const revealed = document.getElementById("reveal").getAttribute("aria-pressed") === "true";
+  main.innerHTML = PASSAGES.map((p, i) => `
+    <article>
+      <div class="phead"><h2>${p.title}</h2><span class="kind">${p.kind}</span><code>${p.tag}</code></div>
+      <div class="cols">
+        <div class="col en"><h3>English</h3><div class="text">${p.en}</div></div>
+        ${["a", "b"].map(v => `
+        <div class="col"><h3>Version ${v.toUpperCase()}${revealed ? ` <span class="model">${MODELS[v.toUpperCase()]}</span>` : ""}</h3>
+          <div class="text" lang="cs">${p[v]}</div>
+        </div>`).join("")}
+      </div>
+      <div class="col" style="border-top:1px solid var(--rule)">
+        <div class="pick" role="group" aria-label="Which version reads better?">
+          ${[["A", "A reads better"], ["same", "About the same"], ["B", "B reads better"]].map(([k, label]) =>
+            `<button type="button" id="pick-${i}-${k}" data-i="${i}" data-k="${k}" aria-pressed="${picks[p.tag] === k}">${label}</button>`).join("")}
+        </div>
+      </div>
+    </article>`).join("");
+  const counts = { A: 0, B: 0, same: 0 };
+  Object.values(picks).forEach(k => { if (k in counts) counts[k]++; });
+  document.getElementById("tally").innerHTML =
+    `Your picks: <b>A ${counts.A}</b> · <b>B ${counts.B}</b> · same ${counts.same} · of ${PASSAGES.length}`;
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  if (b.dataset.k) {
+    const tag = PASSAGES[+b.dataset.i].tag;
+    picks[tag] = picks[tag] === b.dataset.k ? undefined : b.dataset.k;
+    save(); render();
+  } else if (b.id === "reveal") {
+    b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true");
+    b.textContent = b.getAttribute("aria-pressed") === "true" ? "Hide the models" : "Reveal who wrote A and B";
+    render();
+  } else if (b.id === "g-m" || b.id === "g-f") {
+    const f = b.id === "g-f";
+    document.body.dataset.gender = f ? "f" : "m";
+    document.getElementById("g-m").setAttribute("aria-pressed", String(!f));
+    document.getElementById("g-f").setAttribute("aria-pressed", String(f));
+  }
+});
+document.body.dataset.gender = "m";
+render();
+</script>

@@ -19,15 +19,23 @@
 @font-face { font-family: "Bowlby One SC"; src: url(../fonts/bowlby-one-sc-ext.woff2) format("woff2"); font-display: swap; ascent-override: 87.1%; descent-override: 12.9%; line-gap-override: 0%; size-adjust: 94%;
              unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
 @font-face { font-family: "Frijole"; src: url(../fonts/frijole.woff2) format("woff2"); font-display: swap; size-adjust: 85%; }
+/* Czech letters Averia and Frijole lack (e with caron, u with ring, ...): drawn from their own letters and accents by
+   tools/fonts/czech-supplement.py, under new names (OFL Reserved Font Names). Listed after the original font, so only the
+   missing letters come from them, and unicode-range keeps English pages from loading them. */
+@font-face { font-family: "MFW Czech Text"; src: url(../fonts/mfw-czech-text-regular.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; unicode-range: U+010C-010F, U+011A-011B, U+0147-0148, U+0158-0159, U+0164-0165, U+016E-016F; }
+@font-face { font-family: "MFW Czech Text"; src: url(../fonts/mfw-czech-text-bold.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; unicode-range: U+010C-010F, U+011A-011B, U+0147-0148, U+0158-0159, U+0164-0165, U+016E-016F; }
+@font-face { font-family: "MFW Czech Text"; src: url(../fonts/mfw-czech-text-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; font-display: swap; unicode-range: U+010C-010F, U+011A-011B, U+0147-0148, U+0158-0159, U+0164-0165, U+016E-016F; }
+@font-face { font-family: "MFW Czech Text"; src: url(../fonts/mfw-czech-text-bolditalic.woff2) format("woff2"); font-weight: 700; font-style: italic; font-display: swap; unicode-range: U+010C-010F, U+011A-011B, U+0147-0148, U+0158-0159, U+0164-0165, U+016E-016F; }
+@font-face { font-family: "MFW Czech Heading"; src: url(../fonts/mfw-czech-heading.woff2) format("woff2"); font-display: swap; size-adjust: 85%; unicode-range: U+010C-010F, U+011A-011B, U+0147-0148, U+0158-0159, U+0160-0161, U+0164-0165, U+016E-016F, U+017D-017E; }
 
 :root {
     /* One pixel of the Unity canvas (1920 x 1081), fitted inside the window: game page frame, buttons, round bar.
        Phones in portrait use a bigger unit so the round bar stays readable. */
     --u: min(calc(100vw / 1920), calc(100vh / 1081));
     --u: min(calc(100vw / 1920), calc(100svh / 1081));
-    --mfw-font-heading: "Frijole", Georgia, serif;
+    --mfw-font-heading: "Frijole", "MFW Czech Heading", Georgia, serif;
     --mfw-font-button:  "Bowlby One SC", Georgia, serif;
-    --mfw-font-text:    "Averia", Georgia, serif;
+    --mfw-font-text:    "Averia", "MFW Czech Text", Georgia, serif;
     --mfw-cream:        #f1e4c4;
 }
 

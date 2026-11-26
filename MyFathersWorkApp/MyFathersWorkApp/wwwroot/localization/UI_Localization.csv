@@ -9,6 +9,7 @@ MainMenu_PasteSaveDataHere;Paste saved game data here...
 MainMenu_FanMade;This is a fan-made project and is not affiliated with Renegade Game Studios or Hasbro.
 //====== Languages ======;
 English;English
+Czech;Čeština
 //====== Players Select Screen ======;
 PlayersSelect_Title;Players
 PlayersSelect_SubTitle;How many individuals will be sharing this experience today?
@@ -23,6 +24,9 @@ PlayersNameEntry_SubTitle;Player {{0=|A|B|C|D}} – Please enter your given name
 PlayersNameEntry_Placeholder;Enter name...
 PlayersNameEntry_PopUp;The name must be between 2 and 15 characters.
 PlayersNameEntry_PopUp2;Each player name must be unique.
+PlayersNameEntry_Gender;Your character is:
+Gender_Male;a gentleman
+Gender_Female;a lady
 //====== Players Welcome Screen ======;
 PlayersWelcome_First;Welcome to <strong>My Father's Work</strong>,<br /><br /><span class="player-name">{{0=...|Oliver|James|Olivia|...}}</span><br /><br />Our warmest regards.
 PlayersWelcome_Second;Welcome to <strong>My Father's Work</strong>,<br /><br /><span class="player-name">{{0=...|Oliver|James|Olivia|...}}</span><br /><br />Please enjoy your experience.
@@ -393,3 +397,6 @@ MainMenu_InstallHide;Hide
 Update_Done;Updated to {{0=...|v0.66.6.80}}.
 Guide_Found;Already found
 Guide_NotFound;Not found yet
+//====== Dates (.NET format strings; translations: Czech "d. M. yyyy") ======;
+Format_Date;d MMM yyyy
+Format_DateTime;d MMM yyyy, HH:mm

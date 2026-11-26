@@ -417,7 +417,7 @@
     }
 
     // Link labels are plain text (often a player name): encode, then mark the names translate="no"
-    private MarkupString LinkText(string content) => System.Net.WebUtility.HtmlEncode(content).ProtectNames(GlobalData).AsMarkup();
+    private MarkupString LinkText(string content) => System.Net.WebUtility.HtmlEncode(Grammar.Resolve(content, GlobalData)).ProtectNames(GlobalData).AsMarkup();
 
     private void HidePauseMenu()
     {
@@ -773,7 +773,8 @@
     private bool WillAutoplay(GameplayWindow window, bool suppressed) =>
         !suppressed && Audio.Narration != NarrationVoice.Off && Audio.IsUnlocked && !(OliverClips(window) != null && Narration.IsPrivate(GlobalData, window));
 
-    private bool HasNarration(GameplayWindow window) => Audio.Available && (window.VoiceOver != null || OliverClips(window) != null);
+    // Narration is English only: a translated story is silent (AppLanguages.cs)
+    private bool HasNarration(GameplayWindow window) => Audio.Available && GlobalData.IsStoryInEnglish && (window.VoiceOver != null || OliverClips(window) != null);
 
     private GameplayWindow? _OliverWindow; // the window _OliverClips was computed for
     private List<NarrationClip>? _OliverClips;
@@ -930,7 +931,7 @@
     private static readonly System.Text.RegularExpressions.Regex _StartRevealLink =
         new(@"\bstart the (vote|bid)\b", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
-    private static bool IsRevealLink(GameplayElement element) => element.Callback != null && _StartRevealLink.IsMatch(element.Content);
+    private static bool IsRevealLink(GameplayElement element) => element.Callback != null && _StartRevealLink.IsMatch(element.EnglishContent ?? element.Content);
 
     // "Click here after resolving the vote / bid..." on a vote or bid special event: shown as Start Voting / Bidding, and
     // Accept after the countdown follows it to the page where the result is entered (like "Click here to start the
@@ -951,7 +952,7 @@
     private static bool? RevealKind(GameplayWindow window)
     {
         if (window.Cue != SoundCue.SpecialEvent) return null;
-        string text = string.Concat(window.Elements.Select(element => element.Content));
+        string text = string.Concat(window.Elements.Select(element => element.EnglishContent ?? element.Content));
         if (System.Text.RegularExpressions.Regex.IsMatch(text, @"\bbid(s|ding)?\b", System.Text.RegularExpressions.RegexOptions.IgnoreCase)) return true;
         if (System.Text.RegularExpressions.Regex.IsMatch(text, @"\bvot(e|es|ed|ing)\b", System.Text.RegularExpressions.RegexOptions.IgnoreCase)) return false;
         return null;
@@ -973,7 +974,7 @@
         if (resolved != null) return resolved == true ? GlobalTags.Reveal_StartBid : GlobalTags.Reveal_StartVote;
         if (element.ButtonTag != null) return element.ButtonTag;
 
-        string text  = element.Content.Trim();
+        string text  = (element.EnglishContent ?? element.Content).Trim();
         var    start = _StartLink.Match(text);
         if (start.Success) return start.Groups[2].Value == "bid" ? GlobalTags.Reveal_StartBid : GlobalTags.Reveal_StartVote;
         if (window.Elements.Count(other => other.Callback != null) != 1) return null;
@@ -988,7 +989,7 @@
     {
         if (IsRevealLink(element) && GlobalData.ActiveWindow != null)
         {
-            OpenReveal(_StartRevealLink.Match(element.Content).Groups[1].Value.Equals("bid", StringComparison.OrdinalIgnoreCase), element.Callback);
+            OpenReveal(_StartRevealLink.Match(element.EnglishContent ?? element.Content).Groups[1].Value.Equals("bid", StringComparison.OrdinalIgnoreCase), element.Callback);
             return;
         }
 

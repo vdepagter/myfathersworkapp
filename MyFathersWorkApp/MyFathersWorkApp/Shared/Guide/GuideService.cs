@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace MyFathersWorkApp;
 
@@ -11,7 +11,8 @@ namespace MyFathersWorkApp;
 // Not narrated: guide text is no story tag, and js/audio.js skips .guide-note when it highlights.
 public sealed class GuideService(HttpClient http)
 {
-    private readonly Dictionary<ScenarioId, Dictionary<string, string>> _Texts = new();
+    // Per scenario: language -> guide texts (English, and the translations of AppLanguages.cs with English for what they lack)
+    private readonly Dictionary<ScenarioId, Dictionary<string, Dictionary<string, string>>> _Texts = new();
 
     public async Task LoadAsync(ScenarioId scenario)
     {
@@ -25,26 +26,41 @@ public sealed class GuideService(HttpClient http)
             _                        => string.Empty
         };
 
-        Dictionary<string, string> texts = new();
-        _Texts[scenario] = texts;
+        Dictionary<string, Dictionary<string, string>> languages = new();
+        _Texts[scenario] = languages;
         if (file == string.Empty) return;
 
         try
         {
-            Dictionary<string, Dictionary<string, string>> languages = new();
             (await http.GetStringAsync(file)).ProcessLocalizationFile(languages);
-            if (languages.TryGetValue("English", out Dictionary<string, string>? english)) _Texts[scenario] = english;
         }
         catch (Exception exception)
         {
             Console.WriteLine($"Guide: no hints for {scenario} ({exception.Message})");
+            return;
+        }
+
+        foreach (AppLanguage translation in AppLanguages.Translations.Where(translation => translation.Scenarios.Contains(scenario)))
+        {
+            try
+            {
+                (await http.GetStringAsync(translation.File(Path.GetFileNameWithoutExtension(file)))).ProcessLocalizationFile(languages);
+                languages.FillMissing(translation.Name, AppLanguages.ENGLISH);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"Guide: no {translation.Name} hints for {scenario} ({exception.Message})");
+            }
         }
     }
 
     // The hint for what is on display, or null. key: the screen method of a window or popup, or null for the hub.
     public GuideNote? Note(GlobalData globalData, string? key, GuideFound found)
     {
-        if (!_Texts.TryGetValue(globalData.ScenarioId, out Dictionary<string, string>? texts) || texts.Count == 0) return null;
+        if (!_Texts.TryGetValue(globalData.ScenarioId, out Dictionary<string, Dictionary<string, string>>? languages)) return null;
+        if (!languages.TryGetValue(globalData.ScenarioLanguage, out Dictionary<string, string>? texts)
+         && !languages.TryGetValue(AppLanguages.ENGLISH, out texts)) return null;
+        if (texts.Count == 0) return null;
 
         GuideContext context = new(globalData, texts, found);
 

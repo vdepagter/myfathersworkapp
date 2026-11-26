@@ -122,7 +122,7 @@
         }
     </div>;
 
-    private static string FormatDate(DateTime utc) => utc.ToLocalTime().ToString("d MMM yyyy, HH:mm", CultureInfo.InvariantCulture);
+    private string FormatDate(DateTime utc) => GlobalData.FormatDate(utc.ToLocalTime(), true);
 
     private void GoBack()
     {

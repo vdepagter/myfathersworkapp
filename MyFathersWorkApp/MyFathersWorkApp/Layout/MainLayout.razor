@@ -26,7 +26,7 @@
     {
         Nav.LocationChanged += OnLocationChanged;
         UpdateMusic();
-        (await Http.GetStringAsync("localization/UI_Localization.csv")).ProcessLocalizationFile(_GlobalData.UI_Localization);
+        await _GlobalData.LoadLanguagesAsync(Http, Js);
     }
 
     private void OnLocationChanged(object? sender, LocationChangedEventArgs e) => UpdateMusic();

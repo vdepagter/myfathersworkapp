@@ -1,4 +1,4 @@
-namespace MyFathersWorkApp;
+﻿namespace MyFathersWorkApp;
 
 // Achievements and records of the Endings Gallery, worked out from the recorded games and ticked endings every time they
 // are shown. Nothing is stored, so undo, edits in the Recent Games sheet, deletes and imports never leave a stale badge.
@@ -55,7 +55,7 @@ public static class GalleryAchievements
         GalleryGame[]     ordered = Chronological(games).ToArray();
 
         string Notyet()                  => globalData.GetLocalizedUITag(GlobalTags.Ach_NotYet);
-        string When(GalleryGame game)    => game.Date.ToString("d MMM yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        string When(GalleryGame game)    => globalData.FormatDate(game.Date);
         string WhoWhen(string who, GalleryGame game) => $"{who} · {When(game)}";
         string OfCount(int have, int need) => globalData.GetLocalizedUITag(GlobalTags.Ach_OfCount)
                                                         .FormatWithReplacement(0, have.ToString())

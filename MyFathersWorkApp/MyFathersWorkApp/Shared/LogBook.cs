@@ -1,4 +1,4 @@
-namespace MyFathersWorkApp;
+﻿namespace MyFathersWorkApp;
 
 public record LogBookEntry(string Title, string Location, string Summary);
 
@@ -14,6 +14,10 @@ public class LogBookService(HttpClient http)
     {
         public Dictionary<string, List<LogBookEntry>> ByScreen { get; } = new();
         public Dictionary<string, LogBookEntry>       ByTitle  { get; } = new();
+
+        // Translations (AppLanguages.cs): language -> English title -> translated entry. The game state keeps the English
+        // titles, so a change of language shows the same events.
+        public Dictionary<string, Dictionary<string, LogBookEntry>> Translated { get; } = new();
     }
 
     private readonly Dictionary<ScenarioId, Task<ScenarioBook>> _Books = new();
@@ -33,13 +37,39 @@ public class LogBookService(HttpClient http)
     {
         string? path = CsvPath(scenario);
         if (path == null) return;
-        if (!_Books.TryGetValue(scenario, out Task<ScenarioBook>? loading)) _Books[scenario] = loading = LoadCoreAsync(path);
+        if (!_Books.TryGetValue(scenario, out Task<ScenarioBook>? loading)) _Books[scenario] = loading = LoadCoreAsync(scenario, path);
         _Loaded[scenario] = await loading;
     }
 
-    private async Task<ScenarioBook> LoadCoreAsync(string path)
+    private async Task<ScenarioBook> LoadCoreAsync(ScenarioId scenario, string path)
     {
         ScenarioBook book = new();
+
+        // A translation: localization/<code>/<same file name>, "Title;<translated title>;Location;Summary", keyed by the
+        // English title
+        foreach (AppLanguage translation in AppLanguages.Translations.Where(translation => translation.Scenarios.Contains(scenario)))
+        {
+            try
+            {
+                string csv = await http.GetStringAsync(translation.File(Path.GetFileNameWithoutExtension(path)));
+                Dictionary<string, LogBookEntry> entries = new();
+
+                foreach (string rawLine in csv.Split('\n'))
+                {
+                    string line = rawLine.TrimEnd('\r').TrimStart('\uFEFF');
+                    if (line.Length == 0 || line.StartsWith("//")) continue;
+                    string[] parts = line.Split(';', 4);
+                    if (parts.Length < 4 || parts[0] == "Title") continue;
+                    entries[parts[0]] = new LogBookEntry(parts[1], parts[2], parts[3]);
+                }
+
+                book.Translated[translation.Name] = entries;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Log Book ({translation.Name}): {e.Message}");
+            }
+        }
 
         try
         {
@@ -82,8 +112,16 @@ public class LogBookService(HttpClient http)
         if (entries.Count == 1) return entries[0];
 
         string title = globalData.ActiveWindow?.Title ?? string.Empty;
-        return entries.FirstOrDefault(entry => title.Contains(entry.Title, StringComparison.OrdinalIgnoreCase)) ?? entries[0];
+        return entries.FirstOrDefault(entry => title.Contains(entry.Title, StringComparison.OrdinalIgnoreCase)
+                                            || title.Contains(Shown(globalData, book, entry).Title, StringComparison.OrdinalIgnoreCase)) ?? entries[0];
     }
+
+    // The entry in the language the story is shown in
+    private static LogBookEntry Shown(GlobalData globalData, ScenarioBook book, LogBookEntry entry) =>
+        !globalData.IsStoryInEnglish && book.Translated.TryGetValue(globalData.ScenarioLanguage, out Dictionary<string, LogBookEntry>? translated)
+                                     && translated.TryGetValue(entry.Title, out LogBookEntry? shown)
+            ? shown
+            : entry;
 
     // Logs the screen on display; each event once, as in Unity
     public void Note(GlobalData globalData)
@@ -107,10 +145,10 @@ public class LogBookService(HttpClient http)
 
         List<LogBookEntry> entries = globalData.ScenarioVars.LogBook
                                                .Where(title => book.ByTitle.ContainsKey(title))
-                                               .Select(title => WithVillage(book.ByTitle[title], globalData.TownName))
+                                               .Select(title => book.ByTitle[title])
                                                .ToList();
 
         if (entries.Count > 0 && CurrentEntry(globalData, book)?.Title == entries[^1].Title) entries.RemoveAt(entries.Count - 1);
-        return entries;
+        return entries.Select(entry => WithVillage(Shown(globalData, book, entry), globalData.TownName)).ToList();
     }
 }

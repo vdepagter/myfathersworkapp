@@ -1,0 +1,158 @@
+<title>Czech translation: A/B samples</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a proofreader's sheet. One passage per band, English on the left, the two blind Czech versions beside it. */
+:root {
+  --paper: #f6f5f1; --sheet: #ffffff; --ink: #1f1d1a; --muted: #6b665e; --rule: #dedad1;
+  --accent: #7a2e2a; --accent-soft: #f3e6e3; --chip: #ece9e1; --chip-ink: #3d3a34;
+  --name: #e5ecf3; --name-ink: #234a6b; --cond: #fbf3dc; --cond-ink: #6b5313; --pick: #2f5d3a; --pick-soft: #e3efe5;
+  --serif: "Literata", Georgia, "Times New Roman", serif;
+  --sans: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #1a1918; --sheet: #232120; --ink: #ece8e1; --muted: #a39d93; --rule: #3a3734;
+  --accent: #e3988f; --accent-soft: #3b2725; --chip: #34312e; --chip-ink: #ddd8cf;
+  --name: #22313f; --name-ink: #a9c8e6; --cond: #3a321c; --cond-ink: #e9cf86; --pick: #9fd0aa; --pick-soft: #22352a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #1a1918; --sheet: #232120; --ink: #ece8e1; --muted: #a39d93; --rule: #3a3734;
+  --accent: #e3988f; --accent-soft: #3b2725; --chip: #34312e; --chip-ink: #ddd8cf;
+  --name: #22313f; --name-ink: #a9c8e6; --cond: #3a321c; --cond-ink: #e9cf86; --pick: #9fd0aa; --pick-soft: #22352a; color-scheme: dark }
+
+body { background: var(--paper); color: var(--ink); font: 15px/1.5 var(--sans); }
+.wrap { max-width: 1320px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 22px; }
+header { display: grid; gap: 10px; }
+h1 { font: 600 1.9rem/1.15 var(--serif); margin: 0; text-wrap: balance; }
+.lead { color: var(--muted); max-width: 70ch; margin: 0; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 12px 14px; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; }
+.controls .group { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.controls .label { font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+button { font: 500 0.9rem var(--sans); color: var(--ink); background: var(--sheet); border: 1px solid var(--rule); border-radius: 4px; padding: 5px 11px; cursor: pointer; }
+button:hover { border-color: var(--muted); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.tally { margin-left: auto; font: 0.9rem var(--sans); color: var(--muted); font-variant-numeric: tabular-nums; }
+.tally b { color: var(--ink); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 0.82rem; color: var(--muted); align-items: center; }
+
+article { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; }
+.phead { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; padding: 12px 16px; border-bottom: 1px solid var(--rule); }
+.phead h2 { font: 600 1.15rem var(--serif); margin: 0; }
+.phead .kind { color: var(--muted); font-size: 0.85rem; }
+.phead code { margin-left: auto; font: 0.75rem var(--mono); color: var(--muted); }
+.cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.col { padding: 14px 16px 16px; min-width: 0; display: grid; align-content: start; gap: 8px; }
+.col + .col { border-left: 1px solid var(--rule); }
+.col h3 { margin: 0; display: flex; gap: 8px; align-items: center; font: 600 0.78rem var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.col h3 .model { text-transform: none; letter-spacing: 0; font-weight: 500; color: var(--accent); }
+.text { font: 1rem/1.62 var(--serif); overflow-wrap: anywhere; }
+.col.en .text { color: var(--muted); }
+.pick { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.pick button[aria-pressed="true"] { background: var(--pick-soft); border-color: var(--pick); color: var(--pick); }
+
+.ph { font: 500 0.82em var(--sans); border-radius: 3px; padding: 0 5px; white-space: nowrap; }
+.ph.name { background: var(--name); color: var(--name-ink); }
+.ph.opt, .ph.icon, .ph.pl { background: var(--chip); color: var(--chip-ink); white-space: normal; }
+.ph.icon::before { content: "◆ "; font-size: 0.8em; }
+.link { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.cond { background: var(--cond); color: var(--cond-ink); border-radius: 3px; padding: 0 3px; }
+.cond .else::before { content: " ⟂ otherwise: "; font: 600 0.75em var(--sans); }
+.cond .if::before { content: "if: "; font: 600 0.75em var(--sans); }
+.cond.one .if::before { content: "sometimes: "; }
+.g { border-bottom: 2px dotted var(--name-ink); }
+body[data-gender="m"] .gf, body[data-gender="f"] .gm { display: none; }
+
+@media (max-width: 900px) {
+  .cols { grid-template-columns: minmax(0, 1fr); }
+  .col + .col { border-left: 0; border-top: 1px solid var(--rule); }
+  .tally { margin-left: 0; }
+}
+@media (prefers-reduced-motion: no-preference) { button { transition: border-color .15s, background-color .15s; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Czech translation: two versions, side by side</h1>
+    <p class="lead">Seven passages from <i>The Cost of Disease</i>, translated by two models from the same brief and the same draft glossary. The versions are labelled A and B so you can judge them blind. Mark the better one per passage, then reveal which model wrote which.</p>
+  </header>
+
+  <div class="controls">
+    <div class="group"><span class="label">Player is</span>
+      <button id="g-m" type="button" aria-pressed="true">a gentleman</button>
+      <button id="g-f" type="button" aria-pressed="false">a lady</button>
+    </div>
+    <div class="group"><span class="label">Models</span>
+      <button id="reveal" type="button" aria-pressed="false">Reveal who wrote A and B</button>
+    </div>
+    <div class="tally" id="tally"></div>
+  </div>
+
+  <div class="legend">
+    <span><span class="ph name">Oliver</span> name typed in by the players (stays undeclined)</span>
+    <span><span class="g">mávl</span> word that follows the player's gender</span>
+    <span><span class="cond"><span class="if">…</span></span> text shown only in some games</span>
+    <span><span class="ph icon">Creepy</span> game icon</span>
+    <span><span class="link">link</span> choice the players tap</span>
+  </div>
+
+  <main id="passages" style="display:grid;gap:18px"></main>
+</div>
+
+<script>
+const PASSAGES = /*PASSAGES*/[];
+const MODELS = /*MODELS*/{};
+const KEY = "mfw-cs-ab";
+let picks = {};
+try { picks = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { picks = {}; }
+
+function save() { try { localStorage.setItem(KEY, JSON.stringify(picks)); } catch (e) {} }
+
+function render() {
+  const main = document.getElementById("passages");
+  const revealed = document.getElementById("reveal").getAttribute("aria-pressed") === "true";
+  main.innerHTML = PASSAGES.map((p, i) => `
+    <article>
+      <div class="phead"><h2>${p.title}</h2><span class="kind">${p.kind}</span><code>${p.tag}</code></div>
+      <div class="cols">
+        <div class="col en"><h3>English</h3><div class="text">${p.en}</div></div>
+        ${["a", "b"].map(v => `
+        <div class="col"><h3>Version ${v.toUpperCase()}${revealed ? ` <span class="model">${MODELS[v.toUpperCase()]}</span>` : ""}</h3>
+          <div class="text" lang="cs">${p[v]}</div>
+        </div>`).join("")}
+      </div>
+      <div class="col" style="border-top:1px solid var(--rule)">
+        <div class="pick" role="group" aria-label="Which version reads better?">
+          ${[["A", "A reads better"], ["same", "About the same"], ["B", "B reads better"]].map(([k, label]) =>
+            `<button type="button" id="pick-${i}-${k}" data-i="${i}" data-k="${k}" aria-pressed="${picks[p.tag] === k}">${label}</button>`).join("")}
+        </div>
+      </div>
+    </article>`).join("");
+  const counts = { A: 0, B: 0, same: 0 };
+  Object.values(picks).forEach(k => { if (k in counts) counts[k]++; });
+  document.getElementById("tally").innerHTML =
+    `Your picks: <b>A ${counts.A}</b> · <b>B ${counts.B}</b> · same ${counts.same} · of ${PASSAGES.length}`;
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  if (b.dataset.k) {
+    const tag = PASSAGES[+b.dataset.i].tag;
+    picks[tag] = picks[tag] === b.dataset.k ? undefined : b.dataset.k;
+    save(); render();
+  } else if (b.id === "reveal") {
+    b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true");
+    b.textContent = b.getAttribute("aria-pressed") === "true" ? "Hide the models" : "Reveal who wrote A and B";
+    render();
+  } else if (b.id === "g-m" || b.id === "g-f") {
+    const f = b.id === "g-f";
+    document.body.dataset.gender = f ? "f" : "m";
+    document.getElementById("g-m").setAttribute("aria-pressed", String(!f));
+    document.getElementById("g-f").setAttribute("aria-pressed", String(f));
+  }
+});
+document.body.dataset.gender = "m";
+render();
+</script>

@@ -359,6 +359,13 @@ public static class GlobalTags
     public const string MainMenu_Settings       = "MainMenu_Settings";
     public const string MainMenu_Endings        = "MainMenu_Endings"; // main menu button (Unity: "Endings"); the page is MainMenu_Gallery
 
+    // Translations (AppLanguages.cs): date formats (.NET custom format, invariant month names) and the gender choice at name entry
+    public const string Format_Date            = "Format_Date";
+    public const string Format_DateTime        = "Format_DateTime";
+    public const string PlayersNameEntry_Gender = "PlayersNameEntry_Gender";
+    public const string Gender_Male            = "Gender_Male";
+    public const string Gender_Female          = "Gender_Female";
+
     // Others
     public const string GameplayStartTag = "Gameplay_";
 }

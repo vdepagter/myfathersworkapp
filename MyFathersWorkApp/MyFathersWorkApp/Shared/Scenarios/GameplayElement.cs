@@ -13,4 +13,8 @@ public class GameplayElement(string content, Action<GlobalData>? callback = null
     // UI tag of the button Pages/Gameplay.razor shows instead of this link: the one way on from a story window
     // ("Click here to continue...", after a bid or vote, the reveal of a secret conversation)
     public string?             ButtonTag   { get; } = buttonTag;
+
+    // The same text in English while the story is shown in a translation (AppLanguages.cs), unformatted: links and
+    // special events are recognised by their English wording (Pages/Gameplay.razor LinkButtonTag, RevealKind)
+    public string?             EnglishContent { get; init; }
 }

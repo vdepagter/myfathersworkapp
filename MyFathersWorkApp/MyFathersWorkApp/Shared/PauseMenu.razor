@@ -38,16 +38,8 @@
                             </select>
                         </div>
                     }
-
-                    <div class="mfw-setting-row">
-                        <label class="mfw-setting-label" for="pause-scenario-language">@GlobalData.GetLocalizedUITag(GlobalTags.ScenarioLanguage_Title)</label>
-                        <select id="pause-scenario-language" value="@GlobalData.ScenarioLanguage" @onchange="OnScenarioLanguageChanges">
-                            @foreach (string lang in GlobalData.OtherPossibleScenarioLanguages)
-                            {
-                                <option value="@lang">@GlobalData.GetLocalizedUITag("ScenarioLang_" + lang)</option>
-                            }
-                        </select>
-                    </div>
+                    @* The story follows the menu language when the scenario is translated (AppLanguages.cs); the
+                       separate Scenario Language choice was dropped with the Czech translation (Nov 2026) *@
                 }
 
                 @* Always shown (not only with a saved game); a change stops the current narration *@
@@ -118,37 +110,11 @@
         if (Enum.TryParse(e.Value?.ToString(), out NarrationVoice narration)) Audio.SetNarration(narration);
     }
 
+    // The menu language is a device setting (GlobalData.SetLanguageAsync); the reload reopens the game in it, the story
+    // too when the scenario is translated
     private async Task OnLanguageChanges(ChangeEventArgs e)
     {
-        string base64 = await Js.InvokeAsync<string>("localStorage.getItem", "continue");
-        string json   = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(base64));
-        JsonSerializerSettings settings = new JsonSerializerSettings
-        {
-            ObjectCreationHandling = ObjectCreationHandling.Reuse,
-            NullValueHandling      = NullValueHandling.Ignore
-        };
-        GlobalData savedData = new GlobalData();
-        JsonConvert.PopulateObject(json, savedData, settings);
-        savedData.Language = e.Value!.ToString()!;
-        string newJson = JsonConvert.SerializeObject(savedData, Formatting.Indented);
-        await Js.InvokeVoidAsync("localStorage.setItem", "continue", Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(newJson)));
-        Nav.NavigateTo(Nav.Uri, true);
-    }
-
-    private async Task OnScenarioLanguageChanges(ChangeEventArgs e)
-    {
-        string base64 = await Js.InvokeAsync<string>("localStorage.getItem", "continue");
-        string json   = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(base64));
-        JsonSerializerSettings settings = new JsonSerializerSettings
-        {
-            ObjectCreationHandling = ObjectCreationHandling.Reuse,
-            NullValueHandling      = NullValueHandling.Ignore
-        };
-        GlobalData savedData = new GlobalData();
-        JsonConvert.PopulateObject(json, savedData, settings);
-        savedData.ScenarioLanguage = e.Value!.ToString()!;
-        string newJson = JsonConvert.SerializeObject(savedData, Formatting.Indented);
-        await Js.InvokeVoidAsync("localStorage.setItem", "continue", Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(newJson)));
+        await GlobalData!.SetLanguageAsync(Js, e.Value!.ToString()!);
         Nav.NavigateTo(Nav.Uri, true);
     }
 

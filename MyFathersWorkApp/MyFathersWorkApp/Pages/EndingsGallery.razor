@@ -376,7 +376,7 @@
         if (last != null) _Scenario = last.Scenario;
     }
 
-    private static string FormatDate(DateTime date) => date.ToString("d MMM yyyy", CultureInfo.InvariantCulture);
+    private string FormatDate(DateTime date) => GlobalData.FormatDate(date);
 
     private static int PlayerScore(GalleryGame game, string player) => game.Scores.GetValueOrDefault(player);
 

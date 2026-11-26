@@ -207,6 +207,7 @@
         GlobalData.PlayerCName = string.Empty;
         GlobalData.PlayerDName = string.Empty;
         GlobalData.TownName    = string.Empty;
+        GlobalData.PlayerGenders = string.Empty;
         Nav.NavigateTo("PlayersSelect");
     }
 
@@ -217,9 +218,9 @@
         Nav.NavigateTo("Gameplay");
     }
 
-    private void OnLanguageChanges(string language)
+    private async Task OnLanguageChanges(string language)
     {
-        GlobalData.Language = language;
+        await GlobalData.SetLanguageAsync(Js, language);
         Nav.NavigateTo("");
     }
 }

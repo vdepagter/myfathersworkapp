@@ -68,3 +68,12 @@
 
 .forget-name:hover         { color: #ff9d8a; }
 .forget-name:focus-visible { outline: 2px solid #c9a35a; }
+
+/* Czech: the character's gender (past tense and adjectives follow it) */
+.gender-choice {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}

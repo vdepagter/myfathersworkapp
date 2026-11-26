@@ -25,8 +25,19 @@ public partial class GlobalData
     [JsonIgnore] public Dictionary<string, string>                     Scenario_Gameplay_Localization { get; set; } = new();
     [JsonIgnore] public List<string>                                   OtherPossibleScenarioLanguages { get; set; } = new();
 
-    public string Language         { get; set; } = "English";
-    public string ScenarioLanguage { get; set; } = "English_Source";
+    // English story and rules text of the active scenario, also while it is shown in a translation: links are recognised
+    // by their English text (Pages/Gameplay.razor LinkButtonTag)
+    [JsonIgnore] public Dictionary<string, string> Scenario_Localization_English          { get; set; } = new();
+    [JsonIgnore] public Dictionary<string, string> Scenario_Gameplay_Localization_English { get; set; } = new();
+
+    // Menu language (a device setting, localStorage mfwLanguage: a loaded save or undo keeps the current choice) and the
+    // language of the story, which follows it when the scenario is translated (AppLanguages.cs)
+    public string Language         { get; set; } = AppLanguages.ENGLISH;
+    public string ScenarioLanguage { get; set; } = AppLanguages.ENGLISH_STORY;
+
+    // Grammatical gender per player for translations that need it (Czech): "m" or "f" by player index A-D, set at name
+    // entry. Empty (older saves, English): male forms.
+    public string PlayerGenders { get; set; } = string.Empty;
 
     public ScenarioId                 ScenarioId           { get; set; }
     public int                        PlayersNum           { get; set; }
@@ -96,16 +107,103 @@ public partial class GlobalData
         _                        => null
     };
 
-    public string GetLocalizedUITag(string tag)
+    public string GetLocalizedUITag(string tag) => TryGetLocalizedUITag(tag, out string? text) ? text : $"Missing Translation -> {Language}/{tag}";
+
+    // A tag missing from the menu language (or a language that no longer exists, like the removed Polish) falls back to English
+    public bool TryGetLocalizedUITag(string tag, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out string? text)
     {
-        // A menu language that no longer exists (Polish was removed) falls back to English
-        if (UI_Localization.TryGetValue(Language, out Dictionary<string, string>? value) || UI_Localization.TryGetValue("English", out value))
+        text = null;
+        return (UI_Localization.TryGetValue(Language, out Dictionary<string, string>? translated) && translated.TryGetValue(tag, out text))
+            || (UI_Localization.TryGetValue(AppLanguages.ENGLISH, out Dictionary<string, string>? english) && english.TryGetValue(tag, out text));
+    }
+
+    [JsonIgnore] public bool IsStoryInEnglish => ScenarioLanguage == AppLanguages.ENGLISH_STORY;
+
+    // The menu language asks for each player's gender (Pages/PlayersNameEntry.razor)
+    [JsonIgnore] public bool LanguageUsesGender => AppLanguages.Get(Language)?.Gender == true;
+
+    public bool IsFemale(string name)
+    {
+        string[] players = GetActivePlayers();
+        int index = Array.FindIndex(players, player => string.Equals(player, name, StringComparison.Ordinal));
+        return index >= 0 && index < PlayerGenders.Length && PlayerGenders[index] == 'f';
+    }
+
+    public bool IsFemale(int index) => index < PlayerGenders.Length && PlayerGenders[index] == 'f';
+
+    public void SetFemale(int index, bool female)
+    {
+        char[] genders = PlayerGenders.PadRight(4, 'm').ToCharArray();
+        genders[index] = female ? 'f' : 'm';
+        PlayerGenders  = new string(genders);
+    }
+
+    private const string _LANGUAGE_KEY = "mfwLanguage";
+
+    // Loads the menu texts of English and every translation, then the language chosen on this device (or, the first
+    // time, the browser's language when the app has it). Called once by the layout.
+    public async Task LoadLanguagesAsync(HttpClient http, IJSRuntime js)
+    {
+        (await http.GetStringAsync("localization/UI_Localization.csv")).ProcessLocalizationFile(UI_Localization);
+
+        foreach (AppLanguage translation in AppLanguages.Translations)
         {
-            if (value.TryGetValue(tag, out string? translation)) return translation;
-            return $"Missing Translation -> {Language}/{tag}";
+            try
+            {
+                (await http.GetStringAsync(translation.File("UI_Localization"))).ProcessLocalizationFile(UI_Localization);
+                UI_Localization.FillMissing(translation.Name, AppLanguages.ENGLISH);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{translation.Name} menus not loaded: {e.Message}");
+                UI_Localization.Remove(translation.Name);
+            }
         }
 
-        return $"Missing Language -> {Language}";
+        try
+        {
+            string? stored = await js.InvokeAsync<string?>("localStorage.getItem", _LANGUAGE_KEY);
+            string  chosen = stored ?? AppLanguages.FromBrowser(await js.InvokeAsync<string?>("eval", "navigator.language"));
+            Language = UI_Localization.ContainsKey(chosen) ? chosen : AppLanguages.ENGLISH;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Language setting not read: {e.Message}");
+        }
+
+        GalleryTrees.Localize = label => TryGetLocalizedUITag(GalleryTrees.LabelTag(label), out string? text) ? text : label;
+    }
+
+    public async Task SetLanguageAsync(IJSRuntime js, string language)
+    {
+        Language = language;
+        await js.InvokeVoidAsync("localStorage.setItem", _LANGUAGE_KEY, language);
+    }
+
+    // Dates in the menus, in the format of the menu language (UI tags Format_Date / Format_DateTime)
+    public string FormatDate(DateTime date, bool time = false) =>
+        date.ToString(GetLocalizedUITag(time ? GlobalTags.Format_DateTime : GlobalTags.Format_Date), System.Globalization.CultureInfo.InvariantCulture);
+
+    // English text of a scenario tag, whatever language the story is shown in
+    public string GetEnglishScenarioTag(string tag)
+    {
+        if (Scenario_Localization_English.TryGetValue(tag, out string? value)) return value;
+        if (Scenario_Gameplay_Localization_English.TryGetValue(tag, out value)) return value;
+        return string.Empty;
+    }
+
+    // Picks the story language for the loaded scenario texts (the menu language when the scenario is translated, else
+    // English) and makes it active
+    public void ApplyScenarioLanguage(Dictionary<string, Dictionary<string, string>> scenarioLocalizations,
+                                      Dictionary<string, Dictionary<string, string>> scenarioGameplayLocalizations)
+    {
+        ScenarioLanguage = scenarioLocalizations.ContainsKey(Language) ? Language : AppLanguages.ENGLISH_STORY;
+        if (!scenarioLocalizations.ContainsKey(ScenarioLanguage)) ScenarioLanguage = scenarioLocalizations.Keys.First();
+
+        Scenario_Localization                  = scenarioLocalizations[ScenarioLanguage];
+        Scenario_Gameplay_Localization         = scenarioGameplayLocalizations[Scenario_Localization["Gameplay_Lang"]];
+        Scenario_Localization_English          = scenarioLocalizations.GetValueOrDefault(AppLanguages.ENGLISH_STORY) ?? Scenario_Localization;
+        Scenario_Gameplay_Localization_English = scenarioGameplayLocalizations.GetValueOrDefault(AppLanguages.ENGLISH) ?? Scenario_Gameplay_Localization;
     }
 
     public string GetScenarioLocalizedTag(string tag)
@@ -345,14 +443,16 @@ public partial class GlobalData
             ObjectCreationHandling = ObjectCreationHandling.Reuse,
             NullValueHandling      = NullValueHandling.Ignore
         };
+        string language = Language; // the menu language is a device setting, not part of the save
         JsonConvert.PopulateObject(json, this, settings);
+        Language = language;
 
         Dictionary<string, Dictionary<string, string>> scenarioLocalizations         = new();
         Dictionary<string, Dictionary<string, string>> scenarioGameplayLocalizations = new();
 
         await LoadScenarioLanguagesOptionsAsync(nav, http, scenarioLocalizations, scenarioGameplayLocalizations);
-        Scenario_Localization          = scenarioLocalizations[ScenarioLanguage];
-        Scenario_Gameplay_Localization = scenarioGameplayLocalizations[scenarioLocalizations[ScenarioLanguage]["Gameplay_Lang"]];
+        if (scenarioLocalizations.Count == 0) return;
+        ApplyScenarioLanguage(scenarioLocalizations, scenarioGameplayLocalizations);
 
         Action<GlobalData>? activeHub = GetHubMethod();
         Action<GlobalData>? screen    = ResolveScreen(ResumeMethod);
@@ -411,6 +511,25 @@ public partial class GlobalData
 
         (await http.GetStringAsync(scenarioLocalization)).ProcessLocalizationFile(scenarioLocalizations);
         (await http.GetStringAsync(scenarioGameplayLocalization)).ProcessLocalizationFile(scenarioGameplayLocalizations);
+
+        // Translations of this scenario (localization/<code>/<same file name>), English for every tag they lack
+        foreach (AppLanguage translation in AppLanguages.Translations.Where(translation => translation.Scenarios.Contains(ScenarioId)))
+        {
+            try
+            {
+                (await http.GetStringAsync(translation.File(Path.GetFileNameWithoutExtension(scenarioLocalization)))).ProcessLocalizationFile(scenarioLocalizations);
+                (await http.GetStringAsync(translation.File(Path.GetFileNameWithoutExtension(scenarioGameplayLocalization)))).ProcessLocalizationFile(scenarioGameplayLocalizations);
+                scenarioLocalizations.FillMissing(translation.Name, AppLanguages.ENGLISH_STORY);
+                scenarioGameplayLocalizations.FillMissing(translation.Name, AppLanguages.ENGLISH);
+                scenarioLocalizations[translation.Name]["Gameplay_Lang"] = translation.Name;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{translation.Name} story of {ScenarioId} not loaded: {e.Message}");
+                scenarioLocalizations.Remove(translation.Name);
+                scenarioGameplayLocalizations.Remove(translation.Name);
+            }
+        }
 
         OtherPossibleScenarioLanguages.Clear();
         OtherPossibleScenarioLanguages.AddRange(scenarioLocalizations.Keys);

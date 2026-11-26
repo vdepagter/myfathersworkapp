@@ -3,6 +3,7 @@
 @inject NavigationManager Nav
 @inject AudioService      Audio
 @inject GalleryService    Gallery
+@inject IJSRuntime        Js
 
 <MenuPage OnBack="GoBack" Class="centered">
     <div class="pass-book">
@@ -24,8 +25,18 @@
     }
 
     <input class="mp-input" @bind="_PlayerName" @bind:event="oninput"
-           @onkeydown="@(e => { if (e.Key is "Enter" or "NumpadEnter") Continue(); })"
+           @onkeydown="@(async e => { if (e.Key is "Enter" or "NumpadEnter") await Continue(); })"
            placeholder="@GlobalData.GetLocalizedUITag(GlobalTags.PlayersNameEntry_Placeholder)"/>
+
+    @if (GlobalData.LanguageUsesGender)
+    {
+        // Czech: past tense and adjectives follow the character's gender (AppLanguages.cs, [[g:...]] tokens)
+        <div class="gender-choice">
+            <span class="mp-note">@GlobalData.GetLocalizedUITag(GlobalTags.PlayersNameEntry_Gender)</span>
+            <button class="mp-chip @(!_Female ? "selected" : "")" @onclick="() => SetFemale(false)">@GlobalData.GetLocalizedUITag(GlobalTags.Gender_Male)</button>
+            <button class="mp-chip @(_Female ? "selected" : "")" @onclick="() => SetFemale(true)">@GlobalData.GetLocalizedUITag(GlobalTags.Gender_Female)</button>
+        </div>
+    }
 
     @if (_Remembered.Count > 0)
     {
@@ -66,6 +77,10 @@
     [Parameter] public int PlayerIndex { get; set; }
 
     private string _PlayerName = string.Empty;
+    private bool   _Female;
+
+    // Gender chosen for each name on this device, offered again for a remembered name (localStorage mfwGenders)
+    private Dictionary<string, string> _Genders = new();
 
     private List<string> _Remembered = [];
     private List<string> _LastTable  = [];
@@ -79,12 +94,44 @@
                       .Where(name => !Enumerable.Range(0, PlayerIndex).Any(x => string.Equals(GlobalData.GetPlayerNameByIndex(x), name, StringComparison.CurrentCultureIgnoreCase)))
                       .ToList();
         _LastTable = PlayerIndex == 0 && data.LastTable.Count == GlobalData.PlayersNum ? data.LastTable : [];
+        _Female    = GlobalData.IsFemale(PlayerIndex);
+
+        try
+        {
+            string? json = await Js.InvokeAsync<string?>("localStorage.getItem", "mfwGenders");
+            _Genders = string.IsNullOrEmpty(json) ? new() : Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(json) ?? new();
+        }
+        catch
+        {
+            _Genders = new();
+        }
     }
 
     private void PickName(string name)
     {
         Audio.PlayClick();
         _PlayerName = name;
+        if (_Genders.TryGetValue(name, out string? gender)) _Female = gender == "f";
+    }
+
+    private void SetFemale(bool female)
+    {
+        Audio.PlayClick();
+        _Female = female;
+    }
+
+    private async Task RememberGenderAsync(string name, bool female)
+    {
+        if (!GlobalData.LanguageUsesGender) return;
+        _Genders[name] = female ? "f" : "m";
+        try
+        {
+            await Js.InvokeVoidAsync("localStorage.setItem", "mfwGenders", Newtonsoft.Json.JsonConvert.SerializeObject(_Genders));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Gender not remembered: {e.Message}");
+        }
     }
 
     // Endings Gallery: stop suggesting this name (its games and wins stay; finishing a game with it brings it back)
@@ -104,6 +151,7 @@
         GlobalData.PlayerBName = _LastTable[1];
         GlobalData.PlayerCName = _LastTable.Count >= 3 ? _LastTable[2] : string.Empty;
         GlobalData.PlayerDName = _LastTable.Count >= 4 ? _LastTable[3] : string.Empty;
+        for (int x = 0; x < _LastTable.Count; ++x) GlobalData.SetFemale(x, _Genders.GetValueOrDefault(_LastTable[x]) == "f");
         Nav.NavigateTo("PlayersVillage");
     }
     private bool   _ShowPopup;
@@ -115,7 +163,7 @@
         Nav.NavigateTo(PlayerIndex == 0 ? "PlayersInitial" : $"PlayersWelcome/{PlayerIndex - 1}");
     }
 
-    private void Continue()
+    private async Task Continue()
     {
         Audio.PlayClick();
         if (_PlayerName.Length < 2 || _PlayerName.Length > 15)
@@ -160,6 +208,8 @@
             }
         }
         
+        GlobalData.SetFemale(PlayerIndex, GlobalData.LanguageUsesGender && _Female);
+        await RememberGenderAsync(_PlayerName, _Female);
         Nav.NavigateTo($"PlayersWelcome/{PlayerIndex}");
     }
     

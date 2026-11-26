@@ -51,7 +51,16 @@ public static class GalleryTrees
 {
     public static readonly ScenarioId[] Scenarios = [ScenarioId.CostOfDisease, ScenarioId.FearOfUnknown, ScenarioId.TimeOfWar];
 
-    public static string Name(ScenarioId scenario) => scenario switch
+    // Translations of the scenario names and the tree labels (AppLanguages.cs): set by GlobalData for the menu language.
+    // A label is looked up as the UI tag "Gallery_" + its letters and digits (e.g. "Gallery_TheCostofDisease"); without
+    // a translation it stays English.
+    public static Func<string, string> Localize { get; set; } = label => label;
+
+    public static string LabelTag(string label) => "Gallery_" + new string(label.Where(char.IsLetterOrDigit).ToArray());
+
+    public static string Name(ScenarioId scenario) => Localize(EnglishName(scenario));
+
+    private static string EnglishName(ScenarioId scenario) => scenario switch
     {
         ScenarioId.CostOfDisease => "The Cost of Disease",
         ScenarioId.FearOfUnknown => "Fear of the Unknown",
@@ -60,7 +69,10 @@ public static class GalleryTrees
     };
 
     // Branch names are the hub titles; endings and the ending numbers set by the scenario code (Vars.Ending)
-    public static GalleryNode[] Tree(ScenarioId scenario) => scenario switch
+    public static GalleryNode[] Tree(ScenarioId scenario) =>
+        EnglishTree(scenario).Select(node => node with { Label = Localize(node.Label), SameAs = node.SameAs == string.Empty ? string.Empty : Localize(node.SameAs) }).ToArray();
+
+    private static GalleryNode[] EnglishTree(ScenarioId scenario) => scenario switch
     {
         ScenarioId.CostOfDisease =>
         [

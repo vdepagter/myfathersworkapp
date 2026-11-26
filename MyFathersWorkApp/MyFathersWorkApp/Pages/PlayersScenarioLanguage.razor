@@ -76,11 +76,17 @@
     private void SelectLanguage(string key, bool click)
     {
         if (click) Audio.PlayClick();
-        GlobalData.ScenarioLanguage               = key;
-        GlobalData.Years                          = Years.Early;
-        GlobalData.Generation                     = Generation.First;
-        GlobalData.Scenario_Localization          = _ScenarioLocalizations[key];
-        GlobalData.Scenario_Gameplay_Localization = _ScenarioGameplayLocalizations[_ScenarioLocalizations[key]["Gameplay_Lang"]];
+        GlobalData.Years      = Years.Early;
+        GlobalData.Generation = Generation.First;
+
+        // Skipped page: the story follows the menu language when the scenario is translated (AppLanguages.cs)
+        GlobalData.ApplyScenarioLanguage(_ScenarioLocalizations, _ScenarioGameplayLocalizations);
+        if (click)
+        {
+            GlobalData.ScenarioLanguage               = key;
+            GlobalData.Scenario_Localization          = _ScenarioLocalizations[key];
+            GlobalData.Scenario_Gameplay_Localization = _ScenarioGameplayLocalizations[_ScenarioLocalizations[key]["Gameplay_Lang"]];
+        }
 
         GlobalData.ActiveWindow     = null;
         GlobalData.ActiveHub        = null;

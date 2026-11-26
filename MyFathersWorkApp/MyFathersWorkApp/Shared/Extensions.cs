@@ -41,6 +41,13 @@ public static class Extensions
         }
     }
 
+    // A translation falls back to English for every tag it does not have (yet)
+    public static void FillMissing(this Dictionary<string, Dictionary<string, string>> target, string language, string english)
+    {
+        if (!target.TryGetValue(language, out Dictionary<string, string>? translated) || !target.TryGetValue(english, out Dictionary<string, string>? source)) return;
+        foreach ((string tag, string text) in source) translated.TryAdd(tag, text);
+    }
+
     public static string InsertImages(this string text)
     {
         string pattern     = "<icon=([A-Za-z0-9_]+)>";
@@ -54,8 +61,11 @@ public static class Extensions
 
     // Wraps each name (whole word, outside HTML tags) in <span translate="no">. Longest names first, so "Ann" does not
     // split "Anna".
+    // Grammar tokens of translations ([[pl:...]], [[g:...]], AppLanguages.cs) are resolved first.
     public static string ProtectNames(this string text, GlobalData globalData)
     {
+        text = Grammar.Resolve(text, globalData);
+        if (AppLanguages.Get(globalData.Language)?.Code == "cs") text = Grammar.NoBreakAfterShortWords(text);
         string[] names = globalData.ProtectedNames().OrderByDescending(name => name.Length).ToArray();
         if (names.Length == 0 || text.Length == 0) return text;
 
@@ -100,7 +110,8 @@ public static class Extensions
             text = text.Replace(match.Value, replacement);
         }
 
-        return text;
+        // Translations: [[g{id}:male/female]] follows the gender of the player filled in here (AppLanguages.cs, Grammar)
+        return Grammar.BindGender(text, id, replacement);
     }
 
     // Removes the line breaks after the last row of text assembled from several rows

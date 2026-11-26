@@ -70,7 +70,7 @@ public class GameplayWindow(GlobalData globalData)
         string content                        = globalData.GetScenarioLocalizedTag(callerName + "_Content");
         if (contentProcessor != null) content = contentProcessor(content);
         AddStoryText(callerName + "_Content", content);
-        Elements.Add(new GameplayElement(content));
+        Elements.Add(new GameplayElement(content) { EnglishContent = English(callerName + "_Content") });
     }
 
     public void AddNextContent(int index, bool fromNewLine = false, Func<string, string>? contentFormatter = null, Action<GlobalData>? nextCallback = null, [CallerMemberName] string callerName = "")
@@ -78,7 +78,7 @@ public class GameplayWindow(GlobalData globalData)
         string content                        = globalData.GetScenarioLocalizedTag(callerName + $"_Content{index}");
         if (contentFormatter != null) content = contentFormatter(content);
         AddStoryText(callerName + $"_Content{index}", content);
-        Elements.Add(new GameplayElement(content, nextCallback, fromNewLine));
+        Elements.Add(new GameplayElement(content, nextCallback, fromNewLine) { EnglishContent = English(callerName + $"_Content{index}") });
     }
 
     public void AddNextContentWithLinks(int index, List<Action<GlobalData>?> nextCallbacks, bool fromNewLine = false, Func<string, string>? contentFormatter = null, [CallerMemberName] string callerName = "")
@@ -119,19 +119,31 @@ public class GameplayWindow(GlobalData globalData)
             outputStrings.Add(remaining);
         }
 
+        // Translation: the English text of each link, by link number
+        Dictionary<int, string> englishLinks = new();
+        string? english = English(callerName + $"_Content{index}");
+        if (english != null)
+        {
+            foreach (Match match in linkPattern.Matches(english)) englishLinks[int.Parse(match.Groups[1].Value)] = match.Groups[2].Value;
+        }
+
         for (int x = 0; x < outputStrings.Count; ++x)
         {
-            Action<GlobalData>? callback = linkIndexMap.TryGetValue(outputStrings[x], out int callbackIndex) ? nextCallbacks[callbackIndex] : null;
-            Elements.Add(new GameplayElement(outputStrings[x], callback, x == 0 && fromNewLine));
+            bool isLink = linkIndexMap.TryGetValue(outputStrings[x], out int callbackIndex);
+            Action<GlobalData>? callback = isLink ? nextCallbacks[callbackIndex] : null;
+            Elements.Add(new GameplayElement(outputStrings[x], callback, x == 0 && fromNewLine) { EnglishContent = isLink ? englishLinks.GetValueOrDefault(callbackIndex) : null });
         }
     }
+
+    // English text of a story tag while the story is shown in a translation, else null
+    private string? English(string tag) => globalData.IsStoryInEnglish ? null : globalData.GetEnglishScenarioTag(tag);
 
     // Story text of another method's tag (shared screens like "Secret_Content"): shown and narrated like AddDefaultContent
     public void AddStoryContent(string tag)
     {
         string content = globalData.GetScenarioLocalizedTag(tag);
         AddStoryText(tag, content);
-        Elements.Add(new GameplayElement(content));
+        Elements.Add(new GameplayElement(content) { EnglishContent = English(tag) });
     }
 
     public void AddCustomContent(string content, bool fromNewLine = false)
