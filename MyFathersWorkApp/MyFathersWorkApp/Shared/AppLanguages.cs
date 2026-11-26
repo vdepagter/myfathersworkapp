@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace MyFathersWorkApp;
 
@@ -22,7 +22,7 @@ public static class AppLanguages
     public static readonly AppLanguage[] Translations =
     [
         // Czech: past tense and adjectives agree with the player's gender (PlayersNameEntry asks for it, [[g:...]] tokens)
-        new("Czech", "cs", [ScenarioId.CostOfDisease], Gender: true)
+        new("Czech", "cs", [ScenarioId.CostOfDisease, ScenarioId.FearOfUnknown, ScenarioId.TimeOfWar], Gender: true)
     ];
 
     public static AppLanguage? Get(string name) => Translations.FirstOrDefault(language => language.Name == name);

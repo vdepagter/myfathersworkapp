@@ -247,8 +247,19 @@ the team translating the official Czech rulebook of *My Father's Work*. The app 
 replace them with synonyms, and change them only when that team changes them.
 
 English names in brackets: only at the **first** mention of a component in a setup/rule popup, and only for named
-cards, tiles, tokens and Chronicle locations players must find. Never repeat a bracket already given in the same
-text, and never put one on a generic term.
+cards, tiles and tokens players must find. Never repeat a bracket already given in the same text, and never put one on
+a generic term.
+
+**Town locations are the exception** (the rulebook team's rule, 26 Nov 2026): every place printed in English in the
+Village Chronicle or on the board (3.4: Church, Bank, Library, Hospital, Town Hall, Stables, Farmer's Market, ..., the
+Suspicious Buildings, Hunter's Rest / Haven / Lodge, Monster Spawn, ... and any other place a player visits or places a
+piece on) is written Czech + the English name in brackets **every time** it appears in rules, setup, round-page (hub),
+Guide and UI text, in whatever case the sentence needs: "kostel (Church)", "do kostela (Church)", "v bance (Bank)".
+The English is copied exactly as the English text of that row writes it (e.g. "The Hunter's Rest"). Inside a
+placeholder option list the bracket goes into every option: `{{0=| |Železářství (Hardware Store)|...}}`. Hub section
+titles (BANKA, HOSTINEC) may stay without one when the section text names the place with it. Never in story prose,
+and never on a place that is not on the board (an Estate upgrade such as *Soukromá knihovna*, a branch name in
+`[[hub:..]]`).
 
 "On component" means the term is printed in English on something the players hold. For those terms, the recommended
 policy (Q1) is: **Czech everywhere, plus the English name in parentheses at its first mention in each setup/rule
@@ -346,6 +357,8 @@ icons, or in story text.
 | A Building location (Chronicle spot A/B/C) | místo budovy A | n. | |
 
 ### 3.4 Town locations (printed on the Village Chronicle pages)
+
+Outside story prose always with the English in brackets, every time: "do kostela (Church)", "na Lovcově odpočinku (The Hunter's Rest)" (see the rule above the table in section 3).
 
 | English | Czech | Notes |
 |---|---|---|
@@ -491,7 +504,7 @@ Démonický tvor*. Superpower / Weapon / Drug / Ritual → *Nadlidská schopnost
 
 | # | Question | Recommendation |
 |---|---|---|
-| Q1 | How should Czech terms relate to the English components? | Czech everywhere. English in parentheses at the first mention in each setup/rule popup, only for card, tile and token names and Chronicle locations players must find or place. Scenario names shown once in English on the scenario screen. (Rejected: English component names in Czech text, which is jarring; Czech only, which is hard to match at the table.) |
+| Q1 | How should Czech terms relate to the English components? | Czech everywhere. English in parentheses at the first mention in each setup/rule popup, only for card, tile and token names players must find or place. **Town locations** (3.4) carry the English in brackets every time they appear in rules, setup, hub, Guide and UI text, never in story prose (rulebook team, 26 Nov 2026; see section 3). Scenario names shown once in English on the scenario screen. (Rejected: English component names in Czech text, which is jarring; Czech only, which is hard to match at the table.) |
 | Q2 | Masterwork: *veledílo* or *mistrovské dílo*? | **Settled:** *mistrovské dílo* (binding term of the rulebook translation, 3). |
 | Q3 | Self: *osobní figurka* or *figurka vědce*? | *osobní figurka* / *osobně* (gender-free). |
 | Q4 | Creepy: *děsivost*, *podivínství* or *zlověstnost*? | *děsivost / děsivý*. |

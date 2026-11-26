@@ -21,11 +21,19 @@ English files: `MyFathersWorkApp\MyFathersWorkApp\wwwroot\localization\`.
    and must match it: *mistrovské dílo* (Masterwork), *mistrovský experiment*, *technika*, *sídlo* and *vylepšení
    sídla*, *partner* (the Spouse piece; *choť* only in story prose), *flakonek* (Vial). Never write *klepnout* or
    *kliknout*: the app also runs on Windows with a mouse, so use neutral wording (*Pokračujte…, Zvolte své jméno*).
+   **Town locations** (the places printed in English in the Village Chronicle and on the board: Church, Bank, Library,
+   Town Hall, Stables, Barracks, Asylum, ...) are written Czech + English in brackets **every time** they appear in
+   rules, setup, round-page (hub) and UI text: "kostel (Church)", "do kostela (Church)" (the rulebook team's rule, 26 Nov
+   2026). Never in story prose. Other components keep the first-mention rule above.
+   **Scenario glossaries:** Fear of the Unknown and A Time of War have their own terms in
+   `docs\i18n\cs-glossary-FearOfTheUnknown.md` and `docs\i18n\cs-glossary-ATimeOfWar.md`; read the one for your
+   scenario after the main glossary.
 2. Look at `docs\i18n\comparison\opus.csv` and `fable.csv`: two sample translations of the same passages (both
    acceptable; borrow their best solutions). Where your rows include those tags, you may start from either.
 3. Read the English around your rows for context (the rows before and after, and the matching screens in the other CSV:
-   story text is in `TheCostOfDisease_Localization.csv`, rules/setup text in `TheCostOfDisease_Gameplay_Localization.csv`;
-   a screen's tags share the method name, e.g. `S5Special1_Content` (story) is followed by `S5Special1_Content1`
+   story text is in `<Scenario>_Localization.csv`, rules/setup text in `<Scenario>_Gameplay_Localization.csv`
+   (scenarios: `TheCostOfDisease`, `FearOfTheUnknown`, `ATimeOfWar`; the finished Czech files of The Cost of Disease in
+   `wwwroot\localization\cs\` show the house style); a screen's tags share the method name, e.g. `S5Special1_Content` (story) is followed by `S5Special1_Content1`
    (rules)). Some texts end mid-sentence and another tag (or a hub link) completes them: make your half join
    grammatically with the natural translation of the other half, and list such joins in your notes.
 

@@ -86,7 +86,7 @@ Hospital_ImmortalitySecret_Title;<icon=StorybookToken> <b>Tajemství nesmrtelnos
 Hospital_ScientificAdvances_Title;<icon=StorybookToken><b> Vědecké pokroky</b>
 Hospital_VictoryAhead_Title;<icon=StorybookToken><b> Vítězství na dohled</b>
 Hospital_Symposium_Title;<b>Univerzitní sympozium</b>
-Hospital_Symposium_Content1;rozhodnout o osudu <b>univerzity</b> ve městě – na místě, kde nyní táboří kočovná karavana. 
+Hospital_Symposium_Content1;rozhodnout o osudu <b>univerzity (University)</b> ve městě – na místě, kde nyní táboří kočovná karavana (Traveling Caravan). 
 // ---Hospital Visit Check---;
 HospitalVisitCheck_Title;Povinná návštěva
 HospitalVisitCheck_Content;Všeobecná nemocnice {{0=...|London|Dubai|Paris|...}} patřila k prvním nemocnicím v kraji. Byla založena roku 1865 a sehrála zásadní roli v tom, že ji veřejnost přestala vnímat jako místo, kam se chodí umírat, a začala v ní vidět místo uzdravení, vybavené nejnovějšími vymoženostmi lékařství.<br /><br />V den návštěvy se po chodbách činilo několik zdravotních sester, které ošetřovaly pacienty z okolních vesnic s příznaky žluté zimnice{{1=?| a používaly přitom očkovací postupy, jež rodina nedávno zveřejnila}}.

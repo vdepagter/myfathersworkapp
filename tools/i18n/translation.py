@@ -1,6 +1,6 @@
 """Tools for the app's translations (docs/i18n/README.md).
 
-    python tools/i18n/translation.py merge  [--lang cs]           parts in docs/i18n/work/<lang>/ -> wwwroot/localization/<lang>/
+    python tools/i18n/translation.py merge <prefixes> [--lang cs] parts in docs/i18n/work/<lang>/ -> wwwroot/localization/<lang>/
     python tools/i18n/translation.py check  [--lang cs]           every translated file against its English file
     python tools/i18n/translation.py sheet  [--lang cs] [out.xlsx] review workbook: English | Czech | suggestion | comment
     python tools/i18n/translation.py page   [--lang cs] [out.html] side-by-side page to read in a browser
@@ -27,6 +27,14 @@ FILES = [
     ('TheCostOfDisease_Gameplay_Localization.csv', 'The Cost of Disease: rules and setup'),
     ('TheCostOfDisease_Guide.csv', 'The Cost of Disease: guided mode'),
     ('TheCostOfDisease_LogBook.csv', 'The Cost of Disease: Log Book'),
+    ('FearOfTheUnknown_Localization.csv', 'Fear of the Unknown: story'),
+    ('FearOfTheUnknown_Gameplay_Localization.csv', 'Fear of the Unknown: rules and setup'),
+    ('FearOfTheUnknown_Guide.csv', 'Fear of the Unknown: guided mode'),
+    ('FearOfTheUnknown_LogBook.csv', 'Fear of the Unknown: Log Book'),
+    ('ATimeOfWar_Localization.csv', 'A Time of War: story'),
+    ('ATimeOfWar_Gameplay_Localization.csv', 'A Time of War: rules and setup'),
+    ('ATimeOfWar_Guide.csv', 'A Time of War: guided mode'),
+    ('ATimeOfWar_LogBook.csv', 'A Time of War: Log Book'),
 ]
 
 
@@ -79,10 +87,16 @@ def translated(name, lang):
     return {tag: text for tag, text in read_rows(path) if tag}
 
 
-def merge(lang):
+def merge(lang, only):
+    """Rebuilds the translated files of the scenarios named in `only` (file name prefixes, required: a merge overwrites
+    the translated file, so never merge a file that was edited after its parts were written)."""
+    if not only:
+        sys.exit('merge needs the file prefixes to rebuild, e.g. merge FearOfTheUnknown ATimeOfWar')
     out_dir = LOC / lang
     out_dir.mkdir(parents=True, exist_ok=True)
     for name, _ in FILES:
+        if not any(name.startswith(prefix) for prefix in only):
+            continue
         stem = name[:-4]
         parts = sorted((WORK / lang).glob(f'{stem}.part*.csv')) or sorted((WORK / lang).glob(name))
         if not parts:
@@ -229,7 +243,7 @@ if __name__ == '__main__':
     lang = lang_arg()
     rest = [a for a in sys.argv[2:] if not a.startswith('--') and a != lang]
     if command == 'merge':
-        merge(lang)
+        merge(lang, rest)
     elif command == 'check':
         sys.exit(0 if check(lang) else 1)
     elif command == 'sheet':
