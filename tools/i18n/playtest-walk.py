@@ -29,6 +29,7 @@ def args():
     p.add_argument('--steps', type=int, default=500)
     p.add_argument('--players', type=int, default=3)
     p.add_argument('--out', default='.')
+    p.add_argument('--scenario', default='The Cost of Disease', help='English scenario name on the picker button')
     return p.parse_args()
 
 
@@ -48,7 +49,7 @@ def setup(pg, a, rnd):
         pg.locator('button.mp-button').last.click(); time.sleep(0.6)
     pg.fill('input.mp-input', 'Lhota'); pg.locator('button.mp-button').last.click(); time.sleep(0.6)
     pg.locator('button.mp-button').last.click(); time.sleep(0.6)
-    pg.locator('button').filter(has_text=re.compile('Daň za nemoc|The Cost of Disease')).first.click()
+    pg.locator('button').filter(has_text=a.scenario).first.click()
     pg.wait_for_url(re.compile('Gameplay'), timeout=30000); time.sleep(2)
 
 

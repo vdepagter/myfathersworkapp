@@ -7,11 +7,11 @@ Guide_Route1;Kam vede generace I
 Guide_Route2;Kam vede generace II
 Guide_Route3;Kde tato větev končí
 //====== Witch Hunt ======;
-Guide_WitchHunt;V generaci II následuje [[hub:Foreigners]], nebo [[hub:Creature]]. Na konci této generace rozhodnou sudičky jednou ze dvou zkoušek, 50 : 50:<ul><li><b>Poprava</b> na konci Zralých let: oběšen řezník → [[hub:Foreigners]], kovář → [[hub:Creature]].</li><li><b>Dav</b>: Rodinný hrob nezískal nikdo → [[hub:Foreigners]], získal ho kdokoli → [[hub:Creature]].</li></ul>
-Guide_WitchHunt_Now;<b>Nyní:</b> {{0=|zatím nebyl nikdo popraven|byl popraven kovář|byl popraven řezník}} – {{1=?|Rodinný hrob už někdo získal|Rodinný hrob zatím nikdo nezískal}}.
+Guide_WitchHunt;V generaci II následuje [[hub:Foreigners]], nebo [[hub:Creature]]. Na konci této generace rozhodnou sudičky jednou ze dvou zkoušek, 50 : 50:<ul><li><b>Poprava</b> na konci Zralých let: oběšena řeznice → [[hub:Foreigners]], kovář → [[hub:Creature]].</li><li><b>Dav</b>: Rodinný hrob nezískal nikdo → [[hub:Foreigners]], získal ho kdokoli → [[hub:Creature]].</li></ul>
+Guide_WitchHunt_Now;<b>Nyní:</b> {{0=|zatím nebyl nikdo popraven|byl popraven kovář|byla popravena řeznice}} – {{1=?|Rodinný hrob už někdo získal|Rodinný hrob zatím nikdo nezískal}}.
 Guide_WitchHunt_NowForced;<b>Nyní:</b> rozhoduje jméno vaší vesnice: {{0=?|[[hub:Foreigners]]|[[hub:Creature]]}}, ať sudičky zkoušejí cokoli.
 Guide_FamilyPlot;Budou-li sudičky na konci této generace zkoušet dav (50 : 50 s popravou), vede každý získaný Rodinný hrob k větvi [[hub:Creature]]. Nezíská-li ho nikdo, následuje [[hub:Foreigners]].
-Guide_Execution;Budou-li sudičky na konci této generace zkoušet popravu (50 : 50 s davem): řezník → [[hub:Foreigners]], kovář → [[hub:Creature]]. Ve větvi [[hub:Tension]] se oběšený řezník navíc počítá proti vám.
+Guide_Execution;Budou-li sudičky na konci této generace zkoušet popravu (50 : 50 s davem): řeznice → [[hub:Foreigners]], kovář → [[hub:Creature]]. Ve větvi [[hub:Tension]] se oběšená řeznice navíc počítá proti vám.
 //====== Blame it on the Foreigners ======;
 Guide_Foreigners;V generaci III následuje [[hub:Isolation]], nebo [[hub:Tension]]. Na konci této generace rozhodnou sudičky jednou ze dvou zkoušek, 50 : 50:<ul><li><b>Cihly</b>, které nasbírali všichni hráči: dost → Pamětní hradba → [[hub:Isolation]], příliš málo → [[hub:Tension]]. Potřebný počet se losuje: {{0=|2–5|4–8|6–9}}.</li><li><b>Čarodějnice</b> při obviňování (na konci Zralých let): odhalena → [[hub:Tension]], neodhalena → [[hub:Isolation]].</li></ul>
 Guide_Foreigners_Now;<b>Nyní:</b> {{0=|čarodějnici obviníte na konci Zralých let|čarodějnice byla odhalena|byl obviněn nevinný}}.
@@ -27,7 +27,7 @@ Guide_Isolation;Konce této větve: [[end:1]] a [[end:2]]. Rozhodnou o nich na k
 Guide_Isolation_Now;<b>Nyní:</b> rozhodnuto → {{0=|[[end:1]]|[[end:2]]}}.
 Guide_Collaboration;Ano → [[end:1]]. Ne → [[end:2]].
 //====== Tensions Increase ======;
-Guide_Tension;Konce této větve: [[end:3]] a [[end:4]]. Rozhodnou o nich na konci Raných let tři volby vaší rodiny: oběšení řezníka (generace I), obvinění nevinného z čarodějnictví a volba Síly při hlasování o hradbě (generace II). Dvě nebo více z nich → [[end:4]], méně → [[end:3]].
+Guide_Tension;Konce této větve: [[end:3]] a [[end:4]]. Rozhodnou o nich na konci Raných let tři volby vaší rodiny: oběšení řeznice (generace I), obvinění nevinného z čarodějnictví a volba Síly při hlasování o hradbě (generace II). Dvě nebo více z nich → [[end:4]], méně → [[end:3]].
 Guide_Tension_Now;<b>Nyní:</b> volby, které se počítají proti vám: {{0=0}} ze 3 → {{1=?|[[end:4]]|[[end:3]]}}.
 //====== Private Investors ======;
 Guide_Privatized;Konce této větve: [[end:5]] a [[end:6]]. Alespoň {{0=2}} hráči, které Strážce do konce generace odměnil za dosažení konce stupnice děsivosti → [[end:5]], méně → [[end:6]].

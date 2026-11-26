@@ -125,13 +125,13 @@ Foreigners_RumorMill_ClickHere;můžete zde vyzvídat o jiném hráči.
 Foreigners_RumorMill_Content1;Na kostel (Church) padla kletba, a tak se v tomto kole nelze vyptávat měšťanů na klepy.
 Foreigners_RumorMill_Content2;Zjistíte tak, na které místo seslal vybraný hráč v tomto kole kletbu.
 Foreigners_TownStrength_Title;<icon=StorybookToken> Síla města
-Foreigners_TownStrength_Content;Hráči mohou navštívit radnici (Town Hall) a koupit si pamětní cihlu, čímž přispějí na nový památník. Každá cihla má při koupi hodnotu <b>{{0=...|2|...}} VB</b>. Podrobné vysvětlení 
-Foreigners_TownStrength_ClickHere;najdete zde.
+Foreigners_TownStrength_Content;Hráči mohou navštívit radnici (Town Hall) a koupit si pamětní cihlu, čímž přispějí na nový památník. Každá cihla má při koupi hodnotu <b>{{0=...|2|...}} VB</b>. Podrobné vysvětlení si 
+Foreigners_TownStrength_ClickHere;přečtěte zde.
 Foreigners_KeyToTheCity_Title;Klíč od města
-Foreigners_KeyToTheCity_Content;Na konci generace získá hráč s nejvíce cihlami vylepšení <b>Klíč od města</b> (Key to the City). <i>Při shodě rozhoduje nejméně VB.</i>{{0=?| Toto vylepšení získá také hráč s druhým nejvyšším počtem cihel.}}
+Foreigners_KeyToTheCity_Content;Na konci generace získá hráč s nejvíce cihlami vylepšení <b>Klíč od města</b> (Key to the City). <i>Při shodě vyhrává hráč s nejméně VB.</i>{{0=?| Toto vylepšení získá také hráč s druhým nejvyšším počtem cihel.}}
 Foreigners_BankLibrary_Title;<icon=StorybookToken> Banka (Bank) a knihovna (Library)
-Foreigners_BankLibrary_Content;Jedinými známkami modernizace jsou dvě nové provizorní budovy. Vysvětlení k oběma 
-Foreigners_BankLibrary_ClickHere;najdete zde.
+Foreigners_BankLibrary_Content;Jedinými známkami modernizace jsou dvě nové provizorní budovy. Vysvětlení k oběma si 
+Foreigners_BankLibrary_ClickHere;přečtěte zde.
 Foreigners_Accusations_Title;Událost druhého kola – Obvinění
 Foreigners_Accusations_Content;Nad vesnicí visí ohavná kletba, a tak bude rodina na konci druhého kola muset obětovat jednoho ze svých členů. Správná volba přinese VB, ten, na koho volba padne, však <b>zemře</b>.
 Foreigners_PressingForward_Title;<icon=StorybookToken> Kupředu
@@ -199,10 +199,10 @@ HideousMotivation_Content;<b>Krátký úryvek z deníku – <i>(datum a jméno n
 Creature_Title;Stvůra se vrací
 Creature_Asylum_Title;<icon=StorybookToken> Ústav
 Creature_Asylum_Content;Návštěva ústavu (Asylum) vám umožní <b>ztratit 1 <icon=Insanity_Icon></b>. Při své <b>první</b> návštěvě ústavu (Asylum) 
-Creature_Asylum_ClickHere;si přečtěte zde zprávu.
+Creature_Asylum_ClickHere;si zde přečtěte zprávu.
 Creature_Business_Title;<icon=StorybookToken> Obchodní schůzka
 Creature_Business_Content;Návštěva <b>Domu na kopci</b> (House on the Hill) vám umožní <b>získat $2</b>. Při své <b>první</b> návštěvě u obchodníka 
-Creature_Business_ClickHere;si přečtěte zde zprávu.
+Creature_Business_ClickHere;si zde přečtěte zprávu.
 Creature_Requests_Title;<icon=StorybookToken> Požadavky Stvůry
 Creature_Requests_Content;Při akci <b>Provést experiment</b> může kterýkoli hráč dokončit experimenty <b>Štěně</b> a <b>Nevěsta</b>, jako by je měl v ruce. <i>Každý z těchto experimentů smí dokončit jen jeden hráč.</i><br /><br />Když některý hráč dokončí jeden z experimentů pro Stvůru, 
 Creature_Requests_ClickHere;přečtěte si zde, jaké to bude mít následky.
@@ -346,11 +346,11 @@ FinalEnding_Content8;<b>Dopis – {{6=?|Vlad III. Dracula|{{0=Oliver}}}} – <i>
 FinalEnding_Content10;<b>KONEC?</b>
 //====== Gen3 - Isolation ======;
 IsolationIntro_SubTitle;Izolace a nevědomost
-IsolationIntro_Content;<b>Dopis – {{0=...|Oliver|James|Olivia|...}} – <i>30. března 1892, Rumunsko.</i></b><br /><br />Povídám Vám, ti zatracení sedláci opravdu postavili kolem svého vlastního města hradbu. A to prosím v devatenáctém století! Ti hlupáci vyměnili paranoiu za naprosté pomatení!<br /><br />Čekají snad, že nějaká cizí vláda rozestaví vojenské šiky a trebuchety a oblehne tuhle zapadlou pevnůstku? Co by jí to proboha přineslo? Obchod utrpěl. Ceny vzrostly. A co je nejhorší, karavany teď míří jinam, a tak musím hledat jiné cesty, jak získávat poznání.<br /><br />Jen tento týden mě rozzuřila drzost, s jakou se kdosi vměšoval do mých záležitostí! Mne, [[g0:právoplatného dědice/právoplatnou dědičku]] značného panství, podrobili ponižující tělesné prohlídce u čehosi, co vypadalo jako čerstvě zbudovaná brána do mé rodné vesnice. A pak ještě naznačovat, že mám povinnost prokázat své občanství? S mou drahou polovičkou zacházeli tak hrubě, že musela celý následující týden proležet v ložnici, sužována úzkostnými myšlenkami.<br /><br />Proklínám tento pekelný svět, plný zmaru a komplikací na každém kroku! Kdyby jen bylo možné tyto zpátečnické sklony k izolacionismu vyřešit jinak! Jistě dovedete posoudit, jak zoufalá je situace, když dokázala otřást i mou pověstně pragmatickou povahou. Jak má člověk změnit svět, když si svět tak rozhodně přeje zůstat stejný?<br /><br />Pamatujte na má slova: raději ty valy uvidím v troskách, než by mi zlomily ducha. Najdu způsob, jak obejít tento utlačovatelský režim a za každou cenu uchovat svůj odkaz!
+IsolationIntro_Content;<b>Dopis – {{0=...|Oliver|James|Olivia|...}} – <i>30. března 1892. Rumunsko.</i></b><br /><br />Povídám Vám, ti zatracení sedláci opravdu postavili kolem svého vlastního města hradbu. A to prosím v devatenáctém století! Ti hlupáci vyměnili paranoiu za naprosté pomatení!<br /><br />Čekají snad, že nějaká cizí vláda rozestaví vojenské šiky a trebuchety a oblehne tuhle zapadlou pevnůstku? Co by jí to proboha přineslo? Obchod utrpěl. Ceny vzrostly. A co je nejhorší, karavany teď míří jinam, a tak musím hledat jiné cesty, jak získávat poznání.<br /><br />Jen tento týden mě rozzuřila drzost, s jakou se kdosi vměšoval do mých záležitostí! Mne, [[g0:právoplatného dědice/právoplatnou dědičku]] značného panství, podrobili ponižující tělesné prohlídce u čehosi, co vypadalo jako čerstvě zbudovaná brána do mé rodné vesnice. A pak ještě naznačovat, že mám povinnost prokázat své občanství? S mou drahou polovičkou zacházeli tak hrubě, že musela celý následující týden proležet v ložnici, sužována úzkostnými myšlenkami.<br /><br />Proklínám tento pekelný svět, plný zmaru a komplikací na každém kroku! Kdyby jen bylo možné tyto zpátečnické sklony k izolacionismu vyřešit jinak! Jistě dovedete posoudit, jak zoufalá je situace, když dokázala otřást i mou pověstně pragmatickou povahou. Jak má člověk změnit svět, když si svět tak rozhodně přeje zůstat stejný?<br /><br />Pamatujte na má slova: raději ty valy uvidím v troskách, než by mi zlomily ducha. Najdu způsob, jak obejít tento utlačovatelský režim a za každou cenu uchovat svůj odkaz!
 MinorRecompense_Title;<b>Drobné odškodnění</b>
 MinorRecompense_Content;<b>Deník – {{0=...|Oliver|James|Olivia|...}} – <i>Datum neznámé.</i></b><br /><br />Měšťané se mě straní. A právem. Ačkoli nechovám zášť vůči prosťáčkům, kteří nestojí za můj čas, smrt mého rodiče je rána, jež ve mně hluboko hnisá, a toto místo ve mně nevzbuzuje ani špetku hrdosti.<br /><br />Zbývají mi jen mé temné záměry a pracovna, kde se uzavírám mezi zaprášenými foliany a prastarými svitky. Má práce je mou vzpourou proti jejich útlaku. Bude-li město hořet, nebudu plameny rozdmýchávat, ale budu se dívat, jak se peče.
 ExcellenceDistrusted_Title;<b>Nedůvěra k výjimečnosti</b>
-ExcellenceDistrusted_Content;<b>Dopis – {{0=...|Oliver|James|Olivia|...}} – <i>listopad 1892, Rumunsko.</i></b><br /><br />Je v nejvyšší míře žalostné, že nám lid nedůvěřuje kvůli ohavným rejdům našich předků. {{1=...|Town|...}} je přece mé rodiště! A přesto Vám píši ve spěchu a s ohněm v každém slově. Ti tupci by nás trestali za samu naši existenci! Pozorují nás s takovou nedůvěrou, že to na každém kroku živí mé úzkosti.<br /><br />Mor na jejich divoké pověry! Ach, kéž by mě zas obklopovaly zdi univerzity!
+ExcellenceDistrusted_Content;<b>Dopis – {{0=...|Oliver|James|Olivia|...}} – <i>listopad 1892. Rumunsko.</i></b><br /><br />Je v nejvyšší míře žalostné, že nám lid nedůvěřuje kvůli ohavným rejdům našich předků. {{1=...|Town|...}} je přece mé rodiště! A přesto Vám píši ve spěchu a s ohněm v každém slově. Ti tupci by nás trestali za samu naši existenci! Pozorují nás s takovou nedůvěrou, že to na každém kroku živí mé úzkosti.<br /><br />Mor na jejich divoké pověry! Ach, kéž by mě zas obklopovaly zdi univerzity!
 // ---Hub---;
 Isolation_Title;Město za hradbami
 Isolation_RisingPrices_Title;Rostoucí ceny
@@ -367,7 +367,7 @@ Isolation_Experiment_Title;Experiment
 Isolation_Experiment_Content;Kdykoli hráč dokončí <b>{{0=|biologický|chemický|technický}} experiment</b>, získá žeton spolupráce <icon=S2_CollaborativeToken> a umístí ho do svých komnat.{{1=?| <i>Každý hráč může získat pouze 1 žeton.</i>}}{{2=?| Hráč, který získá nejvíce žetonů <b>spolupráce</b> <icon=S2_CollaborativeToken>, získá navíc <b>4 VB.</b>}}
 Isolation_Church_Title;Kostel
 Isolation_Church_ClickHere;Přečtěte si zde
-Isolation_Church_Content; pravidla kostela (Church), pokud je potřebujete.
+Isolation_Church_Content; vysvětlení ke kostelu (Church), pokud je potřebujete.
 // ---Verification of Identity---;
 CitizenshipInspection_Title;<b>Kontrola občanství</b>
 CitizenshipInspection_Content;<b>Zápis v deníku: <i>jméno nečitelné – {{0=...|14 July, 1893|...}}</i></b><br /><br />{{1=|Den prohlídky: nejnovější svrchník, a přesto ani slovo uznání od lotrů u dveří. Ostraha aspoň natolik laxní, že při vstupu do zchátralého vládního úřadu žádná tělesná prohlídka.|Ponuré odpoledne – zataženo, město halí šedá clona nízkých mraků. U radnice, kde se měla konat ohlášená prohlídka, nezbylo než zavrtět hlavou: u dřevěných dvoukřídlých dveří spal na stráži jediný muž v čerstvě přešívané vojenské uniformě, pozůstatku z 18. století. Raději dovnitř bez buzení – škoda každé další minuty, kterou by návštěva stála.}}<br /><br /><b>Zvolte, který hráč navštívil radnici (Town Hall):</b>
@@ -449,10 +449,10 @@ Tension_Crossroads_ClickHere;pokračujte zde.
 Tension_PlotExpansion_Title;Rozšíření parcel
 Tension_PlotExpansion_Content;Cihly nyní můžete použít k otevření nových parcel ve svém sídle. Při otevírání nové parcely má každý žeton cihly, který utratíte, hodnotu $1.
 Tension_Occult_Title;Okultní experimentování
-Tension_Occult_Content;Na konci generace získá hráč s nejvíce dokončenými <b>okultními</b> experimenty okrasné vylepšení sídla <b>Kabinet kuriozit</b>.{{0=?| Toto vylepšení získá také hráč s druhým nejvyšším počtem experimentů.}} <i>Při shodě rozhoduje nižší počet VB.</i>
+Tension_Occult_Content;Na konci generace získá hráč s nejvíce dokončenými <b>okultními</b> experimenty okrasné vylepšení sídla <b>Kabinet kuriozit</b>.{{0=?| Toto vylepšení získá také hráč s druhým nejvyšším počtem experimentů.}} <i>Při shodě vyhrává hráč s nejméně VB.</i>
 Tension_Church_Title;Kostel
-Tension_Church_ClickHere;Zde si přečtěte
-Tension_Church_Content; vysvětlení, jak funguje kostel (Church), budete-li je potřebovat.
+Tension_Church_ClickHere;Přečtěte si zde
+Tension_Church_Content; vysvětlení ke kostelu (Church), pokud je potřebujete.
 Tension_Penalty_Title;Postih za posedlost
 Tension_Penalty_Content;Každý hráč, který do konce této generace neprohloubí svou posedlost, <b>ztratí {{0=...|5|...}} VB.</b>
 // ---The Special Event---;
@@ -613,10 +613,10 @@ Liberal_Focus_Title;<icon=StorybookToken> Důraz na rehabilitaci
 Liberal_Focus_Content;Když žeton hráče dostihne žeton <b>rehabilitace</b> <icon=S2_RehabilitationToken> nebo jej přesáhne, 
 Liberal_Focus_ClickHere;pokračujte zde k přijetí do ústavu (Asylum).
 Liberal_Hunt_Title;<icon=StorybookToken> Hon začal
-Liberal_Hunt_Content;Kdykoli hráč navštíví místo se žetonem honu <icon=S2_HuntTokenFRONT>, vezme si tento žeton a položí ho do svého sídla.<br /><br />Na konci každého kola vyráží výprava zabít Stvůru. Všichni hráči, kteří se účastní úspěšné výpravy, získávají <b>5 VB.</b> Podrobné vysvětlení honu 
-Liberal_Hunt_ClickHere;naleznete zde.
+Liberal_Hunt_Content;Kdykoli hráč navštíví místo se žetonem honu <icon=S2_HuntTokenFRONT>, vezme si tento žeton a položí ho do svého sídla.<br /><br />Na konci každého kola vyráží výprava zabít Stvůru. Všichni hráči, kteří se účastní úspěšné výpravy, získají <b>5 VB.</b> Podrobné vysvětlení honu si 
+Liberal_Hunt_ClickHere;přečtěte zde.
 Liberal_Program_Title;Program {{0=...|Iron Will|...}}
-Liberal_Program_Content;Na konci generace získá hráč, který dokončil nejvíce {{0=|technických|chemických|biologických|okultních}} experimentů, vylepšení sídla <b>Zvěřinec</b>. <i>Při shodě rozhoduje nižší počet VB.</i>{{1=?| Toto vylepšení získá i hráč s druhým nejvyšším počtem experimentů.}}
+Liberal_Program_Content;Na konci generace získá hráč, který dokončil nejvíce {{0=|technických|chemických|biologických|okultních}} experimentů, vylepšení sídla <b>Zvěřinec</b>. <i>Při shodě vyhrává hráč s nejméně VB.</i>{{1=?| Toto vylepšení získá i hráč s druhým nejvyšším počtem experimentů.}}
 // ---The Asylum---;
 AdmittanceLog_Title;<b>Přijímací kniha ústavu {{0=...|1234|...}} {{1=|A|B|C|D}}</b>
 AdmittanceLog_Content;<i>Poněkud vybledlá stránka uvádí záznamy o příchodech a odchodech návštěvníků ústavu. Seznam obsahuje i záznamy o přijetí osob, které podstupují psychiatrické vyšetření.</i><br /><br /><b>V přijímací knize je k tomuto dni zapsáno jméno:</b>
@@ -684,7 +684,7 @@ RiskTooGreat_Content;<b>Deník – {{0=...|Oliver|James|Olivia|...}} – <i>(pok
 EconomicStimulus_Title;<b>Oživení hospodářství</b>
 EconomicStimulus_Content;Přesně podle mých předpovědí přivedly rozšiřující se sociální programy rumunskou vládu během této krátké recese do nemilosrdné chudoby. Prozíravé přesunutí mého portfolia do zahraničí udrželo dopad na zanedbatelné úrovni. Otřesy způsobené touto Velkou válkou však rozdmýchaly nacionalistické nálady a drobná povstání po celé Transylvánii.<br /><br />Náhlé heslo „chraňme své“ se zvrhlo v bitvu uvnitř vlády. Když se příliš dlouho zabývám parlamentními záležitostmi, zívám. Nepochybně jde o nekonečné žvanění o rase, lidských právech a náboženské víře.<br /><br />Výsledkem těchto předsudků je, že Transylvánie nyní stojí před bezútěšným rozhodnutím, které nemůže dopadnout dobře. Jakožto statkáři a podnikatelé o tom, jak bude zemská vláda postupovat, přirozeně rozhodneme my.
 PolicyBid_Title;<b>DRAŽBA</b>
-PolicyBidResolved_Title;<b>Dražba dokončena</b>
+PolicyBidResolved_Title;<b>Dražba skončila</b>
 PolicyVote_Title;<b>HLASOVÁNÍ</b>
 PolicyVoteResolved_Title;<b>Výsledek hlasování</b>
 SurprisingRebuke_Title;<b>Nečekaná výtka</b>

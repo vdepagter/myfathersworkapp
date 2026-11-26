@@ -99,7 +99,7 @@ Log Book and Guide get no English.
 | English | Czech | Notes |
 |---|---|---|
 | witch / witchcraft / witch hunt | čarodějnice / čarodějnictví / hon na čarodějnice | *Čarodějnice* is the accusation, whatever the player's gender, as in the hub title. |
-| Blacksmith / Butcher | kovář / řezník | The execution vote: PRO = *kovář*, PROTI = *řezník*. |
+| Blacksmith / Butcher | kovář / **řeznice** | The Butcher is Henriette (Henrietta), a woman: *řeznice* in story, rules, vote rows and Guide. The execution vote: PRO = *kovář*, PROTI = *řeznice* (*Hlasovali jsme pro smrt řeznice*, *stánek řeznice*). Her heirs' trade adjective stays *řeznický* (*Řeznický učeň*). |
 | Public Execution | veřejná poprava | The source says both hanged and burned: translate each passage as written. |
 | Accuse! / accusation / point a finger at | OBVIŇTE! / obvinění / ukázat prstem na | "fingers pointed at them" → *prsty namířené na něj* (gender-free: *hráč, na kterého ukazuje nejvíc prstů*). |
 | milestones: Ceaseless Ambition / Boundless Study / Pressing the Boundaries / Feared and Misunderstood | Neutuchající ctižádost / Bezmezné studium / Za hranice možného / Strach a nepochopení | |
@@ -240,7 +240,7 @@ skladiště, rozcestí, mauzoleum, parlament, městské hradby, hostinec, panstv
 | Tag / value | English | Czech | Notes |
 |---|---|---|---|
 | `Newspaper` | The {{0}} Ledger / Gazette / Mercury / Village Voice / Examiner | `{{1=\|Zpravodaj\|Věstník\|Merkur\|Hlasatel\|Pozorovatel}} {{0=...\|Town\|...}}` | All masculine singular, so every verb or adjective agrees with any paper. Town name as a label after the title (example 5). |
-| `Suspect_Name` | Apprentice / Blacksmith's / Butcher's Apprentice | `{{0=\|učeň\|kovářský učeň\|řeznický učeň}}` | Fills player-name slots: nominative, masculine (Q6). |
+| `Suspect_Name` | Apprentice / Blacksmith's / Butcher's Apprentice | `{{0=\|Učeň\|Kovářský učeň\|Řeznický učeň}}` | Capitalised: the value is the character's name, shown as a button next to the player names and inserted into player-name slots. Sentences treat it as a name in the nominative, masculine (*Prstem ukazuje i {{0}}*, *Ubohý {{0}} na nás plival*, *Prokletý nebyl {{0}}*), never as a common noun (Q6). |
 | `HexLocation1` / `HexLocation2` | Church / Traveling Caravan / Laborer's Union; Park / Builder's Office / Cemetery | `{{0=\|kostel (Church)\|kočovná karavana (Traveling Caravan)\|Dělnický svaz (Laborer's Union)}}` and `{{0=\|park (Park)\|kancelář stavitele (Builder's Office)\|hřbitov (Cemetery)}}` | Used in rules, hubs and newspapers alike: nominative after a colon (example 6). In the story newspapers the bracket stays, as a known exception. |
 | `AsylumUpgrade` | Asylum Labor Union / Key to the Asylum / Asylum Share | `{{0=\|Odborový svaz ústavu\|Klíč od ústavu\|Podíl v ústavu}}` | No bracket (story uses it too). Labels: *program <b>{{0}}</b>*, *dílky <b>{{0}}</b>* (Q7). |
 | `CreatureRequest` | Puppy / Bride / Puppy and Bride | `{{0=\|Štěně\|Nevěstu\|Štěně i Nevěstu}}` | Only used in `GrandfathersCreation`: accusative fits both rows. |
@@ -292,3 +292,77 @@ Přijetí (7 V ústavu, 8 Ve vlastních rukou). `FinalEnding_Family` "The Family
 | Q7 | `AsylumInvestors_0` asks players to fetch the Asylum upgrade tiles by a code-filled name, and the value cannot carry the English (the story uses it too). | Put the English at the heads of `AsylumSupport_Content1-3` (*<b>Podíl v ústavu</b> (<i>Asylum Share</i>)*). Optionally the developer adds a second tag with the English for the popup. |
 | Q8 | Transylvania: *Transylvánie* or the historical *Sedmihradsko*? | *Transylvánie*: the Dracula associations matter here, and Czech Dracula editions use it. |
 | Q9 | Town location whose Czech equals the English: *park (Park)*. | Keep the bracket for consistency with the rulebook team's rule. Raise it with them if it reads oddly at the table. |
+
+---
+
+## 5. Terms settled during the first translation
+
+Settled by the editing pass after the seven translators (November 2026). Binding like the rest of this file. The
+answers to the open questions above are as recommended; Q1 (warden agreement) and Q6 (Apprentice gender) still wait for
+a developer token.
+
+### 5.1 Rules wording (Gameplay CSV, hubs, Guide)
+
+| English | Czech | Notes |
+|---|---|---|
+| Ties are broken by the one / player with the fewest (lowest) VP. | Při shodě vyhrává hráč s nejméně VB. | Every short tie-break. Where the English says "the one with the fewest VP will gain the Upgrade" the Czech keeps that structure (*Při shodě získá vylepšení hráč s nejméně VB.*). |
+| If still tied, the one who went last … | Pokud shoda trvá, vyhrává ten, kdo byl … na tahu poslední. | Not *Trvá-li shoda i poté*. |
+| The player who won the bid gains … / choose the outcome of your bid: | Vítěz dražby získává … / Vítěz dražby nyní zvolí, jak se svou výhrou naloží: | All four bid result screens. |
+| Bid Complete / Vote Resolution / Vote Result / The Vote Has Been Resolved | Dražba skončila / Výsledek hlasování / Výsledek hlasování / Hlasování vyhodnoceno | Same as the other two scenarios. |
+| voting token | hlasovací žeton | Bracket (*voting token*) at the first mention in a popup. |
+| (hub) Click here … for an explanation of the Church location if needed. | Přečtěte si zde … vysvětlení ke kostelu (Church), pokud je potřebujete. | The three Church sections (`Creature_`, `Isolation_`, `Tension_Church`) read alike. |
+| (hub) For a detailed explanation (of the hunt / battle), click here. | Podrobné vysvětlení (honu / závěrečné bitvy) si … přečtěte zde. | `_Content` ends with *si*, `_ClickHere` is *přečtěte zde.* (Town Strength, Bank & Library, both Hunt sections, Battledome). |
+| (hub) When you visit X for the first time, click here for a message. | Při své první návštěvě … si zde přečtěte zprávu. | |
+| Player (coloured money) token | investiční žeton (Player token) | |
+| Self piece (first mention in a popup) | osobní figurka (Self) | |
+| Collaborative Experiments / Collaboration token | společné experimenty (Collaborative Experiments) / žeton spolupráce (Collaboration) | |
+| Angry Mob track (`AssessmentResults_0_Content6`) | stupnice děsivosti | Source slip for the Creepy track (2.2). |
+| letter headers with a place | *30. března 1892. Rumunsko.* | Period before the place, as in the English; never a comma. |
+
+### 5.2 Window titles repeated elsewhere (Log Book, Guide, hubs)
+
+| English | Czech |
+|---|---|
+| Preparations / A Note for my Sister / Shared Mania | Přípravy / Vzkaz pro mou sestru / Sdílená mánie |
+| Local Inventor Sees Meteoric Rise / The New Science / Dedication Should Not Be Punished / A Town's Suspicions – An Interview | Místní vynálezecká hvězda strmě stoupá / Nová věda / Oddanost by neměla být trestána / Podezření města – rozhovor |
+| Over-Achievement / Overambitious / The Mob Moves In | Nad plán / Přehnaná ctižádost / Dav se blíží |
+| A Public Execution? / The Vote Has Been Resolved | Veřejná poprava? / Hlasování vyhodnoceno |
+| The Blacksmith is Dead. / The Butcher is Dead. | Kovář je mrtev. / Řeznice je mrtva. |
+| Fear of Our Family / Flames of Hysteria / Paranoia Fades / More Secrets to Quell / A Return to Civility | Strach z naší rodiny / Plameny hysterie / Paranoia slábne / Další tajemství k umlčení / Návrat k civilizovanosti |
+| Strengthening the Town / The Deadly Witching Game / The Rumor Is... | Posílení města / Smrtící čarodějnická hra / Klepy praví… |
+| Fortunate Discovery / Memorial to the Past for the Future / Opportunity / A Vague Promise | Šťastný objev / Památník minulosti pro budoucnost / Příležitost / Neurčitý slib |
+| Accusations / Death and Resolution / Cursed Removal / The Curse Continues | Obvinění / Smrt a rozuzlení / Odstranění prokletého / Prokletí trvá |
+| Construction Matters / Protected Against Witchcraft | Stavební záležitosti / Chráněni před čarodějnictvím |
+| The Creature's Demands / Hideous Motivation / Grandfather's Creation Returns / The Creature is Appeased | Požadavky Stvůry / Ohavná pohnutka / Dědovo dílo se vrací / Stvůra je usmířena |
+| Visit to the Sanatorium / Retrieval of Property / Perhaps Stubborn, Perhaps Illiterate | Návštěva sanatoria / Vyzvednutí majetku / Možná tvrdohlavost, možná negramotnost |
+| Meeting on the Hill / A Sly Investment / An Improved Deal / Declined Offer / Thanks Are In Order / To Remove A Curse | Schůzka na kopci / Lstivá investice / Lepší nabídka / Odmítnutá nabídka / Je načase poděkovat / Sejmutí prokletí |
+| The Esteemed Institution / Business Opportunity / Asylum Resolution / Total Contributions | Ctihodný ústav / Obchodní příležitost / Rozhodnutí o ústavu / Celkové příspěvky |
+| A Cursed Cure / Cure Confirmed / Cure Denied | Prokletý lék / Lék potvrzen / Lék odepřen |
+| The Count's Payment Received / The Count is Disappointed / The Creature's Aid / Money Talks | Platba hraběti přijata / Hrabě je zklamán / Pomoc Stvůře / Peníze hýbou světem |
+| The Creature Exacts Its Revenge / Minor Compassion | Stvůra se mstí / Špetka soucitu |
+| A Debt Repaid / For Private Use / A Most Unwelcome Return / Payment Received / Premature End | Dluh splacen / K soukromému užívání / Nanejvýš nevítaný návrat / Platba přijata / Předčasný konec |
+| Minor Recompense / Excellence Distrusted / Verification Completed / Verification of Identity Required | Drobné odškodnění / Nedůvěra k výjimečnosti / Ověření dokončeno / Vyžadováno ověření totožnosti |
+| Neglected by the Caravan / Neglected | Opomenuti karavanami / Opomíjení |
+| A Controlled Release / Consequences of Smuggling / Politics as Usual / Devastating and Expected Results | Řízené vypuštění / Důsledky pašování / Politika jako obvykle / Zničující a očekávané výsledky |
+| Minor Reward for Investment / Reconciliation / In Support of Others / Ways to Ease the Tension | Drobná odměna za investici / Smíření / Na podporu druhých / Jak zmírnit napětí |
+| Investment Dividends / Investment / The Escape / Build Me A Warrior / The World is Not the Same | Výnosy z investic / Investice / Útěk / Postav mi válečníka / Svět už není jako dřív |
+| Merciful Heritage / A Sacrifice is Required / An Abrupt End / The Horror of Existence | Milosrdné dědictví / Je třeba oběti / Náhlý konec / Hrůza bytí |
+| A Plan Revealed / The Meeting at the Junk Palace / Resolution | Plán odhalen / Setkání v Paláci z harampádí / Rozuzlení |
+| Blood in the Battledome / Battle Warrior / The Battledome | Krev v bitevní kopuli / Válečník pro bitevní kopuli / Bitevní kopule |
+| Understanding and Support / Discharged / Aid to the Institute / Choose the Program Focus / The Choice | Pochopení a podpora / Propuštění / Pomoc ústavu / Zvolte zaměření programu / Volba |
+
+### 5.3 Log Book
+
+Titles for screens whose window title carries a typed name or changes with play (the English Log Book uses a fixed
+title): The Inventor in the News → *Vynálezce v novinách*, An Inherited Obsession → *Zděděná posedlost*, The Library
+Falls → *Pád knihovny*, Patient Entry Report → *Přijímací zpráva*, Assessment Results → *Výsledky vyšetření*, The New
+Program → *Nový program*. Screens with two or more entries (Gen1FateVictim, Gen1FateMob, Obsessions, ObsessionsAltered,
+TrialOutcome, MercifulHeritage) use the exact Czech window-title variant, because the app matches it.
+
+Places (no English bracket): Guest Quarters → *Pokoj pro hosty*, Estate → *Panství*, Estate Gates → *Brána panství*,
+Estate Grounds → *Pozemky panství*, Village Streets → *Vesnické ulice*, Newspaper Office → *Redakce*, Smithy → *Kovárna*,
+Butcher's Shop → *Řeznictví*, The Count's Estate → *Hraběcí panství*, Second Home → *Druhé sídlo*, Countryside →
+*Venkov*, Town Walls → *Městské hradby*, Warehouse → *Skladiště*, Docks → *Přístaviště*, Courthouse → *Soudní budova*,
+Parliament → *Parlament*, Mausoleum → *Mauzoleum*. Summaries: Generation I "cousins" are *sourozenci* (as in the story),
+later ones *bratranci*; "a cousin" → *jeden z bratranců* (generic masculine, no tokens in the Log Book); Victoria
+Stoker ("caretaker") → *poručnice*.

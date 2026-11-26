@@ -223,3 +223,86 @@ Study → *pracovna*; Town Square → *náměstí*; Sitting Room → *salon*; Ve
 | Q7 | Base-game action names used here are not in the main glossary: Estate Affairs, Record Knowledge. | Ask the rulebook team. Placeholders: *akce Záležitosti sídla (Estate Affairs)*, *akce Zapsat znalost (Record Knowledge)*. |
 | Q8 | *Uhry* in the 20th-century coursebook (`FinalEnding_Content7`) and the future paradox (`ParadoxTimeRandom_Content7`)? | *Uhry* in the memoir; *Maďarsko* in the coursebook only, which is written decades later. |
 | Q9 | The town-location bracket in hub **titles** makes them long on a phone ("Požadavky armády – kasárna (Barracks)"). | Keep it everywhere as the rule says, and check the width on a phone in the playtest. |
+
+---
+
+## 6. Terms settled during the first translation
+
+Terms the seven translators had to coin (not in sections 3 and 4), as unified by the editing pass (26 Nov 2026). They
+are binding like the rest of this file. Window titles are listed where other texts repeat them (Log Book, Guide, rules).
+
+### 6.1 Decisions of the editing pass
+
+| Point | Settled | Notes |
+|---|---|---|
+| The narrator's spouse (story) | **má drahá polovička** (*s mou drahou polovičkou, mé okouzlené polovičce*) | Gender-free, no `[[g:…]]` tokens (the spouse's gender is not the narrator's). *Partner* stays the game piece. |
+| "masterpiece" outside the game term | **mistrovský kus** | Never *veledílo* (rejected by the rulebook team). The game term stays *mistrovské dílo*. |
+| Hungary | *Uhry, uherský* in the memoir (also the future paradox `ParadoxTimeRandom_Content7`); *maďarský národ* only in the 20th-century coursebook (`FinalEnding_Content7`) | Q8 as recommended. |
+| Giant Time Machine / Giant … (ending 1) | *obří stroj času, obří pavoučí vůz…* | Story wordplay ("an even BIGGER version"); rules say *velmistrovské dílo*. |
+| Family win (`FinalEnding_Family` = *Rodina*) | Endings 3, 5, 6, 7 and 8 rephrased without gender: *to já, {{0}}, stojím za vydáním, sepsáním i sestavením…*, *v čerstvě svěřeném úřadu královského rádce*, *já, {{0}}, znám sladkost vítězství*, *pod autorským vedením: Dr. {{0}}*, *{{0}} pochází z okraje města…*, *zůstávám navždy k Vašim službám* | Ending 1 (*přísahám při svém jménu, {{0}} IV.*) cannot hold "Rodina IV." gracefully (the English "The family IV" cannot either). |
+| A Log Book "cousin" (gender unknown) | *jeden z dědiců*; "the cousins" → *bratranci a sestřenice*, *příbuzní* | |
+
+### 6.2 Rules and button phrases
+
+| English | Czech |
+|---|---|
+| All players may again view the Storybook. | Všichni hráči se nyní opět mohou dívat do Knihy příběhů. |
+| Carefully hand / give this Storybook device to the player with … and do not allow any other players to see the screen. | Opatrně podejte zařízení s Knihou příběhů hráči se žetonem … a nedovolte ostatním hráčům vidět na obrazovku. |
+| Carefully hand the Storybook to {{0}}. This passage is then read aloud to all players. | Opatrně předejte Knihu příběhů hráči: {{0}}. Úryvek se pak čte nahlas všem hráčům. |
+| Click here at the end of the round to move to the next round... | Na konci kola přejděte do dalšího kola… |
+| Click here at the End of the Generation for Final Scoring and to determine the Fate of the Town. | Na konci generace přejděte k závěrečnému bodování a rozhodněte o osudu města. |
+| Click here (at the End of the Generation) to determine the Fate of the Town. | (Na konci generace) pokračujte a rozhodněte o osudu města. |
+| Click here to start the bribe... | Zahajte sbírku na úplatek… |
+| BRIBE / Total Bribe | ÚPLATEK / Celkový úplatek |
+| VOTE / Votes Tallied / Vote Complete / Vote Result | HLASOVÁNÍ / Hlasy sečteny / Hlasování skončilo / Výsledek hlasování |
+| BID / Bid / Bid Complete / Bid Result, Bid Outcome / Bid Resolved | DRAŽBA / Dražba / Dražba skončila / Výsledek dražby / Dražba vyhodnocena |
+| Yay / Nay in links | PRO / PROTI; "(Yay!)" → *(PRO!)* |
+| player closest to the Crown token without overlapping or exceeding it | hráč nejblíže žetonu koruny, aniž by s ním stál na stejném poli nebo ho překročil |
+| Church explanation (hub) | *Přečtěte si zde* + *vysvětlení, jak funguje kostel (Church).*; window title *Dobročinný kostel (Charitable Church)* |
+
+### 6.3 Story terms
+
+| English | Czech |
+|---|---|
+| messenger (she) | poslíčkyně |
+| caretaker (servant at the estate) | správce (same word as the piece) |
+| figurine in the shape of a {{0}} | figurka ve tvaru {{0}} |
+| misshapen wooden figure / carving | neforemná dřevěná soška / řezba |
+| scientific / pistol duel | vědecký souboj / souboj v pistolích |
+| quartering edict | výnos o ubytování vojska |
+| mustard gas concoction | yperitový odvar |
+| radioscope / zoopraxiscope / zoetrope | radioskop / zoopraxiskop / zoetrop |
+| Tiger Launcher, Psychic Mindbomb, Helmet-Mounted Flamethrower, Steam Grenade, Dream Stealer… | tygromet, psychická mozková bomba, plamenomet upevněný na přilbě, parní granát, mechanizovaná lidská zbroj, zloděj snů… (the coursebook declines the same words) |
+
+### 6.4 Hub section titles
+
+| English | Czech | English | Czech |
+|---|---|---|---|
+| Town Hall – Political Rumblings | Radnice (Town Hall) – politické vření | Second Round – Pledge of Support | Druhé kolo – Příslib podpory |
+| Knowledge / Ingredient / Wealth Bonus | Bonus za znalosti / za přísady / za bohatství | Weapons Bonus | Bonus za zbraně |
+| Military Incentive – Barracks | Pobídka armády – kasárna (Barracks) | NEW … | NOVĚ: … |
+| Repair the Time Machine | Oprava stroje času | Paradox Explanation | Vysvětlení paradoxů |
+| Royals Take Notice / Royal Eye | Dvůr si všímá / Královské oko | Like a Whispering Shadow | Jako šeptající stín |
+| Monarchist / Separatist Allegiance | Věrnost monarchii / Věrnost separatistům | Most Decrees | Nejvíce dekretů |
+| War on the World / Final Conflict | Válka proti světu / Poslední střet | Office of Public Relations | Úřad pro styk s veřejností |
+| Science is Stressful | Věda drásá nervy | Reward for Perseverance | Odměna za vytrvalost |
+| My Great Grandfather's Masterwork | Mistrovské dílo mého praděda | Science At any Cost | Věda za každou cenu |
+| Angry Mob Return | Návrat rozzuřeného davu | Visit the {{0}} | Návštěva {{0=…parku (Park)…}} |
+
+### 6.5 Window titles repeated elsewhere (Log Book, Guide)
+
+| English | Czech | English | Czech |
+|---|---|---|---|
+| A Memoir Across Three Generations | Paměti tří generací | Village Meeting | Shromáždění vesnice |
+| Military Protection | Vojenská ochrana | Seeds of Conflict | Semena sváru |
+| Quartering Enforced / Voluntary Quartering | Vynucené / Dobrovolné ubytování vojska | Attracting Attentions | Vzbuzená pozornost |
+| A Time for Sabotage | Čas sabotáže | Demolition for Change | Demolice ve jménu změny |
+| The Target of My Wrath | Terč mého hněvu | Victory for the Resistance / Resistance Quashed | Vítězství odboje / Odboj potlačen |
+| An Unfortunate Death / Wounded Pride | Nešťastná smrt / Raněná pýcha | The Moment of Truth | Okamžik pravdy |
+| Fully Repaired / Rusty, But Worth a Try | Zcela opravený / Zrezivělý, ale za pokus to stojí | Suspicions Confirmed | Podezření potvrzeno |
+| Thanks from the Advisor / Thank You (, {{0}}) | Poděkování od rádce / Poděkování (– {{0}}) | Where Duty Lies | Kam volá povinnost |
+| Time Shifts / Time Shifts Naturally | Čas se posouvá / Čas se posouvá sám | Gift of Silence | Dar mlčení |
+| The Future of Convenience | Budoucnost pohodlí | A Bend Towards Chaos / A Secure Future | Příklon k chaosu / Bezpečná budoucnost |
+| Rebuilding / Monument to Progress | Obnova / Pomník pokroku | Engagement / Campaign Complete | Střetnutí skončilo / Tažení skončilo |
+| Warning worlds (`Warning_World_Title`) | Zelený klid · Prolomení čtvrté stěny · Až příliš dokonalé · Velký bratr · Obojživelníci · Věk dinosaurů | Paradox events (`ParadoxTimeRandom_Title`) | Příval výkonnosti · Jasný cíl · Nikdo nezůstane pozadu · Zápisky z budoucnosti · Důvěra a shovívavost · Návrat podezření · Na mušce · Naprostá katastrofa |
+| A Letter Out of Time / The Secret Laboratory (Log Book only) | Dopis mimo čas / Tajná laboratoř | | |
