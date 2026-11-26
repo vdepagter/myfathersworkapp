@@ -1,0 +1,44 @@
+﻿Tag;Czech
+// Guided mode hints (Shared/Guide/CostOfDiseaseGuide.cs). Not narrated. [[hub:<CostOfDiseaseHubId>]] and [[end:<n>]] become
+// the Endings Gallery names with a found mark. No semicolons in the text (CSV separator), no | or } inside {{n=...}} options.
+//====== Headings ======;
+Guide_Title;Průvodce
+Guide_Route1;Kam vede generace I
+Guide_Route2;Kam vede generace II
+Guide_Route3;Kde tato větev končí
+//====== Generation I ======;
+Guide_Fever;V generaci II následuje [[hub:Hospital]], nebo [[hub:Devastation]]. Na konci této generace rozhodnou sudičky jednou ze dvou zkoušek, 50 : 50:<ul><li><b>Budova</b>, kterou zvolil starosta: banka → [[hub:Hospital]], knihovna → [[hub:Devastation]].</li><li><b>Srdce</b>, která všichni hráči věnovali na dobročinnost: je-li jich více než {{0=8}} plus hod kostkou, postaví se nemocnice. Při {{3=15}} a více se postaví vždy, při {{4=9}} a méně nikdy.</li></ul>
+Guide_Fever_Now;<b>Nyní:</b> {{0=|starosta zvolí budovu na konci Zralých let|byla zvolena banka (→ [[hub:Hospital]], rozhoduje-li budova)|byla zvolena knihovna (→ [[hub:Devastation]], rozhoduje-li budova)}}.
+Guide_Fever_NowForced;<b>Nyní:</b> rozhoduje jméno vaší vesnice: {{0=?|[[hub:Hospital]]|[[hub:Devastation]]}}, ať sudičky zkoušejí cokoli.
+Guide_MayorBid;Nový starosta zvolí novou budovu: banku, nebo knihovnu. Budou-li sudičky na konci této generace zkoušet budovu (50 : 50 se srdci), platí: banka → [[hub:Hospital]], knihovna → [[hub:Devastation]].
+Guide_Building;Tato volba může rozhodnout o generaci II. Na konci této generace sudičky vyzkoušejí buď budovu, nebo srdce, 50 : 50. Zkoušejí-li budovu: banka → [[hub:Hospital]], knihovna → [[hub:Devastation]].
+Guide_Hearts;Zkoušejí-li sudičky srdce (50 : 50 s budovou), postaví se nemocnice, je-li srdcí více než {{0=8}} plus hod kostkou: {{3=15}} a více → jistě [[hub:Hospital]], {{4=9}} a méně → [[hub:Devastation]].
+//====== Devastation ======;
+Guide_Devastation;V generaci III následuje [[hub:Prosperity]], nebo [[hub:GloomyGothic]] – rozhodnou o tom tři podezřelé budovy. Každé prošetření budovu tajně odhalí (+1), nebo zatají (−1), a budova, která byla odhalena častěji než zatajena, je na konci generace <b>odhalená</b>:<ul><li>2 nebo 3 odhalené budovy → [[hub:Prosperity]]</li><li>0 nebo 1 odhalená → [[hub:GloomyGothic]]</li></ul>Prošetřování je tajné, proto si průvodce nevede žádný přehled.
+Guide_Investigate;Odhalení přidá této budově 1, zatajení 1 ubere. Na konci generace II: 2 a více odhalených budov → [[hub:Prosperity]], méně → [[hub:GloomyGothic]].
+//====== Hospital ======;
+Guide_Hospital;V generaci III následuje [[hub:University]], nebo [[hub:NoUniversity]]. Na konci této generace se náhodně vylosuje jedna ze tří zkoušek (každá se stejnou pravděpodobností) a její splnění postaví univerzitu:<ul><li><b>Nesmrtelnost:</b> tajemství nesmrtelnosti objevili {{0=|1 nebo 2 hráči (náhodně vylosováno)|2 hráči|2 nebo 3 hráči (náhodně vylosováno)}}.</li><li><b>Sympozium</b> postavilo univerzitu.</li><li><b>Panacea</b> byla zveřejněna, nikoli vypuštěna.</li></ul>Pro jistotu splňte všechny tři.
+Guide_Hospital_Now;<b>Nyní:</b> hráčů s tajemstvím nesmrtelnosti: {{0=1}} – univerzita: {{1=|zatím nerozhodnuto|nepostavena|postavena|postavena}} – panacea: {{2=?|zveřejněna|nezveřejněna}}.
+Guide_Immortality;Každý hráč s tajemstvím nesmrtelnosti se počítá do jedné ze tří zkoušek na konci generace II: pro větev [[hub:University]] jsou potřeba {{0=|1 nebo 2 hráči (náhodně vylosováno)|2 hráči|2 nebo 3 hráči (náhodně vylosováno)}}.
+Guide_FeverCure;Zveřejněný lék promění střední výsledek sympozia v úspěch a univerzita, kterou sympozium postaví, splní jednu ze tří zkoušek pro větev [[hub:University]]. Patentovaný lék nikoli.
+Guide_Symposium;Úspěch postaví univerzitu, a splní tak jednu ze tří zkoušek pro větev [[hub:University]] na konci generace. Střední výsledek {{0=?|se počítá jako úspěch, protože lék na žlutou zimnici byl zveřejněn|je neúspěchem, protože lék na žlutou zimnici nebyl zveřejněn}}.
+Guide_Panacea;Zveřejnění → zkouška panacey pro větev [[hub:University]] je splněna (jedna ze tří zkoušek, náhodně vylosovaná na konci generace). Vypuštění → zkouška splněna není.
+//====== A Taste of Evil ======;
+Guide_GloomyHunters;Konce této větve: [[end:1]] a [[end:2]]. Na konci Raných let hlasujete, zda se lovcům postavit, nebo jim uvěřit (při hře 2 hráčů se jim postavíte vždy).<ul><li>Postavit se jim a poté dosáhnout cíle součtem VB karet experimentů darovaných na konci Zralých let → [[end:1]]</li><li>Uvěřit jim, nebo cíle nedosáhnout → [[end:2]]</li></ul>
+Guide_GloomyHunters_Now;<b>Nyní:</b> {{0=?|postavili jste se lovcům|uvěřili jste lovcům → [[end:2]]}}{{1=|.| a dosáhli jste cíle → [[end:1]].|, ale cíle jste nedosáhli → [[end:2]].|.}}
+Guide_GloomyWolves;Konce této větve: [[end:3]] a [[end:4]]. Na konci Zralých let hlasujete o vypuštění očistného odvaru (hráči s kartou choroby mezi uschovanými experimenty musí hlasovat PROTI):<ul><li>Zvítězí očista → [[end:3]]</li><li>Jinak volí {{0=Oliver}}: očista → [[end:3]], prodej lahvičky → [[end:4]]</li></ul>
+Guide_GloomyWolves_Now;<b>Nyní:</b> lahvička byla {{0=?|použita k očistě kraje → [[end:3]]|prodána → [[end:4]]}}.
+Guide_Confront;Postavit se → [[end:1]] je stále na dosah (dosáhněte cíle součtem VB darovaných karet experimentů). Uvěřit → [[end:2]].
+Guide_HuntTarget;Cíl splněn → [[end:1]]. Cíl nesplněn → [[end:2]].
+Guide_CleanseVote;Očista → [[end:3]]. PROTI → {{0=Oliver}} volí mezi očistou ([[end:3]]) a prodejem lahvičky ([[end:4]]).
+Guide_Vial;Očista → [[end:3]]. Prodej → [[end:4]].
+//====== The Good Fight ======;
+Guide_ProsperityOrder;Konce této větve: [[end:6]] a [[end:4]]. Na konci Zralých let hlasujete (při 2 hráčích dražíte) o tom, zda podpořit Běsnění:<ul><li>Podpořit → zlo se vrací → [[end:4]]</li><li>Nepodpořit → [[end:6]]</li></ul>
+Guide_ProsperityHunters;Konce této větve: [[end:5]] a [[end:4]]. Dva hony, na konci Raných a Zralých let. Po druhém honu:<ul><li>2 úspěšné hony → [[end:5]]</li><li>1 úspěšný → 50 : 50</li><li>žádný úspěšný → bestie zaplaví vesnici → [[end:4]]</li></ul>
+Guide_ProsperityHunters_Now;<b>Nyní:</b> úspěšné hony: {{0=0}} ze 2.
+Guide_ProsperityEvil;Do vesnice se vrátilo zlo: jediným koncem této větve je nyní [[end:4]].
+Guide_Frenzy;Podpořit Běsnění → zlo se vrací → [[end:4]]. Nepodpořit → [[end:6]].
+Guide_Hunt;Po druhém honu: 2 úspěšné hony → [[end:5]], 1 → 50 : 50, žádný → [[end:4]].
+//====== Search for the Cure / The Crawl ======;
+Guide_University;Tato větev má jediný konec: [[end:8]].
+Guide_NoUniversity;Tato větev má jediný konec: [[end:7]].

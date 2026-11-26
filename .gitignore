@@ -10,3 +10,6 @@ __pycache__/
 /android-app/www/
 *.jks
 *.keystore
+
+# Czech first-pass work parts (merged into wwwroot/localization/cs/, which is the source of truth since)
+docs/i18n/work/cs/

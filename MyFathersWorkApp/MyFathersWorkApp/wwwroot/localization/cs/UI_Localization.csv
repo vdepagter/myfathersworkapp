@@ -1,0 +1,448 @@
+﻿Tag;Czech
+//====== Main Menu ======;
+MainMenu_NewGame;Nová hra
+MainMenu_LoadGame;Nahrát hru
+MainMenu_Continue;Pokračovat
+MainMenu_Language;Jazyk
+MainMenu_Back;Zpět
+MainMenu_PasteSaveDataHere;Sem vložte data uložené hry…
+MainMenu_FanMade;Toto je fanouškovský projekt, který nemá žádnou spojitost se společnostmi Renegade Game Studios ani Hasbro.
+//====== Languages ======;
+English;Angličtina
+Czech;Čeština
+//====== Players Select Screen ======;
+PlayersSelect_Title;Hráči
+PlayersSelect_SubTitle;Kolik ctěných osob se dnes podělí o tento zážitek?
+PlayersSelect_Two;2 hráči
+PlayersSelect_Three;3 hráči
+PlayersSelect_Four;4 hráči
+//====== Players Initial Screen ======;
+PlayersInitial_Content;Jakožto sourozenci z vlivného rodu východoevropského původu jsme my <b>{{0=|dva|tři|čtyři}}</b> obdrželi nikoli nezanedbatelný díl rodinného jmění.<br /><br /> Než začneme, dodejme této historické fikci na poutavosti a uveďme svá jména.
+//====== Players Name Entry Screen ======;
+PlayersNameEntry_Title;Opatrně podejte Knihu příběhů hráči {{0=|A|B|C|D}}
+PlayersNameEntry_SubTitle;Hráč {{0=|A|B|C|D}} – zadejte prosím své křestní jméno:
+PlayersNameEntry_Placeholder;Zadejte jméno…
+PlayersNameEntry_PopUp;Jméno musí mít 2 až 15 znaků.
+PlayersNameEntry_PopUp2;Každý hráč musí mít jiné jméno.
+PlayersNameEntry_Gender;Vaše postava je:
+Gender_Male;pán
+Gender_Female;dáma
+//====== Players Welcome Screen ======;
+PlayersWelcome_First;Vítejte ve hře <strong>My Father's Work</strong>.<br /><br /><span class="player-name">{{0=...|Oliver|James|Olivia|...}}</span><br /><br />Přijměte naše nejvřelejší pozdravy.
+PlayersWelcome_Second;Vítejte ve hře <strong>My Father's Work</strong>.<br /><br /><span class="player-name">{{0=...|Oliver|James|Olivia|...}}</span><br /><br />Užijte si tento zážitek.
+PlayersWelcome_Third;Vítejte ve hře <strong>My Father's Work</strong>.<br /><br /><span class="player-name">{{0=...|Oliver|James|Olivia|...}}</span><br /><br />Kéž se vaše jméno stane nechvalně proslulým.
+PlayersWelcome_Fourth;Vítejte ve hře <strong>My Father's Work</strong>.<br /><br /><span class="player-name">{{0=...|Oliver|James|Olivia|...}}</span><br /><br />Nezapomeňte světu vtisknout svou pečeť.
+//====== Village Screen ======;
+Village_Title;Vesnice
+Village_Subtitle;<p>Nyní, když jsme ustanovili svá křestní jména, musíme v paměti vyhledat i jméno vesnice, nad níž se rozkládají naše rozlehlá panství.<br />Vzhledem k nepřebernému množství městeček na uherském venkově by bylo vskutku troufalé nedopřát společnosti příležitost, aby místo, které bude nyní obývat, pojmenovala sama.</p><p>Zadejte prosím společně jméno obce, v níž leží vaše dědictví.</p>
+Village_Placeholder;Zadejte název vesnice…
+Village_PopUp;Název vesnice musí mít 2 až 20 znaků.
+Village_Remembered;Nebo vyberte vesnici z dřívější hry:
+//====== Village Confirm Screen ======;
+VillageConfirm_Content;<p>Děkujeme a prosíme, odpusťte nám naši zapomnětlivost.</p><p>Ovšemže <span class="village-name"><b>{{0=...|London|Dubai|Paris|...}}</b></span> je jméno příhodné a důstojné místa, kde se bude konat významné vědecké bádání. Ba co víc, dějiny si toto jméno zapamatují, na mou duši.</p>
+//====== Scenario Screen ======;
+Scenario_Title;Scénář
+Scenario_Subtitle;Zvolte scénář pro {{0=...|2|3|4|...}} hráče:
+Scenario_TheCostOfDisease;Daň za nemoc (The Cost of Disease)
+Scenario_TheCostOfDisease_Desc;Vesnici zachvátila žlutá zimnice. Kdykoli mladí dědicové vkročili do jejích ponurých končin, museli si před ústa a chřípí tisknout látkový kapesník, aby se uchránili před miasmatem. Zdálo se to dokonalou – byť morbidní – kulisou, před níž lze dále rozvíjet otcovo hrůzné dílo.
+Scenario_FearOfTheUnknown;Strach z neznáma (Fear of the Unknown)
+Scenario_FearOfTheUnknown_Desc;Kraj se hemžil pověrečnými zvyky… zvyky, které se pramálo snášely s neústupným mravním kompasem církve. Obvinění z čarodějnictví a vúdú propukala se stále větší vervou a všudypřítomná paranoia dědicům bránila nerušeně pracovat.
+Scenario_ATimeOfWar;Čas války (A Time of War)
+Scenario_ATimeOfWar_Desc;Nad malou vesnicí se vznášel přízrak války. Dědicové pociťovali úzkost, zároveň však i nadšení, neboť si začínali uvědomovat, jaké požehnání by válčení mohlo jejich bádání přinést. Snad by jim přispění k rozřešení konfliktu pomohlo i v dalším vědeckém úsilí.
+//====== Scenario Language Screen ======;
+ScenarioLanguage_Title;Jazyk scénáře
+ScenarioLanguage_Subtitle;Zvolte prosím jazyk, v němž bude scénář vyprávěn.
+//====== Mirror Mode ======;
+Mirror_Title;Kontrola s oficiální aplikací
+Mirror_Question;Pokračujte v oficiální aplikaci. Co z tohoto ukazuje?
+Mirror_Hidden;Oficiální aplikace o tom rozhoduje tajně a zatím to neukazuje. Pokud hodnotu znáte, vyberte ji, jinak nechte rozhodnout náhodu.
+Mirror_Number;Pokračujte v oficiální aplikaci. Jaké číslo ukazuje?
+Mirror_NumberError;Zadejte číslo od {{0=...|1}} do {{1=...|999}}.
+Mirror_Nothing;(žádný další text)
+Mirror_Roll;Hodit za mě
+//====== Audio ======;
+Audio_SoundEffects;Zvukové efekty
+Audio_Music;Hudba
+Audio_Volume;Hlasitost
+Audio_Speech;Řeč
+Audio_Narration;Předčítání
+Audio_NarrationFemale;Ženský hlas
+Audio_NarrationMale;Mužský hlas
+Audio_NarrationOliver;Oliver
+Audio_NarrationOff;Vypnuto
+Audio_Highlight;Zvýraznění
+Audio_Highlight_off;Žádné
+Audio_Highlight_dim;Ztlumit zbytek
+Audio_Highlight_quill;Linka brkem
+Audio_Highlight_glow;Svit svíčky
+Audio_Highlight_emberglow;Uhlíky ve svitu svíčky
+Audio_Highlight_wisp;Putující jiskra
+Audio_Scroll;Posouvání
+Audio_Scroll_off;Žádné
+Audio_Scroll_lead;Těsně před další větou
+Audio_Scroll_flow;Neustále, pomalu
+Audio_Scroll_page;Po celých obrazovkách
+Narration_Narrated;Předčítáno
+Narration_Available;Předčítání k dispozici
+Narration_Starting;spouští se…
+Narration_Play;Přehrát
+Narration_Replay;Přehrát znovu
+Narration_Stop;Zastavit předčítání
+Narration_Back;Zpět o 10 sekund
+Narration_Forward;Vpřed o 10 sekund
+Narration_Position;Pozice předčítání
+Audio_NarrationToggle;Zapnout či vypnout předčítání
+Audio_Mute;Ztlumit
+Audio_Unmute;Zrušit ztlumení
+Reveal_StartVote;Zahájit hlasování
+Reveal_StartBid;Zahájit dražbu
+Reveal_DetailsVote;Hlasování zahájíte klepnutím na tlačítko „Zahájit hlasování“. Spustí se tím třísekundové odpočítávání.
+Reveal_DetailsBid;Dražbu zahájíte klepnutím na tlačítko „Zahájit dražbu“. Spustí se tím třísekundové odpočítávání.
+Reveal_ShowVote;Jakmile se na obrazovce objeví slovo „UKAŽTE“, ukažte všichni současně svůj hlas.
+Reveal_ShowBid;Jakmile se na obrazovce objeví slovo „UKAŽTE“, ukažte všichni současně svou nabídku.
+Reveal_Word;UKAŽTE!
+SpecialEvent_Title;Zvláštní událost
+Ending_Next;Další
+Ending_Unlocked;Odemčen nový konec!
+Ending_Recorded;Konec dosažen
+Ending_UnlockedCount;Odemkli jste {{0=...|3}} z 8 konců
+Rankings_Victorious;vítězí!
+Rankings_Family;Rodina
+Rankings_Place;{{0=|1.|2.|3.|4.}}
+Rankings_Points;{{0=...|40}} VB
+Rankings_TieMasterwork;Shodu rozhodlo dokončené veledílo
+Rankings_TieUpgrades;Shodu rozhodl nejvyšší počet vylepšení panství
+Rankings_FamilyNote;Shoda na prvním místě, kterou nic nerozhodne – vítězství tedy patří všem
+Rankings_Continue;Pokračovat
+//====== Scenario Settings ======;
+//====== Gameplay ======;
+Gameplay_Yes;Ano
+Gameplay_No;Ne
+Gameplay_PauseMenu;Pauza
+Gameplay_Resume;Pokračovat
+Gameplay_ReturnToMainMenu;Zpět do hlavní nabídky
+Gameplay_LocalSaveGame;Uložit hru v tomto zařízení
+Gameplay_SaveGame;Uložit hru
+Gameplay_Copy;Kopírovat
+Gameplay_DownloadFile;Stáhnout soubor
+Gameplay_ClickHereToContinue;Klepnutím pokračujte…
+Gameplay_ClickHereContinueNextRound;Klepnutím pokračujte do dalšího kola…
+Gameplay_ClickHere;klepněte sem
+Gameplay_ClickHereForReward;klepnutím získáte zvláštní odměnu
+Gameplay_OnceYouAreReady;Jakmile budete připraveni, klepnutím odkryjte svůj tajný rozhovor.
+Gameplay_Setup;PŘÍPRAVA
+Gameplay_SpecialSetup;ZVLÁŠTNÍ PŘÍPRAVA
+Gameplay_SpecialRule;ZVLÁŠTNÍ PRAVIDLO
+Gameplay_Accept;Přijmout
+Gameplay_Confirm;Potvrdit
+Gameplay_Masterwork;Veledílo
+Gameplay_Choose;ZVOLTE:
+Gameplay_HandStorybookTo;Zařízení s Knihou příběhů nyní opatrně přebírá {{0=...|Oliver|James|Olivia|...}}. Tento text je třeba přečíst nahlas a případnou volbu učinit před zraky všech hráčů.
+Gameplay_DoNotOtherPlayersSee;Zařízení s Knihou příběhů nyní opatrně přebírá {{0=...|Oliver|James|Olivia|...}} a nikdo jiný nesmí na obrazovku vidět.
+Gameplay_EarlyYears;Raná léta
+Gameplay_MiddleYears;Zralá léta
+Gameplay_LateYears;Pozdní léta
+Gameplay_Generation_I;<b>GENERACE I:</b>
+Gameplay_Generation_II;<b>GENERACE II:</b>
+Gameplay_Generation_III;<b>GENERACE III:</b>
+Gameplay_EndOfRound_Title;Konec kola
+Gameplay_EndOfRound_Content;{{0=|Raná léta|Zralá léta|Pozdní léta| }} {{1=|první generace|druhé generace|třetí generace}} skončila.{{2=?|<br />Proveďte všechny akce konce kola.<br />Než budete pokračovat, proveďte všechny akce začátku kola {{3=|Raných let|Zralých let|Pozdních let| }}.|<br />Než budete pokračovat, proveďte všechny akce konce kola.}}
+Gameplay_ClickHereAfterBid;Po vyhodnocení dražby klepněte sem…
+Gameplay_ClickHereAfterVote;Po vyhodnocení hlasování klepněte sem…
+Gameplay_EndOfGeneration_Title;Konec generace
+Gameplay_ClickAtTheEndOfGeneration;Na konci generace klepnutím pokračujte…
+Gameplay_EndRoundButton;Konec kola
+Gameplay_EndGenerationButton;Konec generace
+Gameplay_ContinueButton;Pokračovat
+Gameplay_BidResolvedButton;Dražba vyhodnocena
+Gameplay_VoteResolvedButton;Hlasování vyhodnoceno
+Gameplay_RevealButton;Odkrýt
+Gameplay_RevealLead;Jakmile budete připraveni, odkryjte svůj tajný rozhovor.
+Gameplay_FinalScoringButton;Závěrečné bodování
+Gameplay_TabulateScoresButton;Sečíst body
+Gameplay_DrJr;Dr. {{0=...|Oliver|James|Olivia|...}} ml.
+Gameplay_Dr;Dr. {{0=...|Oliver|James|Olivia|...}}
+Gameplay_Third;{{0=...|Oliver|James|Olivia|...}} III.
+//====== Endings Gallery ======;
+MainMenu_Gallery;Galerie konců
+PlayersNameEntry_Remembered;Nebo vyberte někoho, kdo už hrál:
+PlayersNameEntry_SameTable;Stejná společnost jako minule?
+PlayersNameEntry_UseTable;Použít tyto hráče
+Gallery_Players;Hráči
+Gallery_Endings;Konce
+Gallery_Player;Hráč
+Gallery_Wins;Výhry
+Gallery_GamesPlayed;{{0=...|3}} [[pl:odehraná hra/odehrané hry/odehraných her]]
+Gallery_Family;Rodina
+Gallery_FamilyNote;společné vítězství, počítá se jednou
+Gallery_RecentGames;Nedávné hry
+Gallery_NoGames;Zatím žádné dokončené hry. Hra se zaznamená, jakmile dospěje ke svému závěrečnému konci.
+Gallery_Forget;Odebrat jméno {{0=...|Anna}} z návrhů
+Gallery_EndingsCount;{{0=...|3}} z 8 konců
+Gallery_ShowAll;Zobrazit vše
+Gallery_HideSpoilers;Skrýt prozrazení děje
+Gallery_Reveal;Klepnutím odkryjete
+Gallery_LockedEnding;Zamčený konec
+Gallery_LockedBranch;Zamčená větev
+Gallery_Ending;Konce
+Gallery_Generation;Generace {{0=|I|II|III}}
+Gallery_Played;Odehráno {{0=...|26 Oct}}
+Gallery_TickedByHand;Odškrtnuto ručně
+Gallery_NotReached;Zatím nedosaženo
+Gallery_Reached;Dosaženo
+Gallery_AlsoElsewhere;také ve větvi {{0=...|Prosperity}}, počítá se jednou
+Gallery_TickOff;Odškrtnout konec {{0=...|Committed}}
+Gallery_Untick;Zrušit odškrtnutí konce {{0=...|Committed}}
+Gallery_WonBy;Vítěz: {{0=...|Anna}}
+Gallery_SharedWin;společné vítězství rodiny
+Gallery_KeyPlayed;Odehráno v této aplikaci
+Gallery_KeyOpen;Známo, zatím nedosaženo
+Gallery_KeyLocked;Zamčeno
+Gallery_Legend;Odškrtněte konce, kterých jste dosáhli dříve, než tato galerie vznikla, nebo v oficiální aplikaci. Větev se rozsvítí, jakmile do ní dospějete nebo odškrtnete některý z konců pod ní.
+Gallery_Backup;Zálohovat nebo přenést do jiného zařízení
+Gallery_BackupNote;Galerie je uložena pouze v tomto zařízení a není součástí uložených her. Exportujte ji, abyste měli kopii, a pak ji importujte zde nebo v jiném zařízení: obě galerie se sloučí.
+Gallery_Export;Exportovat
+Gallery_Import;Importovat
+Gallery_PasteHere;Sem vložte export galerie…
+Gallery_ImportDone;Galerie byla importována a sloučena.
+Gallery_ImportFailed;Toto není export galerie.
+Gallery_NewEnding;Odemčen nový konec
+Gallery_EndingRecorded;Konec zaznamenán
+Gallery_ScenarioProgress;{{0=...|Fear of the Unknown}} · {{1=...|3}} z 8 konců
+Gallery_WinFor;{{0=...|Anna}} vítězí: {{1=...|5}}. vítězství
+Gallery_FamilyWin;Společné vítězství rodiny
+Gallery_RecordedNote;Uloženo v Galerii konců v tomto zařízení. Vrátíte-li se tlačítkem Zpět a opravíte body, tento výsledek se nahradí, takže se žádná hra nezapočítá dvakrát.
+Gallery_EditGame;Upravit hru
+Gallery_AddGame;Přidat hru
+Gallery_EditNote;Změny se promítnou do počtu výher, rekordů, úspěchů i mapy konců. ✦ označuje dokončené veledílo.
+Gallery_AddNote;Pro hru odehranou bez této aplikace. Počítá se stejně jako hra odehraná zde.
+Gallery_Scenario;Scénář
+Gallery_PlayedOn;Datum hry
+Gallery_ScoresWinner;Hráči, body a vítěz
+Gallery_Winner;vítěz
+Gallery_Score;Body
+Gallery_AddPlayer;+ Hráč
+Gallery_RemovePlayer;Odebrat z této hry: {{0=...|Anna}}
+Gallery_PlayerName;Jméno
+Gallery_SharedFamilyWin;Společné vítězství (rodina)
+Gallery_DeleteGame;Smazat hru
+Gallery_SureDeleteGame;Smazat natrvalo?
+Gallery_Cancel;Zrušit
+Gallery_Save;Uložit
+Gallery_NamesInvalid;Každý hráč potřebuje jméno o 2 až 15 písmenech a každé jméno smí být použito jen jednou.
+Gallery_EndingLabel;Konec
+Gallery_TapToEdit;Klepnutím na hru ji můžete upravit nebo smazat.
+Gallery_Achievements;Úspěchy
+Gallery_HallOfFame;Síň slávy
+Ach_Count;{{0=...|7}} z {{1=...|16}} úspěchů
+Ach_HighestScores;Nejvyšší skóre
+Ach_TapRecord;klepnutím na rekord otevřete danou hru
+Ach_NoGameYet;Zatím žádná hra
+Ach_SetRecord;Dokončete hru a vytvořte rekord
+Ach_VP;VB
+Ach_Official;oficiální
+Ach_Legend;Úspěchy se odvozují ze zaznamenaných her a z konců, které jste odškrtli, takže změna nebo smazání hry v Síni slávy se do nich promítne. Veledíla se počítají ze her, v nichž byla odškrtnuta při zadávání bodů (nebo v listu hry).
+Ach_NotYet;Zatím ne
+Ach_OfCount;{{0=...|3}} z {{1=...|8}}
+Ach_Best;Nejlepší: {{0=...|61}}
+Ach_Unlocked;Úspěch: {{0=...|A Life's Work}}
+Ach_NewRecord;Nový rekord – {{0=...|The Cost of Disease}}: {{1=...|Anna}}, {{2=...|81}} VB
+Ach_NewRecordOld;Předchozí rekord: {{0=...|75}} ({{1=...|Bram}}).
+Ach_Group_Endings;Konce
+Ach_Group_Masterworks;Veledíla
+Ach_Group_Scores;Body a rodina
+Ach_EndCostOfDisease_Title;Daň za nemoc
+Ach_EndCostOfDisease_Text;Dojděte až na konec scénáře Daň za nemoc.
+Ach_AllCostOfDisease_Title;Všechny osudy nemoci
+Ach_AllCostOfDisease_Text;Dosáhněte všech 8 konců scénáře Daň za nemoc.
+Ach_EndFearOfUnknown_Title;Strach z neznáma
+Ach_EndFearOfUnknown_Text;Dojděte až na konec scénáře Strach z neznáma.
+Ach_AllFearOfUnknown_Title;Všechny osudy strachu
+Ach_AllFearOfUnknown_Text;Dosáhněte všech 8 konců scénáře Strach z neznáma.
+Ach_EndTimeOfWar_Title;Čas války
+Ach_EndTimeOfWar_Text;Dojděte až na konec scénáře Čas války.
+Ach_AllTimeOfWar_Title;Všechny osudy války
+Ach_AllTimeOfWar_Text;Dosáhněte všech 8 konců scénáře Čas války.
+Ach_MwFirst_Title;Dílo celého života
+Ach_MwFirst_Text;Dokončete veledílo.
+Ach_MwMany_Title;Dílna divů
+Ach_MwMany_Text;Dokončete společně 5 veledíl.
+Ach_MwMost_Title;Věk vynálezů
+Ach_MwMost_Text;Dokončete společně 10 veledíl.
+Ach_MwEveryone_Title;Rodina géniů
+Ach_MwEveryone_Text;Všichni hráči dokončí své veledílo v téže hře.
+Ach_MwAllScenarios_Title;Mistr všech oborů
+Ach_MwAllScenarios_Text;Jeden hráč dokončí veledílo ve všech třech scénářích.
+Ach_Score75_Title;Vážené jméno
+Ach_Score75_Text;Dokončete hru se 75 VB či více.
+Ach_Score100_Title;Proslulé jméno
+Ach_Score100_Text;Dokončete hru se 100 VB či více.
+Ach_Score150_Title;Legendární jméno
+Ach_Score150_Text;Dokončete hru se 150 VB či více.
+Ach_FamilyWin_Title;Společný odkaz
+Ach_FamilyWin_Text;Zvítězte společně: společné vítězství rodiny.
+Ach_Dynasty_Title;Dynastie
+Ach_Dynasty_Text;Jeden hráč vyhraje tři hry za sebou.
+Fame_Best;Nejlepší
+Fame_Masterworks;Veledíla
+Fame_Players;{{0=...|3}} [[pl:hráč/hráči/hráčů]]
+Fame_HighestScore;Nejvyšší skóre
+Fame_MostWins;Nejvíce výher
+Fame_Record;rekord
+MainMenu_SavedGames;Uložené hry
+SavedGames_Note;Každá hra se uchovává v tomto zařízení. Když začnete novou hru nebo nahrajete kód uložené hry, uloží se sem hra, kterou jste právě hráli. Otevřete hru, chcete-li v ní pokračovat nebo si ji tlačítkem Zpět (⬅) projít nazpět.
+SavedGames_Current;Právě se hraje
+SavedGames_Earlier;Dřívější hry
+SavedGames_None;Zatím žádné dřívější hry.
+SavedGames_Round;{{0=|Raná léta|Zralá léta|Pozdní léta}} generace {{1=|I|II|III}}
+SavedGames_Ended;Konec: {{0=...|Their Own Destiny}}
+SavedGames_NoHistory;Uchováno bez historie tlačítka Zpět (úložiště prohlížeče bylo plné)
+SavedGames_Open;Otevřít
+SavedGames_SaveCode;Kód uložené hry
+SavedGames_Delete;Smazat
+SavedGames_SureDelete;Smazat natrvalo?
+SavedGames_OpenFailed;Tuto hru se nepodařilo otevřít.
+SavedGames_Import;Nahrát kód uložené hry
+SavedGames_ImportNote;Otevřete soubor s kódem uložené hry nebo vložte jeho text. Hra, kterou právě hrajete, zůstane v seznamu výše.
+SavedGames_ImportFile;Vybrat soubor
+SavedGames_ImportFailed;Toto není kód uložené hry.
+//====== Help ======;
+MainMenu_Help;Nápověda
+Help_Tab_HowToUse;Návod k použití
+Help_HowToUse;<p>My Father's Work je hra o ctižádosti šílených vědců viktoriánské éry, vyprávěná napříč třemi generacemi. Aplikace Kniha příběhů řídí osud města podle rozhodnutí hráčů. Hráči s ní musí v určitých chvílích pracovat, a to klepnutím na konkrétní pasáže.</p><p>Každá generace má tři kola: Raná, Zralá a Pozdní léta. Obrazovka kola uvádí, co se v tomto kole může stát. Nové stránky příběhu čtěte nahlas, pokud aplikace neříká jinak.</p>
+Help_Tab_StoryActions;Akce v příběhu
+Help_StoryActions;<p>Někdy hra vyžaduje, aby hráč po provedení určité akce klepl na konkrétní odkaz. Může jít o akci ve městě či na vašem panství nebo o splnění určitého cíle. Na tyto odkazy nezapomínejte klepat – odmění vás zvláštní pasáží příběhu.</p>
+Help_Tab_Setup;Příprava
+Help_Setup;<p>Vyskakovací okna <b>Příprava</b> a <b>Zvláštní příprava</b> vám říkají, co na herním plánu změnit: které žetony umístit, které dílky přidat, které karty si vzít z krabice nebo na kterou stranu Kroniky vesnice nalistovat. Obrázek ukazuje dotčenou součást. Změnu proveďte dříve, než ji potvrdíte.</p>
+Help_Tab_EndOfRound;Konec kola
+Help_EndOfRound;<p>Každá generace má tři kola. Na konci každého kola musíte klepnout na spodní odkaz (nebo na tlačítko <b>Konec kola</b> pod ním), čímž se vyhodnotí případné zvláštní události a hra přejde do dalšího kola. Na dlouhé stránce kola vás tlačítko <b>↓ Konec kola</b> nad lištou kola přenese rovnou dolů. Obrazovka pak ukáže aktuální kolo a případné změny ve hře.</p><p>Než budete pokračovat, proveďte všechny akce konce kola podle pravidel.</p>
+Help_Tab_EndOfGeneration;Konec generace
+Help_EndOfGeneration;<p>Po Pozdních letech aplikace zobrazí stránku <b>Konec generace</b>. Odstraňte z herního plánu všechny figurky hráčů a proveďte kroky konce generace podle pravidel a k tomu všechny další kroky, které stránka uvádí.</p><p>Příběh se pak posune o léta dál: další generaci hrají dědicové té předchozí a podle toho, co se stalo, se příběh může vydat jinou větví.</p>
+Help_Tab_Secret;Tajné stránky
+Help_Secret;<p>Některé stránky říkají <i>„Zařízení s Knihou příběhů nyní opatrně přebírá … a nikdo jiný nesmí na obrazovku vidět.“</i> Dál čte jen tento hráč. Klepne na <i>„Jakmile budete připraveni, klepnutím odkryjte svůj tajný rozhovor“</i>, rozhodne se a zařízení vrátí.</p><p>Tajné stránky se nikdy nepředčítají samy. Čtenář si je může pustit tlačítkem Přehrát, třeba do sluchátek.</p><p>Když vás stránka žádá, abyste zařízení podali některému hráči, a o utajení se nezmiňuje, přečtěte ji nahlas a volbu učiňte před zraky všech.</p>
+Help_Tab_Bids;Dražby a hlasování
+Help_Bids;<p>U dražby nebo hlasování aplikace vysvětlí, o co jde. Všichni u stolu volí tajně, například penězi nebo kartou skrytou v sevřené dlani, a pak je současně ukážou.</p><p>Po vyhodnocení dražby nebo hlasování klepněte na odkaz a v aplikaci vyberte výsledek. Obrazovka vysvětluje, jak se rozhoduje shoda.</p>
+Help_Tab_ThisApp;Tato aplikace
+Help_ThisApp;<p>Tato fanouškovská verze přidává k oficiální aplikaci několik věcí.</p><p><b>Zpět (⬅)</b> vrátí poslední obrazovku, a to až na začátek hry. <b>Vpřed (➡)</b> znovu provede, co jste vrátili, dokud neučiníte novou volbu. Váš postup se po každé obrazovce ukládá v tomto prohlížeči, takže <b>Pokračovat</b> naváže tam, kde jste skončili, i po zavření stránky. Nová hra tu starou nezahodí: <b>Uložené hry</b> uchovávají každou hru v tomto zařízení, takže ji můžete později znovu otevřít a listovat v ní nazpět.</p><p><b>Pauza (⏸)</b> umožňuje změnit předčítání (původní mužskou či ženskou nahrávku, předčítání Oliverem, nebo vypnuto), způsob, jakým stránka sleduje Olivera, a vrátit se do hlavní nabídky. Chcete-li hru dohrát v jiném zařízení, stiskněte u ní v Uložených hrách <b>Kód uložené hry</b> a tento soubor otevřete v druhém zařízení pod položkou <b>Nahrát kód uložené hry</b>.</p><p><b>Kniha záznamů (📖)</b> uvádí události, kterými jste dosud prošli, s místem, kde se odehrály, a jednořádkovým shrnutím. Oficiální aplikace ji měla pouze pro scénář Daň za nemoc – záznamy pro zbylé dva scénáře napsali fanoušci.</p><p><b>Hrát souběžně s oficiální aplikací</b>, volba pro testery v Nastavení v hlavní nabídce (platí pro příští novou hru), nic nelosuje náhodně. Kdykoli příběh závisí na náhodě, vyberete, co ukazuje oficiální aplikace, takže obě aplikace vyprávějí týž příběh.</p><p><b>Galerie konců</b> ukazuje konce, kterých jste dosáhli, úspěchy (ty z oficiální aplikace i nové za vysoká skóre a veledíla) a <b>Síň slávy</b> s výhrami a rekordy. Při zadávání závěrečných bodů odškrtněte, kdo dokončil své veledílo. Můžete odškrtnout i konce dosažené jinde a galerii exportovat či importovat, a přenést ji tak do jiného zařízení.</p><p><b>Režim s průvodcem (prozrazuje děj!)</b> v Nastavení a v nabídce pauzy je pro lovce všech konců. Karta s cestou na každé obrazovce kola a poznámky u voleb, které řídí příběh, ukazují, která hlasování, dražby a odkazy vedou ke které větvi či konci a které konce jste už našli.</p><p>Na dlouhé stránce vás zkratka <b>↓ Pokračovat</b> nebo <b>↓ Konec kola</b> nad lištou kola přenese dolů k tlačítku stránky.</p><p><b>Hra offline</b> v hlavní nabídce, v Nastavení a v nabídce pauzy: po první návštěvě aplikace funguje bez internetu a lze ji nainstalovat jako aplikaci. Předčítání se přehrává z internetu, pokud si ho nestáhnete: zaškrtněte Olivera pro jednotlivé scénáře nebo původní hlasy a stiskněte Stáhnout (zrušením zaškrtnutí se stažené předčítání odebere). Stažené soubory zůstávají v zařízení i při aktualizacích aplikace. Když vyjde nová verze, aplikace nabídne aktualizaci.</p><h3>Poděkování</h3><p><i>My Father's Work</i>, jeho příběhy, ilustrace, hudba a původní hlasové nahrávky jsou © Renegade Game Studios. Studio Renegade zveřejnilo zdrojový kód původní aplikace pod licencí Creative Commons Uveďte původ-Neužívejte komerčně 4.0 a tato aplikace se šíří za stejných podmínek.</p><p>Tuto verzi aplikace vyvinul Valentijn s pomocí modelu Claude. Navazuje na fanouškovskou doprovodnou aplikaci od autora Deusald, která převedla první dvě generace scénáře Daň za nemoc.</p><p>Předčítání Oliverem vzniklo převodem textu na řeč ElevenLabs (hlas „Oliver Silk“). Písma: Frijole (nadpisy), Bowlby One SC (tlačítka) a Averia (text příběhu), vše pod licencí SIL Open Font License.</p><p>Nevýdělečný fanouškovský projekt, který vytvořili hráči pro hráče. Není nijak spojen se společností Renegade Game Studios a ta jej ani neschválila. Zdrojový kód, hlášení chyb a nápady: <a href="https://github.com/vdepagter/myfathersworkapp" target="_blank" rel="noopener">github.com/vdepagter/myfathersworkapp</a></p><p>Aplikace o vás nic neshromažďuje: hry, uložené pozice, galerie i stažené soubory zůstávají ve vašem zařízení. <a href="privacy.html" target="_blank" rel="noopener">Zásady ochrany soukromí</a></p>
+Help_Tab_VillageNames;Tajná jména vesnic
+Help_VillageNames;<p>Několik jmen vesnice, zadaných při jejím pojmenování před hrou, rozhoduje, kam se příběh po generaci I ubere. Záleží v nich na velkých a malých písmenech: zadejte je přesně tak, jak jsou uvedena.</p><p><b>Daň za nemoc</b></p><ul><li><b>Rage</b> – vlci jsou zlí a lovci dobří.</li><li><b>Kraven</b> – lovci jsou zlí a vlci dobří.</li><li><b>Plague</b> – v generaci II následuje <i>Zkáza</i> (město podlehne moru).</li><li><b>Mercy</b> – v generaci II následuje <i>Rozkvět navzdory nepřízni</i> (nemocnice).</li></ul><p><b>Strach z neznáma</b></p><ul><li><b>Xenophobia</b> – v generaci II následuje <i>Mohou za to cizinci</i>.</li><li><b>Abomination</b> – v generaci II následuje <i>Stvůra se vrací</i>.</li></ul><p><b>Čas války</b></p><ul><li><b>Paradox</b> – v generaci II následuje <i>Cestování časem</i>.</li><li><b>Destruction</b> – v generaci II následuje <i>Stanné právo</i>.</li></ul><p>Jak poznamenal autor hry, vynucený příběh může způsobit, že některá replika nebude zcela sedět, když dění u stolu ukazovalo jiným směrem.</p>
+Help_Tab_Changelog;Co je nového
+Help_ChangelogFailed;Seznam změn se nepodařilo načíst. Zkontrolujte připojení k internetu a zkuste to znovu.
+Gameplay_Undo;Zpět (vrátit poslední obrazovku)
+Gameplay_Redo;Vpřed (znovu provést, co jste vrátili)
+LogBook_Title;Kniha záznamů
+LogBook_Open;Otevřít Knihu záznamů
+LogBook_Empty;Zatím nebyly zaznamenány žádné události.
+LogBook_Page;Strana {{0=...|1}} z {{1=...|3}}
+LogBook_Previous;Předchozí
+LogBook_Next;Další
+LogBook_Close;Zavřít
+//====== Settings ======;
+MainMenu_Settings;Nastavení
+MainMenu_Endings;Konce
+Settings_Title;Nastavení
+Settings_Graphics;Grafika
+Settings_GraphicsLow;Nízká
+Settings_GraphicsMedium;Střední
+Settings_GraphicsHigh;Vysoká
+Settings_TextSize;Velikost textu příběhu
+Settings_TextSizeSample;Traduje se, že jaro pod bdělým zrakem zasněžených vrcholků Karpat je pohled vskutku podivuhodný.
+Settings_Close;Zavřít
+Settings_Guided;Režim s průvodcem (prozrazuje děj!)
+Settings_GuidedDesc;Ukazuje, kam vedou vaše volby: která hlasování, dražby a odkazy v příběhu mění větev nebo konec a o čem rozhodují skryté hody. Pro lovce všech konců – vyzradí většinu překvapení.
+Settings_Mirror;Hrát souběžně s oficiální aplikací
+Settings_MirrorDesc;Nic se nelosuje náhodně. Kdykoli příběh závisí na náhodě, vyberete, co ukazuje oficiální aplikace. Platí pro nové hry.
+Settings_TesterTag;Volba pro testery
+//====== Offline app (Shared/OfflineSettings.razor, Shared/UpdateBanner.razor) ======;
+Offline_Title;Hra offline
+Offline_Ready;Aplikace v tomto zařízení funguje bez internetu.
+Offline_Preparing;Aplikace se připravuje na hru offline… {{0=...|40}} %
+Offline_NotYet;Otevřete aplikaci jednou s připojením k internetu a poté bude fungovat i bez něj.
+Offline_Install;Nainstalovat jako aplikaci
+Offline_InstallDesc;Přidá aplikaci na domovskou obrazovku nebo do nabídky Start – otevírá se ve vlastním okně.
+Offline_IosHint;Na iPhonu nebo iPadu: klepněte na Sdílet a poté na Přidat na plochu.
+Offline_NarrationDesc;Nestažené předčítání se přehrává z internetu. Stažené soubory zůstávají v tomto zařízení i při aktualizacích aplikace: znovu se stahují jen změněné nahrávky.
+Offline_PackOliver;Oliver – {{0=...|The Cost of Disease}}
+Offline_PackMale;Mužský hlas – všechny scénáře
+Offline_PackFemale;Ženský hlas – všechny scénáře
+Offline_Download;Stáhnout
+Offline_Resume;Pokračovat
+Offline_Cancel;Zrušit
+Offline_Remove;Odebrat
+Offline_Downloaded;Staženo
+Offline_NeedsInternet;Vyžaduje internet
+Offline_ErrorSpace;V tomto zařízení není pro toto stahování dost volného místa.
+Offline_ErrorFailed;Některé soubory se nepodařilo stáhnout. Zkuste to znovu tlačítkem Pokračovat.
+Offline_NoPacks;Stahování předčítání zde zatím není k dispozici. Otevřete aplikaci jednou s připojením k internetu.
+Offline_Storage;V tomto zařízení: {{0=...|137 MB}}
+Offline_Open;Hra offline
+Offline_Keep;Předčítání uložené v tomto zařízení
+Offline_WillRemove;Bude odebráno
+Offline_NotDownloaded;Nestaženo
+Offline_After;Poté: {{0=...|251 MB}} ({{1=...|+110 MB}})
+Offline_EntryStored;Staženo předčítání: {{0=...|252 MB}}
+Offline_JustInstalled;Aplikace je nainstalována a funguje bez internetu. Vyberte, které předčítání si v tomto zařízení ponecháte, a stiskněte Stáhnout.
+Offline_Blocked;Tento prohlížeč zde hru offline nepovoluje, například v anonymním okně nebo když se data webu při zavření mažou.
+Offline_FirefoxHint;Ve Firefoxu: otevřete nabídku ⋮ a zvolte Instalovat (nebo Přidat na domovskou obrazovku).
+Offline_Waiting;Čeká
+Update_Ready;Je připravena nová verze aplikace.
+Update_Now;Aktualizovat
+Update_Later;Později
+MainMenu_Install;Hra offline
+MainMenu_InstallHide;Skrýt
+Update_Done;Aktualizováno na verzi {{0=...|v0.66.6.80}}.
+Guide_Found;Již nalezeno
+Guide_NotFound;Zatím nenalezeno
+//====== Dates (.NET format strings; translations: Czech "d. M. yyyy") ======;
+Format_Date;d. M. yyyy
+Format_DateTime;d. M. yyyy, HH:mm
+//====== Endings Gallery names (Shared/Gallery.cs) ======;
+Gallery_TheCostofDisease;Daň za nemoc
+Gallery_FearoftheUnknown;Strach z neznáma
+Gallery_ATimeofWar;Čas války
+Gallery_YellowFever;Žlutá zimnice
+Gallery_Devastation;Zkáza
+Gallery_ATasteofEvil;Příchuť zla
+Gallery_TheirOwnDestiny;Strůjci vlastního osudu
+Gallery_OvershadowedandExploited;Zastíněni a zneužiti
+Gallery_LocalLegends;Místní legendy
+Gallery_TheSpreadofEvil;Zlo se šíří
+Gallery_TheGoodFightMovingForward;Dobrý boj / Cesta vpřed
+Gallery_ToBeRidofEvil;Zbaveni zla
+Gallery_ThereCouldNeverBePeace;Míru nebylo souzeno
+Gallery_ThrivinginAdversity;Rozkvět navzdory nepřízni
+Gallery_SearchfortheCure;Hledání léku
+Gallery_AnUpliftingTale;Povznášející příběh
+Gallery_EditorsnoteAugust1923;Poznámka redaktora – srpen 1923
+Gallery_TheCrawl;Tah po hospodách
+Gallery_ALegacyWillLiveOn;Odkaz bude žít dál
+Gallery_WitchHunt;Hon na čarodějnice
+Gallery_BlameitontheForeigners;Mohou za to cizinci
+Gallery_WalledCity;Město za hradbami
+Gallery_FadedIntoObscurity;Upadli v zapomnění
+Gallery_AModelCity;Vzorné město
+Gallery_TensionsIncrease;Napětí roste
+Gallery_Springtimeforyourvillage;Jaro pro vesnici [your village]
+Gallery_TheAngeroftheMob;Hněv davu
+Gallery_TheCreatureReemerges;Stvůra se vrací
+Gallery_PrivateInvestors;Soukromí investoři
+Gallery_PeaceinDefiance;Mír navzdory všem
+Gallery_ThewardenForever;[Strážce] navždy
+Gallery_Acceptance;Přijetí
+Gallery_Committed;V ústavu
+Gallery_TakingCharge;Ve vlastních rukou
+Gallery_TakingSides;Volba strany
+Gallery_MartialLaw;Stanné právo
+Gallery_MonarchyReigns;Monarchie vládne
+Gallery_RoyalPraise;Královská chvála
+Gallery_TippingtheScales;Jazýček na vahách
+Gallery_WorldConquest;Dobytí světa
+Gallery_HistoryofAppliedSciences;Dějiny užitých věd
+Gallery_LocalLegend;Místní legenda
+Gallery_TimeTravel;Cestování časem
+Gallery_PeacefulReturn;Pokojný návrat
+Gallery_AWrinkleWithinTime;Vráska v čase
+Gallery_ATimelineUnbound;Čas bez pout
+Gallery_ForwardtoProgress;Vpřed za pokrokem
+Gallery_AGiantSuccess;Obří úspěch
+Gallery_BehindtheCurve;Pozadu za dobou

@@ -1,0 +1,74 @@
+<title>Czech translation review</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* Layout: a proofreader's ledger. One table per file, English and Czech side by side, section rows as dividers. */
+:root {
+  --paper: #f6f5f1; --sheet: #ffffff; --ink: #1f1d1a; --muted: #6b665e; --rule: #dedad1; --band: #efece4;
+  --accent: #7a2e2a; --chip: #ece9e1; --chip-ink: #3d3a34; --name: #e5ecf3; --name-ink: #234a6b; --cond: #fbf3dc; --cond-ink: #6b5313;
+  --serif: "Literata", Georgia, serif; --sans: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #1a1918; --sheet: #232120; --ink: #ece8e1; --muted: #a39d93; --rule: #3a3734; --band: #2c2a27;
+  --accent: #e3988f; --chip: #34312e; --chip-ink: #ddd8cf; --name: #22313f; --name-ink: #a9c8e6; --cond: #3a321c; --cond-ink: #e9cf86; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #1a1918; --sheet: #232120; --ink: #ece8e1; --muted: #a39d93; --rule: #3a3734; --band: #2c2a27;
+  --accent: #e3988f; --chip: #34312e; --chip-ink: #ddd8cf; --name: #22313f; --name-ink: #a9c8e6; --cond: #3a321c; --cond-ink: #e9cf86; color-scheme: dark }
+body { background: var(--paper); color: var(--ink); font: 15px/1.5 var(--sans); }
+.wrap { max-width: 1400px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 22px; }
+h1 { font: 600 1.9rem/1.15 var(--serif); margin: 0; text-wrap: balance; }
+.lead { color: var(--muted); max-width: 75ch; margin: 6px 0 0; }
+.count { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 500; }
+nav { display: flex; flex-wrap: wrap; gap: 8px; }
+nav a { color: var(--accent); text-decoration: none; border: 1px solid var(--rule); border-radius: 4px; padding: 3px 10px; background: var(--sheet); font-size: 0.9rem; }
+.filter { display: flex; gap: 8px; align-items: center; }
+.filter input { font: inherit; padding: 6px 10px; border: 1px solid var(--rule); border-radius: 4px; background: var(--sheet); color: var(--ink); width: min(420px, 100%); }
+section { display: grid; gap: 10px; }
+h2 { font: 600 1.3rem var(--serif); margin: 8px 0 0; }
+.scroll { overflow-x: auto; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; min-width: 760px; table-layout: fixed; }
+col.c-tag { width: 200px; }
+th { text-align: left; font: 600 0.75rem var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 8px 12px; border-bottom: 1px solid var(--rule); position: sticky; top: 0; background: var(--sheet); }
+td { padding: 9px 12px; border-top: 1px solid var(--rule); vertical-align: top; overflow-wrap: anywhere; }
+td.tag { font: 0.72rem/1.4 var(--mono); color: var(--muted); }
+td.en { color: var(--muted); font: 0.95rem/1.55 var(--serif); }
+td.cs { font: 1rem/1.6 var(--serif); }
+tr.sec td { background: var(--band); font: 600 0.8rem var(--sans); color: var(--muted); letter-spacing: 0.04em; padding: 5px 12px; }
+.ph { font: 500 0.8em var(--sans); background: var(--chip); color: var(--chip-ink); border-radius: 3px; padding: 0 5px; }
+.ph.icon::before { content: "◆ "; font-size: 0.8em; }
+.name { font: 500 0.82em var(--sans); background: var(--name); color: var(--name-ink); border-radius: 3px; padding: 0 5px; }
+.g { border-bottom: 2px dotted var(--name-ink); }
+.link { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.cond { background: var(--cond); color: var(--cond-ink); border-radius: 3px; padding: 0 3px; }
+.cond .if::before { content: "if: "; font: 600 0.72em var(--sans); }
+.cond.one .if::before { content: "sometimes: "; }
+.cond .else::before { content: " ⟂ otherwise: "; font: 600 0.72em var(--sans); }
+.todo { color: var(--muted); font: italic 0.9rem var(--sans); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 0.82rem; color: var(--muted); }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Czech translation review</h1>
+    <p class="lead">The Czech text of the app menus and <i>The Cost of Disease</i>, next to the English it comes from. First draft by Opus 5.5, for review by native speakers. <span class="count"><!--COUNT--></span>.</p>
+  </header>
+  <div class="legend">
+    <span><span class="name">Oliver</span> name typed in at the table (always nominative)</span>
+    <span><span class="g">přišel | přišla</span> follows the player's gender</span>
+    <span><span class="ph">dům · domy · domů</span> plural 1 / 2–4 / 5+, or one of several options</span>
+    <span><span class="cond"><span class="if">…</span></span> shown only in some games</span>
+    <span><span class="ph icon">Creepy</span> game icon</span>
+    <span><span class="link">link</span> choice the players tap</span>
+  </div>
+  <div class="filter"><label for="q">Find</label><input id="q" type="search" placeholder="Word in English or Czech, or a tag"></div>
+  <!--SECTIONS-->
+</div>
+<script>
+document.getElementById("q").addEventListener("input", e => {
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll("tbody tr").forEach(tr => {
+    tr.hidden = q !== "" && (tr.classList.contains("sec") || !tr.textContent.toLowerCase().includes(q));
+  });
+});
+</script>

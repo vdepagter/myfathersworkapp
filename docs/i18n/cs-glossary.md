@@ -493,3 +493,95 @@ Démonický tvor*. Superpower / Weapon / Drug / Ritual → *Nadlidská schopnost
 | Q13 | Oliver narration is English audio, and sentence highlighting matches the English text. | **Done:** a Czech story is silent (owner: Czech starts without narration). |
 | Q14 | `[[pl]]` and zero: Czech uses the 5+ form for 0 ("0 her"). | **Done:** 0 and 5+ take the third form, also 11–14. |
 | Q15 | Gender picker wording at name entry (Czech only). | Label `PlayersNameEntry_Gender` + chips `Gender_Male` / `Gender_Female`, default masculine (English: "Your character is: a gentleman / a lady"). Proposal: *Vaše postava je: pán / dáma*, or *Oslovení: pan / paní*. |
+
+---
+
+## 6. Terms settled during the first translation
+
+Terms the eight translators had to coin (not in sections 3 and 4), as unified by the editing pass (November 2026).
+They are binding like the rest of this file. Window titles are listed where other texts repeat them (Log Book, Guide,
+rules screens). The settled answers to the open questions (section 5) are not repeated here: the gender chips read
+*Vaše postava je: pán / dáma*.
+
+### 6.1 Game and rules terms
+
+| English | Czech | Notes |
+|---|---|---|
+| the Fates (Guide: which test decides a branch) | sudičky | "the Fates test the building" → *sudičky zkoušejí budovu*. |
+| Confront / Believe (the Hunters) | postavit se lovcům / uvěřit lovcům | Guide and the vote links ("pokud jste hlasovali, že se lovcům postavíte"). The vote screen's "Challenge the Hunters / Accept their story" → *zpochybnit tvrzení lovců / přijmout jejich verzi*. |
+| Cleanse (the vote, the Wolves branch) | očista; *očistný odvar* | Vote link: "pokud jste hlasovali pro očistu". |
+| concoction | odvar | |
+| unleash (the Panacea, the concoction) | vypustit; vypuštění | Opposite of *zveřejnit* (publish). |
+| encourage / not encourage the Frenzy | podpořit / nepodpořit Běsnění | Rules, links and Guide (the Guide said *podnítit* before the editing pass). |
+| hunt won / successful hunt | úspěšný hon | A hunt as an event is always *hon* (pl. *hony*): "po 2 úspěšných honech". |
+| Hearts (the charity count) | srdce | Token: *žeton srdce*. |
+| Investigation (window titles) / investigate (rules) | Pátrání / prošetřit, prošetření | Titles: *Pátrání*, *Pátrání pokračuje*, *Nejvíce pátrání*. |
+| Sciences (the Gen I choice) | vědní obor | "Zvolte, kterému vědnímu oboru se naše rodina bude věnovat". |
+| Masterwork Experiments (the cards) | karty veledíla | |
+| Masterwork Experiment (a named one) | veledílo + name | "Má některý hráč veledílo <b>Lykantropická síla</b>?" |
+| Nasty Rumor (35 VP choice) | ošklivé pomluvy | Window title „Ošklivé pomluvy“. |
+| Unfortunate Accident (35 VP choice) | nešťastná náhoda | Window title „Nešťastná náhoda“, choice "Stane se mu nešťastná náhoda." |
+| seedy dealings | nekalé obchody | |
+| penalty | pokuta (money), postih (a list of losses to choose from), penalizace (VP at scoring) | |
+| Biology award | ocenění za biologii | |
+| research marker | ukazatel výzkumu | |
+| mainstream merit | punc uznávané vědy | |
+| Ties are broken by the last player in turn order. | Při shodě rozhoduje poslední hráč v pořadí tahů. | Vote screens: "Sečtěte všechny hlasy. Vítězí strana s více hlasy." / "Klepněte na výsledek svého hlasování:". |
+| Then, since this is a 3-player game, pass the starting player marker clockwise 1 additional time. | Protože hrajete ve třech, předejte poté žeton začínajícího hráče ještě o jedno místo dál po směru hodinových ručiček. | One sentence in every setup. "Pass the Starting Player token as normal." → *Předejte žeton začínajícího hráče jako obvykle.* |
+| spot A/B/C on the Village Chronicle | místo budovy A/B/C v Kronice vesnice | |
+| Click Here (UI link inside a hub sentence) | klepněte sem | Lower case: it always completes a sentence ("Pokud hráč…, klepněte sem"). Also *klepnutím získáte zvláštní odměnu*. |
+
+### 6.2 Story terms
+
+| English | Czech | Notes |
+|---|---|---|
+| operative (of the Order / Fraternity) | zmocněnec | The Order's messenger → *posel Řádu*, the envoy (she) → *vyslankyně*. |
+| skilled workers | zruční řemeslníci | |
+| operating theater | anatomický sál (the Symposium's lecture hall), operační sál (a hospital's) | |
+| bath chair | pojízdné křeslo | |
+| county | župa | |
+| SWORN STATEMENT | PŘÍSEŽNÉ PROHLÁŠENÍ | Bar-venture statements. |
+| Bar-venture | hospodská eskapáda | Window title *Hospodská eskapáda*; link "vydejte se na hospodskou eskapádu". |
+| morningstar / glaive | kropáč / glévie | |
+
+### 6.3 Window titles repeated elsewhere
+
+| English | Czech |
+|---|---|
+| Attracting Attention / The Mark of Genius | Vzbuzená pozornost / Znamení génia |
+| Election Season (Second round Event – …) | Čas voleb |
+| A Bid for Mayor / Direction of the Town | Dražba o úřad starosty / Budoucnost města |
+| Financial Woes | Finanční strasti |
+| Legacy of Charity / A Legacy of Charity / Charity's Legacy | Odkaz dobročinnosti (all three) |
+| Charity Awarded | Dobročinnost odměněna |
+| Too Old | Na sklonku života |
+| Board of Trustees | Správní rada |
+| Clandestine Meetings / Relief from Disease / Suspicion | Tajné schůzky / Úleva od choroby / Podezření |
+| Death Becomes Us | Smrt nám sluší |
+| A Gift of Spawning / The Hunter's Tax | Dar líhně / Daň pro lovce |
+| Taxation / Final Taxation | Zdanění / Poslední zdanění |
+| Masterwork Completion | Dokončení veledíla |
+| The Hunt is On / The Hunt Begins / Endless Hunt | Hon je v plném proudu / Hon začíná / Nekonečný hon |
+| Safe and Protected | V bezpečí a pod ochranou |
+| The Monster Without | Netvor zvenčí |
+| Engineering Achievement / Scientific Achievement | Inženýrský počin / Vědecký počin |
+| Experiments are Feared | Strach z experimentů |
+| Overrun By Demons / Monsters | Napospas démonům / netvorům |
+| A Call for Assistance | Žádost o pomoc |
+| Once More the Accursed Contribution | Znovu prokletá daň |
+| Deplorable Equity | Zavrženíhodná rovnost |
+| The Ultimate Disease | Nemoc všech nemocí |
+| Hungarian Bright | Uherské osvícení |
+| Masters of Their Own Destiny | Páni vlastního osudu |
+| Scoring / Rankings | Bodování / Pořadí |
+
+### 6.4 UI
+
+| English | Czech |
+|---|---|
+| Hide spoilers | Skrýt prozrazení děje |
+| Local Save Game | Uložit hru v tomto zařízení |
+| How to use (Help tab) | Návod k použití |
+| Village name secrets (Help tab) | Tajná jména vesnic |
+| Highlight styles: Quill line / Ember by candlelight / Travelling spark | Linka brkem / Uhlíky ve svitu svíčky / Putující jiskra |
+| Branch and ending names of *Fear of the Unknown* and *A Time of War* | see the `Gallery_*` rows of `cs/UI_Localization.csv` |
