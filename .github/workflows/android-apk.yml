@@ -5,7 +5,8 @@ name: Android APK
 # repository secrets ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD
 # (android-app/set-secrets.ps1). Without them the build fails: a build signed with another key cannot update an
 # installed app.
-# - Run manually (Actions > Android APK > Run workflow): the APK is kept as a workflow artifact.
+# - Run manually (Actions > Android APK > Run workflow): the APK and the App Bundle (.aab, for Google Play) are kept as
+#   a workflow artifact.
 # - Push a tag v* (e.g. v0.66.6.250): the APK is also attached to the GitHub Release for that tag.
 # - Pull requests that touch the Android app: built (and kept as an artifact) too; without the secrets an unsigned
 #   build only checks that it compiles.
@@ -109,10 +110,12 @@ jobs:
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           chmod +x gradlew
-          ./gradlew assembleRelease -PmfwRevision=$REVISION --no-daemon
+          ./gradlew assembleRelease bundleRelease -PmfwRevision=$REVISION --no-daemon
           if [ "$UNSIGNED" = "1" ]; then ls -l app/build/outputs/apk/release; exit 0; fi
           mkdir -p "$GITHUB_WORKSPACE/dist"
           cp app/build/outputs/apk/release/app-release.apk "$GITHUB_WORKSPACE/dist/MyFathersWork-Unofficial-$VERSION.apk"
+          # The App Bundle for Google Play, signed with the same key (Play App Signing uses that key: android-app/README.md)
+          cp app/build/outputs/bundle/release/app-release.aab "$GITHUB_WORKSPACE/dist/MyFathersWork-Unofficial-$VERSION.aab"
           "$ANDROID_HOME"/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner verify --print-certs "$GITHUB_WORKSPACE/dist/MyFathersWork-Unofficial-$VERSION.apk" | grep -i "SHA-256"
           ls -l "$GITHUB_WORKSPACE/dist"
 
@@ -124,8 +127,10 @@ jobs:
         if: env.UNSIGNED != '1'
         with:
           name: MyFathersWork-Unofficial-${{ env.VERSION }}-android
-          path: dist/MyFathersWork-Unofficial-${{ env.VERSION }}.apk
-          compression-level: 0 # already a zip
+          path: |
+            dist/MyFathersWork-Unofficial-${{ env.VERSION }}.apk
+            dist/MyFathersWork-Unofficial-${{ env.VERSION }}.aab
+          compression-level: 0 # already zips
 
       # windows-release.yml may create the same release at the same time: create it, else upload to it
       - name: Attach to the GitHub Release
