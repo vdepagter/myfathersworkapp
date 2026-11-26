@@ -59,6 +59,7 @@ def read_rows(path, logbook=False):
 def english(name):
     rows = read_rows(LOC / name, logbook=name.endswith('_LogBook.csv'))
     if name == 'UI_Localization.csv':
+        rows = [row for row in rows if not (row[0] or '').startswith('ScenarioLang_')]  # unused rows
         rows += read_rows(WORK / 'gallery-labels.en.csv')
     return rows
 
@@ -159,7 +160,7 @@ def sheet(lang, out):
     wb.remove(wb.active)
     for name, title in FILES:
         tr = translated(name, lang)
-        ws = wb.create_sheet(title[:31].replace(':', ' -'))
+        ws = wb.create_sheet(title.replace(':', ' -')[:31])
         ws.append(['File', 'Tag', 'English', LANGUAGES[lang], 'Suggested ' + LANGUAGES[lang], 'Comment'])
         for cell in ws[1]:
             cell.font = Font(bold=True)

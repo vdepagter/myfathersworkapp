@@ -53,7 +53,7 @@ def setup(pg, a, rnd):
 
 
 def screen_text(pg):
-    root = '.popup-box' if pg.locator('.popup-box').count() else '.gameplay-container'
+    root = '.reveal-panel' if pg.locator('.reveal-panel').count() else '.popup-box' if pg.locator('.popup-box').count() else '.gameplay-container'
     return root, pg.locator(root).first.inner_text()
 
 
@@ -62,8 +62,13 @@ def walk(pg, a, seed, out, errors):
     log = []
     titles = set()
     last = None
+    last_seen, same = None, 0
     for step in range(a.steps):
-        if pg.locator('#blazor-error-ui').is_visible():
+        try:
+            crashed = pg.locator('#blazor-error-ui').is_visible()
+        except Exception as e:
+            log.append(f'PAGE ERROR {e.__class__.__name__}: {str(e)[:80]}'); break
+        if crashed:
             log.append('BLAZOR ERROR'); break
         root, text = screen_text(pg)
         title = text.strip().split('\n')[0][:80]
@@ -74,6 +79,7 @@ def walk(pg, a, seed, out, errors):
         if len(english) >= 3:
             issues.append('english? ' + ' '.join(english[:8]))
         if text != last:
+            print(f'  [{seed}:{step}] {title}', flush=True)
             log.append(f'[{step}] {title}' + (('  !! ' + ' | '.join(issues)) if issues else ''))
             if issues:
                 pg.screenshot(path=str(out / f'issue-{seed}-{step}.png'), full_page=True)
@@ -82,14 +88,23 @@ def walk(pg, a, seed, out, errors):
         if 'KONEC?' in text or 'THE END?' in text:
             log.append('END reached'); break
 
+        same = same + 1 if text == last_seen else 0
+        last_seen = text
         for field in pg.locator(f'{root} input.input-field').all():
-            kind = field.get_attribute('type') or 'text'
-            field.fill(str(rnd.randint(1, 4)) if kind == 'number' else rnd.choice(['Golem', 'Zázrak', 'heslo']))
+            numeric = field.get_attribute('type') == 'number' or field.get_attribute('inputmode') == 'numeric' or same % 2 == 0
+            field.fill(str(rnd.randint(1, 4)) if numeric else rnd.choice(['Golem', 'Zázrak', 'heslo']))
         clickables = [c for c in pg.locator(f'{root} a, {root} button').all() if c.is_visible() and c.inner_text().strip() not in ('', '⬅', '⏸')]
         if not clickables:
+            if root == '.reveal-panel':  # countdown running
+                time.sleep(1); continue
             log.append('no links'); break
         end_round = [c for c in clickables if 'end-round-button' in (c.get_attribute('class') or '')]
-        if end_round and rnd.random() < 0.55:
+        if root == '.reveal-panel':  # bid / vote countdown: Start, then Accept (never Back)
+            green = [c for c in clickables if 'green' in (c.get_attribute('class') or '')]
+            if not green:
+                time.sleep(1); continue
+            choice = green[0]
+        elif end_round and rnd.random() < 0.55:
             choice = end_round[0]
         else:
             choice = rnd.choice(clickables)
@@ -97,6 +112,9 @@ def walk(pg, a, seed, out, errors):
             choice.click(timeout=5000)
         except Exception as e:  # covered by an overlay: try the popup's own button next time
             log.append(f'click failed: {e.__class__.__name__}')
+            if sum(1 for line in log[-6:] if line.startswith('click failed')) >= 6:
+                pg.screenshot(path=str(out / f'stuck-{seed}-{step}.png'))
+                log.append('STUCK'); break
         time.sleep(0.35)
     (out / f'walk-{seed}.txt').write_text('\n'.join(log), encoding='utf-8')
     return log, titles

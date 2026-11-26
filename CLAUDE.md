@@ -1,4 +1,4 @@
-# My Father's Work (Unofficial)
+﻿# My Father's Work (Unofficial)
 
 The app's own name everywhere (page title, home-screen name, Android app, Windows launcher, releases): "My Father's Work (Unofficial)" (owner, 21 Nov 2026; "App" dropped). Repository, folder and project names (`myfathersworkapp`, `MyFathersWorkApp`) stay as they are.
 
@@ -198,6 +198,16 @@ explanations, warrior statistics, battles) are left out. Check with `python tool
   Weapon Published"); "The Order Revealed" also logs on the Prosperity intro (Unity only on Gloomy Gothic); "Vote!"
   (`UniEvent2`, unreachable in the source) is left out. The summaries are as shipped, including "A Call for Assistance"
   repeating the summary of "The Work is Complete".
+
+## Translations (Czech, Nov 2026)
+
+See [`docs/i18n/README.md`](docs/i18n/README.md). English stays in `wwwroot/localization/*.csv`; a translation is
+`wwwroot/localization/<code>/<same file>.csv` (`Tag;<Language>`), English for every tag it lacks. Languages are in
+`Shared/AppLanguages.cs`; the menu language is a device setting (localStorage `mfwLanguage`) and the story follows it
+when the scenario is translated (Czech: The Cost of Disease). Translated text uses `[[pl:..]]` / `[[gN:..]]` grammar
+tokens (players pick a gender at name entry in Czech); typed-in names are never declined. Code must not match English
+story text directly: use `GameplayElement.EnglishContent` (links that become buttons, bid / vote events). A changed or
+new English tag needs its translation (`python tools/i18n/translation.py check`). Glossary: `docs/i18n/cs-glossary.md`.
 
 ## AI narration (tools/narration)
 
