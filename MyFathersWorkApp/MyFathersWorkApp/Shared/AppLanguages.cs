@@ -78,11 +78,20 @@ public static class Grammar
                 return forms.Length < 3 ? forms[^1] : forms[PluralIndex(n)];
             }
 
-            string? name = kind.StartsWith("g=") ? kind[3..^1] : NearestPlayer(before, globalData);
+            string? name = kind.StartsWith("g=") ? PlayerIn(kind[3..^1], globalData) ?? NearestPlayer(before, globalData) : NearestPlayer(before, globalData);
             bool female = name != null && globalData.IsFemale(name);
             return forms.Length < 2 ? forms[0] : forms[female ? 1 : 0];
         });
     }
+
+    // The player a filled-in value names: the value itself, or the longest player name inside it (A Time of War fills in a
+    // regal title with the name, "vévodkyně Anna")
+    private static string? PlayerIn(string value, GlobalData globalData) =>
+        globalData.GetActivePlayers()
+                  .Where(name => !string.IsNullOrWhiteSpace(name) && value.Contains(name, StringComparison.Ordinal))
+                  .OrderByDescending(name => name == value)
+                  .ThenByDescending(name => name.Length)
+                  .FirstOrDefault();
 
     // Czech: 1 -> one, 2-4 -> few, otherwise many
     public static int PluralIndex(long n) => n == 1 ? 0 : n is >= 2 and <= 4 ? 1 : 2;
