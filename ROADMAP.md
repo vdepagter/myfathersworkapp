@@ -19,12 +19,12 @@ version 1.0:
 
 ## Czech translation (started 26 Nov 2026)
 
-Menus and The Cost of Disease are translated (first pass by Opus 5.5, from the glossary `docs/i18n/cs-glossary.md`),
+Menus and all three scenarios are translated (first pass by Opus 5.5, from the glossaries in `docs/i18n/`; terms of the team translating the official Czech rulebook),
 how it works is in `docs/i18n/README.md`. Czech is silent (no narration). Open:
 - Native-speaker review: the owner shares the glossary, the review page and `docs/i18n/cs-review.xlsx` with Czech
   players; `python tools/i18n/translation.py import <xlsx>` applies their suggestions.
 - Play-test at a real table in Czech (gender forms, joins between texts, English component names in brackets).
-- Later: Fear of the Unknown and A Time of War; a Czech narration voice (a parallel thread looks for one).
+- Later: a Czech narration voice (a parallel thread looks for one; gender variants add about 8%).
 
 ## Ideas, not planned
 

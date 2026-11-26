@@ -204,7 +204,7 @@ explanations, warrior statistics, battles) are left out. Check with `python tool
 See [`docs/i18n/README.md`](docs/i18n/README.md). English stays in `wwwroot/localization/*.csv`; a translation is
 `wwwroot/localization/<code>/<same file>.csv` (`Tag;<Language>`), English for every tag it lacks. Languages are in
 `Shared/AppLanguages.cs`; the menu language is a device setting (localStorage `mfwLanguage`) and the story follows it
-when the scenario is translated (Czech: The Cost of Disease). Translated text uses `[[pl:..]]` / `[[gN:..]]` grammar
+when the scenario is translated (Czech: all three scenarios). Translated text uses `[[pl:..]]` / `[[gN:..]]` grammar
 tokens (players pick a gender at name entry in Czech); typed-in names are never declined. Code must not match English
 story text directly: use `GameplayElement.EnglishContent` (links that become buttons, bid / vote events). A changed or
 new English tag needs its translation (`python tools/i18n/translation.py check`). Glossary: `docs/i18n/cs-glossary.md`.
