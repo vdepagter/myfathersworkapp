@@ -49,7 +49,8 @@ public static class Grammar
 {
     public const char NAME_MARK = '\u001F'; // around the name inside [[g=...:...]]
 
-    private static readonly Regex _Token  = new(@"\[\[(pl|g=\u001F[^\u001F]*\u001F|g):([^\]]*)\]\]");
+    // [[gN:...]] whose placeholder the code never filled in is treated like [[g:...]]
+    private static readonly Regex _Token  = new(@"\[\[(pl|g=\u001F[^\u001F]*\u001F|g\d?):([^\]]*)\]\]");
     private static readonly Regex _Tags   = new("<[^>]*>");
     private static readonly Regex _Number = new(@"\d+");
 
