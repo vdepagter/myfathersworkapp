@@ -3,6 +3,10 @@
 What changed in each version of My Father's Work (Unofficial), newest first. The version number is shown at the
 bottom of Help, Settings and the pause menu. Shown in the app under Help > What's new.
 
+## v0.66.6.106 - 26 November 2026
+
+- Getting ready for the Microsoft Store and Google Play. Help > What's new lists the latest versions in order again.
+
 ## v0.66.6.105 - 23 November 2026
 
 - A privacy page (linked from Help > This app): the app collects nothing, and your games stay on your device.
